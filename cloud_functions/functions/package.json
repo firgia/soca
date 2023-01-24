@@ -1,0 +1,43 @@
+{
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "emulators:start": "firebase emulators:start",
+    "emulators:stop": "lsof -t -i:5004 -i:8080 -i:9000 -i:9099 -i:9199 | xargs kill"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "lib/src/index.js",
+  "dependencies": {
+    "@google-cloud/storage": "^6.5.2",
+    "agora-access-token": "^2.0.4",
+    "axios": "^1.1.3",
+    "dotenv": "^16.0.3",
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^4.1.0",
+    "fs-extra": "^11.1.0",
+    "sharp": "^0.31.2",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
+    "@types/sharp": "^0.31.0",
+    "@types/uuid": "^9.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^0.2.0",
+    "typescript": "^4.5.4"
+  },
+  "private": true
+}
