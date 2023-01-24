@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -88,7 +88,6 @@
 				5C37A116AB4A2F75B0D592F4 /* Pods-Runner.profile-development.xcconfig */,
 				A833FD5D3644502EE5330AE4 /* Pods-Runner.profile-staging.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -438,6 +437,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.firgia.soca;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REVERSED_CLIENT_ID = "com.googleusercontent.apps.98143327475-m1rlqhm3ptv7hlj2bhuro1gfuks58v7r";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -569,6 +569,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.firgia.soca;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REVERSED_CLIENT_ID = "com.googleusercontent.apps.98143327475-m1rlqhm3ptv7hlj2bhuro1gfuks58v7r";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -594,6 +595,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.firgia.soca;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REVERSED_CLIENT_ID = "com.googleusercontent.apps.98143327475-m1rlqhm3ptv7hlj2bhuro1gfuks58v7r";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -673,6 +675,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.firgia.soca.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REVERSED_CLIENT_ID = "com.googleusercontent.apps.75316530467-imrc1m6dr2anhc5ordq76ba5715f3pgp";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -753,6 +756,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.firgia.soca.stg;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REVERSED_CLIENT_ID = "com.googleusercontent.apps.535861656111-hhl5oisf28f5828dembptmhdpd4kciun";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -830,6 +834,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.firgia.soca.stg;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REVERSED_CLIENT_ID = "com.googleusercontent.apps.535861656111-hhl5oisf28f5828dembptmhdpd4kciun";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -906,6 +911,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.firgia.soca.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REVERSED_CLIENT_ID = "com.googleusercontent.apps.75316530467-imrc1m6dr2anhc5ordq76ba5715f3pgp";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -980,6 +986,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.firgia.soca.stg;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REVERSED_CLIENT_ID = "com.googleusercontent.apps.535861656111-hhl5oisf28f5828dembptmhdpd4kciun";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1054,6 +1061,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.firgia.soca.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REVERSED_CLIENT_ID = "com.googleusercontent.apps.75316530467-imrc1m6dr2anhc5ordq76ba5715f3pgp";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
