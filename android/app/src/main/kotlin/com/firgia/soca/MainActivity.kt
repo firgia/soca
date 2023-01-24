@@ -1,4 +1,4 @@
-package com.example.soca
+package com.firgia.soca
 
 import io.flutter.embedding.android.FlutterActivity
 
