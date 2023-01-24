@@ -21,6 +21,13 @@ class _AppState extends State<App> {
       ],
       child: MaterialApp.router(
         title: "Soca",
+
+        /* THEMING SETUP */
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        themeMode: ThemeMode.system,
+
+        /* ROUTER SETUP */
         routerDelegate: AppRoutes().router.routerDelegate,
         routeInformationParser: AppRoutes().router.routeInformationParser,
         routeInformationProvider: AppRoutes().router.routeInformationProvider,
