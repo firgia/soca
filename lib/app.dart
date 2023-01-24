@@ -4,7 +4,8 @@ import 'package:soca/config/config.dart';
 import 'package:soca/logic/logic.dart';
 
 class App extends StatefulWidget {
-  const App({super.key});
+  const App({required this.title, super.key});
+  final String title;
 
   @override
   State<App> createState() => _AppState();
@@ -20,7 +21,7 @@ class _AppState extends State<App> {
         BlocProvider(create: (context) => SignOutBloc()),
       ],
       child: MaterialApp.router(
-        title: "Soca",
+        title: widget.title,
 
         /* THEMING SETUP */
         theme: AppTheme.light,
