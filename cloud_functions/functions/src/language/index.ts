@@ -1,3 +1,12 @@
+/*
+ * Author     : Mochamad Firgia
+ * Website    : https://www.firgia.com
+ * Repository : https://github.com/firgia/soca
+ *
+ * Created on Wed Jan 25 2023
+ * Copyright (c) 2023 Mochamad Firgia
+ */
+
 import ar from "../../i18n/ar.json";
 import en from "../../i18n/en.json";
 import es from "../../i18n/es.json";

@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "soca-production"
-  }
+    "production": "soca-production",
+    "development": "soca-development",
+    "staging": "soca-staging"
+  },
+  "targets": {},
+  "etags": {}
 }

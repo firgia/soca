@@ -1,3 +1,12 @@
+/*
+ * Author     : Mochamad Firgia
+ * Website    : https://www.firgia.com
+ * Repository : https://github.com/firgia/soca
+ *
+ * Created on Wed Jan 25 2023
+ * Copyright (c) 2023 Mochamad Firgia
+ */
+
 /* eslint-disable max-len */
 import {ONESIGNAL_APP_ID, ONESIGNAL_REST_API_KEY, ONESIGNAL_URL_NOTIFICATIONS, ONESIGNAL_VOIP_APP_ID, ONESIGNAL_VOIP_REST_API_KEY} from "../../config";
 import {User} from "../../model";

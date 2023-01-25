@@ -1,3 +1,12 @@
+/*
+ * Author     : Mochamad Firgia
+ * Website    : https://www.firgia.com
+ * Repository : https://github.com/firgia/soca
+ *
+ * Created on Wed Jan 25 2023
+ * Copyright (c) 2023 Mochamad Firgia
+ */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-len */
 import {RtcTokenBuilder, RtcRole} from "agora-access-token";

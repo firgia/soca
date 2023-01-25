@@ -1,3 +1,12 @@
+/*
+ * Author     : Mochamad Firgia
+ * Website    : https://www.firgia.com
+ * Repository : https://github.com/firgia/soca
+ *
+ * Created on Wed Jan 25 2023
+ * Copyright (c) 2023 Mochamad Firgia
+ */
+
 /* eslint-disable max-len */
 import {ENVIRONMENT, ONESIGNAL_URL_PLAYERS, ONESIGNAL_VOIP_APP_ID} from "../../config";
 
