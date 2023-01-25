@@ -34,6 +34,7 @@ void main() {
       test("Should return ONESIGNAL_APP_ID based on .env file", () {
         when(dotEnv.env).thenReturn({"ONESIGNAL_APP_ID": "12345"});
         expect(Environtment.onesignalAppID, "12345");
+        verify(dotEnv.env).called(1);
       });
 
       test(
@@ -41,6 +42,7 @@ void main() {
           () {
         when(dotEnv.env).thenReturn({"test": "12345"});
         expect(Environtment.onesignalAppID, "");
+        verify(dotEnv.env).called(1);
       });
     });
 
@@ -48,6 +50,7 @@ void main() {
       test("Should return AGORA_APP_ID based on .env file", () {
         when(dotEnv.env).thenReturn({"AGORA_APP_ID": "123"});
         expect(Environtment.agoraAppID, "123");
+        verify(dotEnv.env).called(1);
       });
 
       test(
@@ -55,6 +58,7 @@ void main() {
           () {
         when(dotEnv.env).thenReturn({"test": "123"});
         expect(Environtment.agoraAppID, "");
+        verify(dotEnv.env).called(1);
       });
     });
   });
