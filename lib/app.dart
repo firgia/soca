@@ -2,9 +2,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:soca/config/config.dart';
-import 'package:soca/logic/logic.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'config/config.dart';
+import 'logic/logic.dart';
+import 'core/core.dart';
 
 /// We need to initialize app before start to the main page
 ///
@@ -15,13 +18,33 @@ import 'package:soca/logic/logic.dart';
 Future<void> initializeApp() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-
   Paint.enableDithering = true;
 
-  // Initialize all asynchronous method
+  // Load Env file
+  //
+  // Some third-party are dependent on the env file,
+  // so we need to load the env before initializing third party
+  late String envFileName;
+  switch (Environtment.current) {
+    case EnvirontmentType.development:
+      envFileName = ".env.development";
+      break;
+    case EnvirontmentType.staging:
+      envFileName = ".env.staging";
+      break;
+    default:
+      envFileName = ".env.production";
+      break;
+  }
+  await dotenv.load(fileName: envFileName);
+
+  // Initialize all asynchronous methods which possible to initialize at the
+  // same time to speed up the initialization process
   await Future.wait([
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
     Firebase.initializeApp(),
+    OneSignal.shared.setAppId(Environtment.onesignalAppID),
+    OnesignalHandler.initialize(showLog: Environtment.isDevelopment),
   ]);
 }
 
