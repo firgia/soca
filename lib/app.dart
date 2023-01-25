@@ -53,7 +53,7 @@ Future<void> initializeApp() async {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
     Firebase.initializeApp(),
     OneSignal.shared.setAppId(Environtment.onesignalAppID),
-    OnesignalHandler.initialize(showLog: Environtment.isDevelopment),
+    OnesignalHandler.initialize(showLog: Environtment.isDevelopment()),
   ]);
 }
 
