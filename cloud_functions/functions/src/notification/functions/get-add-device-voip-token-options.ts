@@ -33,7 +33,7 @@ export async function getAddDeviceVoipTokenOptions(
       "app_id": ONESIGNAL_VOIP_APP_ID,
       "identifier": token,
       "device_type": deviceType,
-      ...(ENVIRONMENT === "dev" && {"test_type": 1}),
+      ...(ENVIRONMENT === "development" && {"test_type": 1}),
     },
   };
 

@@ -9,9 +9,10 @@
 
 /* eslint-disable max-len */
 import * as dotenv from "dotenv";
-dotenv.config();
 
-export const ENVIRONMENT: "dev"| "prod" = "prod";
+export const ENVIRONMENT: "development"| "staging" | "production" = "production";
+dotenv.config({path: `.env.${ENVIRONMENT}`});
+
 export const AGORA_APP_ID = process.env.AGORA_APP_ID;
 export const AGORA_APP_CERTIFICATE = process.env.AGORA_APP_CERTIFICATE;
 export const AGORA_VIDEO_CALL_LIMIT_IN_SECONDS = 600;
