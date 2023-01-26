@@ -79,7 +79,7 @@ abstract class AppTranslations {
 
   /// Return current device language
   static DeviceLanguage? getCurrentDeviceLanguage(BuildContext context) {
-    final code = context.deviceLocale.languageCode;
+    final code = context.locale.languageCode;
 
     switch (code) {
       case "ar":

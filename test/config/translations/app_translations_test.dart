@@ -33,10 +33,11 @@ class MyApp extends StatelessWidget {
 void main() async {
   SharedPreferences.setMockInitialValues({});
   await EasyLocalization.ensureInitialized();
+  EasyLocalization.logger.enableLevels = [];
 
   group("Fields", () {
     group("fallbackLocale", () {
-      test("Should return english locale", () {
+      test("Should return Locale(en)", () {
         expect(AppTranslations.fallbackLocale, const Locale("en"));
       });
     });
@@ -48,7 +49,7 @@ void main() async {
     });
 
     group("supportedLocales", () {
-      test("Should return ar, en, es, id, hi, ru, zh locales", () {
+      test("Should return ar, en, es, id, hi, ru, zh Locales", () {
         expect(
           AppTranslations.supportedLocales,
           const [
@@ -68,7 +69,7 @@ void main() async {
   group("Functions", () {
     runTranslationTest({
       required WidgetTester tester,
-      required VoidCallback body,
+      required Future Function() body,
     }) async {
       await tester.runAsync(() async {
         await tester.pumpWidget(EasyLocalization(
@@ -80,7 +81,7 @@ void main() async {
           child: const MyApp(),
         ));
 
-        body();
+        await body();
         await tester.pump();
       });
     }
@@ -89,90 +90,187 @@ void main() async {
       executeTranslationsChangeTest({
         required WidgetTester tester,
         required DeviceLanguage language,
-        required Locale expecetedLocale,
+        required Locale expectedLocale,
       }) async {
         await runTranslationTest(
           tester: tester,
           body: () async {
             final newLocale = AppTranslations.change(language, _context);
-            expect(newLocale, expecetedLocale);
+            expect(newLocale, expectedLocale);
+            expect(_context.locale, expectedLocale);
           },
         );
       }
 
       testWidgets(
-        'Should change to ar locale when DeviceLanguage is arabic',
-        (WidgetTester tester) async {
+        'Should change current Locale to Locale(ar) when DeviceLanguage.arabic',
+        (tester) async {
           await executeTranslationsChangeTest(
             tester: tester,
-            expecetedLocale: const Locale("ar"),
+            expectedLocale: const Locale("ar"),
             language: DeviceLanguage.arabic,
           );
         },
       );
 
       testWidgets(
-        'Should change to en locale when DeviceLanguage is english',
-        (WidgetTester tester) async {
+        'Should change current Locale to Locale(en) when DeviceLanguage.english',
+        (tester) async {
           await executeTranslationsChangeTest(
             tester: tester,
-            expecetedLocale: const Locale("en"),
+            expectedLocale: const Locale("en"),
             language: DeviceLanguage.english,
           );
         },
       );
 
       testWidgets(
-        'Should change to es locale when DeviceLanguage is spanish',
-        (WidgetTester tester) async {
+        'Should change current Locale to Locale(es) when DeviceLanguage.spanish',
+        (tester) async {
           await executeTranslationsChangeTest(
             tester: tester,
-            expecetedLocale: const Locale("es"),
+            expectedLocale: const Locale("es"),
             language: DeviceLanguage.spanish,
           );
         },
       );
 
       testWidgets(
-        'Should change to hi locale when DeviceLanguage is hindi',
-        (WidgetTester tester) async {
+        'Should change current Locale to Locale(hi) when DeviceLanguage.hindi',
+        (tester) async {
           await executeTranslationsChangeTest(
             tester: tester,
-            expecetedLocale: const Locale("hi"),
+            expectedLocale: const Locale("hi"),
             language: DeviceLanguage.hindi,
           );
         },
       );
 
       testWidgets(
-        'Should change to id locale when DeviceLanguage is indonesian',
-        (WidgetTester tester) async {
+        'Should change current Locale to Locale(id) when DeviceLanguage.indonesian',
+        (tester) async {
           await executeTranslationsChangeTest(
             tester: tester,
-            expecetedLocale: const Locale("id"),
+            expectedLocale: const Locale("id"),
             language: DeviceLanguage.indonesian,
           );
         },
       );
 
       testWidgets(
-        'Should change to ru locale when DeviceLanguage is russian',
-        (WidgetTester tester) async {
+        'Should change current Locale to Locale(ru) when DeviceLanguage.russian',
+        (tester) async {
           await executeTranslationsChangeTest(
             tester: tester,
-            expecetedLocale: const Locale("ru"),
+            expectedLocale: const Locale("ru"),
             language: DeviceLanguage.russian,
           );
         },
       );
 
       testWidgets(
-        'Should change to zh locale when DeviceLanguage is chinese',
-        (WidgetTester tester) async {
+        'Should change current Locale to Locale(zh) when DeviceLanguage.chinese',
+        (tester) async {
           await executeTranslationsChangeTest(
             tester: tester,
-            expecetedLocale: const Locale("zh"),
+            expectedLocale: const Locale("zh"),
             language: DeviceLanguage.chinese,
+          );
+        },
+      );
+    });
+
+    group("getCurrentDeviceLanguage", () {
+      executeGetCurrentDeviceLanguageTest({
+        required WidgetTester tester,
+        required DeviceLanguage expectedDeviceLanguage,
+        required Locale locale,
+      }) async {
+        await runTranslationTest(
+          tester: tester,
+          body: () async {
+            _context.setLocale(locale);
+            expect(
+              AppTranslations.getCurrentDeviceLanguage(_context),
+              expectedDeviceLanguage,
+            );
+          },
+        );
+      }
+
+      testWidgets(
+        "Should return DeviceLanguage.arabic when Locale(ar)",
+        (tester) async {
+          await executeGetCurrentDeviceLanguageTest(
+            tester: tester,
+            expectedDeviceLanguage: DeviceLanguage.arabic,
+            locale: const Locale("ar"),
+          );
+        },
+      );
+
+      testWidgets(
+        "Should return DeviceLanguage.english when Locale(en)",
+        (tester) async {
+          await executeGetCurrentDeviceLanguageTest(
+            tester: tester,
+            expectedDeviceLanguage: DeviceLanguage.english,
+            locale: const Locale("en"),
+          );
+        },
+      );
+
+      testWidgets(
+        "Should return DeviceLanguage.spanish when Locale(es)",
+        (tester) async {
+          await executeGetCurrentDeviceLanguageTest(
+            tester: tester,
+            expectedDeviceLanguage: DeviceLanguage.spanish,
+            locale: const Locale("es"),
+          );
+        },
+      );
+
+      testWidgets(
+        "Should return DeviceLanguage.hindi when Locale(hi)",
+        (tester) async {
+          await executeGetCurrentDeviceLanguageTest(
+            tester: tester,
+            expectedDeviceLanguage: DeviceLanguage.hindi,
+            locale: const Locale("hi"),
+          );
+        },
+      );
+
+      testWidgets(
+        "Should return DeviceLanguage.indonesian when Locale(id)",
+        (tester) async {
+          await executeGetCurrentDeviceLanguageTest(
+            tester: tester,
+            expectedDeviceLanguage: DeviceLanguage.indonesian,
+            locale: const Locale("id"),
+          );
+        },
+      );
+
+      testWidgets(
+        "Should return DeviceLanguage.russian when Locale(ru)",
+        (tester) async {
+          await executeGetCurrentDeviceLanguageTest(
+            tester: tester,
+            expectedDeviceLanguage: DeviceLanguage.russian,
+            locale: const Locale("ru"),
+          );
+        },
+      );
+
+      testWidgets(
+        "Should return DeviceLanguage.chinese when Locale(zh)",
+        (tester) async {
+          await executeGetCurrentDeviceLanguageTest(
+            tester: tester,
+            expectedDeviceLanguage: DeviceLanguage.chinese,
+            locale: const Locale("zh"),
           );
         },
       );
