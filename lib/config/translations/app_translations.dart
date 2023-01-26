@@ -20,11 +20,11 @@ abstract class AppTranslations {
   static const _ru = Locale('ru');
   static const _zh = Locale('zh');
 
+  /// Default locale when the unsupported locale is selected
+  static Locale get fallbackLocale => _en;
+
   /// Location of i18n json file
   static String get path => "assets/json/i18n";
-
-  /// Default locale when the unsupported locale is selected
-  static Locale? get fallbackLocale => _en;
 
   /// List of supported locales for this app
   static List<Locale> get supportedLocales => const [
@@ -37,39 +37,10 @@ abstract class AppTranslations {
         _zh,
       ];
 
-  /// Return current device language
-  static DeviceLanguage? getCurrentDeviceLanguage(BuildContext context) {
-    final code = context.deviceLocale.languageCode;
-
-    switch (code) {
-      case "ar":
-        return DeviceLanguage.arabic;
-
-      case "en":
-        return DeviceLanguage.english;
-
-      case "es":
-        return DeviceLanguage.spanish;
-
-      case "hi":
-        return DeviceLanguage.hindi;
-
-      case "id":
-        return DeviceLanguage.indonesian;
-
-      case "ru":
-        return DeviceLanguage.russian;
-
-      case "zh":
-        return DeviceLanguage.chinese;
-
-      default:
-        return null;
-    }
-  }
-
   /// Change the current locale
-  static void change(DeviceLanguage language, BuildContext context) {
+  ///
+  /// Return new locale
+  static Locale change(DeviceLanguage language, BuildContext context) {
     late Locale newLocale;
 
     switch (language) {
@@ -103,5 +74,37 @@ abstract class AppTranslations {
     }
 
     context.setLocale(newLocale);
+    return newLocale;
+  }
+
+  /// Return current device language
+  static DeviceLanguage? getCurrentDeviceLanguage(BuildContext context) {
+    final code = context.deviceLocale.languageCode;
+
+    switch (code) {
+      case "ar":
+        return DeviceLanguage.arabic;
+
+      case "en":
+        return DeviceLanguage.english;
+
+      case "es":
+        return DeviceLanguage.spanish;
+
+      case "hi":
+        return DeviceLanguage.hindi;
+
+      case "id":
+        return DeviceLanguage.indonesian;
+
+      case "ru":
+        return DeviceLanguage.russian;
+
+      case "zh":
+        return DeviceLanguage.chinese;
+
+      default:
+        return null;
+    }
   }
 }
