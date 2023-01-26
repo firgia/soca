@@ -32,6 +32,7 @@ dependencies:
   cloud_firestore: ^4.3.1
   cloud_functions: ^4.0.7
   cupertino_icons: ^1.0.2
+  easy_localization: ^3.0.1
   equatable: ^2.0.5
   firebase_auth: ^4.2.5
   firebase_core: ^2.4.1
@@ -65,6 +66,8 @@ flutter:
     - assets/images/animation/.
     - assets/images/raster/.
     - assets/images/vector/.
+    - assets/json/i18n/.
+    - assets/json/.
     - .env.development
     - .env.production
     - .env.staging

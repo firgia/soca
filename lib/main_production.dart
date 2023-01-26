@@ -7,6 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'app.dart';
 import 'config/config.dart';
@@ -16,5 +17,14 @@ void main() async {
   Environtment.setCurrentEnvirontment(EnvirontmentType.production);
   await initializeApp();
 
-  runApp(const App(title: "Soca"));
+  runApp(
+    EasyLocalization(
+      path: AppTranslations.path,
+      supportedLocales: AppTranslations.supportedLocales,
+      fallbackLocale: AppTranslations.fallbackLocale,
+      useFallbackTranslations: true,
+      useOnlyLangCode: true,
+      child: const App(title: "Soca"),
+    ),
+  );
 }

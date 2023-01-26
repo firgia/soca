@@ -7,6 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -54,6 +55,7 @@ Future<void> initializeApp() async {
     Firebase.initializeApp(),
     OneSignal.shared.setAppId(Environtment.onesignalAppID),
     OnesignalHandler.initialize(showLog: Environtment.isDevelopment()),
+    EasyLocalization.ensureInitialized(),
   ]);
 }
 
@@ -85,15 +87,20 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       child: MaterialApp.router(
         title: widget.title,
 
+        /* LOCALE SETUP */
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+
         /* THEMING SETUP */
         theme: AppTheme.light,
         darkTheme: AppTheme.dark,
         themeMode: ThemeMode.system,
 
         /* ROUTER SETUP */
-        routerDelegate: AppRoutes().router.routerDelegate,
-        routeInformationParser: AppRoutes().router.routeInformationParser,
-        routeInformationProvider: AppRoutes().router.routeInformationProvider,
+        routerDelegate: AppRoutes.router.routerDelegate,
+        routeInformationParser: AppRoutes.router.routeInformationParser,
+        routeInformationProvider: AppRoutes.router.routeInformationProvider,
       ),
     );
   }
