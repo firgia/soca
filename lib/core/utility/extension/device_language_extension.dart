@@ -8,6 +8,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:soca/config/config.dart';
 import '../../enum/enum.dart';
 import '../../path/path.dart';
 
@@ -83,5 +84,42 @@ extension DeviceLanguageExtension on DeviceLanguage {
       default:
         return "English";
     }
+  }
+
+  Locale toLocale() {
+    DeviceLanguage language = this;
+    Locale? locale;
+
+    switch (language) {
+      case DeviceLanguage.arabic:
+        locale = AppLocale.ar;
+        break;
+
+      case DeviceLanguage.chinese:
+        locale = AppLocale.zh;
+        break;
+
+      case DeviceLanguage.hindi:
+        locale = AppLocale.hi;
+        break;
+
+      case DeviceLanguage.indonesian:
+        locale = AppLocale.id;
+        break;
+
+      case DeviceLanguage.russian:
+        locale = AppLocale.ru;
+        break;
+
+      case DeviceLanguage.spanish:
+        locale = AppLocale.es;
+        break;
+
+      default:
+        locale = AppLocale.en;
+        break;
+    }
+
+    return locale;
   }
 }

@@ -156,5 +156,56 @@ void main() {
         );
       });
     });
+
+    group("toLocale", () {
+      test("Should return Locale(ar) when DeviceLanguage.arabic", () {
+        expect(
+          DeviceLanguage.arabic.toLocale(),
+          const Locale("ar"),
+        );
+      });
+
+      test("Should return Locale(en) when DeviceLanguage.english", () {
+        expect(
+          DeviceLanguage.english.toLocale(),
+          const Locale("en"),
+        );
+      });
+
+      test("Should return Locale(es) when DeviceLanguage.spanish", () {
+        expect(
+          DeviceLanguage.spanish.toLocale(),
+          const Locale("es"),
+        );
+      });
+
+      test("Should return Locale(hi) when DeviceLanguage.hindi", () {
+        expect(
+          DeviceLanguage.hindi.toLocale(),
+          const Locale("hi"),
+        );
+      });
+
+      test("Should return Locale(id) when DeviceLanguage.indonesian", () {
+        expect(
+          DeviceLanguage.indonesian.toLocale(),
+          const Locale("id"),
+        );
+      });
+
+      test("Should return Locale(ru) when DeviceLanguage.russian", () {
+        expect(
+          DeviceLanguage.russian.toLocale(),
+          const Locale("ru"),
+        );
+      });
+
+      test("Should return Locale(zh) when DeviceLanguage.chinese", () {
+        expect(
+          DeviceLanguage.chinese.toLocale(),
+          const Locale("zh"),
+        );
+      });
+    });
   });
 }
