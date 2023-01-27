@@ -80,7 +80,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => LanguageCubit()),
+        BlocProvider(create: (context) => LanguageBloc()),
         BlocProvider(create: (context) => SignInBloc()),
         BlocProvider(create: (context) => SignUpBloc()),
         BlocProvider(create: (context) => SignOutBloc()),

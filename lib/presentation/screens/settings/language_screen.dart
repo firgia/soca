@@ -11,7 +11,7 @@ import 'package:auto_animated/auto_animated.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/enum/enum.dart';
+import '../../../core/core.dart';
 import '../../../logic/logic.dart';
 import '../../../config/config.dart';
 import '../../widgets/widgets.dart';
@@ -21,31 +21,21 @@ class LanguageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<LanguageCubit>().updateSelection(context);
+    _updateLanguageState(context);
 
     return Scaffold(
       body: CustomAppBar(
         key: const Key("app-bar"),
         title: LocaleKeys.language.tr(),
-        body: BlocBuilder<LanguageCubit, LanguageState>(
-          bloc: context.read<LanguageCubit>(),
-          builder: (context, state) {
-            final isLoading = state is LanguageLoading;
-
-            return IgnorePointer(
-              ignoring: isLoading,
-              child: SafeArea(
-                child: Container(
-                  constraints: const BoxConstraints(
-                    maxWidth: 600,
-                    maxHeight: 800,
-                  ),
-                  padding: const EdgeInsets.all(kDefaultSpacing * 1.5),
-                  child: _buildGridLanguages(),
-                ),
-              ),
-            );
-          },
+        body: SafeArea(
+          child: Container(
+            constraints: const BoxConstraints(
+              maxWidth: 600,
+              maxHeight: 800,
+            ),
+            padding: const EdgeInsets.all(kDefaultSpacing * 1.5),
+            child: _buildGridLanguages(),
+          ),
         ),
       ),
       bottomNavigationBar: SafeArea(
@@ -63,8 +53,8 @@ class LanguageScreen extends StatelessWidget {
       itemBuilder: (context, index, animation) {
         return FadeAndSlideAnimation(
           animation: animation,
-          child: BlocBuilder<LanguageCubit, LanguageState>(
-            bloc: context.read<LanguageCubit>(),
+          child: BlocBuilder<LanguageBloc, LanguageState>(
+            bloc: context.read<LanguageBloc>(),
             builder: (context, state) {
               final deviceLanguage = DeviceLanguage.values[index];
               bool isSelected = false;
@@ -75,10 +65,10 @@ class LanguageScreen extends StatelessWidget {
 
               return FlagButton(
                 language: deviceLanguage,
-                onPressed: () => context.read<LanguageCubit>().change(
-                      context,
-                      deviceLanguage,
-                    ),
+                onPressed: () => _changeLanguage(
+                  context,
+                  deviceLanguage,
+                ),
                 selected: isSelected,
               );
             },
@@ -96,22 +86,27 @@ class LanguageScreen extends StatelessWidget {
   }
 
   Widget _buildNextButton(BuildContext context) {
-    return BlocBuilder<LanguageCubit, LanguageState>(
-      bloc: context.read<LanguageCubit>(),
-      builder: (context, state) {
-        final isLoading = state is LanguageLoading;
+    return ElevatedButton(
+      key: const Key("next-button"),
 
-        return AsyncButton(
-          key: const Key("next-button"),
-          isLoading: isLoading,
-
-          // TODO: Implement this
-          ///  onPressed: () => controller.next(),
-          onPressed: () {},
-          style: FlatButtonStyle(expanded: true, size: ButtonSize.large),
-          child: const Text(LocaleKeys.next).tr(),
-        );
-      },
+      // TODO: Implement this
+      ///  onPressed: () => controller.next(),
+      onPressed: () {},
+      style: FlatButtonStyle(expanded: true, size: ButtonSize.large),
+      child: const Text(LocaleKeys.next).tr(),
     );
+  }
+
+  /// Change current language
+  void _changeLanguage(BuildContext context, DeviceLanguage language) {
+    context.setLocale(language.toLocale());
+    _updateLanguageState(context);
+  }
+
+  /// Updating UI Language
+  void _updateLanguageState(BuildContext context) {
+    final languageBloc = context.read<LanguageBloc>();
+    final updatedLanguage = context.locale.toDeviceLanguage();
+    languageBloc.add(LanguageChanged(updatedLanguage));
   }
 }

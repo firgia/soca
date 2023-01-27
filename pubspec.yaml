@@ -55,6 +55,7 @@ dependencies:
   uuid: ^3.0.7
 
 dev_dependencies:
+  bloc_test: ^9.1.0
   build_runner: ^2.3.3
   flutter_lints: ^2.0.0
   flutter_test:

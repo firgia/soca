@@ -3,30 +3,31 @@
  * Website    : https://www.firgia.com
  * Repository : https://github.com/firgia/soca
  * 
- * Created on Thu Jan 26 2023
+ * Created on Fri Jan 27 2023
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-part of 'language_cubit.dart';
+part of 'language_bloc.dart';
 
 abstract class LanguageState extends Equatable {
   const LanguageState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-class LanguageUnselected extends LanguageState {}
+// class LanguageLoading extends LanguageState {}
 
-class LanguageLoading extends LanguageState {}
+class LanguageUnselected extends LanguageState {
+  const LanguageUnselected();
+}
 
 class LanguageSelected extends LanguageState {
   final DeviceLanguage language;
-
   const LanguageSelected(this.language);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         language,
       ];
 }
