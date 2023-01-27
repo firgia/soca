@@ -7,21 +7,13 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-import 'package:flutter/widgets.dart';
 import '../../core/core.dart';
 import '../providers/providers.dart';
 
 class LanguageRepository {
   late final LocalLanguageProvider _localLanguageProvider;
 
-  LanguageRepository() {
-    _localLanguageProvider = LocalLanguageProvider();
-  }
-
-  @visibleForTesting
-  LanguageRepository.test({
-    required LocalLanguageProvider localLanguageProvider,
-  }) {
+  LanguageRepository({required LocalLanguageProvider localLanguageProvider}) {
     _localLanguageProvider = localLanguageProvider;
   }
 
@@ -48,14 +40,14 @@ class LanguageRepository {
   }
 
   /// Update the last saved changed language.
-  Future<void> updateLastChanged(DeviceLanguage language) async {
-    return await _localLanguageProvider.updateLastChanged(language.name);
+  Future<void> updateLastChanged(DeviceLanguage? language) async {
+    return await _localLanguageProvider.updateLastChanged(language?.name);
   }
 
   /// Update the last saved changed Onesignal language.
-  Future<void> updateLastChangedOnesignal(DeviceLanguage language) async {
+  Future<void> updateLastChangedOnesignal(DeviceLanguage? language) async {
     return await _localLanguageProvider
-        .updateLastChangedOnesignal(language.name);
+        .updateLastChangedOnesignal(language?.name);
   }
 
   DeviceLanguage? _getDeviceLanguageFromName(String name) {

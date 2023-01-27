@@ -9,7 +9,9 @@ import 'package:flutter_dotenv/src/dotenv.dart' as _i3;
 import 'package:flutter_dotenv/src/parser.dart' as _i5;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:soca/data/providers/local_language_provider.dart' as _i6;
+import 'package:soca/core/core.dart' as _i8;
+import 'package:soca/data/providers/providers.dart' as _i6;
+import 'package:soca/data/repositories/language_repository.dart' as _i7;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -442,6 +444,54 @@ class MockLocalLanguageProvider extends _i1.Mock
       ) as _i4.Future<void>);
   @override
   _i4.Future<void> updateLastChangedOnesignal(String? language) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateLastChangedOnesignal,
+          [language],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+}
+
+/// A class which mocks [LanguageRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockLanguageRepository extends _i1.Mock
+    implements _i7.LanguageRepository {
+  MockLanguageRepository() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<_i8.DeviceLanguage?> getLastChanged() => (super.noSuchMethod(
+        Invocation.method(
+          #getLastChanged,
+          [],
+        ),
+        returnValue: _i4.Future<_i8.DeviceLanguage?>.value(),
+      ) as _i4.Future<_i8.DeviceLanguage?>);
+  @override
+  _i4.Future<_i8.DeviceLanguage?> getLastChangedOnesignal() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getLastChangedOnesignal,
+          [],
+        ),
+        returnValue: _i4.Future<_i8.DeviceLanguage?>.value(),
+      ) as _i4.Future<_i8.DeviceLanguage?>);
+  @override
+  _i4.Future<void> updateLastChanged(_i8.DeviceLanguage? language) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateLastChanged,
+          [language],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> updateLastChangedOnesignal(_i8.DeviceLanguage? language) =>
       (super.noSuchMethod(
         Invocation.method(
           #updateLastChangedOnesignal,

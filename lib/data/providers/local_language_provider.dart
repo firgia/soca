@@ -7,7 +7,6 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LocalLanguageProvider {
@@ -16,14 +15,7 @@ class LocalLanguageProvider {
 
   late final FlutterSecureStorage _secureStorage;
 
-  LocalLanguageProvider() {
-    _secureStorage = const FlutterSecureStorage();
-  }
-
-  @visibleForTesting
-  LocalLanguageProvider.test({
-    required FlutterSecureStorage secureStorage,
-  }) {
+  LocalLanguageProvider({required FlutterSecureStorage secureStorage}) {
     _secureStorage = secureStorage;
   }
 
@@ -38,7 +30,7 @@ class LocalLanguageProvider {
   }
 
   /// Update the last saved changed language.
-  Future<void> updateLastChanged(String language) async {
+  Future<void> updateLastChanged(String? language) async {
     return await _secureStorage.write(
       key: lastChangedKey,
       value: language,
@@ -46,7 +38,7 @@ class LocalLanguageProvider {
   }
 
   /// Update the last saved changed Onesignal language.
-  Future<void> updateLastChangedOnesignal(String language) async {
+  Future<void> updateLastChangedOnesignal(String? language) async {
     return await _secureStorage.write(
       key: lastChangedOnesignalKey,
       value: language,

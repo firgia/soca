@@ -10,26 +10,39 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:soca/core/core.dart';
+import 'package:soca/data/data.dart';
 import 'package:soca/logic/bloc/bloc.dart';
+
+import '../../../mock/mock.mocks.dart';
 
 void main() {
   group("LanguageBloc", () {
+    late LanguageRepository languageRepository;
+    setUp(() {
+      languageRepository = MockLanguageRepository();
+    });
+
+    createLanguageBloc() =>
+        LanguageBloc(languageRepository: languageRepository);
+
     group("LanguageChanged", () {
       blocTest<LanguageBloc, LanguageState>(
         'Should emits [LanguageSelected] when LanguageChanged is added with language.',
-        build: () => LanguageBloc(),
+        build: () => createLanguageBloc(),
         act: (bloc) =>
             bloc.add(const LanguageChanged(DeviceLanguage.indonesian)),
         expect: () => const <LanguageState>[
+          LanguageLoading(),
           LanguageSelected(DeviceLanguage.indonesian),
         ],
       );
 
       blocTest<LanguageBloc, LanguageState>(
         'Should emits [LanguageUnselected] when LanguageChanged is added with empty language.',
-        build: () => LanguageBloc(),
+        build: () => createLanguageBloc(),
         act: (bloc) => bloc.add(const LanguageChanged()),
         expect: () => const <LanguageState>[
+          LanguageLoading(),
           LanguageUnselected(),
         ],
       );

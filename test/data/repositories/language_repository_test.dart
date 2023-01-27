@@ -20,7 +20,7 @@ void main() {
 
   setUp(() {
     localLanguageProvider = MockLocalLanguageProvider();
-    languageProvider = LanguageRepository.test(
+    languageProvider = LanguageRepository(
       localLanguageProvider: localLanguageProvider,
     );
   });

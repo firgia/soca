@@ -16,5 +16,6 @@ import 'package:soca/data/data.dart';
   DotEnv,
   FlutterSecureStorage,
   LocalLanguageProvider,
+  LanguageRepository,
 ])
 main(List<String> args) {}

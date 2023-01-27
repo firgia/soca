@@ -21,7 +21,7 @@ void main() {
 
   setUp(() {
     secureStorage = MockFlutterSecureStorage();
-    languageProvider = LocalLanguageProvider.test(
+    languageProvider = LocalLanguageProvider(
       secureStorage: secureStorage,
     );
   });

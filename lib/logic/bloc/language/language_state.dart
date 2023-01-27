@@ -16,7 +16,9 @@ abstract class LanguageState extends Equatable {
   List<Object?> get props => [];
 }
 
-// class LanguageLoading extends LanguageState {}
+class LanguageLoading extends LanguageState {
+  const LanguageLoading();
+}
 
 class LanguageUnselected extends LanguageState {
   const LanguageUnselected();
