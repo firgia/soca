@@ -9,19 +9,19 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:soca/data/providers/language/language_provider.dart';
-import '../../../mock/mock.mocks.dart';
+import 'package:soca/data/providers/local_language_provider.dart';
+import '../../mock/mock.mocks.dart';
 
 String get _lastChangedKey => "language_last_changed";
 String get _lastChangedOnesignalKey => "language_last_onesignal_key";
 
 void main() {
   late MockFlutterSecureStorage secureStorage;
-  late LanguageProvider languageProvider;
+  late LocalLanguageProvider languageProvider;
 
   setUp(() {
     secureStorage = MockFlutterSecureStorage();
-    languageProvider = LanguageProvider.test(
+    languageProvider = LocalLanguageProvider.test(
       secureStorage: secureStorage,
     );
   });
@@ -64,17 +64,17 @@ void main() {
       });
     });
 
-    group("setLastChanged", () {
+    group("updateLastChanged", () {
       test("Should save data to storage", () async {
-        await languageProvider.setLastChanged("test");
+        await languageProvider.updateLastChanged("test");
         verify(secureStorage.write(key: _lastChangedKey, value: "test"))
             .called(1);
       });
     });
 
-    group("setLastChangedOnesignal", () {
+    group("updateLastChangedOnesignal", () {
       test("Should save data to storage", () async {
-        await languageProvider.setLastChangedOnesignal("test");
+        await languageProvider.updateLastChangedOnesignal("test");
         verify(secureStorage.write(
                 key: _lastChangedOnesignalKey, value: "test"))
             .called(1);
