@@ -11,7 +11,7 @@ import 'package:go_router/go_router.dart';
 import '../../presentation/presentation.dart';
 
 abstract class AppRoutes {
-  static get router => GoRouter(
+  static GoRouter get router => GoRouter(
         initialLocation: "/language",
         routes: [
           GoRoute(

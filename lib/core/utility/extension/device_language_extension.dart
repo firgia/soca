@@ -12,29 +12,24 @@ import '../../enum/enum.dart';
 import '../../path/path.dart';
 
 extension DeviceLanguageExtension on DeviceLanguage {
-  String getNativeName() {
+  ImageProvider getImage() {
     final language = this;
+
     switch (language) {
       case DeviceLanguage.arabic:
-        return "عربي";
-
+        return const AssetImage(ImageRaster.flagSaudiArabia);
       case DeviceLanguage.chinese:
-        return "简体中文";
-
+        return const AssetImage(ImageRaster.flagChina);
       case DeviceLanguage.hindi:
-        return "हिन्दी";
-
+        return const AssetImage(ImageRaster.flagIndia);
       case DeviceLanguage.indonesian:
-        return "Bahasa Indonesia";
-
+        return const AssetImage(ImageRaster.flagIndonesia);
       case DeviceLanguage.russian:
-        return "Русский";
-
+        return const AssetImage(ImageRaster.flagRussia);
       case DeviceLanguage.spanish:
-        return "Español";
-
+        return const AssetImage(ImageRaster.flagSpain);
       default:
-        return "English";
+        return const AssetImage(ImageRaster.flagUnitedStates);
     }
   }
 
@@ -64,24 +59,29 @@ extension DeviceLanguageExtension on DeviceLanguage {
     }
   }
 
-  ImageProvider getImage() {
+  String getNativeName() {
     final language = this;
-
     switch (language) {
       case DeviceLanguage.arabic:
-        return const AssetImage(ImageRaster.flagSaudiArabia);
+        return "عربي";
+
       case DeviceLanguage.chinese:
-        return const AssetImage(ImageRaster.flagChina);
+        return "简体中文";
+
       case DeviceLanguage.hindi:
-        return const AssetImage(ImageRaster.flagIndia);
+        return "हिन्दी";
+
       case DeviceLanguage.indonesian:
-        return const AssetImage(ImageRaster.flagIndonesia);
+        return "Bahasa Indonesia";
+
       case DeviceLanguage.russian:
-        return const AssetImage(ImageRaster.flagRussia);
+        return "Русский";
+
       case DeviceLanguage.spanish:
-        return const AssetImage(ImageRaster.flagSpain);
+        return "Español";
+
       default:
-        return const AssetImage(ImageRaster.flagUnitedStates);
+        return "English";
     }
   }
 }
