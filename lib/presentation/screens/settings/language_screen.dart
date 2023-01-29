@@ -18,7 +18,11 @@ import '../../../config/config.dart';
 import '../../widgets/widgets.dart';
 
 class LanguageScreen extends StatelessWidget {
-  const LanguageScreen({super.key});
+  late final LanguageBloc languageBloc;
+
+  LanguageScreen({super.key}) {
+    languageBloc = sl<LanguageBloc>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,7 @@ class LanguageScreen extends StatelessWidget {
         key: const Key("app-bar"),
         title: LocaleKeys.language.tr(),
         body: BlocBuilder<LanguageBloc, LanguageState>(
-          bloc: sl<LanguageBloc>(),
+          bloc: languageBloc,
           builder: (context, state) {
             final isLoading = state is LanguageLoading;
 
@@ -64,7 +68,7 @@ class LanguageScreen extends StatelessWidget {
               return FadeAndSlideAnimation(
                 animation: animation,
                 child: BlocBuilder<LanguageBloc, LanguageState>(
-                  bloc: sl<LanguageBloc>(),
+                  bloc: languageBloc,
                   builder: (context, state) {
                     final deviceLanguage = DeviceLanguage.values[index];
                     bool isSelected = false;
@@ -97,7 +101,7 @@ class LanguageScreen extends StatelessWidget {
 
   Widget _buildNextButton(BuildContext context) {
     return BlocBuilder<LanguageBloc, LanguageState>(
-      bloc: sl<LanguageBloc>(),
+      bloc: languageBloc,
       builder: (context, state) {
         final isLoading = state is LanguageLoading;
 
@@ -123,6 +127,6 @@ class LanguageScreen extends StatelessWidget {
   /// Updating UI Language
   void _updateLanguageState(BuildContext context) {
     final updatedLanguage = context.locale.toDeviceLanguage();
-    sl<LanguageBloc>().add(LanguageChanged(updatedLanguage));
+    languageBloc.add(LanguageChanged(updatedLanguage));
   }
 }

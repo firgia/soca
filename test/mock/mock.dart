@@ -10,6 +10,7 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mockito/annotations.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:soca/data/data.dart';
 
 @GenerateMocks([
@@ -17,5 +18,6 @@ import 'package:soca/data/data.dart';
   FlutterSecureStorage,
   LocalLanguageProvider,
   LanguageRepository,
+  OneSignal,
 ])
 main(List<String> args) {}

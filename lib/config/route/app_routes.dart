@@ -32,7 +32,7 @@ abstract class AppRoutes {
           GoRoute(
             path: "/language",
             name: "language",
-            builder: (context, state) => const LanguageScreen(),
+            builder: (context, state) => LanguageScreen(),
           ),
         ],
       );

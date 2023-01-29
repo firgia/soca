@@ -1,6 +1,15 @@
-// service locator
+/*
+ * Author     : Mochamad Firgia
+ * Website    : https://www.firgia.com
+ * Repository : https://github.com/firgia/soca
+ * 
+ * Created on Fri Jan 27 2023
+ * Copyright (c) 2023 Mochamad Firgia
+ */
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:soca/data/data.dart';
 import 'package:soca/logic/logic.dart';
 
@@ -9,7 +18,7 @@ final sl = GetIt.instance;
 
 void setupInjection() {
   // LOGIC
-  sl.registerLazySingleton(
+  sl.registerFactory(
     () => LanguageBloc(
       languageRepository: sl<LanguageRepository>(),
     ),
@@ -26,6 +35,13 @@ void setupInjection() {
   sl.registerLazySingleton(
     () => LanguageRepository(
       localLanguageProvider: sl<LocalLanguageProvider>(),
+    ),
+  );
+
+  sl.registerLazySingleton(
+    () => OnesignalRepository(
+      languageRepository: sl<LanguageRepository>(),
+      oneSignal: OneSignal.shared,
     ),
   );
 }

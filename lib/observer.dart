@@ -1,18 +1,19 @@
-import 'dart:developer';
+/*
+ * Author     : Mochamad Firgia
+ * Website    : https://www.firgia.com
+ * Repository : https://github.com/firgia/soca
+ * 
+ * Created on Fri Jan 27 2023
+ * Copyright (c) 2023 Mochamad Firgia
+ */
 
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:soca/data/repositories/onesignal_repository.dart';
+import 'package:soca/injection.dart';
 import 'package:soca/logic/logic.dart';
 
 class AppBlocObserver extends BlocObserver {
-  @override
-  void onCreate(BlocBase bloc) {
-    super.onCreate(bloc);
-
-    final blocType = bloc.runtimeType;
-
-    print("Creating Bloc type: $blocType");
-  }
-
   @override
   void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
     super.onChange(bloc, change);
@@ -31,6 +32,6 @@ class AppBlocObserver extends BlocObserver {
   }
 
   Future<void> _onLanguageSelected(Change<dynamic> change) async {
-    print("Creating Bloc type: $change");
+    sl<OnesignalRepository>().updateLanguage();
   }
 }

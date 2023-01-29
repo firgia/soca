@@ -11,11 +11,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
-
 import '../../mock/mock.mocks.dart';
 
 void main() {
-  late LocalLanguageProvider localLanguageProvider;
+  late MockLocalLanguageProvider localLanguageProvider;
   late LanguageRepository languageProvider;
 
   setUp(() {

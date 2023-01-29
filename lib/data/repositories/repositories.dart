@@ -8,3 +8,4 @@
  */
 
 export 'language_repository.dart';
+export 'onesignal_repository.dart';
