@@ -20,8 +20,8 @@ import '../../widgets/widgets.dart';
 class LanguageScreen extends StatelessWidget {
   late final LanguageBloc languageBloc;
 
-  LanguageScreen({super.key}) {
-    languageBloc = sl<LanguageBloc>();
+  LanguageScreen({LanguageBloc? languageBloc, super.key}) {
+    this.languageBloc = languageBloc ?? sl<LanguageBloc>();
   }
 
   @override
