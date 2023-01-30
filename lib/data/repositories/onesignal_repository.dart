@@ -23,6 +23,9 @@ class OnesignalRepository {
     _languageRepository = languageRepository;
   }
 
+  // TODO: This operation maybe will failed, please call this operation again when the operation failed because internet connection
+  // HINT: use internet_connection_checker package
+
   /// Update oneSignal language based on last language selected by user
   ///
   /// Return true if successfully to update language

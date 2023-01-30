@@ -20,8 +20,8 @@ class AppBlocObserver extends BlocObserver {
     final blocType = bloc.runtimeType;
     final changeType = change.runtimeType;
 
-    if (blocType is LanguageBloc && changeType is LanguageState) {
-      _onLanguageSelected(change);
+    if (blocType == LanguageBloc && changeType == Change<LanguageState>) {
+      _onLanguageSelected(change as Change<LanguageState>);
     }
   }
 
@@ -31,7 +31,9 @@ class AppBlocObserver extends BlocObserver {
     super.onError(bloc, error, stackTrace);
   }
 
-  Future<void> _onLanguageSelected(Change<dynamic> change) async {
-    sl<OnesignalRepository>().updateLanguage();
+  Future<void> _onLanguageSelected(Change<LanguageState> change) async {
+    if (change.nextState is LanguageSelected) {
+      sl<OnesignalRepository>().updateLanguage();
+    }
   }
 }
