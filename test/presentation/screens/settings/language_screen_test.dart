@@ -18,20 +18,18 @@ import '../../../helper/helper.dart';
 import '../../../mock/mock.mocks.dart';
 
 void main() async {
-  late MockLanguageBloc languageBloc;
-
-  setUp(() {
-    languageBloc = MockLanguageBloc();
-  });
+  setUp(() => registerLocator());
+  tearDown(() => unregisterLocator());
 
   group("AppBar", () {
     testWidgets("Should show the CustomAppBar", (tester) async {
       await tester.runAsync(() async {
+        MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(
           const LanguageSelected(DeviceLanguage.indonesian),
         );
 
-        await tester.pumpApp(child: LanguageScreen(languageBloc: languageBloc));
+        await tester.pumpApp(child: LanguageScreen());
         expect(find.byType(CustomAppBar), findsOneWidget);
       });
     });
@@ -41,9 +39,10 @@ void main() async {
     testWidgets("Should ignore the pointer language items when LanguageLoading",
         (tester) async {
       await tester.runAsync(() async {
+        MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageLoading());
 
-        await tester.pumpApp(child: LanguageScreen(languageBloc: languageBloc));
+        await tester.pumpApp(child: LanguageScreen());
 
         final ignorePointer = find
             .byKey(const Key("ignore_pointer_items"))
@@ -57,9 +56,10 @@ void main() async {
         "Shouldn't ignore the pointer language items when state is not LanguageLoading",
         (tester) async {
       await tester.runAsync(() async {
+        MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageUnselected());
 
-        await tester.pumpApp(child: LanguageScreen(languageBloc: languageBloc));
+        await tester.pumpApp(child: LanguageScreen());
 
         final ignorePointer = find
             .byKey(const Key("ignore_pointer_items"))
@@ -73,8 +73,9 @@ void main() async {
   group("LanguageItems", () {
     testWidgets("Should show the Language items", (tester) async {
       await tester.runAsync(() async {
+        MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageUnselected());
-        await tester.pumpApp(child: LanguageScreen(languageBloc: languageBloc));
+        await tester.pumpApp(child: LanguageScreen());
         expect(find.byKey(const Key("language_items")), findsOneWidget);
       });
     });
@@ -95,8 +96,9 @@ void main() async {
   group("NextButton", () {
     testWidgets("Should show the next button", (tester) async {
       await tester.runAsync(() async {
+        MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageUnselected());
-        await tester.pumpApp(child: LanguageScreen(languageBloc: languageBloc));
+        await tester.pumpApp(child: LanguageScreen());
         expect(find.byKey(const Key("next_button")), findsOneWidget);
       });
     });
@@ -105,8 +107,9 @@ void main() async {
         "Should set the isLoading of AsyncButton to true when state is LanguageLoading",
         (tester) async {
       await tester.runAsync(() async {
+        MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageLoading());
-        await tester.pumpApp(child: LanguageScreen(languageBloc: languageBloc));
+        await tester.pumpApp(child: LanguageScreen());
 
         final nextButton =
             find.byKey(const Key("next_button")).getWidget() as AsyncButton;
@@ -119,8 +122,9 @@ void main() async {
         "Should set the isLoading of AsyncButton to false when state is not LanguageLoading",
         (tester) async {
       await tester.runAsync(() async {
+        MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageUnselected());
-        await tester.pumpApp(child: LanguageScreen(languageBloc: languageBloc));
+        await tester.pumpApp(child: LanguageScreen());
 
         final nextButton =
             find.byKey(const Key("next_button")).getWidget() as AsyncButton;

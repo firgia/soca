@@ -12,11 +12,19 @@ part of 'helper.dart';
 final locator = GetIt.I;
 
 MockPlatformInfo getMockPlatformInfo() {
-  MockPlatformInfo platformInfo = MockPlatformInfo();
+  MockPlatformInfo mock = MockPlatformInfo();
   _removeRegistrationIfExists<PlatformInfo>();
-  locator.registerSingleton<PlatformInfo>(platformInfo);
+  locator.registerSingleton<PlatformInfo>(mock);
 
-  return platformInfo;
+  return mock;
+}
+
+MockLanguageBloc getMockLanguageBloc() {
+  MockLanguageBloc mock = MockLanguageBloc();
+  _removeRegistrationIfExists<LanguageBloc>();
+  locator.registerSingleton<LanguageBloc>(mock);
+
+  return mock;
 }
 
 void registerLocator() {

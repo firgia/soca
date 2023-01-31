@@ -14,6 +14,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
+import 'package:soca/logic/logic.dart';
 
 import '../mock/mock.mocks.dart';
 
