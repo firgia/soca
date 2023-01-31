@@ -71,20 +71,12 @@ class _Generator extends StatelessWidget {
             icon: isLoading ? const SizedBox() : icon!,
             style: style,
             onPressed: (onPressed == null || isLoading) ? null : onPressed,
-            label: (isLoading)
-                ? AdaptiveLoading(
-                    radius: loadingRadius,
-                  )
-                : child,
+            label: (isLoading) ? AdaptiveLoading(radius: loadingRadius) : child,
           )
         : ElevatedButton(
             style: style,
             onPressed: (onPressed == null || isLoading) ? null : onPressed,
-            child: (isLoading)
-                ? AdaptiveLoading(
-                    radius: loadingRadius,
-                  )
-                : child,
+            child: (isLoading) ? AdaptiveLoading(radius: loadingRadius) : child,
           );
   }
 }

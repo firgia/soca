@@ -36,12 +36,14 @@ class FlagButton extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image(
+                  key: const Key("flag_image"),
                   image: language.getImage(),
                   width: 50,
                 ),
                 const SizedBox(height: 8),
                 Text(
                   language.getNativeName(),
+                  key: const Key("flag_text"),
                   textAlign: TextAlign.center,
                   maxLines: 2,
                 ),
@@ -51,6 +53,7 @@ class FlagButton extends StatelessWidget {
         ),
         if (selected)
           Positioned(
+            key: const Key("check_icon"),
             top: 45,
             right: 20,
             child: Icon(
