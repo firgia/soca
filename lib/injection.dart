@@ -11,6 +11,7 @@ import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
 import 'package:soca/logic/logic.dart';
@@ -19,21 +20,24 @@ import 'package:soca/logic/logic.dart';
 final sl = GetIt.instance;
 
 void setupInjection() {
-  // LOGIC
-  sl.registerFactory(
-    () => LanguageBloc(
-      languageRepository: sl<LanguageRepository>(),
+  /* --------------------------------> CONFIG <------------------------------ */
+  sl.registerLazySingleton(() => AppNavigator());
+
+  /* ---------------------------------> CORE <------------------------------- */
+  sl.registerLazySingleton(
+    () => PlatformInfo(
+      isIOS: Platform.isIOS,
+      isAndroid: Platform.isAndroid,
     ),
   );
 
-  // PROVIDER
+  /* ---------------------------------> DATA <------------------------------- */
   sl.registerLazySingleton(
     () => LocalLanguageProvider(
       secureStorage: const FlutterSecureStorage(),
     ),
   );
 
-  // REPOSITORY
   sl.registerLazySingleton(
     () => LanguageRepository(
       localLanguageProvider: sl<LocalLanguageProvider>(),
@@ -47,10 +51,10 @@ void setupInjection() {
     ),
   );
 
-  sl.registerLazySingleton(
-    () => PlatformInfo(
-      isIOS: Platform.isIOS,
-      isAndroid: Platform.isAndroid,
+  /* --------------------------------> LOGIC <------------------------------- */
+  sl.registerFactory(
+    () => LanguageBloc(
+      languageRepository: sl<LanguageRepository>(),
     ),
   );
 }

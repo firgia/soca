@@ -9,12 +9,12 @@
 
 import 'package:flutter/material.dart';
 
-abstract class AppNavigator {
-  static void back<T>(BuildContext context, {T? result}) {
+class AppNavigator {
+  void back<T>(BuildContext context, {T? result}) {
     if (canPop(context)) {
       Navigator.of(context).pop(result);
     }
   }
 
-  static bool canPop(BuildContext context) => Navigator.of(context).canPop();
+  bool canPop(BuildContext context) => Navigator.of(context).canPop();
 }

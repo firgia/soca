@@ -14,6 +14,9 @@ import 'package:soca/presentation/presentation.dart';
 import '../../../helper/helper.dart';
 
 void main() {
+  setUp(() => registerLocator());
+  tearDown(() => unregisterLocator());
+
   group("Title", () {
     testWidgets("Should how the title text", (tester) async {
       await tester.runAsync(() async {

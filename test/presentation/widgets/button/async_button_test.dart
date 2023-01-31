@@ -14,6 +14,9 @@ import 'package:soca/presentation/presentation.dart';
 import '../../../helper/helper.dart';
 
 void main() {
+  setUp(() => registerLocator());
+  tearDown(() => unregisterLocator());
+
   group("Child", () {
     testWidgets("Should render the widget child", (tester) async {
       await tester.runAsync(() async {

@@ -11,23 +11,28 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mockito/annotations.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
 import 'package:soca/logic/logic.dart';
 
 @GenerateNiceMocks([
+  /* --------------------------------> CONFIG <------------------------------ */
+  MockSpec<AppNavigator>(),
+
+  /* ---------------------------------> CORE <------------------------------- */
+  MockSpec<PlatformInfo>(),
+
+  /* ---------------------------------> DATA <------------------------------- */
+  MockSpec<LocalLanguageProvider>(),
+  MockSpec<LanguageRepository>(),
+
+  /* -----------------------------> DEPENDENCIES <--------------------------- */
   MockSpec<DotEnv>(),
   MockSpec<FlutterSecureStorage>(),
   MockSpec<OneSignal>(),
-  MockSpec<PlatformInfo>(),
 
-  // PROVIDER
-  MockSpec<LocalLanguageProvider>(),
-
-  // REPOSITORY
-  MockSpec<LanguageRepository>(),
-
-  // BLOC
+  /* --------------------------------> LOGIC <------------------------------- */
   MockSpec<LanguageBloc>(),
 ])
 main(List<String> args) {}
