@@ -28,26 +28,30 @@ class LanguageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     _updateLanguageState(context);
 
-    return Scaffold(
-      body: CustomAppBar(
-        key: const Key("app-bar"),
-        title: LocaleKeys.language.tr(),
-        body: BlocBuilder<LanguageBloc, LanguageState>(
-          bloc: languageBloc,
-          builder: (context, state) {
-            final isLoading = state is LanguageLoading;
+    return BlocProvider(
+      create: (context) => languageBloc,
+      child: Scaffold(
+        body: CustomAppBar(
+          key: const Key("app_bar"),
+          title: LocaleKeys.language.tr(),
+          body: Column(
+            children: [
+              Expanded(
+                child: BlocBuilder<LanguageBloc, LanguageState>(
+                  builder: (context, state) {
+                    final isLoading = (state is LanguageLoading);
 
-            return IgnorePointer(
-              ignoring: isLoading,
-              child: _buildLanguageItems(),
-            );
-          },
-        ),
-      ),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(kDefaultSpacing),
-          child: _buildNextButton(context),
+                    return IgnorePointer(
+                      key: const Key("ignore_pointer_items"),
+                      ignoring: isLoading,
+                      child: _buildLanguageItems(),
+                    );
+                  },
+                ),
+              ),
+              _buildNextButton(context),
+            ],
+          ),
         ),
       ),
     );
@@ -55,7 +59,7 @@ class LanguageScreen extends StatelessWidget {
 
   Widget _buildLanguageItems() {
     return SafeArea(
-      key: const Key("language-items"),
+      key: const Key("language_items"),
       child: Center(
         child: Container(
           constraints: const BoxConstraints(
@@ -68,7 +72,6 @@ class LanguageScreen extends StatelessWidget {
               return FadeAndSlideAnimation(
                 animation: animation,
                 child: BlocBuilder<LanguageBloc, LanguageState>(
-                  bloc: languageBloc,
                   builder: (context, state) {
                     final deviceLanguage = DeviceLanguage.values[index];
                     bool isSelected = false;
@@ -78,6 +81,7 @@ class LanguageScreen extends StatelessWidget {
                     }
 
                     return FlagButton(
+                      key: Key("flag_button_${deviceLanguage.name}"),
                       language: deviceLanguage,
                       onPressed: () => _changeLanguage(context, deviceLanguage),
                       selected: isSelected,
@@ -100,21 +104,25 @@ class LanguageScreen extends StatelessWidget {
   }
 
   Widget _buildNextButton(BuildContext context) {
-    return BlocBuilder<LanguageBloc, LanguageState>(
-      bloc: languageBloc,
-      builder: (context, state) {
-        final isLoading = state is LanguageLoading;
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(kDefaultSpacing),
+        child: BlocBuilder<LanguageBloc, LanguageState>(
+          builder: (context, state) {
+            final isLoading = state is LanguageLoading;
 
-        return AsyncButton(
-          key: const Key("next-button"),
-          isLoading: isLoading,
-          // TODO: Implement this
-          ///  onPressed: () => controller.next(),
-          onPressed: () {},
-          style: FlatButtonStyle(expanded: true, size: ButtonSize.large),
-          child: const Text(LocaleKeys.next).tr(),
-        );
-      },
+            return AsyncButton(
+              key: const Key("next_button"),
+              isLoading: isLoading,
+              // TODO: Implement this
+              ///  onPressed: () => controller.next(),
+              onPressed: () {},
+              style: FlatButtonStyle(expanded: true, size: ButtonSize.large),
+              child: const Text(LocaleKeys.next).tr(),
+            );
+          },
+        ),
+      ),
     );
   }
 

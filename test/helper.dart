@@ -44,6 +44,7 @@ extension PumpApp on WidgetTester {
     void Function(BuildContext context)? onCompleted,
   }) async {
     SharedPreferences.setMockInitialValues({});
+    EasyLocalization.logger.enableLevels = [];
     await EasyLocalization.ensureInitialized();
 
     await pumpWidget(
@@ -65,4 +66,9 @@ extension PumpApp on WidgetTester {
       onCompleted(_context);
     }
   }
+}
+
+extension GetWidget on Finder {
+  /// Return the single of current widget
+  Widget getWidget() => evaluate().single.widget;
 }

@@ -12,12 +12,20 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mockito/annotations.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:soca/data/data.dart';
+import 'package:soca/logic/logic.dart';
 
-@GenerateMocks([
-  DotEnv,
-  FlutterSecureStorage,
-  LocalLanguageProvider,
-  LanguageRepository,
-  OneSignal,
+@GenerateNiceMocks([
+  MockSpec<DotEnv>(),
+  MockSpec<FlutterSecureStorage>(),
+  MockSpec<OneSignal>(),
+
+  // PROVIDER
+  MockSpec<LocalLanguageProvider>(),
+
+  // REPOSITORY
+  MockSpec<LanguageRepository>(),
+
+  // BLOC
+  MockSpec<LanguageBloc>(),
 ])
 main(List<String> args) {}
