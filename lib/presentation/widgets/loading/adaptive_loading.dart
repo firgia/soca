@@ -7,10 +7,10 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../core/core.dart';
+import '../../../injection.dart';
 
 class AdaptiveLoading extends StatelessWidget {
   const AdaptiveLoading({
@@ -31,7 +31,7 @@ class AdaptiveLoading extends StatelessWidget {
           ? _buildAndroid()
           : (platform == AdaptivePlatform.ios)
               ? _buildIOS()
-              : (Platform.isIOS)
+              : (sl<PlatformInfo>().isIOS)
                   ? _buildIOS()
                   : _buildAndroid(),
     );
@@ -39,6 +39,7 @@ class AdaptiveLoading extends StatelessWidget {
 
   Widget _buildIOS() {
     return CupertinoActivityIndicator(
+      key: const Key("ios_indicator"),
       radius: radius,
       color: color,
     );
@@ -46,6 +47,7 @@ class AdaptiveLoading extends StatelessWidget {
 
   Widget _buildAndroid() {
     return SizedBox(
+      key: const Key("android_indicator"),
       width: radius * 2,
       height: radius * 2,
       child: CircularProgressIndicator(

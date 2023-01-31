@@ -15,9 +15,9 @@ import 'package:onesignal_flutter/src/create_notification.dart' as _i11;
 import 'package:onesignal_flutter/src/defines.dart' as _i9;
 import 'package:onesignal_flutter/src/outcome_event.dart' as _i3;
 import 'package:onesignal_flutter/src/permission.dart' as _i10;
-import 'package:soca/core/core.dart' as _i14;
-import 'package:soca/data/data.dart' as _i13;
-import 'package:soca/data/providers/providers.dart' as _i12;
+import 'package:soca/core/core.dart' as _i12;
+import 'package:soca/data/data.dart' as _i14;
+import 'package:soca/data/providers/providers.dart' as _i13;
 import 'package:soca/logic/bloc/language/language_bloc.dart' as _i4;
 
 // ignore_for_file: type=lint
@@ -1073,11 +1073,29 @@ class MockOneSignal extends _i1.Mock implements _i8.OneSignal {
       ) as _i6.Future<_i3.OSOutcomeEvent>);
 }
 
+/// A class which mocks [PlatformInfo].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockPlatformInfo extends _i1.Mock implements _i12.PlatformInfo {
+  @override
+  bool get isIOS => (super.noSuchMethod(
+        Invocation.getter(#isIOS),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  bool get isAndroid => (super.noSuchMethod(
+        Invocation.getter(#isAndroid),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+}
+
 /// A class which mocks [LocalLanguageProvider].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLocalLanguageProvider extends _i1.Mock
-    implements _i12.LocalLanguageProvider {
+    implements _i13.LocalLanguageProvider {
   @override
   String get lastChangedKey => (super.noSuchMethod(
         Invocation.getter(#lastChangedKey),
@@ -1133,28 +1151,28 @@ class MockLocalLanguageProvider extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLanguageRepository extends _i1.Mock
-    implements _i13.LanguageRepository {
+    implements _i14.LanguageRepository {
   @override
-  _i6.Future<_i14.DeviceLanguage?> getLastChanged() => (super.noSuchMethod(
+  _i6.Future<_i12.DeviceLanguage?> getLastChanged() => (super.noSuchMethod(
         Invocation.method(
           #getLastChanged,
           [],
         ),
-        returnValue: _i6.Future<_i14.DeviceLanguage?>.value(),
-        returnValueForMissingStub: _i6.Future<_i14.DeviceLanguage?>.value(),
-      ) as _i6.Future<_i14.DeviceLanguage?>);
+        returnValue: _i6.Future<_i12.DeviceLanguage?>.value(),
+        returnValueForMissingStub: _i6.Future<_i12.DeviceLanguage?>.value(),
+      ) as _i6.Future<_i12.DeviceLanguage?>);
   @override
-  _i6.Future<_i14.DeviceLanguage?> getLastChangedOnesignal() =>
+  _i6.Future<_i12.DeviceLanguage?> getLastChangedOnesignal() =>
       (super.noSuchMethod(
         Invocation.method(
           #getLastChangedOnesignal,
           [],
         ),
-        returnValue: _i6.Future<_i14.DeviceLanguage?>.value(),
-        returnValueForMissingStub: _i6.Future<_i14.DeviceLanguage?>.value(),
-      ) as _i6.Future<_i14.DeviceLanguage?>);
+        returnValue: _i6.Future<_i12.DeviceLanguage?>.value(),
+        returnValueForMissingStub: _i6.Future<_i12.DeviceLanguage?>.value(),
+      ) as _i6.Future<_i12.DeviceLanguage?>);
   @override
-  _i6.Future<void> updateLastChanged(_i14.DeviceLanguage? language) =>
+  _i6.Future<void> updateLastChanged(_i12.DeviceLanguage? language) =>
       (super.noSuchMethod(
         Invocation.method(
           #updateLastChanged,
@@ -1164,7 +1182,7 @@ class MockLanguageRepository extends _i1.Mock
         returnValueForMissingStub: _i6.Future<void>.value(),
       ) as _i6.Future<void>);
   @override
-  _i6.Future<void> updateLastChangedOnesignal(_i14.DeviceLanguage? language) =>
+  _i6.Future<void> updateLastChangedOnesignal(_i12.DeviceLanguage? language) =>
       (super.noSuchMethod(
         Invocation.method(
           #updateLastChangedOnesignal,

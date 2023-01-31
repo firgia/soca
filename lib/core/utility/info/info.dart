@@ -3,10 +3,8 @@
  * Website    : https://www.firgia.com
  * Repository : https://github.com/firgia/soca
  * 
- * Created on Wed Jan 25 2023
+ * Created on Tue Jan 31 2023
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-export 'extension/extension.dart';
-export 'info/info.dart';
-export 'mixin/mixin.dart';
+export 'platform_info.dart';

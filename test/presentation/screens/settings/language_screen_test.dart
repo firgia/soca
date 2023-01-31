@@ -14,7 +14,7 @@ import 'package:soca/core/enum/enum.dart';
 import 'package:soca/logic/logic.dart';
 import 'package:soca/presentation/presentation.dart';
 
-import '../../../helper.dart';
+import '../../../helper/helper.dart';
 import '../../../mock/mock.mocks.dart';
 
 void main() async {

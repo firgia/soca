@@ -12,7 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/presentation/presentation.dart';
 
-import '../../../helper.dart';
+import '../../../helper/helper.dart';
 
 void main() {
   group("Image", () {

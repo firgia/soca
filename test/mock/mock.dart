@@ -11,6 +11,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mockito/annotations.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
 import 'package:soca/logic/logic.dart';
 
@@ -18,6 +19,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<DotEnv>(),
   MockSpec<FlutterSecureStorage>(),
   MockSpec<OneSignal>(),
+  MockSpec<PlatformInfo>(),
 
   // PROVIDER
   MockSpec<LocalLanguageProvider>(),
