@@ -18,7 +18,7 @@ void main() {
   tearDown(() => unregisterLocator());
 
   group("Title", () {
-    testWidgets("Should how the title text", (tester) async {
+    testWidgets("Should show the title text", (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(
             child: CustomAppBar(title: "hello world", body: Container()));
@@ -26,24 +26,93 @@ void main() {
       });
     });
 
-    // TODO: Implement test
-    // testWidgets(
-    //     "Should show the large title when not scrolling", (tester) async {});
+    testWidgets(
+        "Should show the large title and hide the default title when not scrolling",
+        (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(
+          child: CustomAppBar(
+            title: "hello world",
+            body: Container(),
+          ),
+        );
 
-    // testWidgets(
-    //     "Should hide the large title when scrolling", (tester) async {});
+        final titleOpacity = find.byKey(const Key("title_opacity")).getWidget()
+            as AnimatedOpacity;
 
-    // testWidgets(
-    //     "Should show the small title when scrolling", (tester) async {});
+        final largeTitleOpacity = find
+            .byKey(const Key("large_title_opacity"))
+            .getWidget() as AnimatedOpacity;
 
-    // testWidgets(
-    //     "Should hide the small title when not scrolling", (tester) async {});
+        expect(titleOpacity.opacity, 0);
+        expect(largeTitleOpacity.opacity, 1);
+      });
+    });
+
+    testWidgets(
+        "Should hide the large title and show the default title when scrolling",
+        (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(
+          child: CustomAppBar(
+            title: "hello world",
+            body: Container(),
+          ),
+        );
+
+        await tester.drag(find.byType(NestedScrollView), const Offset(0, -300));
+        await tester.pump();
+
+        final titleOpacity = find.byKey(const Key("title_opacity")).getWidget()
+            as AnimatedOpacity;
+
+        final largeTitleOpacity = find
+            .byKey(const Key("large_title_opacity"))
+            .getWidget() as AnimatedOpacity;
+
+        expect(titleOpacity.opacity, 1);
+        expect(largeTitleOpacity.opacity, 0);
+      });
+    });
   });
 
   group("Divider", () {
-    // TODO: Implement test
-    // testWidgets(
-    //     "Should show the divider when scrolling", (tester) async {});
+    testWidgets("Should hide the divider when not scrolling", (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(
+          child: CustomAppBar(
+            title: "hello world",
+            body: Container(),
+          ),
+        );
+
+        final dividerOpacity = find
+            .byKey(const Key("divider_opacity"))
+            .getWidget() as AnimatedOpacity;
+
+        expect(dividerOpacity.opacity, 0);
+      });
+    });
+
+    testWidgets("Should show the divider when scrolling", (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(
+          child: CustomAppBar(
+            title: "hello world",
+            body: Container(),
+          ),
+        );
+
+        await tester.drag(find.byType(NestedScrollView), const Offset(0, -300));
+        await tester.pump();
+
+        final dividerOpacity = find
+            .byKey(const Key("divider_opacity"))
+            .getWidget() as AnimatedOpacity;
+
+        expect(dividerOpacity.opacity, 1);
+      });
+    });
   });
 
   group("CustomBackButton", () {
