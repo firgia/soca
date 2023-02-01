@@ -11,18 +11,15 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/logic/bloc/bloc.dart';
-import '../../../mock/mock.mocks.dart';
+
+import '../../../helper/helper.dart';
 
 void main() {
   group("LanguageBloc", () {
-    late MockLanguageRepository languageRepository;
+    setUp(() => registerLocator());
+    tearDown(() => unregisterLocator());
 
-    setUp(() {
-      languageRepository = MockLanguageRepository();
-    });
-
-    createLanguageBloc() =>
-        LanguageBloc(languageRepository: languageRepository);
+    createLanguageBloc() => LanguageBloc();
 
     group("LanguageChanged", () {
       blocTest<LanguageBloc, LanguageState>(

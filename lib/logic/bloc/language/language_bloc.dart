@@ -11,17 +11,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import '../../../data/data.dart';
 import '../../../core/core.dart';
+import '../../../injection.dart';
 
 part 'language_event.dart';
 part 'language_state.dart';
 
 class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
-  late final LanguageRepository _languageRepository;
+  final LanguageRepository _languageRepository = sl<LanguageRepository>();
 
-  LanguageBloc({
-    required LanguageRepository languageRepository,
-  })  : _languageRepository = languageRepository,
-        super(const LanguageUnselected()) {
+  LanguageBloc() : super(const LanguageUnselected()) {
     on<LanguageChanged>(_onChanged);
   }
 

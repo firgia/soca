@@ -49,9 +49,5 @@ void setupInjection() {
   sl.registerSingleton<OneSignal>(OneSignal.shared);
 
   /* --------------------------------> LOGIC <------------------------------- */
-  sl.registerFactory<LanguageBloc>(
-    () => LanguageBloc(
-      languageRepository: sl<LanguageRepository>(),
-    ),
-  );
+  sl.registerFactory<LanguageBloc>(() => LanguageBloc());
 }
