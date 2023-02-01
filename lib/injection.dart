@@ -10,6 +10,7 @@
 import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
@@ -48,6 +49,14 @@ void setupInjection() {
     () => OnesignalRepository(
       languageRepository: sl<LanguageRepository>(),
       oneSignal: OneSignal.shared,
+    ),
+  );
+
+  /* -----------------------------> DEPENDENCIES <---------------------------- */
+  sl.registerSingleton<InternetConnectionChecker>(
+    InternetConnectionChecker.createInstance(
+      checkTimeout: const Duration(seconds: 5),
+      checkInterval: const Duration(seconds: 5),
     ),
   );
 

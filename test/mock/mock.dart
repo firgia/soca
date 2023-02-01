@@ -9,6 +9,7 @@
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:mockito/annotations.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:soca/config/config.dart';
@@ -30,6 +31,7 @@ import 'package:soca/logic/logic.dart';
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   MockSpec<DotEnv>(),
   MockSpec<FlutterSecureStorage>(),
+  MockSpec<InternetConnectionChecker>(),
   MockSpec<OneSignal>(),
 
   /* --------------------------------> LOGIC <------------------------------- */

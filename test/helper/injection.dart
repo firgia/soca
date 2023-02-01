@@ -30,6 +30,16 @@ MockPlatformInfo getMockPlatformInfo() {
   return mock;
 }
 
+/* ------------------------------> DEPENDENCIES <---------------------------- */
+
+MockInternetConnectionChecker getMockInternetConnectionChecker() {
+  MockInternetConnectionChecker mock = MockInternetConnectionChecker();
+  _removeRegistrationIfExists<InternetConnectionChecker>();
+  locator.registerSingleton<InternetConnectionChecker>(mock);
+
+  return mock;
+}
+
 /* ---------------------------------> LOGIC <-------------------------------- */
 
 MockLanguageBloc getMockLanguageBloc() {
@@ -47,6 +57,9 @@ void registerLocator() {
   /* ---------------------------------> CORE <------------------------------- */
   getMockPlatformInfo();
 
+  /* ------------------------------> DEPENDENCIES <---------------------------- */
+  getMockInternetConnectionChecker();
+
   /* --------------------------------> LOGIC <------------------------------- */
   getMockLanguageBloc();
 }
@@ -57,6 +70,9 @@ void unregisterLocator() {
 
   /* ---------------------------------> CORE <------------------------------- */
   locator.unregister<PlatformInfo>();
+
+  /* ------------------------------> DEPENDENCIES <---------------------------- */
+  locator.unregister<InternetConnectionChecker>();
 
   /* --------------------------------> LOGIC <------------------------------- */
   locator.unregister<LanguageBloc>();

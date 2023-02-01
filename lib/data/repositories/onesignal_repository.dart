@@ -11,9 +11,11 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'language_repository.dart';
 import '../../core/core.dart';
 
-class OnesignalRepository {
+class OnesignalRepository with InternetConnectionHandlerMixin {
   late final OneSignal _oneSignal;
   late final LanguageRepository _languageRepository;
+
+  bool _failedToUpdateLanguage = false;
 
   OnesignalRepository({
     required OneSignal oneSignal,
@@ -21,10 +23,8 @@ class OnesignalRepository {
   }) {
     _oneSignal = oneSignal;
     _languageRepository = languageRepository;
+    listenInternetConnection();
   }
-
-  // TODO: This operation maybe will failed, please call this operation again when the operation failed because internet connection
-  // HINT: use internet_connection_checker package
 
   /// Update oneSignal language based on last language selected by user
   ///
@@ -49,7 +49,20 @@ class OnesignalRepository {
         }
       }
     }
-
+    _failedToUpdateLanguage = isFailedToUpdate;
     return !isFailedToUpdate;
+  }
+
+  @override
+  void onInternetConnected() {
+    super.onInternetConnected();
+
+    if (_failedToUpdateLanguage) {
+      updateLanguage();
+    }
+  }
+
+  void dispose() {
+    cancelInternetConnectionListener();
   }
 }
