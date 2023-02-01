@@ -8,7 +8,7 @@
  */
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:soca/injection.dart';
+import '../../injection.dart';
 
 class LocalLanguageProvider {
   String get lastChangedKey => "language_last_changed";

@@ -21,12 +21,9 @@ void main() {
 
   setUp(() {
     registerLocator();
-    languageRepository = MockLanguageRepository();
-    onesignal = MockOneSignal();
-    onesignalRepository = OnesignalRepository(
-      languageRepository: languageRepository,
-      oneSignal: onesignal,
-    );
+    languageRepository = getMockLanguageRepository();
+    onesignal = getMockOneSignal();
+    onesignalRepository = OnesignalRepository();
   });
 
   tearDown(() => unregisterLocator());

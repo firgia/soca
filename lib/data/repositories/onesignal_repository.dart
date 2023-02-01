@@ -9,20 +9,16 @@
 
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'language_repository.dart';
+import '../../injection.dart';
 import '../../core/core.dart';
 
 class OnesignalRepository with InternetConnectionHandlerMixin {
-  late final OneSignal _oneSignal;
-  late final LanguageRepository _languageRepository;
+  final OneSignal _oneSignal = sl<OneSignal>();
+  final LanguageRepository _languageRepository = sl<LanguageRepository>();
 
   bool _failedToUpdateLanguage = false;
 
-  OnesignalRepository({
-    required OneSignal oneSignal,
-    required LanguageRepository languageRepository,
-  }) {
-    _oneSignal = oneSignal;
-    _languageRepository = languageRepository;
+  OnesignalRepository() {
     listenInternetConnection();
   }
 

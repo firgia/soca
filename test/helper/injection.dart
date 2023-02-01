@@ -39,6 +39,14 @@ MockLocalLanguageProvider getMockLocalLanguageProvider() {
   return mock;
 }
 
+MockLanguageRepository getMockLanguageRepository() {
+  MockLanguageRepository mock = MockLanguageRepository();
+  _removeRegistrationIfExists<LanguageRepository>();
+  locator.registerSingleton<LanguageRepository>(mock);
+
+  return mock;
+}
+
 /* ------------------------------> DEPENDENCIES <---------------------------- */
 
 MockFlutterSecureStorage getMockFlutterSecureStorage() {
@@ -53,6 +61,14 @@ MockInternetConnectionChecker getMockInternetConnectionChecker() {
   MockInternetConnectionChecker mock = MockInternetConnectionChecker();
   _removeRegistrationIfExists<InternetConnectionChecker>();
   locator.registerSingleton<InternetConnectionChecker>(mock);
+
+  return mock;
+}
+
+MockOneSignal getMockOneSignal() {
+  MockOneSignal mock = MockOneSignal();
+  _removeRegistrationIfExists<OneSignal>();
+  locator.registerSingleton<OneSignal>(mock);
 
   return mock;
 }
@@ -76,10 +92,12 @@ void registerLocator() {
 
   /* ----------------------------------> DATA <-------------------------------- */
   getMockLocalLanguageProvider();
+  getMockLanguageRepository();
 
   /* ------------------------------> DEPENDENCIES <-------------------------- */
   getMockFlutterSecureStorage();
   getMockInternetConnectionChecker();
+  getMockOneSignal();
 
   /* --------------------------------> LOGIC <------------------------------- */
   getMockLanguageBloc();
@@ -94,10 +112,12 @@ void unregisterLocator() {
 
   /* ----------------------------------> DATA <-------------------------------- */
   locator.unregister<LocalLanguageProvider>();
+  locator.unregister<LanguageRepository>();
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   locator.unregister<FlutterSecureStorage>();
   locator.unregister<InternetConnectionChecker>();
+  locator.unregister<OneSignal>();
 
   /* --------------------------------> LOGIC <------------------------------- */
   locator.unregister<LanguageBloc>();

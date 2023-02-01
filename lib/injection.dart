@@ -22,10 +22,10 @@ final sl = GetIt.instance;
 
 void setupInjection() {
   /* --------------------------------> CONFIG <------------------------------ */
-  sl.registerLazySingleton(() => AppNavigator());
+  sl.registerLazySingleton<AppNavigator>(() => AppNavigator());
 
   /* ---------------------------------> CORE <------------------------------- */
-  sl.registerLazySingleton(
+  sl.registerLazySingleton<PlatformInfo>(
     () => PlatformInfo(
       isIOS: Platform.isIOS,
       isAndroid: Platform.isAndroid,
@@ -33,18 +33,10 @@ void setupInjection() {
   );
 
   /* ---------------------------------> DATA <------------------------------- */
-  sl.registerLazySingleton(
-    () => LocalLanguageProvider(),
-  );
-
+  sl.registerLazySingleton<LocalLanguageProvider>(
+      () => LocalLanguageProvider());
   sl.registerLazySingleton<LanguageRepository>(() => LanguageRepository());
-
-  sl.registerLazySingleton(
-    () => OnesignalRepository(
-      languageRepository: sl<LanguageRepository>(),
-      oneSignal: OneSignal.shared,
-    ),
-  );
+  sl.registerLazySingleton<OnesignalRepository>(() => OnesignalRepository());
 
   /* -----------------------------> DEPENDENCIES <---------------------------- */
   sl.registerSingleton<InternetConnectionChecker>(
@@ -53,11 +45,11 @@ void setupInjection() {
       checkInterval: const Duration(seconds: 5),
     ),
   );
-
   sl.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage());
+  sl.registerSingleton<OneSignal>(OneSignal.shared);
 
   /* --------------------------------> LOGIC <------------------------------- */
-  sl.registerFactory(
+  sl.registerFactory<LanguageBloc>(
     () => LanguageBloc(
       languageRepository: sl<LanguageRepository>(),
     ),
