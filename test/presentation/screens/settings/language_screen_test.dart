@@ -7,9 +7,11 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:soca/config/config.dart';
 import 'package:soca/core/enum/enum.dart';
 import 'package:soca/logic/logic.dart';
 import 'package:soca/presentation/presentation.dart';
@@ -31,6 +33,21 @@ void main() async {
 
         await tester.pumpApp(child: LanguageScreen());
         expect(find.byType(CustomAppBar), findsOneWidget);
+      });
+    });
+
+    testWidgets("Should show the language title", (tester) async {
+      await tester.runAsync(() async {
+        MockLanguageBloc languageBloc = getMockLanguageBloc();
+        when(languageBloc.state).thenReturn(
+          const LanguageSelected(DeviceLanguage.indonesian),
+        );
+
+        await tester.pumpApp(child: LanguageScreen());
+        final customAppBar =
+            find.byType(CustomAppBar).getWidget() as CustomAppBar;
+
+        expect(customAppBar.title, LocaleKeys.language.tr());
       });
     });
   });
@@ -188,6 +205,19 @@ void main() async {
             find.byKey(const Key("next_button")).getWidget() as AsyncButton;
 
         expect(nextButton.isLoading, false);
+      });
+    });
+
+    testWidgets("Should show the next text", (tester) async {
+      await tester.runAsync(() async {
+        MockLanguageBloc languageBloc = getMockLanguageBloc();
+        when(languageBloc.state).thenReturn(
+          const LanguageSelected(DeviceLanguage.indonesian),
+        );
+
+        await tester.pumpApp(child: LanguageScreen());
+
+        expect(find.text(LocaleKeys.next.tr()), findsOneWidget);
       });
     });
   });
