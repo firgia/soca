@@ -7,16 +7,14 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
-
 import '../../mock/mock.mocks.dart';
 
 void main() {
-  late DotEnv dotEnv;
+  late MockDotEnv dotEnv;
 
   setUp(() {
     dotEnv = MockDotEnv();

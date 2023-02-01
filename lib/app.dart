@@ -7,6 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,9 +15,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'injection.dart';
 import 'config/config.dart';
-import 'logic/logic.dart';
 import 'core/core.dart';
+import 'observer.dart';
 
 /// We need to initialize app before start to the main page
 ///
@@ -46,6 +48,7 @@ Future<void> initializeApp() async {
       break;
   }
   await dotenv.load(fileName: envFileName);
+  setupInjection();
 
   // Initialize all asynchronous methods which possible to initialize at the
   // same time to speed up the initialization process
@@ -54,7 +57,10 @@ Future<void> initializeApp() async {
     Firebase.initializeApp(),
     OneSignal.shared.setAppId(Environtment.onesignalAppID),
     OnesignalHandler.initialize(showLog: Environtment.isDevelopment()),
+    EasyLocalization.ensureInitialized(),
   ]);
+
+  Bloc.observer = AppBlocObserver();
 }
 
 class App extends StatefulWidget {
@@ -76,25 +82,23 @@ class _AppState extends State<App> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => SignInBloc()),
-        BlocProvider(create: (context) => SignUpBloc()),
-        BlocProvider(create: (context) => SignOutBloc()),
-      ],
-      child: MaterialApp.router(
-        title: widget.title,
+    return MaterialApp.router(
+      title: widget.title,
 
-        /* THEMING SETUP */
-        theme: AppTheme.light,
-        darkTheme: AppTheme.dark,
-        themeMode: ThemeMode.system,
+      /* LOCALE SETUP */
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
 
-        /* ROUTER SETUP */
-        routerDelegate: AppRoutes().router.routerDelegate,
-        routeInformationParser: AppRoutes().router.routeInformationParser,
-        routeInformationProvider: AppRoutes().router.routeInformationProvider,
-      ),
+      /* THEMING SETUP */
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.system,
+
+      /* ROUTER SETUP */
+      routerDelegate: AppRoutes.router.routerDelegate,
+      routeInformationParser: AppRoutes.router.routeInformationParser,
+      routeInformationProvider: AppRoutes.router.routeInformationProvider,
     );
   }
 }
