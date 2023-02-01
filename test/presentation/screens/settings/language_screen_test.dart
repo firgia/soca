@@ -80,17 +80,75 @@ void main() async {
       });
     });
 
-    // TODO: Implement test
-    // testWidgets("Should show the flag button based on DeviceLanguage",
-    //     (tester) async {});
+    testWidgets("Should show the flag button based on DeviceLanguage",
+        (tester) async {
+      await tester.runAsync(() async {
+        MockLanguageBloc languageBloc = getMockLanguageBloc();
+        when(languageBloc.state).thenReturn(const LanguageUnselected());
+        await tester.pumpApp(child: LanguageScreen());
 
-    // testWidgets(
-    //     "Should set the selected FlagButton to true when DeviceLanguage is selected",
-    //     (tester) async {});
+        // We need to drag to make sure all button is shown
+        await tester.drag(find.byType(CustomAppBar), const Offset(0, -200));
+        await tester.pump();
 
-    // testWidgets(
-    //     "Should set the selected FlagButton to false when DeviceLanguage is not selected",
-    //     (tester) async {});
+        for (DeviceLanguage deviceLanguage in DeviceLanguage.values) {
+          expect(find.byKey(Key("flag_button_${deviceLanguage.name}")),
+              findsOneWidget);
+        }
+      });
+    });
+
+    testWidgets(
+        "Should set the selected FlagButton to true when DeviceLanguage is selected",
+        (tester) async {
+      await tester.runAsync(() async {
+        MockLanguageBloc languageBloc = getMockLanguageBloc();
+        DeviceLanguage selectedLanguage = DeviceLanguage.indonesian;
+
+        when(languageBloc.state).thenReturn(LanguageSelected(selectedLanguage));
+        await tester.pumpApp(child: LanguageScreen());
+
+        // We need to drag to make sure all button is shown
+        await tester.drag(find.byType(CustomAppBar), const Offset(0, -200));
+        await tester.pump();
+
+        for (DeviceLanguage deviceLanguage in DeviceLanguage.values) {
+          final button = find
+              .byKey(Key("flag_button_${deviceLanguage.name}"))
+              .getWidget() as FlagButton;
+
+          if (button.language == selectedLanguage) {
+            expect(button.selected, true);
+          }
+        }
+      });
+    });
+
+    testWidgets(
+        "Should set the selected FlagButton to false when DeviceLanguage is not selected",
+        (tester) async {
+      await tester.runAsync(() async {
+        MockLanguageBloc languageBloc = getMockLanguageBloc();
+        DeviceLanguage selectedLanguage = DeviceLanguage.indonesian;
+
+        when(languageBloc.state).thenReturn(LanguageSelected(selectedLanguage));
+        await tester.pumpApp(child: LanguageScreen());
+
+        // We need to drag to make sure all button is shown
+        await tester.drag(find.byType(CustomAppBar), const Offset(0, -200));
+        await tester.pump();
+
+        for (DeviceLanguage deviceLanguage in DeviceLanguage.values) {
+          final button = find
+              .byKey(Key("flag_button_${deviceLanguage.name}"))
+              .getWidget() as FlagButton;
+
+          if (button.language != selectedLanguage) {
+            expect(button.selected, false);
+          }
+        }
+      });
+    });
   });
 
   group("NextButton", () {
