@@ -119,8 +119,9 @@ void main() {
           ),
         );
 
-        final indicator =
-            find.byKey(const Key("android_indicator")).getWidget() as SizedBox;
+        final indicator = find
+            .byKey(const Key("adaptive_loading_android_indicator"))
+            .getWidget() as SizedBox;
 
         expect(indicator.height, radius * 2);
         expect(indicator.width, radius * 2);

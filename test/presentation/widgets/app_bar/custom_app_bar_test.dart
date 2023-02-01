@@ -37,11 +37,12 @@ void main() {
           ),
         );
 
-        final titleOpacity = find.byKey(const Key("title_opacity")).getWidget()
-            as AnimatedOpacity;
+        final titleOpacity = find
+            .byKey(const Key("custom_app_bar_title_opacity"))
+            .getWidget() as AnimatedOpacity;
 
         final largeTitleOpacity = find
-            .byKey(const Key("large_title_opacity"))
+            .byKey(const Key("custom_app_bar_large_title_opacity"))
             .getWidget() as AnimatedOpacity;
 
         expect(titleOpacity.opacity, 0);
@@ -63,11 +64,12 @@ void main() {
         await tester.drag(find.byType(NestedScrollView), const Offset(0, -300));
         await tester.pump();
 
-        final titleOpacity = find.byKey(const Key("title_opacity")).getWidget()
-            as AnimatedOpacity;
+        final titleOpacity = find
+            .byKey(const Key("custom_app_bar_title_opacity"))
+            .getWidget() as AnimatedOpacity;
 
         final largeTitleOpacity = find
-            .byKey(const Key("large_title_opacity"))
+            .byKey(const Key("custom_app_bar_large_title_opacity"))
             .getWidget() as AnimatedOpacity;
 
         expect(titleOpacity.opacity, 1);
@@ -87,7 +89,7 @@ void main() {
         );
 
         final dividerOpacity = find
-            .byKey(const Key("divider_opacity"))
+            .byKey(const Key("custom_app_bar_divider_opacity"))
             .getWidget() as AnimatedOpacity;
 
         expect(dividerOpacity.opacity, 0);
@@ -107,7 +109,7 @@ void main() {
         await tester.pump();
 
         final dividerOpacity = find
-            .byKey(const Key("divider_opacity"))
+            .byKey(const Key("custom_app_bar_divider_opacity"))
             .getWidget() as AnimatedOpacity;
 
         expect(dividerOpacity.opacity, 1);

@@ -39,7 +39,7 @@ class AdaptiveLoading extends StatelessWidget {
 
   Widget _buildIOS() {
     return CupertinoActivityIndicator(
-      key: const Key("ios_indicator"),
+      key: const Key("adaptive_loading_ios_indicator"),
       radius: radius,
       color: color,
     );
@@ -47,7 +47,7 @@ class AdaptiveLoading extends StatelessWidget {
 
   Widget _buildAndroid() {
     return SizedBox(
-      key: const Key("android_indicator"),
+      key: const Key("adaptive_loading_android_indicator"),
       width: radius * 2,
       height: radius * 2,
       child: CircularProgressIndicator(

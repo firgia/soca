@@ -82,7 +82,7 @@ class _AppBarDelegate extends SliverPersistentHeaderDelegate {
         fit: StackFit.expand,
         children: [
           AnimatedOpacity(
-            key: const Key("large_title_opacity"),
+            key: const Key("custom_app_bar_large_title_opacity"),
             duration: const Duration(milliseconds: 150),
             opacity: largeTitleOpacity,
             child: Padding(
@@ -109,7 +109,7 @@ class _AppBarDelegate extends SliverPersistentHeaderDelegate {
                       const SizedBox(width: kDefaultSpacing / 2),
                       Expanded(
                         child: AnimatedOpacity(
-                          key: const Key("title_opacity"),
+                          key: const Key("custom_app_bar_title_opacity"),
                           duration: const Duration(milliseconds: 150),
                           opacity: titleOpacity,
                           child: _buildTitleText(context),
@@ -122,7 +122,7 @@ class _AppBarDelegate extends SliverPersistentHeaderDelegate {
                 ),
                 const SizedBox(height: 4),
                 AnimatedOpacity(
-                  key: const Key("divider_opacity"),
+                  key: const Key("custom_app_bar_divider_opacity"),
                   opacity: dividerOpacity,
                   duration: const Duration(milliseconds: 150),
                   child: _buildDivider(),

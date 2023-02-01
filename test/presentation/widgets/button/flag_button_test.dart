@@ -28,7 +28,9 @@ void main() {
           ),
         );
 
-        final image = find.byKey(const Key("flag_image")).getWidget() as Image;
+        final image = find
+            .byKey(const Key("language_screen_flag_button_image"))
+            .getWidget() as Image;
 
         expect(image.image, deviceLanguage.getImage());
       });
@@ -49,7 +51,9 @@ void main() {
           ),
         );
 
-        final text = find.byKey(const Key("flag_text")).getWidget() as Text;
+        final text = find
+            .byKey(const Key("language_screen_flag_button_text"))
+            .getWidget() as Text;
         expect(text.data, deviceLanguage.getNativeName());
       });
     });
@@ -69,7 +73,8 @@ void main() {
           ),
         );
 
-        expect(find.byKey(const Key("check_icon")), findsOneWidget);
+        expect(find.byKey(const Key("language_screen_flag_button_check_icon")),
+            findsOneWidget);
       });
     });
 
@@ -86,7 +91,8 @@ void main() {
           ),
         );
 
-        expect(find.byKey(const Key("check_icon")), findsNothing);
+        expect(find.byKey(const Key("language_screen_flag_button_check_icon")),
+            findsNothing);
       });
     });
   });

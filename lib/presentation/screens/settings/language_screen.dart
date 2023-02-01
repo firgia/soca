@@ -30,7 +30,7 @@ class LanguageScreen extends StatelessWidget {
       create: (context) => languageBloc,
       child: Scaffold(
         body: CustomAppBar(
-          key: const Key("app_bar"),
+          key: const Key("language_screen_app_bar"),
           title: LocaleKeys.language.tr(),
           body: Column(
             children: [
@@ -40,7 +40,7 @@ class LanguageScreen extends StatelessWidget {
                     final isLoading = (state is LanguageLoading);
 
                     return IgnorePointer(
-                      key: const Key("ignore_pointer_items"),
+                      key: const Key("language_screen_ignore_pointer_items"),
                       ignoring: isLoading,
                       child: _buildLanguageItems(),
                     );
@@ -57,7 +57,7 @@ class LanguageScreen extends StatelessWidget {
 
   Widget _buildLanguageItems() {
     return SafeArea(
-      key: const Key("language_items"),
+      key: const Key("language_screen_language_items"),
       child: Center(
         child: Container(
           constraints: const BoxConstraints(
@@ -79,7 +79,8 @@ class LanguageScreen extends StatelessWidget {
                     }
 
                     return FlagButton(
-                      key: Key("flag_button_${deviceLanguage.name}"),
+                      key: Key(
+                          "language_screen_flag_button_${deviceLanguage.name}"),
                       language: deviceLanguage,
                       onPressed: () => _changeLanguage(context, deviceLanguage),
                       selected: isSelected,
@@ -110,7 +111,7 @@ class LanguageScreen extends StatelessWidget {
             final isLoading = state is LanguageLoading;
 
             return AsyncButton(
-              key: const Key("next_button"),
+              key: const Key("language_screen_next_button"),
               isLoading: isLoading,
               // TODO: Implement this
               ///  onPressed: () => controller.next(),

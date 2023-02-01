@@ -62,7 +62,7 @@ void main() async {
         await tester.pumpApp(child: LanguageScreen());
 
         final ignorePointer = find
-            .byKey(const Key("ignore_pointer_items"))
+            .byKey(const Key("language_screen_ignore_pointer_items"))
             .getWidget() as IgnorePointer;
 
         expect(ignorePointer.ignoring, true);
@@ -79,7 +79,7 @@ void main() async {
         await tester.pumpApp(child: LanguageScreen());
 
         final ignorePointer = find
-            .byKey(const Key("ignore_pointer_items"))
+            .byKey(const Key("language_screen_ignore_pointer_items"))
             .getWidget() as IgnorePointer;
 
         expect(ignorePointer.ignoring, false);
@@ -93,7 +93,8 @@ void main() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageUnselected());
         await tester.pumpApp(child: LanguageScreen());
-        expect(find.byKey(const Key("language_items")), findsOneWidget);
+        expect(find.byKey(const Key("language_screen_language_items")),
+            findsOneWidget);
       });
     });
 
@@ -109,7 +110,9 @@ void main() async {
         await tester.pump();
 
         for (DeviceLanguage deviceLanguage in DeviceLanguage.values) {
-          expect(find.byKey(Key("flag_button_${deviceLanguage.name}")),
+          expect(
+              find.byKey(
+                  Key("language_screen_flag_button_${deviceLanguage.name}")),
               findsOneWidget);
         }
       });
@@ -131,7 +134,7 @@ void main() async {
 
         for (DeviceLanguage deviceLanguage in DeviceLanguage.values) {
           final button = find
-              .byKey(Key("flag_button_${deviceLanguage.name}"))
+              .byKey(Key("language_screen_flag_button_${deviceLanguage.name}"))
               .getWidget() as FlagButton;
 
           if (button.language == selectedLanguage) {
@@ -157,7 +160,7 @@ void main() async {
 
         for (DeviceLanguage deviceLanguage in DeviceLanguage.values) {
           final button = find
-              .byKey(Key("flag_button_${deviceLanguage.name}"))
+              .byKey(Key("language_screen_flag_button_${deviceLanguage.name}"))
               .getWidget() as FlagButton;
 
           if (button.language != selectedLanguage) {
@@ -174,7 +177,8 @@ void main() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageUnselected());
         await tester.pumpApp(child: LanguageScreen());
-        expect(find.byKey(const Key("next_button")), findsOneWidget);
+        expect(find.byKey(const Key("language_screen_next_button")),
+            findsOneWidget);
       });
     });
 
@@ -186,8 +190,9 @@ void main() async {
         when(languageBloc.state).thenReturn(const LanguageLoading());
         await tester.pumpApp(child: LanguageScreen());
 
-        final nextButton =
-            find.byKey(const Key("next_button")).getWidget() as AsyncButton;
+        final nextButton = find
+            .byKey(const Key("language_screen_next_button"))
+            .getWidget() as AsyncButton;
 
         expect(nextButton.isLoading, true);
       });
@@ -201,8 +206,9 @@ void main() async {
         when(languageBloc.state).thenReturn(const LanguageUnselected());
         await tester.pumpApp(child: LanguageScreen());
 
-        final nextButton =
-            find.byKey(const Key("next_button")).getWidget() as AsyncButton;
+        final nextButton = find
+            .byKey(const Key("language_screen_next_button"))
+            .getWidget() as AsyncButton;
 
         expect(nextButton.isLoading, false);
       });
