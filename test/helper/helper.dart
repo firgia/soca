@@ -16,6 +16,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
+import 'package:soca/data/data.dart';
 import 'package:soca/logic/logic.dart';
 
 import '../mock/mock.mocks.dart';

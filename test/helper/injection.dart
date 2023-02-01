@@ -30,6 +30,15 @@ MockPlatformInfo getMockPlatformInfo() {
   return mock;
 }
 
+/* ----------------------------------> DATA <-------------------------------- */
+MockLocalLanguageProvider getMockLocalLanguageProvider() {
+  MockLocalLanguageProvider mock = MockLocalLanguageProvider();
+  _removeRegistrationIfExists<LocalLanguageProvider>();
+  locator.registerSingleton<LocalLanguageProvider>(mock);
+
+  return mock;
+}
+
 /* ------------------------------> DEPENDENCIES <---------------------------- */
 
 MockFlutterSecureStorage getMockFlutterSecureStorage() {
@@ -65,6 +74,9 @@ void registerLocator() {
   /* ---------------------------------> CORE <------------------------------- */
   getMockPlatformInfo();
 
+  /* ----------------------------------> DATA <-------------------------------- */
+  getMockLocalLanguageProvider();
+
   /* ------------------------------> DEPENDENCIES <-------------------------- */
   getMockFlutterSecureStorage();
   getMockInternetConnectionChecker();
@@ -79,6 +91,9 @@ void unregisterLocator() {
 
   /* ---------------------------------> CORE <------------------------------- */
   locator.unregister<PlatformInfo>();
+
+  /* ----------------------------------> DATA <-------------------------------- */
+  locator.unregister<LocalLanguageProvider>();
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   locator.unregister<FlutterSecureStorage>();

@@ -37,11 +37,7 @@ void setupInjection() {
     () => LocalLanguageProvider(),
   );
 
-  sl.registerLazySingleton(
-    () => LanguageRepository(
-      localLanguageProvider: sl<LocalLanguageProvider>(),
-    ),
-  );
+  sl.registerLazySingleton<LanguageRepository>(() => LanguageRepository());
 
   sl.registerLazySingleton(
     () => OnesignalRepository(

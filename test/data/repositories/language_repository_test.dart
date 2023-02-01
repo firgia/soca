@@ -11,6 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
+import '../../helper/helper.dart';
 import '../../mock/mock.mocks.dart';
 
 void main() {
@@ -18,11 +19,12 @@ void main() {
   late LanguageRepository languageProvider;
 
   setUp(() {
-    localLanguageProvider = MockLocalLanguageProvider();
-    languageProvider = LanguageRepository(
-      localLanguageProvider: localLanguageProvider,
-    );
+    registerLocator();
+    localLanguageProvider = getMockLocalLanguageProvider();
+    languageProvider = LanguageRepository();
   });
+
+  tearDown(() => unregisterLocator());
 
   group("Functions", () {
     group("getLastChanged", () {

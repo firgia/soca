@@ -7,15 +7,16 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:soca/injection.dart';
+
 import '../../core/core.dart';
 import '../providers/providers.dart';
 
 class LanguageRepository {
-  late final LocalLanguageProvider _localLanguageProvider;
+  final LocalLanguageProvider _localLanguageProvider =
+      sl<LocalLanguageProvider>();
 
-  LanguageRepository({required LocalLanguageProvider localLanguageProvider}) {
-    _localLanguageProvider = localLanguageProvider;
-  }
+  LanguageRepository();
 
   /// Get the last saved changed language.
   Future<DeviceLanguage?> getLastChanged() async {
