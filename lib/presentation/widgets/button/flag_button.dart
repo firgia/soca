@@ -14,14 +14,14 @@ import '../../../core/core.dart';
 class FlagButton extends StatelessWidget {
   const FlagButton({
     required this.language,
-    required this.onPressed,
+    required this.onTap,
     required this.selected,
     Key? key,
   }) : super(key: key);
 
   final DeviceLanguage language;
   final bool selected;
-  final VoidCallback onPressed;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -31,23 +31,25 @@ class FlagButton extends StatelessWidget {
         Opacity(
           opacity: selected ? .4 : 1,
           child: GestureDetector(
-            onTap: selected ? null : onPressed,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image(
-                  key: const Key("flag_button_image"),
-                  image: language.getImage(),
-                  width: 50,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  language.getNativeName(),
-                  key: const Key("flag_button_text"),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                ),
-              ],
+            onTap: selected ? null : onTap,
+            child: AbsorbPointer(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image(
+                    key: const Key("flag_button_image"),
+                    image: language.getImage(),
+                    width: 50,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    language.getNativeName(),
+                    key: const Key("flag_button_text"),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

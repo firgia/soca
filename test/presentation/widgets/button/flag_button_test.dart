@@ -23,7 +23,7 @@ void main() {
         await tester.pumpApp(
           child: FlagButton(
             language: deviceLanguage,
-            onPressed: () {},
+            onTap: () {},
             selected: false,
           ),
         );
@@ -45,7 +45,7 @@ void main() {
         await tester.pumpApp(
           child: FlagButton(
             language: deviceLanguage,
-            onPressed: () {},
+            onTap: () {},
             selected: false,
           ),
         );
@@ -66,7 +66,7 @@ void main() {
         await tester.pumpApp(
           child: FlagButton(
             language: deviceLanguage,
-            onPressed: () {},
+            onTap: () {},
             selected: true,
           ),
         );
@@ -83,7 +83,7 @@ void main() {
         await tester.pumpApp(
           child: FlagButton(
             language: deviceLanguage,
-            onPressed: () {},
+            onTap: () {},
             selected: false,
           ),
         );

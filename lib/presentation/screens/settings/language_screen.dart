@@ -82,7 +82,7 @@ class LanguageScreen extends StatelessWidget {
                       key: Key(
                           "language_screen_flag_button_${deviceLanguage.name}"),
                       language: deviceLanguage,
-                      onPressed: () => _changeLanguage(context, deviceLanguage),
+                      onTap: () => _changeLanguage(context, deviceLanguage),
                       selected: isSelected,
                     );
                   },
