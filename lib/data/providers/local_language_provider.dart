@@ -8,16 +8,14 @@
  */
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:soca/injection.dart';
 
 class LocalLanguageProvider {
   String get lastChangedKey => "language_last_changed";
   String get lastChangedOnesignalKey => "language_last_onesignal_key";
 
-  late final FlutterSecureStorage _secureStorage;
-
-  LocalLanguageProvider({required FlutterSecureStorage secureStorage}) {
-    _secureStorage = secureStorage;
-  }
+  final FlutterSecureStorage _secureStorage = sl<FlutterSecureStorage>();
+  LocalLanguageProvider();
 
   /// Get the last saved changed language.
   Future<String?> getLastChanged() async {

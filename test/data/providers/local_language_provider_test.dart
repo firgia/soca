@@ -10,21 +10,23 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:soca/data/providers/local_language_provider.dart';
+import '../../helper/helper.dart';
 import '../../mock/mock.mocks.dart';
 
 String get _lastChangedKey => "language_last_changed";
 String get _lastChangedOnesignalKey => "language_last_onesignal_key";
 
 void main() {
-  late MockFlutterSecureStorage secureStorage;
   late LocalLanguageProvider languageProvider;
+  late MockFlutterSecureStorage secureStorage;
 
   setUp(() {
-    secureStorage = MockFlutterSecureStorage();
-    languageProvider = LocalLanguageProvider(
-      secureStorage: secureStorage,
-    );
+    registerLocator();
+    secureStorage = getMockFlutterSecureStorage();
+    languageProvider = LocalLanguageProvider();
   });
+
+  tearDown(() => unregisterLocator());
 
   group("Functions", () {
     group("getLastChanged", () {

@@ -32,6 +32,14 @@ MockPlatformInfo getMockPlatformInfo() {
 
 /* ------------------------------> DEPENDENCIES <---------------------------- */
 
+MockFlutterSecureStorage getMockFlutterSecureStorage() {
+  MockFlutterSecureStorage mock = MockFlutterSecureStorage();
+  _removeRegistrationIfExists<FlutterSecureStorage>();
+  locator.registerSingleton<FlutterSecureStorage>(mock);
+
+  return mock;
+}
+
 MockInternetConnectionChecker getMockInternetConnectionChecker() {
   MockInternetConnectionChecker mock = MockInternetConnectionChecker();
   _removeRegistrationIfExists<InternetConnectionChecker>();
@@ -57,7 +65,8 @@ void registerLocator() {
   /* ---------------------------------> CORE <------------------------------- */
   getMockPlatformInfo();
 
-  /* ------------------------------> DEPENDENCIES <---------------------------- */
+  /* ------------------------------> DEPENDENCIES <-------------------------- */
+  getMockFlutterSecureStorage();
   getMockInternetConnectionChecker();
 
   /* --------------------------------> LOGIC <------------------------------- */
@@ -71,7 +80,8 @@ void unregisterLocator() {
   /* ---------------------------------> CORE <------------------------------- */
   locator.unregister<PlatformInfo>();
 
-  /* ------------------------------> DEPENDENCIES <---------------------------- */
+  /* -----------------------------> DEPENDENCIES <--------------------------- */
+  locator.unregister<FlutterSecureStorage>();
   locator.unregister<InternetConnectionChecker>();
 
   /* --------------------------------> LOGIC <------------------------------- */

@@ -34,9 +34,7 @@ void setupInjection() {
 
   /* ---------------------------------> DATA <------------------------------- */
   sl.registerLazySingleton(
-    () => LocalLanguageProvider(
-      secureStorage: const FlutterSecureStorage(),
-    ),
+    () => LocalLanguageProvider(),
   );
 
   sl.registerLazySingleton(
@@ -59,6 +57,8 @@ void setupInjection() {
       checkInterval: const Duration(seconds: 5),
     ),
   );
+
+  sl.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage());
 
   /* --------------------------------> LOGIC <------------------------------- */
   sl.registerFactory(
