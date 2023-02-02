@@ -8,8 +8,7 @@
  */
 
 import 'package:logging/logging.dart';
-import 'package:soca/injection.dart';
-
+import '../../injection.dart';
 import '../../core/core.dart';
 import '../providers/providers.dart';
 

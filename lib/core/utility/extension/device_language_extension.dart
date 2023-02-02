@@ -8,7 +8,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:soca/config/config.dart';
+import '../../../config/config.dart';
 import '../../enum/enum.dart';
 import '../../path/path.dart';
 

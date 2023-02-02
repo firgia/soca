@@ -31,6 +31,14 @@ MockPlatformInfo getMockPlatformInfo() {
 }
 
 /* ----------------------------------> DATA <-------------------------------- */
+MockAuthProvider getMockAuthProvider() {
+  MockAuthProvider mock = MockAuthProvider();
+  _removeRegistrationIfExists<AuthProvider>();
+  locator.registerSingleton<AuthProvider>(mock);
+
+  return mock;
+}
+
 MockLocalLanguageProvider getMockLocalLanguageProvider() {
   MockLocalLanguageProvider mock = MockLocalLanguageProvider();
   _removeRegistrationIfExists<LocalLanguageProvider>();
@@ -61,6 +69,22 @@ MockFlutterSecureStorage getMockFlutterSecureStorage() {
   MockFlutterSecureStorage mock = MockFlutterSecureStorage();
   _removeRegistrationIfExists<FlutterSecureStorage>();
   locator.registerSingleton<FlutterSecureStorage>(mock);
+
+  return mock;
+}
+
+MockFirebaseAuth getMockFirebaseAuth() {
+  MockFirebaseAuth mock = MockFirebaseAuth();
+  _removeRegistrationIfExists<FirebaseAuth>();
+  locator.registerSingleton<FirebaseAuth>(mock);
+
+  return mock;
+}
+
+MockGoogleSignIn getMockGoogleSignIn() {
+  MockGoogleSignIn mock = MockGoogleSignIn();
+  _removeRegistrationIfExists<GoogleSignIn>();
+  locator.registerSingleton<GoogleSignIn>(mock);
 
   return mock;
 }
@@ -99,12 +123,15 @@ void registerLocator() {
   getMockPlatformInfo();
 
   /* ---------------------------------> DATA <------------------------------- */
+  getMockAuthProvider();
   getMockFunctionsProvider();
   getMockLocalLanguageProvider();
   getMockLanguageRepository();
 
   /* ------------------------------> DEPENDENCIES <-------------------------- */
   getMockFlutterSecureStorage();
+  getMockFirebaseAuth();
+  getMockGoogleSignIn();
   getMockInternetConnectionChecker();
   getMockOneSignal();
 
@@ -120,12 +147,15 @@ void unregisterLocator() {
   locator.unregister<PlatformInfo>();
 
   /* ---------------------------------> DATA <------------------------------- */
+  locator.unregister<AuthProvider>();
   locator.unregister<FunctionsProvider>();
   locator.unregister<LocalLanguageProvider>();
   locator.unregister<LanguageRepository>();
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   locator.unregister<FlutterSecureStorage>();
+  locator.unregister<FirebaseAuth>();
+  locator.unregister<GoogleSignIn>();
   locator.unregister<InternetConnectionChecker>();
   locator.unregister<OneSignal>();
 

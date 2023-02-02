@@ -7,5 +7,6 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+export 'auth_repository.dart';
 export 'language_repository.dart';
 export 'onesignal_repository.dart';
