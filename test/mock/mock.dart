@@ -30,6 +30,7 @@ import 'package:soca/logic/logic.dart';
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   MockSpec<DotEnv>(),
+  MockSpec<FunctionsProvider>(),
   MockSpec<FlutterSecureStorage>(),
   MockSpec<InternetConnectionChecker>(),
   MockSpec<OneSignal>(),

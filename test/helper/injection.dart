@@ -39,6 +39,14 @@ MockLocalLanguageProvider getMockLocalLanguageProvider() {
   return mock;
 }
 
+MockFunctionsProvider getMockFunctionsProvider() {
+  MockFunctionsProvider mock = MockFunctionsProvider();
+  _removeRegistrationIfExists<FunctionsProvider>();
+  locator.registerSingleton<FunctionsProvider>(mock);
+
+  return mock;
+}
+
 MockLanguageRepository getMockLanguageRepository() {
   MockLanguageRepository mock = MockLanguageRepository();
   _removeRegistrationIfExists<LanguageRepository>();
@@ -90,7 +98,8 @@ void registerLocator() {
   /* ---------------------------------> CORE <------------------------------- */
   getMockPlatformInfo();
 
-  /* ----------------------------------> DATA <-------------------------------- */
+  /* ---------------------------------> DATA <------------------------------- */
+  getMockFunctionsProvider();
   getMockLocalLanguageProvider();
   getMockLanguageRepository();
 
@@ -110,7 +119,8 @@ void unregisterLocator() {
   /* ---------------------------------> CORE <------------------------------- */
   locator.unregister<PlatformInfo>();
 
-  /* ----------------------------------> DATA <-------------------------------- */
+  /* ---------------------------------> DATA <------------------------------- */
+  locator.unregister<FunctionsProvider>();
   locator.unregister<LocalLanguageProvider>();
   locator.unregister<LanguageRepository>();
 

@@ -11,11 +11,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logging/logging.dart';
 import '../../core/core.dart';
 import '../../injection.dart';
+import 'functions_provider.dart';
 
 class AuthProvider {
   String get _signInOnProcessKey => "sign_in_on_process";
   String get _signInMethodKey => "sign_in_method";
 
+  final FunctionsProvider _functionsProvider = sl<FunctionsProvider>();
   final FlutterSecureStorage _secureStorage = sl<FlutterSecureStorage>();
   final Logger _logger = Logger("Local Language Provider");
 
@@ -69,5 +71,25 @@ class AuthProvider {
 
     _logger.fine("Successfully to getting $_signInMethodKey data");
     return null;
+  }
+
+  /// Notify to server when user has been sign in successfully
+  ///
+  /// {@macro firebase_functions_exception}
+  Future<void> notifyIsSignInSuccessfully({
+    required String deviceID,
+    required String oneSignalPlayerID,
+    required String? voipToken,
+    required DevicePlatform devicePlatform,
+  }) async {
+    await _functionsProvider.call(
+      functionsName: FunctionName.onSignIn,
+      parameters: {
+        "device_id": deviceID,
+        "player_id": oneSignalPlayerID,
+        "voip_token": voipToken,
+        "platform": devicePlatform.name,
+      },
+    );
   }
 }

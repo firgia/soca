@@ -16,14 +16,17 @@ import '../../mock/mock.mocks.dart';
 
 String get _signInOnProcessKey => "sign_in_on_process";
 String get _signInMethodKey => "sign_in_method";
+String get _onSignIn => "onSignIn";
 
 void main() {
   late AuthProvider authProvider;
   late MockFlutterSecureStorage secureStorage;
+  late MockFunctionsProvider functionsProvider;
 
   setUp(() {
     registerLocator();
     secureStorage = getMockFlutterSecureStorage();
+    functionsProvider = getMockFunctionsProvider();
     authProvider = AuthProvider();
   });
 
@@ -80,6 +83,30 @@ void main() {
         verify(secureStorage.write(key: _signInOnProcessKey, value: "true"))
             .called(1);
       });
+    });
+
+    group("notifyIsSignInSuccessfully", () {
+      test("Should send the argument based on parameter ", () async {
+        when(functionsProvider.call(functionsName: _onSignIn))
+            .thenAnswer((_) => Future.value({}));
+
+        await authProvider.notifyIsSignInSuccessfully(
+          deviceID: "123",
+          devicePlatform: DevicePlatform.ios,
+          oneSignalPlayerID: "123456",
+          voipToken: "abcdef",
+        );
+
+        verify(functionsProvider.call(functionsName: _onSignIn, parameters: {
+          "device_id": "123",
+          "player_id": "123456",
+          "voip_token": "abcdef",
+          "platform": "ios",
+        }));
+      });
+
+      // TODO: Implement test
+      //  test("Should thrown Exception when getting error", () async {});
     });
   });
 }

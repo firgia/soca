@@ -386,6 +386,29 @@ class MockDotEnv extends _i1.Mock implements _i12.DotEnv {
       ) as bool);
 }
 
+/// A class which mocks [FunctionsProvider].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFunctionsProvider extends _i1.Mock implements _i9.FunctionsProvider {
+  @override
+  _i10.Future<dynamic> call({
+    required String? functionsName,
+    dynamic parameters,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #call,
+          [],
+          {
+            #functionsName: functionsName,
+            #parameters: parameters,
+          },
+        ),
+        returnValue: _i10.Future<dynamic>.value(),
+        returnValueForMissingStub: _i10.Future<dynamic>.value(),
+      ) as _i10.Future<dynamic>);
+}
+
 /// A class which mocks [FlutterSecureStorage].
 ///
 /// See the documentation for Mockito's code generation for more information.
