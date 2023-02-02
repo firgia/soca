@@ -8,6 +8,7 @@
  */
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../injection.dart';
@@ -15,6 +16,7 @@ import '../../injection.dart';
 class DeviceProvider {
   String get deviceIDKey => "device_id_key";
   final FlutterSecureStorage _secureStorage = sl<FlutterSecureStorage>();
+  final OneSignal _oneSignal = sl<OneSignal>();
 
   /// Get device ID
   ///
@@ -30,5 +32,11 @@ class DeviceProvider {
     } else {
       return deviceID;
     }
+  }
+
+  /// Get onesignal Player ID
+  Future<String?> getOnesignalPlayerID() async {
+    final deviceState = await _oneSignal.getDeviceState();
+    return deviceState?.userId;
   }
 }

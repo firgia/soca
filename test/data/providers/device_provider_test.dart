@@ -9,6 +9,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:soca/data/data.dart';
 
 import '../../helper/helper.dart';
@@ -19,10 +20,12 @@ String get _deviceIDKey => "device_id_key";
 void main() {
   late DeviceProvider deviceProvider;
   late MockFlutterSecureStorage secureStorage;
+  late MockOneSignal oneSignal;
 
   setUp(() {
     registerLocator();
     secureStorage = getMockFlutterSecureStorage();
+    oneSignal = getMockOneSignal();
     deviceProvider = DeviceProvider();
   });
 
@@ -52,6 +55,26 @@ void main() {
         verify(secureStorage.read(key: _deviceIDKey));
         verify(
             secureStorage.write(key: _deviceIDKey, value: anyNamed("value")));
+      });
+    });
+
+    group("getOnesignalPlayerID", () {
+      test("Should return onesignal player ID", () async {
+        when(oneSignal.getDeviceState()).thenAnswer(
+          (_) => Future.value(OSDeviceState({
+            'hasNotificationPermission': false,
+            'pushDisabled': false,
+            'subscribed': false,
+            'emailSubscribed': false,
+            'smsSubscribed': false,
+            'userId': "12345-12345",
+          })),
+        );
+
+        final playerID = await deviceProvider.getOnesignalPlayerID();
+
+        expect(playerID, "12345-12345");
+        verify(oneSignal.getDeviceState());
       });
     });
   });
