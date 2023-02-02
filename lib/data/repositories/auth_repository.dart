@@ -20,6 +20,30 @@ class AuthRepository {
   final AuthProvider _signInProvider = sl<AuthProvider>();
   final Logger _logger = Logger("Auth Repository");
 
+  /// Check current user is signed in
+  ///
+  /// Return `true` if user is signed in
+  Future<bool> isSignedIn() async {
+    _logger.info("Checking is signed in...");
+    final signInOnProcess = await _signInProvider.isSignInOnProcess();
+
+    if (signInOnProcess == true && _firebaseAuth.currentUser != null) {
+      _logger.warning(
+          "Signed in with unsuccessfully authentication process, trying to sign out automatically.");
+      await signOut();
+      return false;
+    } else {
+      final signedIn = _firebaseAuth.currentUser != null;
+
+      if (signedIn) {
+        _logger.fine("User is Signed in");
+      } else {
+        _logger.fine("User is not Signed in");
+      }
+      return signedIn;
+    }
+  }
+
   /// Sign out from current account
   Future<void> signOut() async {
     final bool isGoogleSignIn = await _googleSignIn.isSignedIn();

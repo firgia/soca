@@ -31,6 +31,49 @@ void main() {
   tearDown(() => unregisterLocator());
 
   group("Functions", () {
+    group("isSignedIn", () {
+      test(
+          "Should return true when a user has signed in and signed in the process has completed",
+          () async {
+        when(firebaseAuth.currentUser).thenReturn(MockUser());
+        when(authProvider.isSignInOnProcess())
+            .thenAnswer((_) => Future.value(false));
+
+        final isSignedIn = await authRepository.isSignedIn();
+
+        expect(isSignedIn, true);
+        verify(firebaseAuth.currentUser);
+        verify(authProvider.isSignInOnProcess());
+      });
+
+      test(
+          "Should return false and try to sign out automatically when a user has signed in, but the signed-in process doesn't complete",
+          () async {
+        when(firebaseAuth.currentUser).thenReturn(MockUser());
+        when(authProvider.isSignInOnProcess())
+            .thenAnswer((_) => Future.value(true));
+
+        final isSignedIn = await authRepository.isSignedIn();
+
+        expect(isSignedIn, false);
+        verify(firebaseAuth.currentUser);
+        verify(authProvider.isSignInOnProcess());
+        verify(firebaseAuth.signOut());
+      });
+
+      test("Should return false when a user not signed in", () async {
+        when(firebaseAuth.currentUser).thenReturn(null);
+        when(authProvider.isSignInOnProcess())
+            .thenAnswer((_) => Future.value(false));
+
+        final isSignedIn = await authRepository.isSignedIn();
+
+        expect(isSignedIn, false);
+        verify(firebaseAuth.currentUser);
+        verify(authProvider.isSignInOnProcess());
+      });
+    });
+
     group("signOut", () {
       test(
           "Should call Google signOut() and disconnect() when sign in with Google",
