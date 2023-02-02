@@ -50,7 +50,7 @@ dependencies:
   google_sign_in: ^5.4.3
   internet_connection_checker: ^1.0.0+1
   intl: ^0.17.0
-  logging: ^1.1.0
+  logging: ^1.1.1
   onesignal_flutter: ^3.5.0
   shared_preferences: ^2.0.17
   sign_in_with_apple: ^4.3.0
