@@ -31,7 +31,7 @@ class AdaptiveLoading extends StatelessWidget {
           ? _buildAndroid()
           : (platform == AdaptivePlatform.ios)
               ? _buildIOS()
-              : (sl<PlatformInfo>().isIOS)
+              : (sl<PlatformInfo>().isIOS())
                   ? _buildIOS()
                   : _buildAndroid(),
     );

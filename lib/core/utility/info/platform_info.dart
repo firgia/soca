@@ -7,12 +7,20 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:soca/core/core.dart';
+
 class PlatformInfo {
   late final bool _isIOS;
   late final bool _isAndroid;
 
-  bool get isIOS => _isIOS;
-  bool get isAndroid => _isAndroid;
+  bool isIOS() => _isIOS;
+  bool isAndroid() => _isAndroid;
+
+  DevicePlatform? get devicePlatform {
+    if (_isIOS) return DevicePlatform.ios;
+    if (_isAndroid) return DevicePlatform.android;
+    return null;
+  }
 
   PlatformInfo({
     required bool isIOS,

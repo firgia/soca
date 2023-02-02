@@ -53,13 +53,13 @@ void main() {
 
       await tester.runAsync(() async {
         // Check is Android
-        when(platformInfo.isIOS).thenReturn(false);
+        when(platformInfo.isIOS()).thenReturn(false);
         await tester.pumpApp(child: const AdaptiveLoading());
         expect(find.byType(CupertinoActivityIndicator), findsNothing);
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
         // Check is IOS
-        when(platformInfo.isIOS).thenReturn(true);
+        when(platformInfo.isIOS()).thenReturn(true);
         await tester.pumpApp(child: const AdaptiveLoading());
         expect(find.byType(CupertinoActivityIndicator), findsOneWidget);
         expect(find.byType(CircularProgressIndicator), findsNothing);
