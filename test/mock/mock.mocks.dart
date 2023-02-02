@@ -263,14 +263,20 @@ class MockAppNavigator extends _i1.Mock implements _i9.AppNavigator {
 /// See the documentation for Mockito's code generation for more information.
 class MockPlatformInfo extends _i1.Mock implements _i11.PlatformInfo {
   @override
-  bool get isIOS => (super.noSuchMethod(
-        Invocation.getter(#isIOS),
+  bool isIOS() => (super.noSuchMethod(
+        Invocation.method(
+          #isIOS,
+          [],
+        ),
         returnValue: false,
         returnValueForMissingStub: false,
       ) as bool);
   @override
-  bool get isAndroid => (super.noSuchMethod(
-        Invocation.getter(#isAndroid),
+  bool isAndroid() => (super.noSuchMethod(
+        Invocation.method(
+          #isAndroid,
+          [],
+        ),
         returnValue: false,
         returnValueForMissingStub: false,
       ) as bool);

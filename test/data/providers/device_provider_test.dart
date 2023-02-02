@@ -77,5 +77,8 @@ void main() {
         verify(oneSignal.getDeviceState());
       });
     });
+
+    // TODO: Implement test
+    // group("getVoIP", () {});
   });
 }
