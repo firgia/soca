@@ -10,6 +10,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logging/logging.dart';
+import 'package:soca/core/core.dart';
 import '../../data/data.dart';
 
 import '../../injection.dart';
@@ -44,6 +45,54 @@ class AuthRepository {
     }
   }
 
+/*
+  Future<bool?> signInWithGoogle() async {
+    try {
+      if (await _googleSignIn.isSignedIn() && await isSignedIn()) {
+        _logger.info(
+            "Sign-in with Google is ignored because user already signed in.");
+        return false;
+      }
+
+      await _signInProvider.setIsSignInOnProcess(true);
+      var user = _googleSignIn.currentUser;
+      user ??= await _googleSignIn.signIn();
+
+      if (user != null) {
+        _logger.info(
+            "Google account has been selected, Request sign in with Google credential...");
+        final googleAuth = await user.authentication;
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        await _firebaseAuth
+            .signInWithCredential(credential)
+            .timeout(const Duration(seconds: 60));
+        await _signInProvider.setSignInMethod(AuthMethod.google);
+
+        _logger.info(
+            "Sign with credential is finished, sending sign in status to Realtime Database...");
+        await _signInProvider.notifyIsSignInSuccessfully();
+        await _signInProvider.setIsSignInOnProcess(false);
+
+        _logger.finest("Successfully to sign in with Google Account");
+        return true;
+      } else {
+        return false;
+      }
+    } on FirebaseAuthException catch (error) {
+      if (error.code == "user-disabled") {
+        await _googleSignIn.disconnect();
+        await _googleSignIn.signOut();
+      }
+      throw SignInWithGoogleException.fromCode(error.code);
+    } catch (error) {
+      throw const SignInWithGoogleException();
+    }
+  }
+*/
   /// Sign out from current account
   Future<void> signOut() async {
     final bool isGoogleSignIn = await _googleSignIn.isSignedIn();

@@ -25,5 +25,6 @@
 /// {@endtemplate}
 
 export 'auth_provider.dart';
+export 'device_provider.dart';
 export 'functions_provider.dart';
 export 'local_language_provider.dart';
