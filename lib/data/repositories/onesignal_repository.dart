@@ -7,25 +7,28 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:logging/logging.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'language_repository.dart';
 import '../../injection.dart';
 import '../../core/core.dart';
 
 class OnesignalRepository with InternetConnectionHandlerMixin {
+  OnesignalRepository() {
+    listenInternetConnection();
+  }
+
   final OneSignal _oneSignal = sl<OneSignal>();
   final LanguageRepository _languageRepository = sl<LanguageRepository>();
 
   bool _failedToUpdateLanguage = false;
-
-  OnesignalRepository() {
-    listenInternetConnection();
-  }
+  final Logger _logger = Logger("Onesignal Repository");
 
   /// Update oneSignal language based on last language selected by user
   ///
   /// Return true if successfully to update language
   Future<bool> updateLanguage() async {
+    _logger.info("Updating the Language...");
     bool isFailedToUpdate = false;
 
     final lastLanguageChanged = await _languageRepository.getLastChanged();
@@ -45,6 +48,14 @@ class OnesignalRepository with InternetConnectionHandlerMixin {
         }
       }
     }
+
+    if (_failedToUpdateLanguage) {
+      _logger.warning(
+          "Failed to update the language. The app will try to update the language automatically when the internet connection state has changed to connected.");
+    } else {
+      _logger.fine("Successfully to update the language");
+    }
+
     _failedToUpdateLanguage = isFailedToUpdate;
     return !isFailedToUpdate;
   }
@@ -54,6 +65,7 @@ class OnesignalRepository with InternetConnectionHandlerMixin {
     super.onInternetConnected();
 
     if (_failedToUpdateLanguage) {
+      _logger.info("Trying to update the language...");
       updateLanguage();
     }
   }
