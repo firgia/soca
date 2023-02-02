@@ -15,15 +15,11 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 abstract class OnesignalHandler {
   static bool _isInitialized = false;
 
-  static Future<void> initialize({required bool showLog}) async {
+  static void initialize() async {
     // TODO: Change this to bloc
     // final oneSignalController = Get.put(OneSignalController());
 
     if (_isInitialized != true) {
-      if (showLog) {
-        await OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-      }
-
       OneSignal.shared.setNotificationWillShowInForegroundHandler(
           (OSNotificationReceivedEvent event) {
         // Will be called whenever a notification is received in foreground
