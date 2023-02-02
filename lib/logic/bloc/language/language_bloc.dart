@@ -9,6 +9,7 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:logging/logging.dart';
 import '../../../data/data.dart';
 import '../../../core/core.dart';
 import '../../../injection.dart';
@@ -18,6 +19,7 @@ part 'language_state.dart';
 
 class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
   final LanguageRepository _languageRepository = sl<LanguageRepository>();
+  final Logger _logger = Logger("Language Bloc");
 
   LanguageBloc() : super(const LanguageUnselected()) {
     on<LanguageChanged>(_onChanged);
@@ -27,13 +29,16 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
     LanguageChanged event,
     Emitter<LanguageState> emit,
   ) async {
+    _logger.info("Change the language...");
     final language = event.language;
     emit(const LanguageLoading());
     await _languageRepository.updateLastChanged(language);
 
     if (language != null) {
+      _logger.fine("Successfully change the language to $language");
       emit(LanguageSelected(language));
     } else {
+      _logger.info("Unselected Language");
       emit(const LanguageUnselected());
     }
   }
