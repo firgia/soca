@@ -7,4 +7,4 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-export 'sign_in_with_google_exception.dart';
+export 'sign_in_with_google_failure.dart';

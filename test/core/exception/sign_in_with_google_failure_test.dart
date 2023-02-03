@@ -13,48 +13,48 @@ import 'package:soca/core/core.dart';
 void main() {
   group("Default Constructor", () {
     test("Should return unknown code as a default", () {
-      const exception = SignInWithGoogleException();
-      expect(exception.code, SignInWithGoogleExceptionCode.unknown);
+      const exception = SignInWithGoogleFailure();
+      expect(exception.code, SignInWithGoogleFailureCode.unknown);
     });
   });
 
   group("From Code", () {
     test("Should return code based on string code", () {
       final invalidCredential =
-          SignInWithGoogleException.fromCode("invalid-credential");
+          SignInWithGoogleFailure.fromCode("invalid-credential");
       final accountExistsWithDifferentCredential =
-          SignInWithGoogleException.fromCode(
+          SignInWithGoogleFailure.fromCode(
               "account-exists-with-different-credential");
-      final userDisabled = SignInWithGoogleException.fromCode("user-disabled");
+      final userDisabled = SignInWithGoogleFailure.fromCode("user-disabled");
       final operationNotAllowed =
-          SignInWithGoogleException.fromCode("operation-not-allowed");
+          SignInWithGoogleFailure.fromCode("operation-not-allowed");
       final networkRequestFailed =
-          SignInWithGoogleException.fromCode("network-request-failed");
-      final unknown = SignInWithGoogleException.fromCode("abc");
+          SignInWithGoogleFailure.fromCode("network-request-failed");
+      final unknown = SignInWithGoogleFailure.fromCode("abc");
 
       expect(
         invalidCredential.code,
-        SignInWithGoogleExceptionCode.invalidCredential,
+        SignInWithGoogleFailureCode.invalidCredential,
       );
       expect(
         accountExistsWithDifferentCredential.code,
-        SignInWithGoogleExceptionCode.accountExistsWithDifferentCredential,
+        SignInWithGoogleFailureCode.accountExistsWithDifferentCredential,
       );
       expect(
         userDisabled.code,
-        SignInWithGoogleExceptionCode.userDisabled,
+        SignInWithGoogleFailureCode.userDisabled,
       );
       expect(
         operationNotAllowed.code,
-        SignInWithGoogleExceptionCode.operationNotAllowed,
+        SignInWithGoogleFailureCode.operationNotAllowed,
       );
       expect(
         networkRequestFailed.code,
-        SignInWithGoogleExceptionCode.networkRequestFailed,
+        SignInWithGoogleFailureCode.networkRequestFailed,
       );
       expect(
         unknown.code,
-        SignInWithGoogleExceptionCode.unknown,
+        SignInWithGoogleFailureCode.unknown,
       );
     });
   });
