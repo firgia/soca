@@ -47,6 +47,54 @@ class AuthRepository {
     }
   }
 
+  /// Sign in with Apple Account
+  ///
+  /// `Exception`
+  ///
+  /// A [SignInWithAppleFailure] maybe thrown when a failure occurs.
+  ///
+  ///
+  /// Return `true` if sign in is successfully
+  Future<bool> signInWithApple() async {
+    try {
+      if (await isSignedIn()) {
+        _logger.info(
+            "Sign-in with Apple is ignored because user already signed in.");
+        return false;
+      }
+
+      await _authProvider.setIsSignInOnProcess(true);
+      final appleIdCredential = await _authProvider.getAppleIDCredential();
+
+      _logger.info(
+          "Apple account has been selected, request sign in with Apple credential...");
+
+      final oAuthProvider = OAuthProvider('apple.com');
+      final credential = oAuthProvider.credential(
+        idToken: appleIdCredential.identityToken,
+        accessToken: appleIdCredential.authorizationCode,
+      );
+
+      await _firebaseAuth
+          .signInWithCredential(credential)
+          .timeout(const Duration(seconds: 60));
+
+      _logger.info("Sign with credential is finished");
+      await _authProvider.setSignInMethod(AuthMethod.apple);
+      await _notifyIsSignInSuccessfully();
+      await _authProvider.setIsSignInOnProcess(false);
+
+      _logger.finest("Successfully to sign in with Apple Account");
+      return true;
+    } on Exception catch (e) {
+      await _authProvider.setIsSignInOnProcess(false);
+      throw SignInWithAppleFailure.fromException(e);
+    } catch (e) {
+      await _authProvider.setIsSignInOnProcess(false);
+      throw const SignInWithAppleFailure();
+    }
+  }
+
   /// Sign in with Google Account
   ///
   /// `Exception`
@@ -55,7 +103,7 @@ class AuthRepository {
   ///
   ///
   /// Return `true` if sign in is successfully
-  Future<bool?> signInWithGoogle() async {
+  Future<bool> signInWithGoogle() async {
     try {
       if (await _googleSignIn.isSignedIn() && await isSignedIn()) {
         _logger.info(
@@ -70,6 +118,7 @@ class AuthRepository {
       if (user != null) {
         _logger.info(
             "Google account has been selected, Request sign in with Google credential...");
+
         final googleAuth = await user.authentication;
         final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
@@ -81,8 +130,7 @@ class AuthRepository {
             .timeout(const Duration(seconds: 60));
         await _signInProvider.setSignInMethod(AuthMethod.google);
 
-        _logger.info(
-            "Sign with credential is finished, sending sign in status to Realtime Database...");
+        _logger.info("Sign with credential is finished");
         await _notifyIsSignInSuccessfully();
         await _signInProvider.setIsSignInOnProcess(false);
 
@@ -130,6 +178,8 @@ class AuthRepository {
   }
 
   Future<void> _notifyIsSignInSuccessfully() async {
+    _logger.info("Notify sign in successfully to server...");
+
     String deviceID = await _deviceProvider.getDeviceID();
     DevicePlatform devicePlatform =
         _deviceProvider.getPlatform() ?? DevicePlatform.android;

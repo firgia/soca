@@ -10,6 +10,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
 
@@ -76,6 +77,43 @@ void main() {
       });
     });
 
+    group("signInWithAple", () {
+      const appleCredential = AuthorizationCredentialAppleID(
+        authorizationCode: "1234",
+        email: "test@gmail.com",
+        familyName: "familyName",
+        givenName: "givenName",
+        identityToken: "123",
+        state: "state",
+        userIdentifier: "123",
+      );
+
+      test("Should return true when Successfully to sign in with Apple",
+          () async {
+        when(authProvider.isSignInOnProcess())
+            .thenAnswer((_) => Future.value(false));
+        when(authProvider.getAppleIDCredential())
+            .thenAnswer((_) => Future.value(appleCredential));
+        when(firebaseAuth.signInWithCredential(any))
+            .thenAnswer((_) => Future.value(MockUserCredential()));
+
+        final status = await authRepository.signInWithApple();
+        expect(status, true);
+
+        verifyInOrder([
+          authProvider.setIsSignInOnProcess(true),
+          authProvider.getAppleIDCredential(),
+          firebaseAuth.signInWithCredential(any),
+          authProvider.notifyIsSignInSuccessfully(
+            deviceID: anyNamed("deviceID"),
+            oneSignalPlayerID: anyNamed("oneSignalPlayerID"),
+            voipToken: anyNamed("voipToken"),
+            devicePlatform: anyNamed("devicePlatform"),
+          ),
+          authProvider.setIsSignInOnProcess(false),
+        ]);
+      });
+    });
     group("signInWithGoogle", () {
       const accessToken = 'access-token';
       const idToken = 'id-token';
@@ -97,20 +135,20 @@ void main() {
             .thenAnswer((_) => Future.value(MockUserCredential()));
 
         final status = await authRepository.signInWithGoogle();
-
         expect(status, true);
-        verify(googleSignIn.isSignedIn());
-        verify(authProvider.setIsSignInOnProcess(true));
-        verify(googleSignIn.signIn());
-        verify(authProvider.setIsSignInOnProcess(false));
-        verify(
+
+        verifyInOrder([
+          googleSignIn.isSignedIn(),
+          authProvider.setIsSignInOnProcess(true),
+          googleSignIn.signIn(),
           authProvider.notifyIsSignInSuccessfully(
             deviceID: anyNamed("deviceID"),
             oneSignalPlayerID: anyNamed("oneSignalPlayerID"),
             voipToken: anyNamed("voipToken"),
             devicePlatform: anyNamed("devicePlatform"),
           ),
-        );
+          authProvider.setIsSignInOnProcess(false),
+        ]);
       });
 
       test("Should return false if has been signed in", () async {
@@ -175,12 +213,14 @@ void main() {
         } catch (e) {
           expect(e, isA<SignInWithGoogleFailure>());
 
-          verify(googleSignIn.isSignedIn());
-          verify(authProvider.setIsSignInOnProcess(true));
-          verify(googleSignIn.signIn());
-          verify(authProvider.setIsSignInOnProcess(false));
-          verify(googleSignIn.disconnect());
-          verify(googleSignIn.signOut());
+          verifyInOrder([
+            googleSignIn.isSignedIn(),
+            authProvider.setIsSignInOnProcess(true),
+            googleSignIn.signIn(),
+            googleSignIn.disconnect(),
+            googleSignIn.signOut(),
+            authProvider.setIsSignInOnProcess(false),
+          ]);
         }
       });
     });

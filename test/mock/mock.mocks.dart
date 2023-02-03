@@ -410,6 +410,31 @@ class MockDeviceInfo extends _i1.Mock implements _i15.DeviceInfo {
 /// See the documentation for Mockito's code generation for more information.
 class MockAuthProvider extends _i1.Mock implements _i17.AuthProvider {
   @override
+  _i16.Future<_i2.AuthorizationCredentialAppleID> getAppleIDCredential() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAppleIDCredential,
+          [],
+        ),
+        returnValue: _i16.Future<_i2.AuthorizationCredentialAppleID>.value(
+            _FakeAuthorizationCredentialAppleID_0(
+          this,
+          Invocation.method(
+            #getAppleIDCredential,
+            [],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i16.Future<_i2.AuthorizationCredentialAppleID>.value(
+                _FakeAuthorizationCredentialAppleID_0(
+          this,
+          Invocation.method(
+            #getAppleIDCredential,
+            [],
+          ),
+        )),
+      ) as _i16.Future<_i2.AuthorizationCredentialAppleID>);
+  @override
   _i16.Future<bool?> isSignInOnProcess() => (super.noSuchMethod(
         Invocation.method(
           #isSignInOnProcess,
