@@ -53,9 +53,7 @@ class DeviceProvider {
     return playerID;
   }
 
-  /// Get device push token VoIP
-  ///
-  /// Return null if platform is not iOS
+  /// {@macro get_device_push_token_voip}
   Future<String?> getVoIP() async {
     return _deviceInfo.getDevicePushTokenVoIP();
   }

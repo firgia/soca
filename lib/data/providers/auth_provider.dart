@@ -9,6 +9,7 @@
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logging/logging.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../core/core.dart';
 import '../../injection.dart';
 import 'functions_provider.dart';
@@ -17,9 +18,18 @@ class AuthProvider {
   String get _signInOnProcessKey => "sign_in_on_process";
   String get _signInMethodKey => "sign_in_method";
 
+  final DeviceInfo _deviceInfo = sl<DeviceInfo>();
   final FunctionsProvider _functionsProvider = sl<FunctionsProvider>();
   final FlutterSecureStorage _secureStorage = sl<FlutterSecureStorage>();
   final Logger _logger = Logger("Local Language Provider");
+
+  /// {@macro get_apple_id_credential}
+  Future<AuthorizationCredentialAppleID> getAppleIDCredential() {
+    return _deviceInfo.getAppleIDCredential(scopes: [
+      AppleIDAuthorizationScopes.email,
+      AppleIDAuthorizationScopes.fullName,
+    ]);
+  }
 
   /// Check is on process to sign in
   ///

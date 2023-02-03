@@ -10,6 +10,7 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
 import '../../helper/helper.dart';
@@ -23,17 +24,57 @@ void main() {
   late AuthProvider authProvider;
   late MockFlutterSecureStorage secureStorage;
   late MockFunctionsProvider functionsProvider;
+  late MockDeviceInfo deviceInfo;
 
   setUp(() {
     registerLocator();
     secureStorage = getMockFlutterSecureStorage();
     functionsProvider = getMockFunctionsProvider();
+    deviceInfo = getMockDeviceInfo();
     authProvider = AuthProvider();
   });
 
   tearDown(() => unregisterLocator());
 
   group("Functions", () {
+    group("getAppleIDCredential", () {
+      test("Should return Apple ID Credential", () async {
+        const credential = AuthorizationCredentialAppleID(
+          authorizationCode: "1234",
+          email: "test@gmail.com",
+          familyName: "familyName",
+          givenName: "givenName",
+          identityToken: "123",
+          state: "state",
+          userIdentifier: "123",
+        );
+
+        when(deviceInfo.getAppleIDCredential(scopes: anyNamed("scopes")))
+            .thenAnswer(
+          (_) => Future.value(credential),
+        );
+
+        final result = await authProvider.getAppleIDCredential();
+
+        expect(result, credential);
+        verify(deviceInfo.getAppleIDCredential(scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ]));
+      });
+
+      test("Should throw exception if failure occurs", () async {
+        const exception = SignInWithAppleNotSupportedException(message: "test");
+        when(deviceInfo.getAppleIDCredential(scopes: anyNamed("scopes")))
+            .thenThrow(exception);
+
+        expect(
+          () => authProvider.getAppleIDCredential(),
+          throwsA(isA<SignInWithAppleNotSupportedException>()),
+        );
+      });
+    });
+
     group("getSignInMethod", () {
       test("Should return sign in method based on storage data", () async {
         when(secureStorage.read(key: _signInMethodKey))
