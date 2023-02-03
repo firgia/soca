@@ -22,10 +22,10 @@ MockAppNavigator getMockAppNavigator() {
 
 /* ----------------------------------> CORE <-------------------------------- */
 
-MockPlatformInfo getMockPlatformInfo() {
-  MockPlatformInfo mock = MockPlatformInfo();
-  _removeRegistrationIfExists<PlatformInfo>();
-  locator.registerSingleton<PlatformInfo>(mock);
+MockDeviceInfo getMockDeviceInfo() {
+  MockDeviceInfo mock = MockDeviceInfo();
+  _removeRegistrationIfExists<DeviceInfo>();
+  locator.registerSingleton<DeviceInfo>(mock);
 
   return mock;
 }
@@ -136,7 +136,7 @@ void registerLocator() {
   getMockAppNavigator();
 
   /* ---------------------------------> CORE <------------------------------- */
-  getMockPlatformInfo();
+  getMockDeviceInfo();
 
   /* ---------------------------------> DATA <------------------------------- */
   getMockAuthProvider();
@@ -162,7 +162,7 @@ void unregisterLocator() {
   locator.unregister<AppNavigator>();
 
   /* ---------------------------------> CORE <------------------------------- */
-  locator.unregister<PlatformInfo>();
+  locator.unregister<DeviceInfo>();
 
   /* ---------------------------------> DATA <------------------------------- */
   locator.unregister<AuthProvider>();

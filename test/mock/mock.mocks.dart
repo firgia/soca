@@ -312,10 +312,10 @@ class MockAppNavigator extends _i1.Mock implements _i12.AppNavigator {
       ) as bool);
 }
 
-/// A class which mocks [PlatformInfo].
+/// A class which mocks [DeviceInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPlatformInfo extends _i1.Mock implements _i14.PlatformInfo {
+class MockDeviceInfo extends _i1.Mock implements _i14.DeviceInfo {
   @override
   bool isIOS() => (super.noSuchMethod(
         Invocation.method(

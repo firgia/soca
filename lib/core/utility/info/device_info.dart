@@ -9,7 +9,7 @@
 
 import 'package:soca/core/core.dart';
 
-class PlatformInfo {
+class DeviceInfo {
   late final bool _isIOS;
   late final bool _isAndroid;
 
@@ -22,7 +22,7 @@ class PlatformInfo {
     return null;
   }
 
-  PlatformInfo({
+  DeviceInfo({
     required bool isIOS,
     required bool isAndroid,
   }) {

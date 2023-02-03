@@ -17,10 +17,10 @@ import '../../injection.dart';
 
 class AuthRepository {
   final AuthProvider _authProvider = sl<AuthProvider>();
+  final DeviceInfo _deviceInfo = sl<DeviceInfo>();
   final DeviceProvider _deviceProvider = sl<DeviceProvider>();
   final FirebaseAuth _firebaseAuth = sl<FirebaseAuth>();
   final GoogleSignIn _googleSignIn = sl<GoogleSignIn>();
-  final PlatformInfo _platformInfo = sl<PlatformInfo>();
   final AuthProvider _signInProvider = sl<AuthProvider>();
   final Logger _logger = Logger("Auth Repository");
 
@@ -133,7 +133,7 @@ class AuthRepository {
   Future<void> _notifyIsSignInSuccessfully() async {
     String deviceID = await _deviceProvider.getDeviceID();
     DevicePlatform devicePlatform =
-        _platformInfo.devicePlatform ?? DevicePlatform.android;
+        _deviceInfo.devicePlatform ?? DevicePlatform.android;
     String? voipToken = await _deviceProvider.getVoIP();
     String oneSignalPlayerID =
         await _deviceProvider.getOnesignalPlayerID() ?? "";

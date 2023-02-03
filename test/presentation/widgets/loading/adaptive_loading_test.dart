@@ -49,17 +49,17 @@ void main() {
 
     testWidgets("Should render Automatically by target platform",
         (tester) async {
-      MockPlatformInfo platformInfo = getMockPlatformInfo();
+      MockDeviceInfo deviceInfo = getMockDeviceInfo();
 
       await tester.runAsync(() async {
         // Check is Android
-        when(platformInfo.isIOS()).thenReturn(false);
+        when(deviceInfo.isIOS()).thenReturn(false);
         await tester.pumpApp(child: const AdaptiveLoading());
         expect(find.byType(CupertinoActivityIndicator), findsNothing);
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
         // Check is IOS
-        when(platformInfo.isIOS()).thenReturn(true);
+        when(deviceInfo.isIOS()).thenReturn(true);
         await tester.pumpApp(child: const AdaptiveLoading());
         expect(find.byType(CupertinoActivityIndicator), findsOneWidget);
         expect(find.byType(CircularProgressIndicator), findsNothing);

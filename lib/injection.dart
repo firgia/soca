@@ -28,8 +28,8 @@ void setupInjection() {
   sl.registerLazySingleton<AppNavigator>(() => AppNavigator());
 
   /* ---------------------------------> CORE <------------------------------- */
-  sl.registerLazySingleton<PlatformInfo>(
-    () => PlatformInfo(
+  sl.registerLazySingleton<DeviceInfo>(
+    () => DeviceInfo(
       isIOS: Platform.isIOS,
       isAndroid: Platform.isAndroid,
     ),
