@@ -113,6 +113,26 @@ void main() {
           authProvider.setIsSignInOnProcess(false),
         ]);
       });
+
+      test("Should return false if has been signed in", () async {
+        when(firebaseAuth.currentUser).thenReturn(MockUser());
+        when(authProvider.isSignInOnProcess())
+            .thenAnswer((_) => Future.value(false));
+
+        final status = await authRepository.signInWithApple();
+        expect(status, false);
+
+        verify(authProvider.isSignInOnProcess());
+        verify(firebaseAuth.currentUser);
+      });
+
+      test("Should throw SignInWithAppleFailure when a failure occurs.",
+          () async {
+        when(authProvider.getAppleIDCredential()).thenThrow(Exception());
+
+        expect(() => authRepository.signInWithApple(),
+            throwsA(isA<SignInWithAppleFailure>()));
+      });
     });
     group("signInWithGoogle", () {
       const accessToken = 'access-token';
@@ -183,11 +203,8 @@ void main() {
           () async {
         when(googleSignIn.isSignedIn()).thenThrow(Exception());
 
-        try {
-          await authRepository.signInWithGoogle();
-        } catch (e) {
-          expect(e, isA<SignInWithGoogleFailure>());
-        }
+        expect(() => authRepository.signInWithGoogle(),
+            throwsA(isA<SignInWithGoogleFailure>()));
       });
 
       test(
