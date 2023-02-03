@@ -7,6 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:soca/core/core.dart';
@@ -148,6 +149,38 @@ void main() {
           await authRepository.signInWithGoogle();
         } catch (e) {
           expect(e, isA<SignInWithGoogleFailure>());
+        }
+      });
+
+      test(
+          "Should throw SignInWithGoogleFailure and sign out from Google when user on Firebase Auth is disabled.",
+          () async {
+        when(googleSignIn.isSignedIn()).thenAnswer((_) => Future.value(false));
+        when(googleSignInAuthentication.accessToken).thenReturn(accessToken);
+        when(googleSignInAuthentication.idToken).thenReturn(idToken);
+        when(googleSignInAccount.authentication)
+            .thenAnswer((_) => Future.value(googleSignInAuthentication));
+        when(googleSignIn.signIn())
+            .thenAnswer((_) => Future.value(googleSignInAccount));
+        when(firebaseAuth.signInWithCredential(any))
+            .thenThrow(FirebaseAuthException(code: "user-disabled"));
+
+        expect(
+          () async => authRepository.signInWithGoogle(),
+          throwsA(isA<SignInWithGoogleFailure>()),
+        );
+
+        try {
+          await authRepository.signInWithGoogle();
+        } catch (e) {
+          expect(e, isA<SignInWithGoogleFailure>());
+
+          verify(googleSignIn.isSignedIn());
+          verify(authProvider.setIsSignInOnProcess(true));
+          verify(googleSignIn.signIn());
+          verify(authProvider.setIsSignInOnProcess(false));
+          verify(googleSignIn.disconnect());
+          verify(googleSignIn.signOut());
         }
       });
     });

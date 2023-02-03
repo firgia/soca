@@ -34,10 +34,10 @@ enum SignInWithGoogleFailureCode {
 /// {@endtemplate}
 class SignInWithGoogleFailure implements Exception {
   /// {@macro sign_in_with_google_exception}
-  const SignInWithGoogleFailure([
+  const SignInWithGoogleFailure({
     this.code = SignInWithGoogleFailureCode.unknown,
     this.message = "An unknown exception occurred.",
-  ]);
+  });
 
   final String message;
   final SignInWithGoogleFailureCode code;
@@ -56,32 +56,34 @@ class SignInWithGoogleFailure implements Exception {
     switch (code) {
       case "invalid-credential":
         return const SignInWithGoogleFailure(
-          SignInWithGoogleFailureCode.invalidCredential,
-          "The supplied auth credential is malformed or has expired",
+          code: SignInWithGoogleFailureCode.invalidCredential,
+          message: "The supplied auth credential is malformed or has expired",
         );
 
       case "account-exists-with-different-credential":
         return const SignInWithGoogleFailure(
-          SignInWithGoogleFailureCode.accountExistsWithDifferentCredential,
-          "Account exists with different credential",
+          code:
+              SignInWithGoogleFailureCode.accountExistsWithDifferentCredential,
+          message: "Account exists with different credential",
         );
 
       case "user-disabled":
         return const SignInWithGoogleFailure(
-          SignInWithGoogleFailureCode.userDisabled,
-          "User account has disabled by admin",
+          code: SignInWithGoogleFailureCode.userDisabled,
+          message: "User account has disabled by admin",
         );
 
       case "operation-not-allowed":
         return const SignInWithGoogleFailure(
-          SignInWithGoogleFailureCode.operationNotAllowed,
-          "Operation not allowed, the sign-in provider is disabled in Firebase project",
+          code: SignInWithGoogleFailureCode.operationNotAllowed,
+          message:
+              "Operation not allowed, the sign-in provider is disabled in Firebase project",
         );
 
       case "network-request-failed":
         return const SignInWithGoogleFailure(
-          SignInWithGoogleFailureCode.networkRequestFailed,
-          "Unstable connection network",
+          code: SignInWithGoogleFailureCode.networkRequestFailed,
+          message: "Unstable connection network",
         );
 
       default:
