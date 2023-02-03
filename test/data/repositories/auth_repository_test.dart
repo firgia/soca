@@ -102,6 +102,14 @@ void main() {
         verify(authProvider.setIsSignInOnProcess(true));
         verify(googleSignIn.signIn());
         verify(authProvider.setIsSignInOnProcess(false));
+        verify(
+          authProvider.notifyIsSignInSuccessfully(
+            deviceID: anyNamed("deviceID"),
+            oneSignalPlayerID: anyNamed("oneSignalPlayerID"),
+            voipToken: anyNamed("voipToken"),
+            devicePlatform: anyNamed("devicePlatform"),
+          ),
+        );
       });
 
       test("Should return false if has been signed in", () async {

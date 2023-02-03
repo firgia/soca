@@ -79,6 +79,8 @@ void main() {
     });
 
     // TODO: Implement test
+    // This functions calls the static field, which means we can't mock the field.
+    // So we can skip this test for a while.
     // group("getVoIP", () {});
   });
 }
