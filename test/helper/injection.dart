@@ -89,6 +89,14 @@ MockFirebaseAuth getMockFirebaseAuth() {
   return mock;
 }
 
+MockFirebaseFunctions getMockFirebaseFunctions() {
+  MockFirebaseFunctions mock = MockFirebaseFunctions();
+  _removeRegistrationIfExists<FirebaseFunctions>();
+  locator.registerSingleton<FirebaseFunctions>(mock);
+
+  return mock;
+}
+
 MockGoogleSignIn getMockGoogleSignIn() {
   MockGoogleSignIn mock = MockGoogleSignIn();
   _removeRegistrationIfExists<GoogleSignIn>();
@@ -140,6 +148,7 @@ void registerLocator() {
   /* ------------------------------> DEPENDENCIES <-------------------------- */
   getMockFlutterSecureStorage();
   getMockFirebaseAuth();
+  getMockFirebaseFunctions();
   getMockGoogleSignIn();
   getMockInternetConnectionChecker();
   getMockOneSignal();
@@ -165,6 +174,7 @@ void unregisterLocator() {
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   locator.unregister<FlutterSecureStorage>();
   locator.unregister<FirebaseAuth>();
+  locator.unregister<FirebaseFunctions>();
   locator.unregister<GoogleSignIn>();
   locator.unregister<InternetConnectionChecker>();
   locator.unregister<OneSignal>();

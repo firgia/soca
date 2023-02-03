@@ -7,6 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:soca/core/core.dart';
@@ -87,8 +88,12 @@ void main() {
 
     group("notifyIsSignInSuccessfully", () {
       test("Should send the argument based on parameter ", () async {
-        when(functionsProvider.call(functionsName: _onSignIn))
-            .thenAnswer((_) => Future.value({}));
+        when(
+          functionsProvider.call(
+            functionsName: _onSignIn,
+            parameters: anyNamed("parameters"),
+          ),
+        ).thenAnswer((_) => Future.value({}));
 
         await authProvider.notifyIsSignInSuccessfully(
           deviceID: "123",
@@ -105,8 +110,29 @@ void main() {
         }));
       });
 
-      // TODO: Implement test
-      //  test("Should thrown Exception when getting error", () async {});
+      test("Should thrown Exception when getting error", () async {
+        Exception exception = FirebaseFunctionsException(
+          message: "unknown",
+          code: "unknown",
+        );
+
+        when(
+          functionsProvider.call(
+            functionsName: _onSignIn,
+            parameters: anyNamed("parameters"),
+          ),
+        ).thenThrow(exception);
+
+        expect(
+          () => authProvider.notifyIsSignInSuccessfully(
+            deviceID: "123",
+            devicePlatform: DevicePlatform.ios,
+            oneSignalPlayerID: "123456",
+            voipToken: "abcdef",
+          ),
+          throwsA(exception),
+        );
+      });
     });
   });
 }
