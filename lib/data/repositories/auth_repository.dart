@@ -16,8 +16,11 @@ import '../../data/data.dart';
 import '../../injection.dart';
 
 class AuthRepository {
+  final AuthProvider _authProvider = sl<AuthProvider>();
+  final DeviceProvider _deviceProvider = sl<DeviceProvider>();
   final FirebaseAuth _firebaseAuth = sl<FirebaseAuth>();
   final GoogleSignIn _googleSignIn = sl<GoogleSignIn>();
+  final PlatformInfo _platformInfo = sl<PlatformInfo>();
   final AuthProvider _signInProvider = sl<AuthProvider>();
   final Logger _logger = Logger("Auth Repository");
 
@@ -45,7 +48,6 @@ class AuthRepository {
     }
   }
 
-/*
   Future<bool?> signInWithGoogle() async {
     try {
       if (await _googleSignIn.isSignedIn() && await isSignedIn()) {
@@ -74,12 +76,13 @@ class AuthRepository {
 
         _logger.info(
             "Sign with credential is finished, sending sign in status to Realtime Database...");
-        await _signInProvider.notifyIsSignInSuccessfully();
+        await _notifyIsSignInSuccessfully();
         await _signInProvider.setIsSignInOnProcess(false);
 
         _logger.finest("Successfully to sign in with Google Account");
         return true;
       } else {
+        await _signInProvider.setIsSignInOnProcess(false);
         return false;
       }
     } on FirebaseAuthException catch (error) {
@@ -87,12 +90,14 @@ class AuthRepository {
         await _googleSignIn.disconnect();
         await _googleSignIn.signOut();
       }
-      throw SignInWithGoogleException.fromCode(error.code);
+      await _signInProvider.setIsSignInOnProcess(false);
+      throw SignInWithGoogleFailure.fromCode(error.code);
     } catch (error) {
-      throw const SignInWithGoogleException();
+      await _signInProvider.setIsSignInOnProcess(false);
+      throw const SignInWithGoogleFailure();
     }
   }
-*/
+
   /// Sign out from current account
   Future<void> signOut() async {
     final bool isGoogleSignIn = await _googleSignIn.isSignedIn();
@@ -111,5 +116,21 @@ class AuthRepository {
     await _signInProvider.setSignInMethod(null);
     await _signInProvider.setIsSignInOnProcess(false);
     _logger.fine("All sign out process 100% successfully");
+  }
+
+  Future<void> _notifyIsSignInSuccessfully() async {
+    String deviceID = await _deviceProvider.getDeviceID();
+    DevicePlatform devicePlatform =
+        _platformInfo.devicePlatform ?? DevicePlatform.android;
+    String? voipToken = await _deviceProvider.getVoIP();
+    String oneSignalPlayerID =
+        await _deviceProvider.getOnesignalPlayerID() ?? "";
+
+    await _authProvider.notifyIsSignInSuccessfully(
+      deviceID: deviceID,
+      oneSignalPlayerID: oneSignalPlayerID,
+      voipToken: voipToken,
+      devicePlatform: devicePlatform,
+    );
   }
 }

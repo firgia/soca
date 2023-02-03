@@ -9,6 +9,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
 
 import '../../helper/helper.dart';
@@ -71,6 +72,75 @@ void main() {
         expect(isSignedIn, false);
         verify(firebaseAuth.currentUser);
         verify(authProvider.isSignInOnProcess());
+      });
+    });
+
+    group("signInWithGoogle", () {
+      const accessToken = 'access-token';
+      const idToken = 'id-token';
+      final googleSignInAuthentication = MockGoogleSignInAuthentication();
+      final googleSignInAccount = MockGoogleSignInAccount();
+
+      test("Should return true when Successfully to sign in with Google",
+          () async {
+        when(googleSignIn.isSignedIn()).thenAnswer((_) => Future.value(false));
+        when(googleSignInAuthentication.accessToken).thenReturn(accessToken);
+        when(googleSignInAuthentication.idToken).thenReturn(idToken);
+        when(googleSignInAccount.authentication)
+            .thenAnswer((_) => Future.value(googleSignInAuthentication));
+        when(googleSignIn.signIn())
+            .thenAnswer((_) => Future.value(googleSignInAccount));
+        when(firebaseAuth.signInWithCredential(any))
+            .thenAnswer((_) => Future.value(MockUserCredential()));
+        when(firebaseAuth.signInWithPopup(any))
+            .thenAnswer((_) => Future.value(MockUserCredential()));
+
+        final status = await authRepository.signInWithGoogle();
+
+        expect(status, true);
+        verify(googleSignIn.isSignedIn());
+        verify(authProvider.setIsSignInOnProcess(true));
+        verify(googleSignIn.signIn());
+        verify(authProvider.setIsSignInOnProcess(false));
+      });
+
+      test("Should return false if has been signed in", () async {
+        when(firebaseAuth.currentUser).thenReturn(MockUser());
+        when(authProvider.isSignInOnProcess())
+            .thenAnswer((_) => Future.value(false));
+        when(googleSignIn.isSignedIn()).thenAnswer((_) => Future.value(true));
+
+        final status = await authRepository.signInWithGoogle();
+
+        expect(status, false);
+        verify(firebaseAuth.currentUser);
+        verify(authProvider.isSignInOnProcess());
+        verify(googleSignIn.isSignedIn());
+      });
+
+      test("Should return false when GoogleSignInAccount is not available",
+          () async {
+        when(googleSignIn.isSignedIn()).thenAnswer((_) => Future.value(false));
+        when(googleSignIn.signIn()).thenAnswer((_) => Future.value(null));
+
+        final status = await authRepository.signInWithGoogle();
+
+        expect(status, false);
+
+        verify(googleSignIn.isSignedIn());
+        verify(authProvider.setIsSignInOnProcess(true));
+        verify(googleSignIn.signIn());
+      });
+
+      test("Should throw SignInWithGoogleFailure when a failure occurs.",
+          () async {
+        when(googleSignIn.isSignedIn()).thenThrow(Exception());
+
+        try {
+          await authRepository.signInWithGoogle();
+        } catch (e) {
+          expect(e, isA<SignInWithGoogleFailure>());
+        }
       });
     });
 

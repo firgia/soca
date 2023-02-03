@@ -28,6 +28,7 @@ import 'package:soca/logic/logic.dart';
 
   /* ---------------------------------> DATA <------------------------------- */
   MockSpec<AuthProvider>(),
+  MockSpec<DeviceProvider>(),
   MockSpec<FunctionsProvider>(),
   MockSpec<LocalLanguageProvider>(),
   MockSpec<LanguageRepository>(),
@@ -36,8 +37,11 @@ import 'package:soca/logic/logic.dart';
   MockSpec<DotEnv>(),
   MockSpec<FlutterSecureStorage>(),
   MockSpec<FirebaseAuth>(),
-  MockSpec<User>(),
   MockSpec<GoogleSignIn>(),
+  MockSpec<GoogleSignInAuthentication>(),
+  MockSpec<GoogleSignInAccount>(),
+  MockSpec<User>(),
+  MockSpec<UserCredential>(),
   MockSpec<InternetConnectionChecker>(),
   MockSpec<OneSignal>(),
 

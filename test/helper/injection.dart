@@ -39,6 +39,14 @@ MockAuthProvider getMockAuthProvider() {
   return mock;
 }
 
+MockDeviceProvider getMockDeviceProvider() {
+  MockDeviceProvider mock = MockDeviceProvider();
+  _removeRegistrationIfExists<DeviceProvider>();
+  locator.registerSingleton<DeviceProvider>(mock);
+
+  return mock;
+}
+
 MockLocalLanguageProvider getMockLocalLanguageProvider() {
   MockLocalLanguageProvider mock = MockLocalLanguageProvider();
   _removeRegistrationIfExists<LocalLanguageProvider>();
@@ -124,6 +132,7 @@ void registerLocator() {
 
   /* ---------------------------------> DATA <------------------------------- */
   getMockAuthProvider();
+  getMockDeviceProvider();
   getMockFunctionsProvider();
   getMockLocalLanguageProvider();
   getMockLanguageRepository();
@@ -148,6 +157,7 @@ void unregisterLocator() {
 
   /* ---------------------------------> DATA <------------------------------- */
   locator.unregister<AuthProvider>();
+  locator.unregister<DeviceProvider>();
   locator.unregister<FunctionsProvider>();
   locator.unregister<LocalLanguageProvider>();
   locator.unregister<LanguageRepository>();
