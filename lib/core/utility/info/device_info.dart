@@ -7,26 +7,37 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:io';
+import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:soca/core/core.dart';
 
+// We have to convert all static Fields and Functions to make it testable
 class DeviceInfo {
-  late final bool _isIOS;
-  late final bool _isAndroid;
+  bool isIOS() => Platform.isIOS;
+  bool isAndroid() => Platform.isAndroid;
 
-  bool isIOS() => _isIOS;
-  bool isAndroid() => _isAndroid;
-
-  DevicePlatform? get devicePlatform {
-    if (_isIOS) return DevicePlatform.ios;
-    if (_isAndroid) return DevicePlatform.android;
+  DevicePlatform? get platform {
+    if (isIOS()) return DevicePlatform.ios;
+    if (isAndroid()) return DevicePlatform.android;
     return null;
   }
 
-  DeviceInfo({
-    required bool isIOS,
-    required bool isAndroid,
+  Future<AuthorizationCredentialAppleID> getAppleIDCredential({
+    required List<AppleIDAuthorizationScopes> scopes,
+    WebAuthenticationOptions? webAuthenticationOptions,
+    String? nonce,
+    String? state,
   }) {
-    _isIOS = isIOS;
-    _isAndroid = isAndroid;
+    return SignInWithApple.getAppleIDCredential(
+      scopes: scopes,
+      nonce: nonce,
+      state: state,
+      webAuthenticationOptions: webAuthenticationOptions,
+    );
+  }
+
+  Future<String?> getDevicePushTokenVoIP() async {
+    return await FlutterCallkitIncoming.getDevicePushTokenVoIP();
   }
 }

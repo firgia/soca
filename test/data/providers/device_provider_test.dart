@@ -21,11 +21,13 @@ void main() {
   late DeviceProvider deviceProvider;
   late MockFlutterSecureStorage secureStorage;
   late MockOneSignal oneSignal;
+  late MockDeviceInfo deviceInfo;
 
   setUp(() {
     registerLocator();
     secureStorage = getMockFlutterSecureStorage();
     oneSignal = getMockOneSignal();
+    deviceInfo = getMockDeviceInfo();
     deviceProvider = DeviceProvider();
   });
 
@@ -78,9 +80,15 @@ void main() {
       });
     });
 
-    // TODO: Implement test
-    // This functions calls the static field, which means we can't mock the field.
-    // So we can skip this test for a while.
-    // group("getVoIP", () {});
+    group("getVoIP", () {
+      test("Should return voip from getDevicePushTokenVoIP()", () async {
+        when(deviceInfo.getDevicePushTokenVoIP())
+            .thenAnswer((_) => Future.value("1234"));
+
+        final voip = await deviceProvider.getVoIP();
+        expect(voip, "1234");
+        verify(deviceInfo.getDevicePushTokenVoIP());
+      });
+    });
   });
 }

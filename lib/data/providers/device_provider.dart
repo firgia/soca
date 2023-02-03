@@ -7,16 +7,18 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logging/logging.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../core/core.dart';
 import '../../injection.dart';
 
 class DeviceProvider {
   String get deviceIDKey => "device_id_key";
+
+  final DeviceInfo _deviceInfo = sl<DeviceInfo>();
   final FlutterSecureStorage _secureStorage = sl<FlutterSecureStorage>();
   final OneSignal _oneSignal = sl<OneSignal>();
   final Logger _logger = Logger("Device Provider");
@@ -55,7 +57,11 @@ class DeviceProvider {
   ///
   /// Return null if platform is not iOS
   Future<String?> getVoIP() async {
-    final voIP = await FlutterCallkitIncoming.getDevicePushTokenVoIP();
-    return voIP;
+    return _deviceInfo.getDevicePushTokenVoIP();
+  }
+
+  /// Get current device platform
+  DevicePlatform? getPlatform() {
+    return _deviceInfo.platform;
   }
 }
