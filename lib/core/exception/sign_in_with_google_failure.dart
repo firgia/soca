@@ -7,6 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:firebase_auth/firebase_auth.dart';
+
 enum SignInWithGoogleFailureCode {
   /// The supplied auth credential is malformed or has expired
   invalidCredential,
@@ -36,6 +38,17 @@ class SignInWithGoogleFailure implements Exception {
     this.code = SignInWithGoogleFailureCode.unknown,
     this.message = "An unknown exception occurred.",
   ]);
+
+  final String message;
+  final SignInWithGoogleFailureCode code;
+
+  factory SignInWithGoogleFailure.fromException(Exception e) {
+    if (e is FirebaseAuthException) {
+      return SignInWithGoogleFailure.fromCode(e.code);
+    } else {
+      return const SignInWithGoogleFailure();
+    }
+  }
 
   /// Create an authentication message
   /// from a firebase authentication exception code.
@@ -75,7 +88,4 @@ class SignInWithGoogleFailure implements Exception {
         return const SignInWithGoogleFailure();
     }
   }
-
-  final String message;
-  final SignInWithGoogleFailureCode code;
 }

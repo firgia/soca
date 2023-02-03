@@ -7,6 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:soca/core/core.dart';
 
@@ -54,6 +56,29 @@ void main() {
       );
       expect(
         unknown.code,
+        SignInWithGoogleFailureCode.unknown,
+      );
+    });
+  });
+
+  group("From Exception", () {
+    test("Should return correct code from FirebaseAuthException ", () {
+      final invalidCredential = SignInWithGoogleFailure.fromException(
+        FirebaseAuthException(code: "invalid-credential"),
+      );
+
+      expect(
+        invalidCredential.code,
+        SignInWithGoogleFailureCode.invalidCredential,
+      );
+    });
+
+    test("Should return unknown code from non FirebaseAuthException ", () {
+      final invalidCredential = SignInWithGoogleFailure.fromException(
+          FirebaseFunctionsException(message: "test", code: "test"));
+
+      expect(
+        invalidCredential.code,
         SignInWithGoogleFailureCode.unknown,
       );
     });

@@ -48,6 +48,14 @@ class AuthRepository {
     }
   }
 
+  /// Sign in with Google Account
+  ///
+  /// `Exception`
+  ///
+  /// A [SignInWithGoogleFailure] maybe thrown when a failure occurs.
+  ///
+  ///
+  /// Return `true` if sign in is successfully
   Future<bool?> signInWithGoogle() async {
     try {
       if (await _googleSignIn.isSignedIn() && await isSignedIn()) {
@@ -85,14 +93,18 @@ class AuthRepository {
         await _signInProvider.setIsSignInOnProcess(false);
         return false;
       }
-    } on FirebaseAuthException catch (error) {
-      if (error.code == "user-disabled") {
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "user-disabled") {
         await _googleSignIn.disconnect();
         await _googleSignIn.signOut();
       }
+
       await _signInProvider.setIsSignInOnProcess(false);
-      throw SignInWithGoogleFailure.fromCode(error.code);
-    } catch (error) {
+      throw SignInWithGoogleFailure.fromException(e);
+    } on Exception catch (e) {
+      await _signInProvider.setIsSignInOnProcess(false);
+      throw SignInWithGoogleFailure.fromException(e);
+    } catch (e) {
       await _signInProvider.setIsSignInOnProcess(false);
       throw const SignInWithGoogleFailure();
     }
