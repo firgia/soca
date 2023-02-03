@@ -55,4 +55,5 @@ void setupInjection() {
 
   /* --------------------------------> LOGIC <------------------------------- */
   sl.registerFactory<LanguageBloc>(() => LanguageBloc());
+  sl.registerFactory<SignInBloc>(() => SignInBloc());
 }

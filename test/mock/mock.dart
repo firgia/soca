@@ -32,6 +32,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<DeviceProvider>(),
   MockSpec<FunctionsProvider>(),
   MockSpec<LocalLanguageProvider>(),
+  MockSpec<AuthRepository>(),
   MockSpec<LanguageRepository>(),
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
@@ -50,5 +51,6 @@ import 'package:soca/logic/logic.dart';
 
   /* --------------------------------> LOGIC <------------------------------- */
   MockSpec<LanguageBloc>(),
+  MockSpec<SignInBloc>(),
 ])
 main(List<String> args) {}

@@ -63,6 +63,14 @@ MockFunctionsProvider getMockFunctionsProvider() {
   return mock;
 }
 
+MockAuthRepository getMockAuthRepository() {
+  MockAuthRepository mock = MockAuthRepository();
+  _removeRegistrationIfExists<AuthRepository>();
+  locator.registerSingleton<AuthRepository>(mock);
+
+  return mock;
+}
+
 MockLanguageRepository getMockLanguageRepository() {
   MockLanguageRepository mock = MockLanguageRepository();
   _removeRegistrationIfExists<LanguageRepository>();
@@ -131,6 +139,14 @@ MockLanguageBloc getMockLanguageBloc() {
   return mock;
 }
 
+MockSignInBloc getMockSignInBloc() {
+  MockSignInBloc mock = MockSignInBloc();
+  _removeRegistrationIfExists<SignInBloc>();
+  locator.registerSingleton<SignInBloc>(mock);
+
+  return mock;
+}
+
 void registerLocator() {
   /* --------------------------------> CONFIG <------------------------------ */
   getMockAppNavigator();
@@ -143,6 +159,7 @@ void registerLocator() {
   getMockDeviceProvider();
   getMockFunctionsProvider();
   getMockLocalLanguageProvider();
+  getMockAuthRepository();
   getMockLanguageRepository();
 
   /* ------------------------------> DEPENDENCIES <-------------------------- */
@@ -155,6 +172,7 @@ void registerLocator() {
 
   /* --------------------------------> LOGIC <------------------------------- */
   getMockLanguageBloc();
+  getMockSignInBloc();
 }
 
 void unregisterLocator() {
@@ -169,6 +187,7 @@ void unregisterLocator() {
   locator.unregister<DeviceProvider>();
   locator.unregister<FunctionsProvider>();
   locator.unregister<LocalLanguageProvider>();
+  locator.unregister<AuthRepository>();
   locator.unregister<LanguageRepository>();
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
@@ -181,6 +200,7 @@ void unregisterLocator() {
 
   /* --------------------------------> LOGIC <------------------------------- */
   locator.unregister<LanguageBloc>();
+  locator.unregister<SignInBloc>();
 }
 
 void _removeRegistrationIfExists<T extends Object>() {
