@@ -52,5 +52,6 @@ import 'package:soca/logic/logic.dart';
   /* --------------------------------> LOGIC <------------------------------- */
   MockSpec<LanguageBloc>(),
   MockSpec<SignInBloc>(),
+  MockSpec<SignOutBloc>(),
 ])
 main(List<String> args) {}

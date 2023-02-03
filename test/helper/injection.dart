@@ -147,6 +147,14 @@ MockSignInBloc getMockSignInBloc() {
   return mock;
 }
 
+MockSignOutBloc getMockSignOutBloc() {
+  MockSignOutBloc mock = MockSignOutBloc();
+  _removeRegistrationIfExists<SignOutBloc>();
+  locator.registerSingleton<SignOutBloc>(mock);
+
+  return mock;
+}
+
 void registerLocator() {
   /* --------------------------------> CONFIG <------------------------------ */
   getMockAppNavigator();
@@ -173,6 +181,7 @@ void registerLocator() {
   /* --------------------------------> LOGIC <------------------------------- */
   getMockLanguageBloc();
   getMockSignInBloc();
+  getMockSignOutBloc();
 }
 
 void unregisterLocator() {
@@ -201,6 +210,7 @@ void unregisterLocator() {
   /* --------------------------------> LOGIC <------------------------------- */
   locator.unregister<LanguageBloc>();
   locator.unregister<SignInBloc>();
+  locator.unregister<SignOutBloc>();
 }
 
 void _removeRegistrationIfExists<T extends Object>() {
