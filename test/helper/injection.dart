@@ -129,6 +129,14 @@ MockOneSignal getMockOneSignal() {
   return mock;
 }
 
+MockWidgetsBinding getMockWidgetsBinding() {
+  MockWidgetsBinding mock = MockWidgetsBinding();
+  _removeRegistrationIfExists<WidgetsBinding>();
+  locator.registerSingleton<WidgetsBinding>(mock);
+
+  return mock;
+}
+
 /* ---------------------------------> LOGIC <-------------------------------- */
 
 MockLanguageBloc getMockLanguageBloc() {
@@ -177,6 +185,7 @@ void registerLocator() {
   getMockGoogleSignIn();
   getMockInternetConnectionChecker();
   getMockOneSignal();
+  getMockWidgetsBinding();
 
   /* --------------------------------> LOGIC <------------------------------- */
   getMockLanguageBloc();
@@ -206,6 +215,7 @@ void unregisterLocator() {
   locator.unregister<GoogleSignIn>();
   locator.unregister<InternetConnectionChecker>();
   locator.unregister<OneSignal>();
+  locator.unregister<WidgetsBinding>();
 
   /* --------------------------------> LOGIC <------------------------------- */
   locator.unregister<LanguageBloc>();

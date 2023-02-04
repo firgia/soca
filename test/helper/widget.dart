@@ -67,4 +67,7 @@ extension PumpApp on WidgetTester {
 extension GetWidget on Finder {
   /// Return the single of current widget
   Widget getWidget() => evaluate().single.widget;
+
+  /// Return the first of current widget
+  Widget getFirstWidget() => evaluate().first.widget;
 }

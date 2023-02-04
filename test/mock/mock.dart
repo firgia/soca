@@ -9,6 +9,8 @@
 
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -48,6 +50,8 @@ import 'package:soca/logic/logic.dart';
   MockSpec<UserCredential>(),
   MockSpec<InternetConnectionChecker>(),
   MockSpec<OneSignal>(),
+  MockSpec<SingletonFlutterWindow>(),
+  MockSpec<WidgetsBinding>(),
 
   /* --------------------------------> LOGIC <------------------------------- */
   MockSpec<LanguageBloc>(),
