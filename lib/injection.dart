@@ -59,4 +59,5 @@ void setupInjection() {
   sl.registerFactory<LanguageBloc>(() => LanguageBloc());
   sl.registerFactory<SignInBloc>(() => SignInBloc());
   sl.registerFactory<SignOutBloc>(() => SignOutBloc());
+  sl.registerFactory<RouteCubit>(() => RouteCubit());
 }
