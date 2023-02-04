@@ -9,6 +9,7 @@
 
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -40,7 +41,7 @@ void setupInjection() {
   sl.registerLazySingleton<LanguageRepository>(() => LanguageRepository());
   sl.registerLazySingleton<OnesignalRepository>(() => OnesignalRepository());
 
-  /* -----------------------------> DEPENDENCIES <---------------------------- */
+  /* -----------------------------> DEPENDENCIES <--------------------------- */
   sl.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage());
   sl.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
   sl.registerSingleton<FirebaseFunctions>(FirebaseFunctions.instance);
@@ -52,6 +53,7 @@ void setupInjection() {
     ),
   );
   sl.registerSingleton<OneSignal>(OneSignal.shared);
+  sl.registerSingleton<WidgetsBinding>(WidgetsBinding.instance);
 
   /* --------------------------------> LOGIC <------------------------------- */
   sl.registerFactory<LanguageBloc>(() => LanguageBloc());

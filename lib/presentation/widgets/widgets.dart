@@ -9,5 +9,7 @@
 
 export 'app_bar/app_bar.dart';
 export 'button/button.dart';
+export 'image/image.dart';
 export 'loading/loading.dart';
 export 'style/style.dart';
+export 'utility/utility.dart';
