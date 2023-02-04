@@ -163,6 +163,14 @@ MockSignOutBloc getMockSignOutBloc() {
   return mock;
 }
 
+MockRouteCubit getMockRouteCubit() {
+  MockRouteCubit mock = MockRouteCubit();
+  _removeRegistrationIfExists<RouteCubit>();
+  locator.registerSingleton<RouteCubit>(mock);
+
+  return mock;
+}
+
 void registerLocator() {
   /* --------------------------------> CONFIG <------------------------------ */
   getMockAppNavigator();
@@ -191,6 +199,7 @@ void registerLocator() {
   getMockLanguageBloc();
   getMockSignInBloc();
   getMockSignOutBloc();
+  getMockRouteCubit();
 }
 
 void unregisterLocator() {
@@ -221,6 +230,7 @@ void unregisterLocator() {
   locator.unregister<LanguageBloc>();
   locator.unregister<SignInBloc>();
   locator.unregister<SignOutBloc>();
+  locator.unregister<RouteCubit>();
 }
 
 void _removeRegistrationIfExists<T extends Object>() {
