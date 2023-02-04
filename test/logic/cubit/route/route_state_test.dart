@@ -8,16 +8,17 @@
  */
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:soca/config/config.dart';
 import 'package:soca/logic/logic.dart';
 
 void main() {
   group("RouteTarget", () {
     group("Fields", () {
-      group("path", () {
-        test("Should return path value based on constructor", () {
-          const routeTarget = RouteTarget("/home");
+      group("name", () {
+        test("Should return name value based on constructor", () {
+          final routeTarget = RouteTarget(AppPages.home);
 
-          expect(routeTarget.path, "/home");
+          expect(routeTarget.name, AppPages.home);
         });
       });
     });

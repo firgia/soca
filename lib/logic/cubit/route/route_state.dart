@@ -25,7 +25,7 @@ class RouteLoading extends RouteState {
 }
 
 class RouteTarget extends RouteState {
-  final String path;
+  final String name;
 
-  const RouteTarget(this.path);
+  const RouteTarget(this.name);
 }

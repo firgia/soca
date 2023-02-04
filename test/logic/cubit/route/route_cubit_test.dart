@@ -10,6 +10,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:soca/config/config.dart';
 import 'package:soca/logic/logic.dart';
 
 import '../../../helper/helper.dart';
@@ -25,32 +26,32 @@ void main() {
     });
     tearDown(() => unregisterLocator());
 
-    group("getTargetPath", () {
+    group("getTargetRoute", () {
       blocTest<RouteCubit, RouteState>(
-        'Should emits [RouteLoading, RouteTarget("/")] when user has been signed in.',
+        'Should emits [RouteLoading, RouteTarget(AppPages.home)] when user has been signed in.',
         build: () => RouteCubit(),
-        act: (cubit) => cubit.getTargetPath(),
+        act: (cubit) => cubit.getTargetRoute(),
         setUp: () {
           when(authRepository.isSignedIn())
               .thenAnswer((_) => Future.value(true));
         },
-        expect: () => const <RouteState>[
-          RouteLoading(),
-          RouteTarget("/"),
+        expect: () => <RouteState>[
+          const RouteLoading(),
+          RouteTarget(AppPages.home),
         ],
       );
 
       blocTest<RouteCubit, RouteState>(
-        'Should emits [RouteLoading, RouteTarget("/sign_in")] when user not signed in.',
+        'Should emits [RouteLoading, RouteTarget(AppPages.signIn)] when user not signed in.',
         build: () => RouteCubit(),
-        act: (cubit) => cubit.getTargetPath(),
+        act: (cubit) => cubit.getTargetRoute(),
         setUp: () {
           when(authRepository.isSignedIn())
               .thenAnswer((_) => Future.value(false));
         },
-        expect: () => const <RouteState>[
-          RouteLoading(),
-          RouteTarget("/sign_in"),
+        expect: () => <RouteState>[
+          const RouteLoading(),
+          RouteTarget(AppPages.signIn),
         ],
       );
     });

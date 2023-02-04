@@ -10,7 +10,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
-
+import '../../../config/config.dart';
 import '../../../data/data.dart';
 import '../../../injection.dart';
 
@@ -23,8 +23,8 @@ class RouteCubit extends Cubit<RouteState> {
 
   final Logger _logger = Logger("Route Cubit");
 
-  void getTargetPath() async {
-    String targetPath = "/";
+  void getTargetRoute() async {
+    String targetName = "/";
     emit(const RouteLoading());
     _logger.info("Checking user signed in...");
 
@@ -34,12 +34,12 @@ class RouteCubit extends Cubit<RouteState> {
     // Check different device
     // Check is first time use app
     if (isSignedIn) {
-      targetPath = "/";
+      targetName = AppPages.home;
     } else {
-      targetPath = "/sign_in";
+      targetName = AppPages.signIn;
     }
 
-    emit(RouteTarget(targetPath));
-    _logger.fine("The target route is $targetPath");
+    emit(RouteTarget(targetName));
+    _logger.fine("The target route is $targetName");
   }
 }
