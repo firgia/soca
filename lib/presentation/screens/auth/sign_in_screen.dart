@@ -11,8 +11,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:soca/core/core.dart';
-import 'package:soca/logic/logic.dart';
-
+import '../../../logic/logic.dart';
 import '../../../config/config.dart';
 import '../../../injection.dart';
 import '../../presentation.dart';
@@ -29,9 +28,31 @@ class SignInScreen extends StatelessWidget with UIMixin {
       create: (context) => signInBloc,
       child: BlocListener<SignInBloc, SignInState>(
         listener: (context, state) {
-          // TODO: implement listener
+          // TODO: Must add validate to sign up page
           if (state is SignInSuccessfully) {
             appNavigator.goToHome(context);
+          }
+          // Error handling
+          else if (state is SignInWithAppleError) {
+            SignInWithAppleFailureCode code = state.failure.code;
+
+            if (code != SignInWithAppleFailureCode.canceled) {
+              Alert(context).showAuthenticationErrorMessage(
+                errorCode: code.name,
+              );
+            }
+          } else if (state is SignInWithGoogleError) {
+            SignInWithGoogleFailureCode code = state.failure.code;
+
+            if (code == SignInWithGoogleFailureCode.networkRequestFailed) {
+              Alert(context).showInternetErrorMessage();
+            } else {
+              Alert(context).showAuthenticationErrorMessage(
+                errorCode: code.name,
+              );
+            }
+          } else if (state is SignInError) {
+            Alert(context).showAuthenticationErrorMessage();
           }
         },
         child: Scaffold(
