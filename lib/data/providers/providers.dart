@@ -16,7 +16,7 @@
 /// The request does not have valid authentication credentials for the operation.
 ///
 /// - **not-found**:
-/// Thrown if the user is not available.
+/// Thrown if the data is not available.
 ///
 /// [Explore more FirebaseFunctionsException code](https://firebase.google.com/docs/reference/android/com/google/firebase/functions/FirebaseFunctionsException.Code)
 ///
@@ -28,3 +28,4 @@ export 'auth_provider.dart';
 export 'device_provider.dart';
 export 'functions_provider.dart';
 export 'local_language_provider.dart';
+export 'user_provider.dart';

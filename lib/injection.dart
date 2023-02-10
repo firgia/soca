@@ -9,6 +9,7 @@
 
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -45,6 +46,7 @@ void setupInjection() {
   sl.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage());
   sl.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
   sl.registerSingleton<FirebaseFunctions>(FirebaseFunctions.instance);
+  sl.registerSingleton<FirebaseStorage>(FirebaseStorage.instance);
   sl.registerSingleton<GoogleSignIn>(GoogleSignIn());
   sl.registerSingleton<InternetConnectionChecker>(
     InternetConnectionChecker.createInstance(

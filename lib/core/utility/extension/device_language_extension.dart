@@ -122,4 +122,6 @@ extension DeviceLanguageExtension on DeviceLanguage {
 
     return locale;
   }
+
+  String getLanguageCode() => toLocale().languageCode;
 }
