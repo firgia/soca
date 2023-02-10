@@ -157,6 +157,50 @@ void main() {
       });
     });
 
+    group("getLanguageCode", () {
+      test("Should return 'ar' text when DeviceLanguage.arabic", () {
+        expect(
+          DeviceLanguage.arabic.getLanguageCode(),
+          "ar",
+        );
+      });
+
+      test("Should return 'en' text when DeviceLanguage.english", () {
+        expect(
+          DeviceLanguage.english.getLanguageCode(),
+          "en",
+        );
+      });
+
+      test("Should return 'es' text when DeviceLanguage.spanish", () {
+        expect(
+          DeviceLanguage.spanish.getLanguageCode(),
+          "es",
+        );
+      });
+
+      test("Should return 'hi' text when DeviceLanguage.hindi", () {
+        expect(
+          DeviceLanguage.hindi.getLanguageCode(),
+          "hi",
+        );
+      });
+
+      test("Should return 'ru' text when DeviceLanguage.russian", () {
+        expect(
+          DeviceLanguage.russian.getLanguageCode(),
+          "ru",
+        );
+      });
+
+      test("Should return 'zh' text when DeviceLanguage.chinese", () {
+        expect(
+          DeviceLanguage.chinese.getLanguageCode(),
+          "zh",
+        );
+      });
+    });
+
     group("toLocale", () {
       test("Should return Locale(ar) when DeviceLanguage.arabic", () {
         expect(
