@@ -9,4 +9,5 @@
 
 export 'alert.dart';
 export 'brightness_builder.dart';
+export 'bottomsheet.dart';
 export 'dialog.dart';
