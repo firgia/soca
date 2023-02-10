@@ -19,11 +19,11 @@ enum SignUpFailureCode {
   unknown,
 }
 
-/// {@template sign_in_up_exception}
+/// {@template sign_up_exception}
 /// Thrown during the sign up process if a failure occurs.
 /// {@endtemplate}
 class SignUpFailure implements Exception {
-  /// {@macro sign_in_up_exception}
+  /// {@macro sign_up_exception}
   const SignUpFailure({
     this.code = SignUpFailureCode.unknown,
     this.message = "An unknown exception occurred.",
