@@ -9,9 +9,9 @@
 
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:soca/data/repositories/onesignal_repository.dart';
-import 'package:soca/injection.dart';
-import 'package:soca/logic/logic.dart';
+import 'data/repositories/onesignal_repository.dart';
+import 'injection.dart';
+import 'logic/logic.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override

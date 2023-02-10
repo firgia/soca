@@ -23,7 +23,7 @@ void main() {
 
     group("LanguageChanged", () {
       blocTest<LanguageBloc, LanguageState>(
-        'Should emits [LanguageSelected] when LanguageChanged is added with language.',
+        'Should emits [LanguageLoading, LanguageSelected] when LanguageChanged is added with language.',
         build: () => createLanguageBloc(),
         act: (bloc) =>
             bloc.add(const LanguageChanged(DeviceLanguage.indonesian)),
@@ -34,7 +34,7 @@ void main() {
       );
 
       blocTest<LanguageBloc, LanguageState>(
-        'Should emits [LanguageUnselected] when LanguageChanged is added with empty language.',
+        'Should emits [LanguageLoading, LanguageUnselected] when LanguageChanged is added with empty language.',
         build: () => createLanguageBloc(),
         act: (bloc) => bloc.add(const LanguageChanged()),
         expect: () => const <LanguageState>[

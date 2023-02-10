@@ -8,3 +8,4 @@
  */
 
 export 'internet_connection_handler_mixin.dart';
+export 'ui_mixin.dart';

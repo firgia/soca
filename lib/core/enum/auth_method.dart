@@ -3,13 +3,12 @@
  * Website    : https://www.firgia.com
  * Repository : https://github.com/firgia/soca
  * 
- * Created on Wed Jan 25 2023
+ * Created on Thu Feb 02 2023
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-part of 'theme_cubit.dart';
-
-@immutable
-abstract class ThemeState {}
-
-class ThemeInitial extends ThemeState {}
+/// List of supported authentication provider on this app
+enum AuthMethod {
+  apple,
+  google,
+}

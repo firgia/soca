@@ -51,13 +51,14 @@ Future<void> initializeApp() async {
       break;
   }
   await dotenv.load(fileName: envFileName);
+
+  await Firebase.initializeApp();
   setupInjection();
 
   // Initialize all asynchronous methods which possible to initialize at the
   // same time to speed up the initialization process
   await Future.wait([
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
-    Firebase.initializeApp(),
     OneSignal.shared.setAppId(Environtment.onesignalAppID),
     EasyLocalization.ensureInitialized(),
     _Logging.initialize(showLog: Environtment.isDevelopment()),

@@ -8,30 +8,36 @@
  */
 
 import 'package:go_router/go_router.dart';
+import 'app_pages.dart';
 import '../../presentation/presentation.dart';
 
 abstract class AppRoutes {
   static GoRouter get router => GoRouter(
-        initialLocation: "/language",
+        initialLocation: "/${AppPages.splash}",
         routes: [
           GoRoute(
-            path: "/",
-            name: "home",
+            path: "/${AppPages.splash}",
+            name: AppPages.splash,
+            builder: (context, state) => SplashScreen(),
+          ),
+          GoRoute(
+            path: "/${AppPages.home}",
+            name: AppPages.home,
             builder: (context, state) => const HomeScreen(),
           ),
           GoRoute(
-            path: "/sign_in",
-            name: "sign_in",
-            builder: (context, state) => const SignInScreen(),
+            path: "/${AppPages.signIn}",
+            name: AppPages.signIn,
+            builder: (context, state) => SignInScreen(),
           ),
           GoRoute(
-            path: "/sign_up",
-            name: "sign_up",
+            path: "/${AppPages.signUp}",
+            name: AppPages.signUp,
             builder: (context, state) => const SignUpScreen(),
           ),
           GoRoute(
-            path: "/language",
-            name: "language",
+            path: "/${AppPages.language}",
+            name: AppPages.language,
             builder: (context, state) => LanguageScreen(),
           ),
         ],

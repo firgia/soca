@@ -8,6 +8,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:soca/config/config.dart';
 
 class AppNavigator {
   void back<T>(BuildContext context, {T? result}) {
@@ -17,4 +19,19 @@ class AppNavigator {
   }
 
   bool canPop(BuildContext context) => Navigator.of(context).canPop();
+
+  void goToHome(BuildContext context) =>
+      context.pushReplacementNamed(AppPages.home);
+
+  void goToLanguage(BuildContext context) =>
+      context.pushReplacementNamed(AppPages.language);
+
+  void goToSplash(BuildContext context) =>
+      context.pushReplacementNamed(AppPages.splash);
+
+  void goToSignIn(BuildContext context) =>
+      context.pushReplacementNamed(AppPages.signIn);
+
+  void goToSignUp(BuildContext context) =>
+      context.pushReplacementNamed(AppPages.signUp);
 }

@@ -7,4 +7,4 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-export 'theme/theme_cubit.dart';
+export 'route/route_cubit.dart';

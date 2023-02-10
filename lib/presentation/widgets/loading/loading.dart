@@ -8,3 +8,4 @@
  */
 
 export 'adaptive_loading.dart';
+export 'loading_panel.dart';

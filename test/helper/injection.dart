@@ -22,19 +22,51 @@ MockAppNavigator getMockAppNavigator() {
 
 /* ----------------------------------> CORE <-------------------------------- */
 
-MockPlatformInfo getMockPlatformInfo() {
-  MockPlatformInfo mock = MockPlatformInfo();
-  _removeRegistrationIfExists<PlatformInfo>();
-  locator.registerSingleton<PlatformInfo>(mock);
+MockDeviceInfo getMockDeviceInfo() {
+  MockDeviceInfo mock = MockDeviceInfo();
+  _removeRegistrationIfExists<DeviceInfo>();
+  locator.registerSingleton<DeviceInfo>(mock);
 
   return mock;
 }
 
 /* ----------------------------------> DATA <-------------------------------- */
+MockAuthProvider getMockAuthProvider() {
+  MockAuthProvider mock = MockAuthProvider();
+  _removeRegistrationIfExists<AuthProvider>();
+  locator.registerSingleton<AuthProvider>(mock);
+
+  return mock;
+}
+
+MockDeviceProvider getMockDeviceProvider() {
+  MockDeviceProvider mock = MockDeviceProvider();
+  _removeRegistrationIfExists<DeviceProvider>();
+  locator.registerSingleton<DeviceProvider>(mock);
+
+  return mock;
+}
+
 MockLocalLanguageProvider getMockLocalLanguageProvider() {
   MockLocalLanguageProvider mock = MockLocalLanguageProvider();
   _removeRegistrationIfExists<LocalLanguageProvider>();
   locator.registerSingleton<LocalLanguageProvider>(mock);
+
+  return mock;
+}
+
+MockFunctionsProvider getMockFunctionsProvider() {
+  MockFunctionsProvider mock = MockFunctionsProvider();
+  _removeRegistrationIfExists<FunctionsProvider>();
+  locator.registerSingleton<FunctionsProvider>(mock);
+
+  return mock;
+}
+
+MockAuthRepository getMockAuthRepository() {
+  MockAuthRepository mock = MockAuthRepository();
+  _removeRegistrationIfExists<AuthRepository>();
+  locator.registerSingleton<AuthRepository>(mock);
 
   return mock;
 }
@@ -57,6 +89,30 @@ MockFlutterSecureStorage getMockFlutterSecureStorage() {
   return mock;
 }
 
+MockFirebaseAuth getMockFirebaseAuth() {
+  MockFirebaseAuth mock = MockFirebaseAuth();
+  _removeRegistrationIfExists<FirebaseAuth>();
+  locator.registerSingleton<FirebaseAuth>(mock);
+
+  return mock;
+}
+
+MockFirebaseFunctions getMockFirebaseFunctions() {
+  MockFirebaseFunctions mock = MockFirebaseFunctions();
+  _removeRegistrationIfExists<FirebaseFunctions>();
+  locator.registerSingleton<FirebaseFunctions>(mock);
+
+  return mock;
+}
+
+MockGoogleSignIn getMockGoogleSignIn() {
+  MockGoogleSignIn mock = MockGoogleSignIn();
+  _removeRegistrationIfExists<GoogleSignIn>();
+  locator.registerSingleton<GoogleSignIn>(mock);
+
+  return mock;
+}
+
 MockInternetConnectionChecker getMockInternetConnectionChecker() {
   MockInternetConnectionChecker mock = MockInternetConnectionChecker();
   _removeRegistrationIfExists<InternetConnectionChecker>();
@@ -73,6 +129,14 @@ MockOneSignal getMockOneSignal() {
   return mock;
 }
 
+MockWidgetsBinding getMockWidgetsBinding() {
+  MockWidgetsBinding mock = MockWidgetsBinding();
+  _removeRegistrationIfExists<WidgetsBinding>();
+  locator.registerSingleton<WidgetsBinding>(mock);
+
+  return mock;
+}
+
 /* ---------------------------------> LOGIC <-------------------------------- */
 
 MockLanguageBloc getMockLanguageBloc() {
@@ -83,24 +147,59 @@ MockLanguageBloc getMockLanguageBloc() {
   return mock;
 }
 
+MockSignInBloc getMockSignInBloc() {
+  MockSignInBloc mock = MockSignInBloc();
+  _removeRegistrationIfExists<SignInBloc>();
+  locator.registerSingleton<SignInBloc>(mock);
+
+  return mock;
+}
+
+MockSignOutBloc getMockSignOutBloc() {
+  MockSignOutBloc mock = MockSignOutBloc();
+  _removeRegistrationIfExists<SignOutBloc>();
+  locator.registerSingleton<SignOutBloc>(mock);
+
+  return mock;
+}
+
+MockRouteCubit getMockRouteCubit() {
+  MockRouteCubit mock = MockRouteCubit();
+  _removeRegistrationIfExists<RouteCubit>();
+  locator.registerSingleton<RouteCubit>(mock);
+
+  return mock;
+}
+
 void registerLocator() {
   /* --------------------------------> CONFIG <------------------------------ */
   getMockAppNavigator();
 
   /* ---------------------------------> CORE <------------------------------- */
-  getMockPlatformInfo();
+  getMockDeviceInfo();
 
-  /* ----------------------------------> DATA <-------------------------------- */
+  /* ---------------------------------> DATA <------------------------------- */
+  getMockAuthProvider();
+  getMockDeviceProvider();
+  getMockFunctionsProvider();
   getMockLocalLanguageProvider();
+  getMockAuthRepository();
   getMockLanguageRepository();
 
   /* ------------------------------> DEPENDENCIES <-------------------------- */
   getMockFlutterSecureStorage();
+  getMockFirebaseAuth();
+  getMockFirebaseFunctions();
+  getMockGoogleSignIn();
   getMockInternetConnectionChecker();
   getMockOneSignal();
+  getMockWidgetsBinding();
 
   /* --------------------------------> LOGIC <------------------------------- */
   getMockLanguageBloc();
+  getMockSignInBloc();
+  getMockSignOutBloc();
+  getMockRouteCubit();
 }
 
 void unregisterLocator() {
@@ -108,19 +207,30 @@ void unregisterLocator() {
   locator.unregister<AppNavigator>();
 
   /* ---------------------------------> CORE <------------------------------- */
-  locator.unregister<PlatformInfo>();
+  locator.unregister<DeviceInfo>();
 
-  /* ----------------------------------> DATA <-------------------------------- */
+  /* ---------------------------------> DATA <------------------------------- */
+  locator.unregister<AuthProvider>();
+  locator.unregister<DeviceProvider>();
+  locator.unregister<FunctionsProvider>();
   locator.unregister<LocalLanguageProvider>();
+  locator.unregister<AuthRepository>();
   locator.unregister<LanguageRepository>();
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   locator.unregister<FlutterSecureStorage>();
+  locator.unregister<FirebaseAuth>();
+  locator.unregister<FirebaseFunctions>();
+  locator.unregister<GoogleSignIn>();
   locator.unregister<InternetConnectionChecker>();
   locator.unregister<OneSignal>();
+  locator.unregister<WidgetsBinding>();
 
   /* --------------------------------> LOGIC <------------------------------- */
   locator.unregister<LanguageBloc>();
+  locator.unregister<SignInBloc>();
+  locator.unregister<SignOutBloc>();
+  locator.unregister<RouteCubit>();
 }
 
 void _removeRegistrationIfExists<T extends Object>() {
