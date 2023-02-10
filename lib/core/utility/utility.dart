@@ -8,5 +8,6 @@
  */
 
 export 'extension/extension.dart';
+export 'helper/helper.dart';
 export 'info/info.dart';
 export 'mixin/mixin.dart';
