@@ -229,6 +229,8 @@ class AuthRepository {
       );
 
       _logger.finest("Successfully to sign up");
+    } on SignUpFailure catch (_) {
+      rethrow;
     } on Exception catch (e) {
       throw SignUpFailure.fromException(e);
     } catch (e) {

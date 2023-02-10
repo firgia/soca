@@ -7,6 +7,9 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:io';
+
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -21,6 +24,7 @@ void main() {
   late MockAuthProvider authProvider;
   late MockFirebaseAuth firebaseAuth;
   late MockGoogleSignIn googleSignIn;
+  late MockUserProvider userProvider;
   late AuthRepository authRepository;
 
   setUp(() {
@@ -28,6 +32,7 @@ void main() {
     authProvider = getMockAuthProvider();
     firebaseAuth = getMockFirebaseAuth();
     googleSignIn = getMockGoogleSignIn();
+    userProvider = getMockUserProvider();
     authRepository = AuthRepository();
   });
 
@@ -292,6 +297,134 @@ void main() {
 
         verify(authProvider.setSignInMethod(null));
         verify(authProvider.setIsSignInOnProcess(false));
+      });
+    });
+
+    group("signUp", () {
+      late File file;
+
+      setUp(() {
+        file = File("assets/images/raster/avatar.png");
+      });
+
+      Future<void> runSignUp() async {
+        await authRepository.signUp(
+          type: UserType.volunteer,
+          name: "Firgia",
+          profileImage: file,
+          dateOfBirth: DateTime(2000, 4, 24),
+          gender: Gender.male,
+          deviceLanguage: DeviceLanguage.indonesian,
+          language: [
+            const Language(code: "id"),
+            const Language(code: "en"),
+          ],
+        );
+      }
+
+      test("Should not throw any exception when sign up successfully",
+          () async {
+        MockUser user = MockUser();
+        when(user.uid).thenReturn("123");
+        when(firebaseAuth.currentUser).thenReturn(user);
+
+        await runSignUp();
+
+        verify(
+          userProvider.createUser(
+            uid: "123",
+            type: UserType.volunteer,
+            name: "Firgia",
+            profileImage: file,
+            dateOfBirth: DateTime(2000, 4, 24),
+            gender: Gender.male,
+            deviceLanguage: DeviceLanguage.indonesian,
+            language: [
+              const Language(code: "id"),
+              const Language(code: "en"),
+            ],
+            deviceID: anyNamed("deviceID"),
+            oneSignalPlayerID: anyNamed("oneSignalPlayerID"),
+            voipToken: anyNamed("voipToken"),
+            devicePlatform: anyNamed("devicePlatform"),
+          ),
+        );
+      });
+
+      test("Should throw SignUpFailureCode.unauthenticated when not signed in",
+          () async {
+        when(firebaseAuth.currentUser).thenReturn(null);
+        expect(() => runSignUp(), throwsA(isA<SignUpFailure>()));
+
+        try {
+          await runSignUp();
+        } on SignUpFailure catch (e) {
+          expect(e.code, SignUpFailureCode.unauthenticated);
+        }
+      });
+
+      test(
+          "Should throw SignUpFailureCode.invalidArgument when get invalid argument error from FirebaseFunctionsExceptions",
+          () async {
+        MockUser user = MockUser();
+        when(user.uid).thenReturn("123");
+        when(firebaseAuth.currentUser).thenReturn(user);
+        when(
+          userProvider.createUser(
+            uid: anyNamed("uid"),
+            type: anyNamed("type"),
+            name: anyNamed("name"),
+            profileImage: anyNamed("profileImage"),
+            dateOfBirth: anyNamed("dateOfBirth"),
+            gender: anyNamed("gender"),
+            deviceLanguage: anyNamed("deviceLanguage"),
+            language: anyNamed("language"),
+            deviceID: anyNamed("deviceID"),
+            oneSignalPlayerID: anyNamed("oneSignalPlayerID"),
+            voipToken: anyNamed("voipToken"),
+            devicePlatform: anyNamed("devicePlatform"),
+          ),
+        ).thenThrow(FirebaseFunctionsException(
+            message: "error", code: "invalid-argument"));
+
+        expect(() => runSignUp(), throwsA(isA<SignUpFailure>()));
+
+        try {
+          await runSignUp();
+        } on SignUpFailure catch (e) {
+          expect(e.code, SignUpFailureCode.invalidArgument);
+        }
+      });
+
+      test("Should throw SignUpFailureCode.unknown when unknown exception",
+          () async {
+        MockUser user = MockUser();
+        when(user.uid).thenReturn("123");
+        when(firebaseAuth.currentUser).thenReturn(user);
+        when(
+          userProvider.createUser(
+            uid: anyNamed("uid"),
+            type: anyNamed("type"),
+            name: anyNamed("name"),
+            profileImage: anyNamed("profileImage"),
+            dateOfBirth: anyNamed("dateOfBirth"),
+            gender: anyNamed("gender"),
+            deviceLanguage: anyNamed("deviceLanguage"),
+            language: anyNamed("language"),
+            deviceID: anyNamed("deviceID"),
+            oneSignalPlayerID: anyNamed("oneSignalPlayerID"),
+            voipToken: anyNamed("voipToken"),
+            devicePlatform: anyNamed("devicePlatform"),
+          ),
+        ).thenThrow(Exception());
+
+        expect(() => runSignUp(), throwsA(isA<SignUpFailure>()));
+
+        try {
+          await runSignUp();
+        } on SignUpFailure catch (e) {
+          expect(e.code, SignUpFailureCode.unknown);
+        }
       });
     });
   });
