@@ -9,8 +9,9 @@
 
 import 'package:flutter/material.dart';
 import '../../../core/core.dart';
-import '../../../presentation/presentation.dart';
+import '../message/message.dart';
 import 'bottomsheet.dart';
+import 'dialog.dart';
 
 class Alert with UIMixin {
   late BuildContext context;
