@@ -9,3 +9,4 @@
 
 export 'sign_in_with_apple_failure.dart';
 export 'sign_in_with_google_failure.dart';
+export 'sign_up_failure.dart';

@@ -37,6 +37,7 @@ void setupInjection() {
   sl.registerLazySingleton<FunctionsProvider>(() => FunctionsProvider());
   sl.registerLazySingleton<LocalLanguageProvider>(
       () => LocalLanguageProvider());
+  sl.registerLazySingleton<UserProvider>(() => UserProvider());
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepository());
   sl.registerLazySingleton<LanguageRepository>(() => LanguageRepository());
