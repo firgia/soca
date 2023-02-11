@@ -3,7 +3,7 @@
  * Website    : https://www.firgia.com
  * Repository : https://github.com/firgia/soca
  * 
- * Created on Fri Feb 10 2023
+ * Created on Sat Feb 11 2023
  * Copyright (c) 2023 Mochamad Firgia
  */
 
@@ -13,18 +13,16 @@ import 'package:soca/data/data.dart';
 void main() {
   group(".fromMap()", () {
     test("Should convert map value to fields", () {
-      final actual = Language.fromMap(
+      final actual = UserActivity.fromMap(
         const {
-          "code": "id",
-          "name": "Indonesian",
-          "nativeName": "Bahasa Indonesia"
+          "online": true,
+          "last_seen": "2023-02-11T14:12:06.182067",
         },
       );
 
-      const expected = Language(
-        code: "id",
-        name: "Indonesian",
-        nativeName: "Bahasa Indonesia",
+      final expected = UserActivity(
+        online: true,
+        lastSeen: DateTime.tryParse("2023-02-11T14:12:06.182067"),
       );
 
       expect(actual, expected);

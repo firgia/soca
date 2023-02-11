@@ -8,7 +8,7 @@
  */
 
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -41,14 +41,14 @@ import 'package:soca/logic/logic.dart';
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   MockSpec<DotEnv>(),
   MockSpec<FlutterSecureStorage>(),
-  MockSpec<FirebaseAuth>(),
+  MockSpec<auth.FirebaseAuth>(),
   MockSpec<FirebaseFunctions>(),
   MockSpec<GoogleSignIn>(),
   MockSpec<GoogleSignInAuthentication>(),
   MockSpec<GoogleSignInAccount>(),
   MockSpec<HttpsCallable>(),
-  MockSpec<User>(),
-  MockSpec<UserCredential>(),
+  MockSpec<auth.User>(),
+  MockSpec<auth.UserCredential>(),
   MockSpec<InternetConnectionChecker>(),
   MockSpec<OneSignal>(),
   MockSpec<SingletonFlutterWindow>(),

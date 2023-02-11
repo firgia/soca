@@ -8,4 +8,5 @@
  */
 
 export 'device_language_extension.dart';
+export 'string_extension.dart';
 export 'locale_extension.dart';
