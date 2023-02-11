@@ -13,14 +13,14 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:soca/core/core.dart';
 
 void main() {
-  group("Default Constructor", () {
+  group(".()", () {
     test("Should return unknown code as a default", () {
       const exception = SignInWithAppleFailure();
       expect(exception.code, SignInWithAppleFailureCode.unknown);
     });
   });
 
-  group("From Code", () {
+  group(".fromException()", () {
     test(
         "Should return the correct code from SignInWithAppleNotSupportedException",
         () {

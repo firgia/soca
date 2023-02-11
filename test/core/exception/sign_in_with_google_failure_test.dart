@@ -13,14 +13,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:soca/core/core.dart';
 
 void main() {
-  group("Default Constructor", () {
+  group(".()", () {
     test("Should return unknown code as a default", () {
       const exception = SignInWithGoogleFailure();
       expect(exception.code, SignInWithGoogleFailureCode.unknown);
     });
   });
 
-  group("From Code", () {
+  group(".fromCode()", () {
     test("Should return code based on string code", () {
       final invalidCredential =
           SignInWithGoogleFailure.fromCode("invalid-credential");
@@ -61,7 +61,7 @@ void main() {
     });
   });
 
-  group("From Exception", () {
+  group(".fromException()", () {
     test("Should return correct code from FirebaseAuthException ", () {
       final invalidCredential = SignInWithGoogleFailure.fromException(
         FirebaseAuthException(code: "invalid-credential"),
