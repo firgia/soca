@@ -81,12 +81,8 @@ class UserProvider {
     String extension = fileName.split(".").last;
 
     _logger.info("Uploading avatar image to Firebase Storage...");
-    Reference firebaseStorageRef = _firebaseStorage
-        .ref()
-        .child("users")
-        .child(uid)
-        .child("avatar")
-        .child('$timeStamp.$extension');
+    Reference firebaseStorageRef =
+        _firebaseStorage.ref().child("users/$uid/avatar/$timeStamp.$extension");
     UploadTask task = firebaseStorageRef.putFile(file);
 
     return await task;
