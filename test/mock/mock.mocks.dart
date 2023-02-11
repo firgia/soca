@@ -1019,6 +1019,16 @@ class MockUserProvider extends _i1.Mock implements _i20.UserProvider {
         returnValueForMissingStub: _i24.Future<void>.value(),
       ) as _i24.Future<void>);
   @override
+  _i24.Future<dynamic> getProfile({String? uid}) => (super.noSuchMethod(
+        Invocation.method(
+          #getProfile,
+          [],
+          {#uid: uid},
+        ),
+        returnValue: _i24.Future<dynamic>.value(),
+        returnValueForMissingStub: _i24.Future<dynamic>.value(),
+      ) as _i24.Future<dynamic>);
+  @override
   _i24.Future<_i3.TaskSnapshot> uploadAvatar({
     required _i27.File? file,
     required String? uid,

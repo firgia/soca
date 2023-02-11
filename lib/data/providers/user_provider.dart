@@ -71,9 +71,11 @@ class UserProvider {
     _logger.fine("Successfully to create new user");
   }
 
+  /// {@template get_profile_user}
   /// Get profile user
   ///
   /// If uid is null, the profile will return based on signed-in user
+  /// {@endtemplate}
   ///
   /// {@macro firebase_functions_exception}
   Future<dynamic> getProfile({String? uid}) async {

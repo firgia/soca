@@ -24,6 +24,8 @@ class AuthRepository {
   final UserProvider _userProvider = sl<UserProvider>();
   final Logger _logger = Logger("Auth Repository");
 
+  String? get uid => _firebaseAuth.currentUser?.uid;
+
   /// Check current user is signed in
   ///
   /// Return `true` if user is signed in
@@ -193,7 +195,7 @@ class AuthRepository {
     required List<Language> language,
   }) async {
     try {
-      final uid = _firebaseAuth.currentUser?.uid;
+      final uid = this.uid;
       final currentDeviceLanguage = deviceLanguage ?? DeviceLanguage.english;
 
       if (uid == null) {

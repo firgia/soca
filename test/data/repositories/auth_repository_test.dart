@@ -38,6 +38,16 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  group(".uid", () {
+    test("Should return uid from FirebaseAuth.currentUser", () {
+      MockUser user = MockUser();
+      when(user.uid).thenReturn("1234");
+      when(firebaseAuth.currentUser).thenReturn(user);
+
+      expect(authRepository.uid, "1234");
+    });
+  });
+
   group("Functions", () {
     group("isSignedIn", () {
       test(
@@ -364,7 +374,7 @@ void main() {
       });
 
       test(
-          "Should throw SignUpFailureCode.invalidArgument when get invalid argument error from FirebaseFunctionsExceptions",
+          "Should throw SignUpFailureCode.invalidArgument when get invalid-argument error from FirebaseFunctionsExceptions",
           () async {
         MockUser user = MockUser();
         when(user.uid).thenReturn("123");
