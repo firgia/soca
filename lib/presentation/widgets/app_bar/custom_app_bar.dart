@@ -9,11 +9,106 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:soca/core/core.dart';
 import '../../../../config/config.dart';
+import '../../../injection.dart';
 import '../button/custom_back_button.dart';
+import '../text/text.dart';
 
-class CustomAppBar extends StatelessWidget {
+class CustomAppBar extends _WrapperAppBar {
   const CustomAppBar({
+    required String title,
+    required Widget body,
+    List<Widget>? actions,
+    Key? key,
+  }) : super(
+          body: body,
+          title: title,
+          titleOnly: false,
+          actions: actions,
+          key: key,
+        );
+
+  const CustomAppBar.header({
+    required String title,
+    required Widget body,
+    Key? key,
+  }) : super(
+          body: body,
+          title: title,
+          titleOnly: true,
+          key: key,
+        );
+}
+
+class _WrapperAppBar extends StatelessWidget {
+  const _WrapperAppBar({
+    required this.titleOnly,
+    required this.title,
+    required this.body,
+    this.actions,
+    super.key,
+  });
+
+  final bool titleOnly;
+  final String title;
+  final Widget body;
+  final List<Widget>? actions;
+
+  @override
+  Widget build(BuildContext context) {
+    if (titleOnly) {
+      return _TitleAppBar(
+        title: title,
+        body: body,
+        key: key,
+      );
+    } else {
+      return _FullyAppBar(
+        title: title,
+        body: body,
+        actions: actions,
+        key: key,
+      );
+    }
+  }
+}
+
+class _TitleAppBar extends StatelessWidget {
+  final DeviceInfo deviceInfo = sl<DeviceInfo>();
+
+  _TitleAppBar({
+    required this.title,
+    required this.body,
+    super.key,
+  });
+
+  final String title;
+  final Widget body;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: deviceInfo.isIOS() ? 50 : 80,
+              bottom: 40,
+            ),
+            child: Center(
+              child: LargeTitleText(title),
+            ),
+          ),
+        ),
+        Expanded(child: body),
+      ],
+    );
+  }
+}
+
+class _FullyAppBar extends StatelessWidget {
+  const _FullyAppBar({
     required this.title,
     required this.body,
     this.actions,
@@ -156,15 +251,7 @@ class _AppBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   Widget _buildLargeTitleText(BuildContext context) {
-    return Text(
-      title,
-      style: Theme.of(context).appBarTheme.titleTextStyle?.copyWith(
-            fontSize: 30,
-          ),
-      textAlign: TextAlign.center,
-      maxLines: 2,
-      overflow: TextOverflow.ellipsis,
-    );
+    return LargeTitleText(title);
   }
 
   @override

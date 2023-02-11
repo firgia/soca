@@ -13,4 +13,5 @@ export 'image/image.dart';
 export 'loading/loading.dart';
 export 'message/message.dart';
 export 'style/style.dart';
+export 'text/text.dart';
 export 'utility/utility.dart';

@@ -17,6 +17,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:logging/logging.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'data/data.dart';
 import 'injection.dart';
 import 'config/config.dart';
@@ -95,6 +96,18 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: widget.title,
+      builder: (context, child) => ResponsiveWrapper.builder(
+        ScrollConfiguration(
+          behavior: FlatScrollBehaviour(),
+          child: child ?? const SizedBox(),
+        ),
+        minWidth: 450,
+        defaultScale: true,
+        breakpoints: [
+          const ResponsiveBreakpoint.resize(480, name: MOBILE),
+          const ResponsiveBreakpoint.autoScale(768, name: TABLET),
+        ],
+      ),
 
       /* LOCALE SETUP */
       localizationsDelegates: context.localizationDelegates,
@@ -118,6 +131,14 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     super.dispose();
 
     onesignalRepository.dispose();
+  }
+}
+
+class FlatScrollBehaviour extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
+    return child;
   }
 }
 
