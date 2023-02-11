@@ -71,6 +71,18 @@ class UserProvider {
     _logger.fine("Successfully to create new user");
   }
 
+  /// Get profile user
+  ///
+  /// If uid is null, the profile will return based on signed-in user
+  ///
+  /// {@macro firebase_functions_exception}
+  Future<dynamic> getProfile({String? uid}) async {
+    return _functionsProvider.call(
+      functionsName: FunctionName.getProfileUser,
+      parameters: {if (uid != null) "uid": uid},
+    );
+  }
+
   /// Uploading new avatar image
   Future<TaskSnapshot> uploadAvatar({
     required File file,

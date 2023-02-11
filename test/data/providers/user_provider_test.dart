@@ -19,6 +19,7 @@ import '../../helper/helper.dart';
 import '../../mock/mock.mocks.dart';
 
 String get _createUser => "createUser";
+String get _getProfile => "getProfileUser";
 
 void main() {
   late UserProvider userProvider;
@@ -100,6 +101,58 @@ void main() {
     });
   });
 
+  group(".getProfile()", () {
+    test("Should send the argument based on parameter", () async {
+      when(
+        functionsProvider.call(
+          functionsName: _getProfile,
+          parameters: anyNamed("parameters"),
+        ),
+      ).thenAnswer((_) => Future.value({}));
+
+      await userProvider.getProfile(uid: "1234");
+
+      verify(functionsProvider.call(
+        functionsName: _getProfile,
+        parameters: {"uid": "1234"},
+      ));
+    });
+
+    test("Should not send the argument when empty parameter", () async {
+      when(
+        functionsProvider.call(
+          functionsName: _getProfile,
+          parameters: anyNamed("parameters"),
+        ),
+      ).thenAnswer((_) => Future.value({}));
+
+      await userProvider.getProfile();
+
+      verify(functionsProvider.call(
+        functionsName: _getProfile,
+        parameters: {},
+      ));
+    });
+
+    test("Should thrown Exception when getting error", () async {
+      Exception exception = FirebaseFunctionsException(
+        message: "unknown",
+        code: "unknown",
+      );
+
+      when(
+        functionsProvider.call(
+          functionsName: _getProfile,
+          parameters: anyNamed("parameters"),
+        ),
+      ).thenThrow(exception);
+
+      expect(
+        () => userProvider.getProfile(),
+        throwsA(exception),
+      );
+    });
+  });
   group(".uploadAvatar()", () {
     test("Should send the correct path", () async {
       File file = File("assets/images/raster/avatar.png");
