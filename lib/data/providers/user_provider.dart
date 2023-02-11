@@ -27,10 +27,8 @@ class UserProvider {
   ///
   /// {@macro firebase_functions_exception}
   Future<void> createUser({
-    required String uid,
     required UserType type,
     required String name,
-    required File profileImage,
     required DateTime dateOfBirth,
     required Gender gender,
     required DeviceLanguage deviceLanguage,
@@ -40,16 +38,6 @@ class UserProvider {
     required String? voipToken,
     required DevicePlatform devicePlatform,
   }) async {
-    await _functionsProvider.call(
-      functionsName: FunctionName.onSignIn,
-      parameters: {
-        "device_id": deviceID,
-        "player_id": oneSignalPlayerID,
-        "voip_token": voipToken,
-        "platform": devicePlatform.name,
-      },
-    );
-
     _logger.info("Creating user data...");
 
     List<String> languageCodes = [];
@@ -80,21 +68,27 @@ class UserProvider {
       "language": languageCodes,
     });
 
-    _logger.info("Creating user data is finished");
+    _logger.fine("Successfully to create new user");
+  }
 
-    // Uploading new profile image
+  /// Uploading new avatar image
+  Future<TaskSnapshot> uploadAvatar({
+    required File file,
+    required String uid,
+  }) async {
     final timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
-    String fileName = path.basename(profileImage.path);
+    String fileName = path.basename(file.path);
     String extension = fileName.split(".").last;
 
-    _logger.info("Uploading avatar image to Firebase Storage");
+    _logger.info("Uploading avatar image to Firebase Storage...");
     Reference firebaseStorageRef = _firebaseStorage
         .ref()
         .child("users")
         .child(uid)
         .child("avatar")
         .child('$timeStamp.$extension');
-    await firebaseStorageRef.putFile(profileImage);
-    _logger.fine("Successfully to create new user");
+    UploadTask task = firebaseStorageRef.putFile(file);
+
+    return await task;
   }
 }

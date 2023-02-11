@@ -214,10 +214,8 @@ class AuthRepository {
           await _deviceProvider.getOnesignalPlayerID() ?? "";
 
       await _userProvider.createUser(
-        uid: uid,
         type: type,
         name: name,
-        profileImage: profileImage,
         dateOfBirth: dateOfBirth,
         gender: gender,
         deviceLanguage: currentDeviceLanguage,
@@ -226,6 +224,11 @@ class AuthRepository {
         oneSignalPlayerID: oneSignalPlayerID,
         voipToken: voipToken,
         devicePlatform: devicePlatform,
+      );
+
+      await _userProvider.uploadAvatar(
+        file: profileImage,
+        uid: uid,
       );
 
       _logger.finest("Successfully to sign up");

@@ -63,6 +63,14 @@ MockFunctionsProvider getMockFunctionsProvider() {
   return mock;
 }
 
+MockUserProvider getMockUserProvider() {
+  MockUserProvider mock = MockUserProvider();
+  _removeRegistrationIfExists<UserProvider>();
+  locator.registerSingleton<UserProvider>(mock);
+
+  return mock;
+}
+
 MockAuthRepository getMockAuthRepository() {
   MockAuthRepository mock = MockAuthRepository();
   _removeRegistrationIfExists<AuthRepository>();
@@ -101,6 +109,14 @@ MockFirebaseFunctions getMockFirebaseFunctions() {
   MockFirebaseFunctions mock = MockFirebaseFunctions();
   _removeRegistrationIfExists<FirebaseFunctions>();
   locator.registerSingleton<FirebaseFunctions>(mock);
+
+  return mock;
+}
+
+MockFirebaseStorage getMockFirebaseStorage() {
+  MockFirebaseStorage mock = MockFirebaseStorage();
+  _removeRegistrationIfExists<FirebaseStorage>();
+  locator.registerSingleton<FirebaseStorage>(mock);
 
   return mock;
 }
@@ -182,6 +198,7 @@ void registerLocator() {
   getMockAuthProvider();
   getMockDeviceProvider();
   getMockFunctionsProvider();
+  getMockUserProvider();
   getMockLocalLanguageProvider();
   getMockAuthRepository();
   getMockLanguageRepository();
@@ -190,6 +207,7 @@ void registerLocator() {
   getMockFlutterSecureStorage();
   getMockFirebaseAuth();
   getMockFirebaseFunctions();
+  getMockFirebaseStorage();
   getMockGoogleSignIn();
   getMockInternetConnectionChecker();
   getMockOneSignal();
@@ -213,6 +231,7 @@ void unregisterLocator() {
   locator.unregister<AuthProvider>();
   locator.unregister<DeviceProvider>();
   locator.unregister<FunctionsProvider>();
+  locator.unregister<UserProvider>();
   locator.unregister<LocalLanguageProvider>();
   locator.unregister<AuthRepository>();
   locator.unregister<LanguageRepository>();
@@ -221,6 +240,7 @@ void unregisterLocator() {
   locator.unregister<FlutterSecureStorage>();
   locator.unregister<FirebaseAuth>();
   locator.unregister<FirebaseFunctions>();
+  locator.unregister<FirebaseStorage>();
   locator.unregister<GoogleSignIn>();
   locator.unregister<InternetConnectionChecker>();
   locator.unregister<OneSignal>();

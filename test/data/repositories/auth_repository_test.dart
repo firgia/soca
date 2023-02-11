@@ -332,10 +332,8 @@ void main() {
 
         verify(
           userProvider.createUser(
-            uid: "123",
             type: UserType.volunteer,
             name: "Firgia",
-            profileImage: file,
             dateOfBirth: DateTime(2000, 4, 24),
             gender: Gender.male,
             deviceLanguage: DeviceLanguage.indonesian,
@@ -349,6 +347,8 @@ void main() {
             devicePlatform: anyNamed("devicePlatform"),
           ),
         );
+
+        verify(userProvider.uploadAvatar(file: file, uid: "123"));
       });
 
       test("Should throw SignUpFailureCode.unauthenticated when not signed in",
@@ -371,10 +371,8 @@ void main() {
         when(firebaseAuth.currentUser).thenReturn(user);
         when(
           userProvider.createUser(
-            uid: anyNamed("uid"),
             type: anyNamed("type"),
             name: anyNamed("name"),
-            profileImage: anyNamed("profileImage"),
             dateOfBirth: anyNamed("dateOfBirth"),
             gender: anyNamed("gender"),
             deviceLanguage: anyNamed("deviceLanguage"),
@@ -403,10 +401,8 @@ void main() {
         when(firebaseAuth.currentUser).thenReturn(user);
         when(
           userProvider.createUser(
-            uid: anyNamed("uid"),
             type: anyNamed("type"),
             name: anyNamed("name"),
-            profileImage: anyNamed("profileImage"),
             dateOfBirth: anyNamed("dateOfBirth"),
             gender: anyNamed("gender"),
             deviceLanguage: anyNamed("deviceLanguage"),
