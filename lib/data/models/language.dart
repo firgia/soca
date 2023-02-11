@@ -8,7 +8,6 @@
  */
 
 import 'package:equatable/equatable.dart';
-
 import '../../core/core.dart';
 
 class Language extends Equatable {
