@@ -38,6 +38,16 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  group(".email", () {
+    test("Should return email from FirebaseAuth.currentUser", () {
+      MockUser user = MockUser();
+      when(user.email).thenReturn("contact@firgia.com");
+      when(firebaseAuth.currentUser).thenReturn(user);
+
+      expect(authRepository.email, "contact@firgia.com");
+    });
+  });
+
   group(".uid", () {
     test("Should return uid from FirebaseAuth.currentUser", () {
       MockUser user = MockUser();

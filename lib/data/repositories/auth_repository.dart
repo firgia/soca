@@ -24,6 +24,10 @@ class AuthRepository {
   final UserProvider _userProvider = sl<UserProvider>();
   final Logger _logger = Logger("Auth Repository");
 
+  /// The users email address.
+  String? get email => _firebaseAuth.currentUser?.email;
+
+  /// The user's unique ID.
   String? get uid => _firebaseAuth.currentUser?.uid;
 
   /// Check current user is signed in
