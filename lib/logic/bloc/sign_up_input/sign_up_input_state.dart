@@ -7,9 +7,9 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-part of 'sign_up_bloc.dart';
+part of 'sign_up_input_bloc.dart';
 
-class SignUpState extends Equatable {
+class SignUpInputState extends Equatable {
   final UserType? type;
   final String? name;
   final File? profileImage;
@@ -18,7 +18,7 @@ class SignUpState extends Equatable {
   final DeviceLanguage? deviceLanguage;
   final List<Language>? languages;
 
-  const SignUpState({
+  const SignUpInputState({
     this.type,
     this.name,
     this.profileImage,
@@ -28,7 +28,7 @@ class SignUpState extends Equatable {
     this.languages,
   });
 
-  SignUpState copyWith({
+  SignUpInputState copyWith({
     UserType? type,
     String? name,
     File? profileImage,
@@ -37,7 +37,7 @@ class SignUpState extends Equatable {
     DeviceLanguage? deviceLanguage,
     List<Language>? languages,
   }) {
-    return SignUpState(
+    return SignUpInputState(
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       deviceLanguage: deviceLanguage ?? this.deviceLanguage,
       gender: gender ?? this.gender,
@@ -64,29 +64,5 @@ class SignUpState extends Equatable {
         gender,
         deviceLanguage,
         languages,
-      ];
-}
-
-class SignUpSuccessfully extends SignUpState {
-  const SignUpSuccessfully();
-}
-
-class SignUpLoading extends SignUpState {
-  const SignUpLoading();
-}
-
-class SignUpFailed extends SignUpState {
-  const SignUpFailed();
-}
-
-class SignUpError extends SignUpState {
-  final SignUpFailure? failure;
-  const SignUpError([this.failure]);
-
-  @override
-  List<Object?> get props =>
-      super.props +
-      [
-        failure,
       ];
 }
