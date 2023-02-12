@@ -17,43 +17,40 @@ import '../../../helper/helper.dart';
 import '../../../mock/mock.mocks.dart';
 
 void main() {
-  group("RouteCubit", () {
-    late MockAuthRepository authRepository;
+  late MockAuthRepository authRepository;
 
-    setUp(() {
-      registerLocator();
-      authRepository = getMockAuthRepository();
-    });
-    tearDown(() => unregisterLocator());
+  setUp(() {
+    registerLocator();
+    authRepository = getMockAuthRepository();
+  });
+  tearDown(() => unregisterLocator());
 
-    group("getTargetRoute", () {
-      blocTest<RouteCubit, RouteState>(
-        'Should emits [RouteLoading, RouteTarget(AppPages.home)] when user has been signed in.',
-        build: () => RouteCubit(),
-        act: (cubit) => cubit.getTargetRoute(),
-        setUp: () {
-          when(authRepository.isSignedIn())
-              .thenAnswer((_) => Future.value(true));
-        },
-        expect: () => <RouteState>[
-          const RouteLoading(),
-          RouteTarget(AppPages.home),
-        ],
-      );
+  group(".getTargetRoute()", () {
+    blocTest<RouteCubit, RouteState>(
+      'Should emits [RouteLoading, RouteTarget(AppPages.home)] when user has been signed in.',
+      build: () => RouteCubit(),
+      act: (route) => route.getTargetRoute(),
+      setUp: () {
+        when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
+      },
+      expect: () => <RouteState>[
+        const RouteLoading(),
+        RouteTarget(AppPages.home),
+      ],
+    );
 
-      blocTest<RouteCubit, RouteState>(
-        'Should emits [RouteLoading, RouteTarget(AppPages.signIn)] when user not signed in.',
-        build: () => RouteCubit(),
-        act: (cubit) => cubit.getTargetRoute(),
-        setUp: () {
-          when(authRepository.isSignedIn())
-              .thenAnswer((_) => Future.value(false));
-        },
-        expect: () => <RouteState>[
-          const RouteLoading(),
-          RouteTarget(AppPages.signIn),
-        ],
-      );
-    });
+    blocTest<RouteCubit, RouteState>(
+      'Should emits [RouteLoading, RouteTarget(AppPages.signIn)] when user not signed in.',
+      build: () => RouteCubit(),
+      act: (route) => route.getTargetRoute(),
+      setUp: () {
+        when(authRepository.isSignedIn())
+            .thenAnswer((_) => Future.value(false));
+      },
+      expect: () => <RouteState>[
+        const RouteLoading(),
+        RouteTarget(AppPages.signIn),
+      ],
+    );
   });
 }

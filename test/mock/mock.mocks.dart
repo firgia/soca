@@ -1073,6 +1073,15 @@ class MockUserProvider extends _i1.Mock implements _i20.UserProvider {
 /// See the documentation for Mockito's code generation for more information.
 class MockAuthRepository extends _i1.Mock implements _i20.AuthRepository {
   @override
+  _i24.Future<_i23.AuthMethod?> getSignInMethod() => (super.noSuchMethod(
+        Invocation.method(
+          #getSignInMethod,
+          [],
+        ),
+        returnValue: _i24.Future<_i23.AuthMethod?>.value(),
+        returnValueForMissingStub: _i24.Future<_i23.AuthMethod?>.value(),
+      ) as _i24.Future<_i23.AuthMethod?>);
+  @override
   _i24.Future<bool> isSignedIn() => (super.noSuchMethod(
         Invocation.method(
           #isSignedIn,

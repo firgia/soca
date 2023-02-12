@@ -13,13 +13,11 @@ import 'package:soca/logic/logic.dart';
 
 void main() {
   group("RouteTarget", () {
-    group("Fields", () {
-      group("name", () {
-        test("Should return name value based on constructor", () {
-          final routeTarget = RouteTarget(AppPages.home);
+    group("()", () {
+      test("Should fill up the fields based on the constructor parameter", () {
+        final routeTarget = RouteTarget(AppPages.home);
 
-          expect(routeTarget.name, AppPages.home);
-        });
+        expect(routeTarget.name, AppPages.home);
       });
     });
   });
