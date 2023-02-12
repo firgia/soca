@@ -31,9 +31,7 @@ class AuthRepository {
   String? get uid => _firebaseAuth.currentUser?.uid;
 
   /// {@macro get_sign_in_method}
-  Future<AuthMethod?> getSignInMethod() async {
-    return _authProvider.getSignInMethod();
-  }
+  Future<AuthMethod?> getSignInMethod() => _authProvider.getSignInMethod();
 
   /// Check current user is signed in
   ///

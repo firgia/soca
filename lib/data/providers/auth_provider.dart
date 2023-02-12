@@ -64,9 +64,11 @@ class AuthProvider {
     _logger.fine("Successfully to save $_signInMethodKey data");
   }
 
+  /// {@template get_sign_in_method}
   /// Get authentication provider
   ///
   /// return `null` when user not signed in
+  /// {@endtemplate}
   Future<AuthMethod?> getSignInMethod() async {
     _logger.info("Getting $_signInMethodKey data...");
     String? signInMethod = await _secureStorage.read(key: _signInMethodKey);
