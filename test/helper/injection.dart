@@ -171,10 +171,10 @@ MockSignInBloc getMockSignInBloc() {
   return mock;
 }
 
-MockSignOutBloc getMockSignOutBloc() {
-  MockSignOutBloc mock = MockSignOutBloc();
-  _removeRegistrationIfExists<SignOutBloc>();
-  locator.registerSingleton<SignOutBloc>(mock);
+MockAccountCubit getMockAccountCubit() {
+  MockAccountCubit mock = MockAccountCubit();
+  _removeRegistrationIfExists<AccountCubit>();
+  locator.registerSingleton<AccountCubit>(mock);
 
   return mock;
 }
@@ -183,6 +183,14 @@ MockRouteCubit getMockRouteCubit() {
   MockRouteCubit mock = MockRouteCubit();
   _removeRegistrationIfExists<RouteCubit>();
   locator.registerSingleton<RouteCubit>(mock);
+
+  return mock;
+}
+
+MockSignOutCubit getMockSignOutCubit() {
+  MockSignOutCubit mock = MockSignOutCubit();
+  _removeRegistrationIfExists<SignOutCubit>();
+  locator.registerSingleton<SignOutCubit>(mock);
 
   return mock;
 }
@@ -216,8 +224,9 @@ void registerLocator() {
   /* --------------------------------> LOGIC <------------------------------- */
   getMockLanguageBloc();
   getMockSignInBloc();
-  getMockSignOutBloc();
+  getMockAccountCubit();
   getMockRouteCubit();
+  getMockSignOutCubit();
 }
 
 void unregisterLocator() {
@@ -249,8 +258,9 @@ void unregisterLocator() {
   /* --------------------------------> LOGIC <------------------------------- */
   locator.unregister<LanguageBloc>();
   locator.unregister<SignInBloc>();
-  locator.unregister<SignOutBloc>();
+  locator.unregister<AccountCubit>();
   locator.unregister<RouteCubit>();
+  locator.unregister<SignOutCubit>();
 }
 
 void _removeRegistrationIfExists<T extends Object>() {

@@ -3,32 +3,26 @@
  * Website    : https://www.firgia.com
  * Repository : https://github.com/firgia/soca
  * 
- * Created on Fri Feb 03 2023
+ * Created on Sun Feb 12 2023
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 
 import '../../../data/data.dart';
 import '../../../injection.dart';
 
-part 'sign_out_event.dart';
 part 'sign_out_state.dart';
 
-class SignOutBloc extends Bloc<SignOutEvent, SignOutState> {
+class SignOutCubit extends Cubit<SignOutState> {
+  SignOutCubit() : super(const SignOutInitial());
+
   final AuthRepository _authRepository = sl<AuthRepository>();
-  final Logger _logger = Logger("Sign Out Bloc");
+  final Logger _logger = Logger("Sign Out Cubit");
 
-  SignOutBloc() : super(const SignOutInitial()) {
-    on<SignOutExecute>(_onSignOutExecute);
-  }
-
-  Future<void> _onSignOutExecute(
-    SignOutEvent event,
-    Emitter<SignOutState> emit,
-  ) async {
+  void signOut() async {
     _logger.info("Sign out...");
     emit(const SignOutLoading());
 

@@ -57,7 +57,8 @@ import 'package:soca/logic/logic.dart';
   /* --------------------------------> LOGIC <------------------------------- */
   MockSpec<LanguageBloc>(),
   MockSpec<SignInBloc>(),
-  MockSpec<SignOutBloc>(),
+  MockSpec<AccountCubit>(),
   MockSpec<RouteCubit>(),
+  MockSpec<SignOutCubit>(),
 ])
 main(List<String> args) {}
