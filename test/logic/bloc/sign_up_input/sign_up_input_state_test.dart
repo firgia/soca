@@ -51,6 +51,43 @@ void main() {
       });
     });
 
+    group(".phase", () {
+      test(
+          "Should return [SignUpPhase.inputPersonalInformation] when [type] and [languages] is not null",
+          () {
+        SignUpInputState state = SignUpInputState(
+          dateOfBirth: DateTime(2000),
+          deviceLanguage: DeviceLanguage.arabic,
+          gender: Gender.male,
+          languages: const [Language(code: "id")],
+          name: "Firgia",
+          profileImage: File("assets/images/raster/avatar.png"),
+          type: UserType.volunteer,
+        );
+
+        expect(state.phase, SignUpPhase.inputPersonalInformation);
+      });
+
+      test("Should return [SignUpPhase.selectLanguage] when [type] is not null",
+          () {
+        SignUpInputState state = const SignUpInputState(
+          languages: null,
+          type: UserType.volunteer,
+        );
+
+        expect(state.phase, SignUpPhase.selectLanguage);
+      });
+
+      test("Should return [SignUpPhase.selectLanguage] when [type] is null",
+          () {
+        SignUpInputState state = const SignUpInputState(
+          type: null,
+        );
+
+        expect(state.phase, SignUpPhase.selectUserType);
+      });
+    });
+
     group(".copyWith()", () {
       test("Should copy the dateOfBirth", () {
         final state = defaultState.copyWith(dateOfBirth: DateTime(2001));

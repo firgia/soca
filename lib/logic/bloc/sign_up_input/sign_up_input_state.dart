@@ -55,6 +55,16 @@ class SignUpInputState extends Equatable {
       gender != null &&
       languages != null);
 
+  SignUpPhase get phase {
+    if (type != null && languages != null) {
+      return SignUpPhase.inputPersonalInformation;
+    } else if (type != null) {
+      return SignUpPhase.selectLanguage;
+    } else {
+      return SignUpPhase.selectUserType;
+    }
+  }
+
   @override
   List<Object?> get props => [
         type,
