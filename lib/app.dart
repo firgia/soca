@@ -97,10 +97,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     return MaterialApp.router(
       title: widget.title,
       builder: (context, child) => ResponsiveWrapper.builder(
-        ScrollConfiguration(
-          behavior: FlatScrollBehaviour(),
-          child: child ?? const SizedBox(),
-        ),
+        BouncingScrollWrapper(child: child ?? const SizedBox()),
         minWidth: 450,
         defaultScale: true,
         breakpoints: [
@@ -131,14 +128,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     super.dispose();
 
     onesignalRepository.dispose();
-  }
-}
-
-class FlatScrollBehaviour extends ScrollBehavior {
-  @override
-  Widget buildOverscrollIndicator(
-      BuildContext context, Widget child, ScrollableDetails details) {
-    return child;
   }
 }
 
