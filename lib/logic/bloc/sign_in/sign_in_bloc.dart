@@ -41,7 +41,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         _logger.fine("Successfully to sign in with Apple");
         emit(const SignInSuccessfully());
       } else {
-        _logger.info("Failed to sign in with Apple");
+        _logger.warning("Failed to sign in with Apple");
         emit(const SignInFailed());
       }
     } on SignInWithAppleFailure catch (e) {
@@ -67,7 +67,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         _logger.fine("Successfully to sign in with Google");
         emit(const SignInSuccessfully());
       } else {
-        _logger.info("Failed to sign in with Google");
+        _logger.warning("Failed to sign in with Google");
         emit(const SignInFailed());
       }
     } on SignInWithGoogleFailure catch (e) {
