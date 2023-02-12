@@ -62,6 +62,19 @@ void main() {
     });
   });
 
+  group(".getSignInMethod()", () {
+    test("Should return data from AuthProvider.getSignInMethod()", () async {
+      when(authProvider.getSignInMethod()).thenAnswer(
+        (_) => Future.value(AuthMethod.apple),
+      );
+
+      AuthMethod? authMethod = await authRepository.getSignInMethod();
+
+      expect(authMethod, AuthMethod.apple);
+      verify(authProvider.getSignInMethod());
+    });
+  });
+
   group("Functions", () {
     group("isSignedIn", () {
       test(
