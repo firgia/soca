@@ -32,7 +32,7 @@ class UserProvider {
     required DateTime dateOfBirth,
     required Gender gender,
     required DeviceLanguage deviceLanguage,
-    required List<Language> language,
+    required List<Language> languages,
     required String deviceID,
     required String oneSignalPlayerID,
     required String? voipToken,
@@ -41,7 +41,7 @@ class UserProvider {
     _logger.info("Creating user data...");
 
     List<String> languageCodes = [];
-    for (Language lang in language) {
+    for (Language lang in languages) {
       final code = lang.code;
       if (code != null) {
         languageCodes.add(code);

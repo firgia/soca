@@ -352,7 +352,7 @@ void main() {
           dateOfBirth: DateTime(2000, 4, 24),
           gender: Gender.male,
           deviceLanguage: DeviceLanguage.indonesian,
-          language: [
+          languages: [
             const Language(code: "id"),
             const Language(code: "en"),
           ],
@@ -374,7 +374,7 @@ void main() {
             dateOfBirth: DateTime(2000, 4, 24),
             gender: Gender.male,
             deviceLanguage: DeviceLanguage.indonesian,
-            language: [
+            languages: [
               const Language(code: "id"),
               const Language(code: "en"),
             ],
@@ -413,7 +413,7 @@ void main() {
             dateOfBirth: anyNamed("dateOfBirth"),
             gender: anyNamed("gender"),
             deviceLanguage: anyNamed("deviceLanguage"),
-            language: anyNamed("language"),
+            languages: anyNamed("language"),
             deviceID: anyNamed("deviceID"),
             oneSignalPlayerID: anyNamed("oneSignalPlayerID"),
             voipToken: anyNamed("voipToken"),
@@ -443,7 +443,7 @@ void main() {
             dateOfBirth: anyNamed("dateOfBirth"),
             gender: anyNamed("gender"),
             deviceLanguage: anyNamed("deviceLanguage"),
-            language: anyNamed("language"),
+            languages: anyNamed("language"),
             deviceID: anyNamed("deviceID"),
             oneSignalPlayerID: anyNamed("oneSignalPlayerID"),
             voipToken: anyNamed("voipToken"),

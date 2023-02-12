@@ -41,7 +41,7 @@ void main() {
         dateOfBirth: DateTime(2000, 4, 24),
         gender: Gender.male,
         deviceLanguage: DeviceLanguage.indonesian,
-        language: [
+        languages: [
           const Language(code: "id"),
           const Language(code: "en"),
         ],

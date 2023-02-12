@@ -1003,7 +1003,7 @@ class MockUserProvider extends _i1.Mock implements _i19.UserProvider {
     required DateTime? dateOfBirth,
     required _i24.Gender? gender,
     required _i24.DeviceLanguage? deviceLanguage,
-    required List<_i27.Language>? language,
+    required List<_i27.Language>? languages,
     required String? deviceID,
     required String? oneSignalPlayerID,
     required String? voipToken,
@@ -1019,7 +1019,7 @@ class MockUserProvider extends _i1.Mock implements _i19.UserProvider {
             #dateOfBirth: dateOfBirth,
             #gender: gender,
             #deviceLanguage: deviceLanguage,
-            #language: language,
+            #languages: languages,
             #deviceID: deviceID,
             #oneSignalPlayerID: oneSignalPlayerID,
             #voipToken: voipToken,
@@ -1136,7 +1136,7 @@ class MockAuthRepository extends _i1.Mock implements _i19.AuthRepository {
     required DateTime? dateOfBirth,
     required _i24.Gender? gender,
     required _i24.DeviceLanguage? deviceLanguage,
-    required List<_i27.Language>? language,
+    required List<_i27.Language>? languages,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1149,7 +1149,7 @@ class MockAuthRepository extends _i1.Mock implements _i19.AuthRepository {
             #dateOfBirth: dateOfBirth,
             #gender: gender,
             #deviceLanguage: deviceLanguage,
-            #language: language,
+            #languages: languages,
           },
         ),
         returnValue: _i25.Future<void>.value(),

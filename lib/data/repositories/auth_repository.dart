@@ -199,7 +199,7 @@ class AuthRepository {
     required DateTime dateOfBirth,
     required Gender gender,
     required DeviceLanguage? deviceLanguage,
-    required List<Language> language,
+    required List<Language> languages,
   }) async {
     try {
       final uid = this.uid;
@@ -228,7 +228,7 @@ class AuthRepository {
         dateOfBirth: dateOfBirth,
         gender: gender,
         deviceLanguage: currentDeviceLanguage,
-        language: language,
+        languages: languages,
         deviceID: deviceID,
         oneSignalPlayerID: oneSignalPlayerID,
         voipToken: voipToken,
