@@ -45,6 +45,8 @@ void main() {
       when(firebaseAuth.currentUser).thenReturn(user);
 
       expect(authRepository.email, "contact@firgia.com");
+      verify(user.email);
+      verify(firebaseAuth.currentUser);
     });
   });
 
@@ -55,6 +57,8 @@ void main() {
       when(firebaseAuth.currentUser).thenReturn(user);
 
       expect(authRepository.uid, "1234");
+      verify(user.uid);
+      verify(firebaseAuth.currentUser);
     });
   });
 
