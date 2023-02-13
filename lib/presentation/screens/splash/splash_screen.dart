@@ -56,7 +56,7 @@ class SplashScreen extends StatelessWidget with UIMixin {
             tag: "splash",
             child: LottieBuilder.asset(
               ImageAnimation.splashLoading,
-              height: isSmartphone(context) ? 220 : 250,
+              height: isMobile(context) ? 220 : 250,
             ),
           ),
         ),

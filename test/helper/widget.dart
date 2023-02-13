@@ -9,7 +9,14 @@
 
 part of 'helper.dart';
 
-late BuildContext _context;
+class ScreenSize {
+  const ScreenSize(this.name, this.width, this.height, this.ratio);
+  final String name;
+  final double width, height, ratio;
+}
+
+const iphone14 = ScreenSize("iphone_14", 1170, 2532, 19.5 / 9);
+const ipad12Pro = ScreenSize("ipad_12_pro", 2048, 2732, 4 / 3);
 
 class _App extends StatelessWidget {
   const _App({
@@ -21,7 +28,6 @@ class _App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
     return MaterialApp(
       locale: EasyLocalization.of(context)!.locale,
       supportedLocales: EasyLocalization.of(context)!.supportedLocales,
@@ -37,7 +43,6 @@ extension PumpApp on WidgetTester {
     required Widget child,
     Duration? duration,
     EnginePhase phase = EnginePhase.sendSemanticsUpdate,
-    void Function(BuildContext context)? onCompleted,
   }) async {
     SharedPreferences.setMockInitialValues({});
     EasyLocalization.logger.enableLevels = [];
@@ -57,10 +62,15 @@ extension PumpApp on WidgetTester {
     );
 
     await pump();
+  }
+}
 
-    if (onCompleted != null) {
-      onCompleted(_context);
-    }
+extension ScreenSizeManager on WidgetTester {
+  Future<void> setScreenSize(ScreenSize screenSize) async {
+    final size = Size(screenSize.width, screenSize.height);
+    await binding.setSurfaceSize(size);
+    binding.window.physicalSizeTestValue = size;
+    binding.window.devicePixelRatioTestValue = screenSize.ratio;
   }
 }
 
