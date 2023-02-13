@@ -7,6 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mockito/mockito.dart';
@@ -26,13 +28,18 @@ void main() {
     registerLocator();
     appNavigator = getMockAppNavigator();
     routeCubit = getMockRouteCubit();
+
+    MockWidgetsBinding widgetBinding = getMockWidgetsBinding();
+    MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
+    when(window.platformBrightness).thenReturn(Brightness.dark);
+    when(widgetBinding.window).thenReturn(window);
   });
 
   tearDown(() => unregisterLocator());
 
   group("Route", () {
     testWidgets(
-        "Should navigate to sign in page when routeTarget return signIn",
+        "Should navigate to sign in page when routeTarget return AppPages.signIn",
         (tester) async {
       await tester.runAsync(() async {
         when(routeCubit.stream)
@@ -46,7 +53,7 @@ void main() {
     });
 
     testWidgets(
-        "Should navigate to language page when routeTarget return language",
+        "Should navigate to language page when routeTarget return AppPages.language",
         (tester) async {
       await tester.runAsync(() async {
         when(routeCubit.stream)
@@ -56,6 +63,75 @@ void main() {
 
         verify(routeCubit.getTargetRoute());
         verify(appNavigator.goToLanguage(any));
+      });
+    });
+
+    testWidgets(
+        "Should navigate to home page when routeTarget return AppPages.home",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(routeCubit.stream)
+            .thenAnswer((_) => Stream.value(RouteTarget(AppPages.home)));
+
+        await tester.pumpApp(child: SplashScreen());
+
+        verify(routeCubit.getTargetRoute());
+        verify(appNavigator.goToHome(any));
+      });
+    });
+
+    testWidgets(
+        "Should navigate to sign up page when routeTarget return AppPages.signUp",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(routeCubit.stream)
+            .thenAnswer((_) => Stream.value(RouteTarget(AppPages.signUp)));
+
+        await tester.pumpApp(child: SplashScreen());
+
+        verify(routeCubit.getTargetRoute());
+        verify(appNavigator.goToSignUp(any));
+      });
+    });
+
+    testWidgets("Should show alert something error when getting error",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(routeCubit.stream)
+            .thenAnswer((_) => Stream.value(const RouteError()));
+
+        await tester.pumpApp(child: SplashScreen());
+        await tester.pump();
+
+        expect(
+          find.byKey(const Key("error_message_something_error")),
+          findsOneWidget,
+        );
+        verify(routeCubit.getTargetRoute());
+      });
+    });
+
+    testWidgets(
+        "Should call getTargetRoute() again when press ok on alert something error",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(routeCubit.stream)
+            .thenAnswer((_) => Stream.value(const RouteError()));
+
+        await tester.pumpApp(child: SplashScreen());
+        await tester.pump();
+
+        expect(
+          find.byKey(const Key("error_message_something_error")),
+          findsOneWidget,
+        );
+        verify(routeCubit.getTargetRoute());
+
+        when(routeCubit.stream)
+            .thenAnswer((_) => Stream.value(RouteTarget(AppPages.signUp)));
+        await tester.tap(find.text(LocaleKeys.ok.tr()));
+        await tester.pump();
+        verify(routeCubit.getTargetRoute());
       });
     });
   });

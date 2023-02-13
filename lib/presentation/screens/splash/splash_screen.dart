@@ -14,6 +14,7 @@ import '../../../injection.dart';
 import '../../../logic/logic.dart';
 import '../../../config/config.dart';
 import '../../../core/core.dart';
+import '../../widgets/widgets.dart';
 
 class SplashScreen extends StatelessWidget with UIMixin {
   SplashScreen({super.key});
@@ -39,6 +40,13 @@ class SplashScreen extends StatelessWidget with UIMixin {
             appNavigator.goToSignUp(context);
           }
           // TODO: add Different device
+        }
+
+        if (state is RouteError) {
+          /// Allow user to retry when got any error
+          Alert(context).showSomethingErrorMessage(
+            onActionPressed: () => routeCubit.getTargetRoute(),
+          );
         }
       },
       child: Scaffold(
