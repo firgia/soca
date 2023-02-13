@@ -33,7 +33,7 @@ abstract class AppRoutes {
           GoRoute(
             path: "/${AppPages.signUp}",
             name: AppPages.signUp,
-            builder: (context, state) => const SignUpScreen(),
+            builder: (context, state) => SignUpScreen(),
           ),
           GoRoute(
             path: "/${AppPages.language}",
