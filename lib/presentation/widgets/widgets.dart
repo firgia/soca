@@ -9,9 +9,11 @@
 
 export 'app_bar/app_bar.dart';
 export 'button/button.dart';
+export 'card/card.dart';
 export 'image/image.dart';
 export 'loading/loading.dart';
 export 'message/message.dart';
+export 'shadow/shadow.dart';
 export 'style/style.dart';
 export 'text/text.dart';
 export 'utility/utility.dart';
