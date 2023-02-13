@@ -87,6 +87,14 @@ MockLanguageRepository getMockLanguageRepository() {
   return mock;
 }
 
+MockUserRepository getMockUserRepository() {
+  MockUserRepository mock = MockUserRepository();
+  _removeRegistrationIfExists<UserRepository>();
+  locator.registerSingleton<UserRepository>(mock);
+
+  return mock;
+}
+
 /* ------------------------------> DEPENDENCIES <---------------------------- */
 
 MockFlutterSecureStorage getMockFlutterSecureStorage() {
@@ -171,6 +179,22 @@ MockSignInBloc getMockSignInBloc() {
   return mock;
 }
 
+MockSignUpBloc getMockSignUpBloc() {
+  MockSignUpBloc mock = MockSignUpBloc();
+  _removeRegistrationIfExists<SignUpBloc>();
+  locator.registerSingleton<SignUpBloc>(mock);
+
+  return mock;
+}
+
+MockSignUpInputBloc getMockSignUpInputBloc() {
+  MockSignUpInputBloc mock = MockSignUpInputBloc();
+  _removeRegistrationIfExists<SignUpInputBloc>();
+  locator.registerSingleton<SignUpInputBloc>(mock);
+
+  return mock;
+}
+
 MockAccountCubit getMockAccountCubit() {
   MockAccountCubit mock = MockAccountCubit();
   _removeRegistrationIfExists<AccountCubit>();
@@ -210,6 +234,7 @@ void registerLocator() {
   getMockLocalLanguageProvider();
   getMockAuthRepository();
   getMockLanguageRepository();
+  getMockUserRepository();
 
   /* ------------------------------> DEPENDENCIES <-------------------------- */
   getMockFlutterSecureStorage();
@@ -224,6 +249,8 @@ void registerLocator() {
   /* --------------------------------> LOGIC <------------------------------- */
   getMockLanguageBloc();
   getMockSignInBloc();
+  getMockSignUpBloc();
+  getMockSignUpInputBloc();
   getMockAccountCubit();
   getMockRouteCubit();
   getMockSignOutCubit();
@@ -244,6 +271,7 @@ void unregisterLocator() {
   locator.unregister<LocalLanguageProvider>();
   locator.unregister<AuthRepository>();
   locator.unregister<LanguageRepository>();
+  locator.unregister<UserRepository>();
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   locator.unregister<FlutterSecureStorage>();
@@ -258,6 +286,8 @@ void unregisterLocator() {
   /* --------------------------------> LOGIC <------------------------------- */
   locator.unregister<LanguageBloc>();
   locator.unregister<SignInBloc>();
+  locator.unregister<SignUpBloc>();
+  locator.unregister<SignUpInputBloc>();
   locator.unregister<AccountCubit>();
   locator.unregister<RouteCubit>();
   locator.unregister<SignOutCubit>();

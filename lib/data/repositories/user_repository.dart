@@ -20,6 +20,10 @@ class UserRepository {
   final Logger _logger = Logger("User Repository");
 
   /// {@macro get_profile_user}
+  ///
+  /// `Exception`
+  ///
+  /// A [UserFailure] maybe thrown when a failure occurs.
   Future<User> getProfile({String? uid}) async {
     String? authUID = _authRepository.uid;
 

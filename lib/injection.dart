@@ -42,6 +42,7 @@ void setupInjection() {
   sl.registerLazySingleton<AuthRepository>(() => AuthRepository());
   sl.registerLazySingleton<LanguageRepository>(() => LanguageRepository());
   sl.registerLazySingleton<OnesignalRepository>(() => OnesignalRepository());
+  sl.registerLazySingleton<UserRepository>(() => UserRepository());
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   sl.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage());
@@ -62,6 +63,7 @@ void setupInjection() {
   sl.registerFactory<LanguageBloc>(() => LanguageBloc());
   sl.registerFactory<SignInBloc>(() => SignInBloc());
   sl.registerFactory<SignUpInputBloc>(() => SignUpInputBloc());
+  sl.registerFactory<SignUpBloc>(() => SignUpBloc());
   sl.registerFactory<AccountCubit>(() => AccountCubit());
   sl.registerFactory<RouteCubit>(() => RouteCubit());
   sl.registerFactory<SignOutCubit>(() => SignOutCubit());

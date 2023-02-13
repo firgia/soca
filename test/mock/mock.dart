@@ -37,6 +37,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<UserProvider>(),
   MockSpec<AuthRepository>(),
   MockSpec<LanguageRepository>(),
+  MockSpec<UserRepository>(),
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   MockSpec<DotEnv>(),
@@ -57,6 +58,8 @@ import 'package:soca/logic/logic.dart';
   /* --------------------------------> LOGIC <------------------------------- */
   MockSpec<LanguageBloc>(),
   MockSpec<SignInBloc>(),
+  MockSpec<SignUpBloc>(),
+  MockSpec<SignUpInputBloc>(),
   MockSpec<AccountCubit>(),
   MockSpec<RouteCubit>(),
   MockSpec<SignOutCubit>(),
