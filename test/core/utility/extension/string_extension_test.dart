@@ -11,6 +11,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:soca/core/core.dart';
 
 void main() {
+  group(".capitalizeFirst", () {
+    test("Should convert capitalize the first letter", () {
+      String case1 = "firgia".capitalizeFirst;
+      String case2 = "mochamad firgia".capitalizeFirst;
+      String case3 = " firgia".capitalizeFirst;
+      String case4 = "".capitalizeFirst;
+
+      expect(case1, "Firgia");
+      expect(case2, "Mochamad firgia");
+      expect(case3, " firgia");
+      expect(case4, "");
+    });
+  });
+
   group(".toGender()", () {
     test("Should return Gender.male when male", () {
       expect(

@@ -10,6 +10,16 @@
 import '../../core.dart';
 
 extension StringExtension on String {
+  String get capitalizeFirst {
+    String val = this;
+
+    if (val.trim().isEmpty) {
+      return val;
+    } else {
+      return "${val[0].toUpperCase()}${val.substring(1).toLowerCase()}";
+    }
+  }
+
   Gender? toGender() {
     String value = this;
 
