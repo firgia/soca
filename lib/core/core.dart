@@ -10,5 +10,6 @@
 export 'enum/enum.dart';
 export 'exception/exception.dart';
 export 'handler/handler.dart';
+export 'interface/interface.dart';
 export 'path/path.dart';
 export 'utility/utility.dart';
