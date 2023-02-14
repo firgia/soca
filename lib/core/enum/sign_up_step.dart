@@ -1,3 +1,4 @@
+
 /*
  * Author     : Mochamad Firgia
  * Website    : https://www.firgia.com
@@ -7,7 +8,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-enum SignUpPhase {
+enum SignUpStep {
   selectUserType,
   selectLanguage,
   inputPersonalInformation,
