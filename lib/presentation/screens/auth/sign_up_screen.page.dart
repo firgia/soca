@@ -10,7 +10,7 @@
 part of 'sign_up_screen.dart';
 
 class _SignUpFormPage extends StatelessWidget {
-  const _SignUpFormPage() : super(key: const Key("sign_up_form_page"));
+  const _SignUpFormPage() : super(key: const Key("sign_up_screen_form_page"));
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class _SignUpFormPage extends StatelessWidget {
 
 class _SelectUserTypePage extends StatelessWidget {
   const _SelectUserTypePage()
-      : super(key: const Key("sign_up_select_user_type_page"));
+      : super(key: const Key("sign_up_screen_select_user_type_page"));
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class _SelectUserTypePage extends StatelessWidget {
         bool isSelected = state.type == UserType.blind;
 
         return IllustrationCardButton(
-          key: const Key("sign_up_blind_user_button"),
+          key: const Key("sign_up_screen_blind_user_button"),
           selected: isSelected,
           onPressed: () => context
               .read<SignUpInputBloc>()
@@ -77,7 +77,7 @@ class _SelectUserTypePage extends StatelessWidget {
         bool isSelected = state.type == UserType.volunteer;
 
         return IllustrationCardButton(
-          key: const Key("sign_up_volunteer_user_button"),
+          key: const Key("sign_up_screen_volunteer_user_button"),
           selected: isSelected,
           onPressed: () => context
               .read<SignUpInputBloc>()
@@ -110,7 +110,7 @@ class _SelectUserTypePage extends StatelessWidget {
 
 class _SelectLanguagePage extends StatelessWidget {
   const _SelectLanguagePage()
-      : super(key: const Key("sign_up_select_language_page"));
+      : super(key: const Key("sign_up_screen_select_language_page"));
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +120,8 @@ class _SelectLanguagePage extends StatelessWidget {
 
 class _PersonalInformationPage extends StatelessWidget {
   const _PersonalInformationPage()
-      : super(key: const Key("sign_up_select_personal_information_page"));
+      : super(
+            key: const Key("sign_up_screen_select_personal_information_page"));
 
   @override
   Widget build(BuildContext context) {

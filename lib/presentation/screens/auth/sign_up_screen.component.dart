@@ -10,7 +10,7 @@
 part of 'sign_up_screen.dart';
 
 class _HelloText extends StatelessWidget {
-  const _HelloText() : super(key: const Key("sign_up_hello_text"));
+  const _HelloText() : super(key: const Key("sign_up_screen_hello_text"));
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class _HelloText extends StatelessWidget {
 
 class _LetsGetStartedText extends StatelessWidget {
   const _LetsGetStartedText()
-      : super(key: const Key("sign_up_lets_get_started_text"));
+      : super(key: const Key("sign_up_screen_lets_get_started_text"));
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,8 @@ class _LetsGetStartedText extends StatelessWidget {
 }
 
 class _FillInFormText extends StatelessWidget {
-  const _FillInFormText() : super(key: const Key("sign_up_fill_in_form_text"));
+  const _FillInFormText()
+      : super(key: const Key("sign_up_screen_fill_in_form_text"));
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,8 @@ class _FillInFormText extends StatelessWidget {
 }
 
 class _AuthIconButton extends StatelessWidget with UIMixin {
-  const _AuthIconButton() : super(key: const Key("sign_up_auth_icon_button"));
+  const _AuthIconButton()
+      : super(key: const Key("sign_up_screen_auth_icon_button"));
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +83,7 @@ class _AuthIconButton extends StatelessWidget with UIMixin {
 }
 
 class _AccountCard extends StatelessWidget with UIMixin {
-  _AccountCard() : super(key: const Key("sign_up_account_card"));
+  _AccountCard() : super(key: const Key("sign_up_screen_account_card"));
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +163,7 @@ class _NextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      key: const Key("sign_up_next_button"),
+      key: const Key("sign_up_screen_next_button"),
       onPressed: !enable ? null : onPressed,
       style: FlatButtonStyle(expanded: true),
       child: const Text(LocaleKeys.next).tr(),

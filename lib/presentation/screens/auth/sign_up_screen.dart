@@ -79,7 +79,7 @@ class SignUpScreen extends StatelessWidget
   @override
   Widget buildMobileLayout(BuildContext context, BoxConstraints constraints) {
     return SafeArea(
-      key: const Key("sign_up_mobile_layout"),
+      key: const Key("sign_up_screen_mobile_layout"),
       child: Padding(
         padding: const EdgeInsets.all(kDefaultSpacing * 1.5),
         child: Column(
@@ -110,7 +110,7 @@ class SignUpScreen extends StatelessWidget
   @override
   Widget buildTabletLayout(BuildContext context, BoxConstraints constraints) {
     return SafeArea(
-      key: const Key("sign_up_tablet_layout"),
+      key: const Key("sign_up_screen_tablet_layout"),
       child: Center(
         child: Container(
           constraints: const BoxConstraints(
