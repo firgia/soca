@@ -176,5 +176,45 @@ void main() {
         expect(state.type, UserType.blind);
       });
     });
+
+    group(".isCanNext()", () {
+      group("When [currentStep] is [SignUpStep.selectUserType]", () {
+        test("Should return true when [type] is not null", () {
+          SignUpInputState inputState =
+              const SignUpInputState(type: UserType.blind);
+
+          expect(inputState.isCanNext(), true);
+        });
+
+        test("Should return false when [type] is null", () {
+          SignUpInputState inputState = const SignUpInputState();
+
+          expect(inputState.isCanNext(), false);
+        });
+      });
+
+      group("When [currentStep] is [SignUpStep.selectLanguage]", () {
+        test("Should return true when [type] and [language] is not null", () {
+          SignUpInputState inputState = const SignUpInputState(
+            type: UserType.blind,
+            languages: [
+              Language(code: "id"),
+            ],
+            currentStep: SignUpStep.selectLanguage,
+          );
+
+          expect(inputState.isCanNext(), true);
+        });
+
+        test("Should return false when [type] or [language] is null", () {
+          SignUpInputState inputState = const SignUpInputState(
+            type: UserType.blind,
+            currentStep: SignUpStep.selectLanguage,
+          );
+
+          expect(inputState.isCanNext(), false);
+        });
+      });
+    });
   });
 }

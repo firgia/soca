@@ -52,12 +52,32 @@ class SignUpInputState extends Equatable {
     );
   }
 
-  bool get isValidToSubmit => (type != null &&
+  bool isValidToSubmit() => (type != null &&
       name != null &&
       profileImage != null &&
       dateOfBirth != null &&
       gender != null &&
       languages != null);
+
+  bool isCanNext() {
+    switch (currentStep) {
+      case SignUpStep.selectUserType:
+        if (validStep == SignUpStep.selectLanguage ||
+            validStep == SignUpStep.inputPersonalInformation) {
+          return true;
+        }
+        break;
+      case SignUpStep.selectLanguage:
+        if (validStep == SignUpStep.inputPersonalInformation) {
+          return true;
+        }
+        break;
+      default:
+        break;
+    }
+
+    return false;
+  }
 
   SignUpStep get validStep {
     if (type != null && languages != null) {
