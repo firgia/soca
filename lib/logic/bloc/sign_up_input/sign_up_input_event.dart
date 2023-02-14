@@ -71,3 +71,11 @@ class SignUpInputLanguagesChanged extends SignUpInputEvent {
   @override
   List<Object> get props => [languages];
 }
+
+class SignUpInputBackStep extends SignUpInputEvent {
+  const SignUpInputBackStep();
+}
+
+class SignUpInputNextStep extends SignUpInputEvent {
+  const SignUpInputNextStep();
+}

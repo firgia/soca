@@ -125,5 +125,116 @@ void main() {
         ],
       );
     });
+
+    group("SignUpInputNextStep()", () {
+      blocTest<SignUpInputBloc, SignUpInputState>(
+        'Should emits [SignUpInputState] and change the [currentStep] value to SignUpStep.selectLanguage when [currentStep] is SignUpStep.selectLanguage and [type] is not null.',
+        build: () => SignUpInputBloc(),
+        seed: () => const SignUpInputState(
+          currentStep: SignUpStep.selectUserType,
+          type: UserType.blind,
+        ),
+        act: (signUp) {
+          signUp.add(const SignUpInputNextStep());
+        },
+        expect: () => const <SignUpInputState>[
+          SignUpInputState(
+            currentStep: SignUpStep.selectLanguage,
+            type: UserType.blind,
+          ),
+        ],
+      );
+
+      blocTest<SignUpInputBloc, SignUpInputState>(
+        'Should not emits [SignUpInputState] and change the [currentStep] value to SignUpStep.selectLanguage when [type] is null.',
+        build: () => SignUpInputBloc(),
+        seed: () =>
+            const SignUpInputState(currentStep: SignUpStep.selectUserType),
+        act: (signUp) {
+          signUp.add(const SignUpInputNextStep());
+        },
+        expect: () => const <SignUpInputState>[],
+      );
+
+      blocTest<SignUpInputBloc, SignUpInputState>(
+        'Should emits [SignUpInputState] and change the [currentStep] value to SignUpStep.inputPersonalInformation when [currentStep] is SignUpStep.selectUserType and [type] & [languages] is not null.',
+        build: () => SignUpInputBloc(),
+        seed: () => const SignUpInputState(
+          currentStep: SignUpStep.selectLanguage,
+          type: UserType.blind,
+          languages: [Language(code: "id")],
+        ),
+        act: (signUp) {
+          signUp.add(const SignUpInputNextStep());
+          signUp.add(const SignUpInputNextStep());
+        },
+        expect: () => const <SignUpInputState>[
+          SignUpInputState(
+            currentStep: SignUpStep.inputPersonalInformation,
+            type: UserType.blind,
+            languages: [Language(code: "id")],
+          ),
+        ],
+      );
+
+      blocTest<SignUpInputBloc, SignUpInputState>(
+        'Should not emits [SignUpInputState] and change the [currentStep] value to SignUpStep.inputPersonalInformation when [type] or [languages] is null.',
+        build: () => SignUpInputBloc(),
+        seed: () => const SignUpInputState(
+          currentStep: SignUpStep.selectLanguage,
+        ),
+        act: (signUp) {
+          signUp.add(const SignUpInputNextStep());
+          signUp.add(const SignUpInputNextStep());
+        },
+        expect: () => const <SignUpInputState>[],
+      );
+    });
+
+    group("SignUpInputBackStep()", () {
+      blocTest<SignUpInputBloc, SignUpInputState>(
+        'Should emits [SignUpInputState] and change the [currentStep] value to SignUpStep.selectLanguage when [currentStep] is SignUpStep.inputPersonalInformation.',
+        build: () => SignUpInputBloc(),
+        seed: () => const SignUpInputState(
+          currentStep: SignUpStep.inputPersonalInformation,
+        ),
+        act: (signUp) {
+          signUp.add(const SignUpInputBackStep());
+        },
+        expect: () => const <SignUpInputState>[
+          SignUpInputState(
+            currentStep: SignUpStep.selectLanguage,
+          ),
+        ],
+      );
+
+      blocTest<SignUpInputBloc, SignUpInputState>(
+        'Should emits [SignUpInputState] and change the [currentStep] value to SignUpStep.selectUserType when [currentStep] is SignUpStep.selectLanguage.',
+        build: () => SignUpInputBloc(),
+        seed: () => const SignUpInputState(
+          currentStep: SignUpStep.selectLanguage,
+        ),
+        act: (signUp) {
+          signUp.add(const SignUpInputBackStep());
+        },
+        expect: () => const <SignUpInputState>[
+          SignUpInputState(
+            currentStep: SignUpStep.selectUserType,
+          ),
+        ],
+      );
+
+      blocTest<SignUpInputBloc, SignUpInputState>(
+        'Should not emits [SignUpInputState] when [currentStep] is SignUpStep.selectUserType.',
+        build: () => SignUpInputBloc(),
+        seed: () => const SignUpInputState(
+          currentStep: SignUpStep.selectUserType,
+        ),
+        act: (signUp) {
+          signUp.add(const SignUpInputBackStep());
+        },
+        expect: () => const <SignUpInputState>[],
+      );
+    });
   });
 }

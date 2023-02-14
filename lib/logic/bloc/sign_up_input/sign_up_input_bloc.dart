@@ -30,6 +30,8 @@ class SignUpInputBloc extends Bloc<SignUpInputEvent, SignUpInputState> {
     on<SignUpInputGenderChanged>(_onGenderChanged);
     on<SignUpInputDeviceLanguageChanged>(_onDeviceLanguageChanged);
     on<SignUpInputLanguagesChanged>(_onLanguagesChanged);
+    on<SignUpInputBackStep>(_onBackStep);
+    on<SignUpInputNextStep>(_onNextStep);
   }
 
   void _onNameChanged(
@@ -86,5 +88,60 @@ class SignUpInputBloc extends Bloc<SignUpInputEvent, SignUpInputState> {
   ) {
     emit(state.copyWith(languages: event.languages));
     _logger.info("Languages changed");
+  }
+
+  void _onBackStep(
+    SignUpInputBackStep event,
+    Emitter<SignUpInputState> emit,
+  ) {
+    SignUpStep? targetStep;
+
+    switch (state.currentStep) {
+      case SignUpStep.inputPersonalInformation:
+        targetStep = SignUpStep.selectLanguage;
+        break;
+      case SignUpStep.selectLanguage:
+        targetStep = SignUpStep.selectUserType;
+        break;
+      default:
+        break;
+    }
+
+    if (targetStep != null) {
+      emit(state.copyWith(currentStep: targetStep));
+      _logger.info("Back step");
+    } else {
+      _logger.info("Back step ignored because current step is the first step");
+    }
+  }
+
+  void _onNextStep(
+    SignUpInputNextStep event,
+    Emitter<SignUpInputState> emit,
+  ) {
+    SignUpStep? targetStep;
+
+    switch (state.currentStep) {
+      case SignUpStep.selectUserType:
+        if (state.validStep == SignUpStep.selectLanguage ||
+            state.validStep == SignUpStep.inputPersonalInformation) {
+          targetStep = SignUpStep.selectLanguage;
+        }
+        break;
+      case SignUpStep.selectLanguage:
+        if (state.validStep == SignUpStep.inputPersonalInformation) {
+          targetStep = SignUpStep.inputPersonalInformation;
+        }
+        break;
+      default:
+        break;
+    }
+
+    if (targetStep != null) {
+      emit(state.copyWith(currentStep: targetStep));
+      _logger.info("Next step");
+    } else {
+      _logger.info("Next step ignored because current step is the last step");
+    }
   }
 }

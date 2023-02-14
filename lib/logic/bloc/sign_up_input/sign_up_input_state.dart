@@ -17,6 +17,7 @@ class SignUpInputState extends Equatable {
   final Gender? gender;
   final DeviceLanguage? deviceLanguage;
   final List<Language>? languages;
+  final SignUpStep currentStep;
 
   const SignUpInputState({
     this.type,
@@ -26,6 +27,7 @@ class SignUpInputState extends Equatable {
     this.gender,
     this.deviceLanguage,
     this.languages,
+    this.currentStep = SignUpStep.selectUserType,
   });
 
   SignUpInputState copyWith({
@@ -36,6 +38,7 @@ class SignUpInputState extends Equatable {
     Gender? gender,
     DeviceLanguage? deviceLanguage,
     List<Language>? languages,
+    SignUpStep? currentStep,
   }) {
     return SignUpInputState(
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
@@ -45,6 +48,7 @@ class SignUpInputState extends Equatable {
       name: name ?? this.name,
       profileImage: profileImage ?? this.profileImage,
       type: type ?? this.type,
+      currentStep: currentStep ?? this.currentStep,
     );
   }
 
@@ -55,13 +59,13 @@ class SignUpInputState extends Equatable {
       gender != null &&
       languages != null);
 
-  SignUpPhase get phase {
+  SignUpStep get validStep {
     if (type != null && languages != null) {
-      return SignUpPhase.inputPersonalInformation;
+      return SignUpStep.inputPersonalInformation;
     } else if (type != null) {
-      return SignUpPhase.selectLanguage;
+      return SignUpStep.selectLanguage;
     } else {
-      return SignUpPhase.selectUserType;
+      return SignUpStep.selectUserType;
     }
   }
 
@@ -74,5 +78,7 @@ class SignUpInputState extends Equatable {
         gender,
         deviceLanguage,
         languages,
+        validStep,
+        currentStep,
       ];
 }

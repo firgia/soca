@@ -51,9 +51,9 @@ void main() {
       });
     });
 
-    group(".phase", () {
+    group(".validStep", () {
       test(
-          "Should return [SignUpPhase.inputPersonalInformation] when [type] and [languages] is not null",
+          "Should return [SignUpStep.inputPersonalInformation] when [type] and [languages] is not null",
           () {
         SignUpInputState state = SignUpInputState(
           dateOfBirth: DateTime(2000),
@@ -65,26 +65,25 @@ void main() {
           type: UserType.volunteer,
         );
 
-        expect(state.phase, SignUpPhase.inputPersonalInformation);
+        expect(state.validStep, SignUpStep.inputPersonalInformation);
       });
 
-      test("Should return [SignUpPhase.selectLanguage] when [type] is not null",
+      test("Should return [SignUpStep.selectLanguage] when [type] is not null",
           () {
         SignUpInputState state = const SignUpInputState(
           languages: null,
           type: UserType.volunteer,
         );
 
-        expect(state.phase, SignUpPhase.selectLanguage);
+        expect(state.validStep, SignUpStep.selectLanguage);
       });
 
-      test("Should return [SignUpPhase.selectLanguage] when [type] is null",
-          () {
+      test("Should return [SignUpStep.selectLanguage] when [type] is null", () {
         SignUpInputState state = const SignUpInputState(
           type: null,
         );
 
-        expect(state.phase, SignUpPhase.selectUserType);
+        expect(state.validStep, SignUpStep.selectUserType);
       });
     });
 
