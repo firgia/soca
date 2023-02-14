@@ -18,6 +18,7 @@ import 'package:soca/presentation/presentation.dart';
 import '../../../config/config.dart';
 
 part 'sign_up_screen.component.dart';
+part 'sign_up_screen.page.dart';
 
 class SignUpScreen extends StatelessWidget
     with UIMixin
@@ -96,6 +97,10 @@ class SignUpScreen extends StatelessWidget
             const SizedBox(height: kDefaultSpacing),
             const _FillInFormText(),
             const Spacer(flex: 1),
+            const Flexible(
+              flex: 10,
+              child: _SignUpFormPage(),
+            ),
           ],
         ),
       ),
@@ -124,6 +129,10 @@ class SignUpScreen extends StatelessWidget
               const SizedBox(height: kDefaultSpacing * 2),
               _AccountCard(),
               const Spacer(flex: 1),
+              const Flexible(
+                flex: 10,
+                child: _SignUpFormPage(),
+              ),
             ],
           ),
         ),

@@ -7,9 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:soca/config/config.dart';
@@ -47,6 +46,12 @@ void main() {
   tearDown(() => unregisterLocator());
 
   group("Responsive Layout", () {
+    setUp(() {
+      when(signUpInputBloc.state).thenReturn(
+        const SignUpInputState(currentStep: SignUpStep.selectUserType),
+      );
+    });
+
     test("Should implements [ResponsiveLayoutInterface]", () {
       SignUpScreen signUpScreen = SignUpScreen();
 
@@ -55,8 +60,7 @@ void main() {
 
     testWidgets("Should use [ResponsiveBuilder]", (tester) async {
       await tester.runAsync(() async {
-        when(accountCubit.stream)
-            .thenAnswer((_) => Stream.value(const AccountEmpty()));
+        when(accountCubit.state).thenReturn(const AccountEmpty());
 
         await tester.pumpApp(child: SignUpScreen());
 
@@ -67,8 +71,7 @@ void main() {
     testWidgets("Should show the mobile layout when device is mobile",
         (tester) async {
       await tester.runAsync(() async {
-        when(accountCubit.stream)
-            .thenAnswer((_) => Stream.value(const AccountEmpty()));
+        when(accountCubit.state).thenReturn(const AccountEmpty());
 
         await tester.pumpApp(child: SignUpScreen());
 
@@ -83,8 +86,7 @@ void main() {
     testWidgets("Should show the tablet layout when device is tablet",
         (tester) async {
       await tester.runAsync(() async {
-        when(accountCubit.stream)
-            .thenAnswer((_) => Stream.value(const AccountEmpty()));
+        when(accountCubit.state).thenReturn(const AccountEmpty());
 
         await tester.pumpApp(child: SignUpScreen());
 
@@ -98,10 +100,15 @@ void main() {
   });
 
   group("Text", () {
+    setUp(() {
+      when(signUpInputBloc.state).thenReturn(
+        const SignUpInputState(currentStep: SignUpStep.selectUserType),
+      );
+    });
+
     testWidgets("Should show hello text", (tester) async {
       await tester.runAsync(() async {
-        when(accountCubit.stream)
-            .thenAnswer((_) => Stream.value(const AccountEmpty()));
+        when(accountCubit.state).thenReturn(const AccountEmpty());
 
         await tester.pumpApp(child: SignUpScreen());
 
@@ -119,8 +126,7 @@ void main() {
 
     testWidgets("Should show lets get started text", (tester) async {
       await tester.runAsync(() async {
-        when(accountCubit.stream)
-            .thenAnswer((_) => Stream.value(const AccountEmpty()));
+        when(accountCubit.state).thenReturn(const AccountEmpty());
 
         await tester.pumpApp(child: SignUpScreen());
 
@@ -138,8 +144,7 @@ void main() {
 
     testWidgets("Should show fill in form text", (tester) async {
       await tester.runAsync(() async {
-        when(accountCubit.stream)
-            .thenAnswer((_) => Stream.value(const AccountEmpty()));
+        when(accountCubit.state).thenReturn(const AccountEmpty());
 
         await tester.pumpApp(child: SignUpScreen());
 
@@ -163,6 +168,12 @@ void main() {
   });
 
   group("Account", () {
+    setUp(() {
+      when(signUpInputBloc.state).thenReturn(
+        const SignUpInputState(currentStep: SignUpStep.selectUserType),
+      );
+    });
+
     testWidgets("Should show auth icon button when device is mobile",
         (tester) async {
       await tester.runAsync(() async {
@@ -324,6 +335,10 @@ void main() {
           ),
         ),
       );
+
+      when(signUpInputBloc.state).thenReturn(
+        const SignUpInputState(currentStep: SignUpStep.selectUserType),
+      );
     });
 
     testWidgets("Should call signOut() when [SignOutButton] is tapped",
@@ -359,6 +374,254 @@ void main() {
 
         verify(signOutCubit.signOut());
         verify(appNavigator.goToSplash(any));
+      });
+    });
+  });
+
+  group("Page Transition", () {
+    testWidgets(
+        "Should show select user type page when [SignUpInputBloc.currentStep] is [SignUpStep.selectType]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signUpInputBloc.state).thenReturn(
+          const SignUpInputState(currentStep: SignUpStep.selectUserType),
+        );
+
+        await tester.pumpApp(child: SignUpScreen());
+
+        expect(
+          find.byKey(const Key("sign_up_select_user_type_page")),
+          findsOneWidget,
+        );
+
+        expect(
+          find.byKey(const Key("sign_up_select_language_page")),
+          findsNothing,
+        );
+
+        expect(
+          find.byKey(const Key("sign_up_select_personal_information_page")),
+          findsNothing,
+        );
+      });
+    });
+
+    testWidgets(
+        "Should show select language page when [SignUpInputBloc.currentStep] is [SignUpStep.selectLanguage]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signUpInputBloc.state).thenReturn(
+          const SignUpInputState(currentStep: SignUpStep.selectLanguage),
+        );
+
+        await tester.pumpApp(child: SignUpScreen());
+
+        expect(
+          find.byKey(const Key("sign_up_select_user_type_page")),
+          findsNothing,
+        );
+
+        expect(
+          find.byKey(const Key("sign_up_select_language_page")),
+          findsOneWidget,
+        );
+
+        expect(
+          find.byKey(const Key("sign_up_select_personal_information_page")),
+          findsNothing,
+        );
+      });
+    });
+
+    testWidgets(
+        "Should show personal information page when [SignUpInputBloc.currentStep] is [SignUpStep.inputPersonalInformation]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signUpInputBloc.state).thenReturn(
+          const SignUpInputState(
+              currentStep: SignUpStep.inputPersonalInformation),
+        );
+
+        await tester.pumpApp(child: SignUpScreen());
+
+        expect(
+          find.byKey(const Key("sign_up_select_user_type_page")),
+          findsNothing,
+        );
+
+        expect(
+          find.byKey(const Key("sign_up_select_language_page")),
+          findsNothing,
+        );
+
+        expect(
+          find.byKey(const Key("sign_up_select_personal_information_page")),
+          findsOneWidget,
+        );
+      });
+    });
+  });
+
+  group("SelectUserTypePage()", () {
+    group("Next Button", () {
+      testWidgets("Should show next button", (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(currentStep: SignUpStep.selectUserType),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+
+          expect(find.byKey(const Key("sign_up_next_button")), findsOneWidget);
+        });
+      });
+
+      testWidgets(
+          "Should enable next button when [SignUpInputState.type] is not null",
+          (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(type: UserType.volunteer),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+          ElevatedButton nextButton = find
+              .byKey(const Key("sign_up_next_button"))
+              .getWidget() as ElevatedButton;
+
+          expect(nextButton.onPressed, isNotNull);
+        });
+      });
+
+      testWidgets(
+          "Should disable next button when [SignUpInputState.type] is null",
+          (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(type: null),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+          ElevatedButton nextButton = find
+              .byKey(const Key("sign_up_next_button"))
+              .getWidget() as ElevatedButton;
+
+          expect(nextButton.onPressed, null);
+        });
+      });
+
+      testWidgets(
+          "Should call [SignUpInputNextStep()] when next button is pressed and enabled",
+          (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(type: UserType.volunteer),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+
+          await tester.tap(find.byKey(const Key("sign_up_next_button")));
+          await tester.pumpAndSettle();
+
+          verify(signUpInputBloc.add(const SignUpInputNextStep()));
+        });
+      });
+    });
+
+    group("User type button", () {
+      testWidgets("Should show blind user button", (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(currentStep: SignUpStep.selectUserType),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+
+          expect(
+            find.byKey(const Key("sign_up_blind_user_button")),
+            findsOneWidget,
+          );
+        });
+      });
+
+      testWidgets("Should show volunteer user button", (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(currentStep: SignUpStep.selectUserType),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+
+          expect(
+            find.byKey(const Key("sign_up_volunteer_user_button")),
+            findsOneWidget,
+          );
+        });
+      });
+
+      testWidgets(
+          "Should call the [SignUpInputTypeChanged(UserType.blind)] when pressed blind user button",
+          (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(currentStep: SignUpStep.selectUserType),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+          await tester.tap(
+            find.byKey(const Key("sign_up_blind_user_button")),
+          );
+          await tester.pumpAndSettle();
+
+          verify(
+            signUpInputBloc.add(const SignUpInputTypeChanged(UserType.blind)),
+          );
+        });
+      });
+
+      testWidgets(
+          "Should call the [SignUpInputTypeChanged(UserType.volunteer)] when pressed volunteer user button",
+          (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(currentStep: SignUpStep.selectUserType),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+          await tester.tap(
+            find.byKey(const Key("sign_up_volunteer_user_button")),
+          );
+          await tester.pumpAndSettle();
+
+          verify(
+            signUpInputBloc
+                .add(const SignUpInputTypeChanged(UserType.volunteer)),
+          );
+        });
+      });
+    });
+
+    group("Text", () {
+      testWidgets("Should show title text", (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(currentStep: SignUpStep.selectUserType),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+          expect(find.text(LocaleKeys.select_user_type.tr()), findsOneWidget);
+        });
+      });
+
+      testWidgets("Should show info text", (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(currentStep: SignUpStep.selectUserType),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+          expect(find.text(LocaleKeys.sign_up_rule_desc.tr()), findsOneWidget);
+        });
       });
     });
   });

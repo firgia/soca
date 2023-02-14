@@ -115,6 +115,60 @@ class _AccountCard extends StatelessWidget with UIMixin {
   }
 }
 
+class _PageTitleText extends StatelessWidget with UIMixin {
+  const _PageTitleText(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: isLTR(context) ? Alignment.topLeft : Alignment.topRight,
+      child: Text(
+        text,
+        style: Theme.of(context).textTheme.titleLarge,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+}
+
+class _PageInfoText extends StatelessWidget {
+  const _PageInfoText(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: Theme.of(context).textTheme.labelSmall,
+      textAlign: TextAlign.center,
+    );
+  }
+}
+
+class _NextButton extends StatelessWidget {
+  const _NextButton({
+    required this.onPressed,
+    this.enable = false,
+  });
+
+  final bool enable;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      key: const Key("sign_up_next_button"),
+      onPressed: !enable ? null : onPressed,
+      style: FlatButtonStyle(expanded: true),
+      child: const Text(LocaleKeys.next).tr(),
+    );
+  }
+}
+
 /// Showing account to sign out with bottomsheet or dialog
 void _showAccount(
   BuildContext context, {
