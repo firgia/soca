@@ -151,22 +151,73 @@ class _PageInfoText extends StatelessWidget {
   }
 }
 
-class _NextButton extends StatelessWidget {
-  const _NextButton({
-    required this.onPressed,
-    this.enable = false,
-  });
-
-  final bool enable;
-  final VoidCallback onPressed;
+class _BlindUserButton extends StatelessWidget {
+  const _BlindUserButton()
+      : super(key: const Key("sign_up_screen_blind_user_button"));
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      key: const Key("sign_up_screen_next_button"),
-      onPressed: !enable ? null : onPressed,
-      style: FlatButtonStyle(expanded: true),
-      child: const Text(LocaleKeys.next).tr(),
+    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
+      builder: (context, state) {
+        bool isSelected = state.type == UserType.blind;
+
+        return IllustrationCardButton(
+          selected: isSelected,
+          onPressed: () => context
+              .read<SignUpInputBloc>()
+              .add(const SignUpInputTypeChanged(UserType.blind)),
+          subtitle: LocaleKeys.blind_info.tr(),
+          title: LocaleKeys.blind.tr(),
+          vectorAsset: ImageVector.blindIllustration,
+        );
+      },
+    );
+  }
+}
+
+class _VolunteerUserButton extends StatelessWidget {
+  const _VolunteerUserButton()
+      : super(key: const Key("sign_up_screen_volunteer_user_button"));
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
+      builder: (context, state) {
+        bool isSelected = state.type == UserType.volunteer;
+
+        return IllustrationCardButton(
+          selected: isSelected,
+          onPressed: () => context
+              .read<SignUpInputBloc>()
+              .add(const SignUpInputTypeChanged(UserType.volunteer)),
+          subtitle: LocaleKeys.volunteer_info.tr(),
+          title: LocaleKeys.volunteer.tr(),
+          vectorAsset: ImageVector.greetingIllustration,
+        );
+      },
+    );
+  }
+}
+
+class _NextButton extends StatelessWidget {
+  const _NextButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
+      builder: (context, state) {
+        SignUpInputBloc signUpInputBloc = context.read<SignUpInputBloc>();
+        bool enable = state.isCanNext();
+
+        return ElevatedButton(
+          key: const Key("sign_up_screen_next_button"),
+          onPressed: !enable
+              ? null
+              : () => signUpInputBloc.add(const SignUpInputNextStep()),
+          style: FlatButtonStyle(expanded: true),
+          child: const Text(LocaleKeys.next).tr(),
+        );
+      },
     );
   }
 }

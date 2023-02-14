@@ -41,69 +41,14 @@ class _SelectUserTypePage extends StatelessWidget {
       children: [
         _PageTitleText(LocaleKeys.select_user_type.tr()),
         const SizedBox(height: kDefaultSpacing),
-        _buildBlindUserButton(),
+        const _BlindUserButton(),
         const SizedBox(height: kDefaultSpacing),
-        _buildVolunteerUserButton(),
+        const _VolunteerUserButton(),
         const Spacer(),
         _PageInfoText(LocaleKeys.sign_up_rule_desc.tr()),
         const SizedBox(height: kDefaultSpacing),
-        _buildNextButton(),
+        const _NextButton(),
       ],
-    );
-  }
-
-  Widget _buildBlindUserButton() {
-    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
-      builder: (context, state) {
-        bool isSelected = state.type == UserType.blind;
-
-        return IllustrationCardButton(
-          key: const Key("sign_up_screen_blind_user_button"),
-          selected: isSelected,
-          onPressed: () => context
-              .read<SignUpInputBloc>()
-              .add(const SignUpInputTypeChanged(UserType.blind)),
-          subtitle: LocaleKeys.blind_info.tr(),
-          title: LocaleKeys.blind.tr(),
-          vectorAsset: ImageVector.blindIllustration,
-        );
-      },
-    );
-  }
-
-  Widget _buildVolunteerUserButton() {
-    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
-      builder: (context, state) {
-        bool isSelected = state.type == UserType.volunteer;
-
-        return IllustrationCardButton(
-          key: const Key("sign_up_screen_volunteer_user_button"),
-          selected: isSelected,
-          onPressed: () => context
-              .read<SignUpInputBloc>()
-              .add(const SignUpInputTypeChanged(UserType.volunteer)),
-          subtitle: LocaleKeys.volunteer_info.tr(),
-          title: LocaleKeys.volunteer.tr(),
-          vectorAsset: ImageVector.greetingIllustration,
-        );
-      },
-    );
-  }
-
-  Widget _buildNextButton() {
-    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
-      builder: (context, state) {
-        SignUpInputBloc signUpInputBloc = context.read<SignUpInputBloc>();
-        SignUpStep validStep = state.validStep;
-
-        bool enableNextButton = (validStep == SignUpStep.selectLanguage ||
-            validStep == SignUpStep.inputPersonalInformation);
-
-        return _NextButton(
-          onPressed: () => signUpInputBloc.add(const SignUpInputNextStep()),
-          enable: enableNextButton,
-        );
-      },
     );
   }
 }
