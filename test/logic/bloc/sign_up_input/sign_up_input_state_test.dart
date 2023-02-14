@@ -215,6 +215,20 @@ void main() {
           expect(inputState.isCanNext(), false);
         });
       });
+
+      group("When [currentStep] is [SignUpStep.inputPersonalInformation]", () {
+        test("Should always return false", () {
+          SignUpInputState inputState = const SignUpInputState(
+            type: UserType.blind,
+            languages: [
+              Language(code: "id"),
+            ],
+            currentStep: SignUpStep.inputPersonalInformation,
+          );
+
+          expect(inputState.isCanNext(), false);
+        });
+      });
     });
   });
 }
