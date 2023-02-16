@@ -16,28 +16,8 @@ abstract class SignUpInputEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SignUpInputNameChanged extends SignUpInputEvent {
-  const SignUpInputNameChanged(this.name);
-  final String name;
-
-  @override
-  List<Object> get props => [name];
-}
-
-class SignUpInputTypeChanged extends SignUpInputEvent {
-  const SignUpInputTypeChanged(this.type);
-  final UserType type;
-
-  @override
-  List<Object> get props => [type];
-}
-
-class SignUpInputProfileImageChanged extends SignUpInputEvent {
-  const SignUpInputProfileImageChanged(this.profileImage);
-  final File profileImage;
-
-  @override
-  List<Object> get props => [profileImage];
+class SignUpInputBackStep extends SignUpInputEvent {
+  const SignUpInputBackStep();
 }
 
 class SignUpInputDateOfBirthChanged extends SignUpInputEvent {
@@ -48,14 +28,6 @@ class SignUpInputDateOfBirthChanged extends SignUpInputEvent {
   List<Object> get props => [dateOfBirth];
 }
 
-class SignUpInputGenderChanged extends SignUpInputEvent {
-  const SignUpInputGenderChanged(this.gender);
-  final Gender gender;
-
-  @override
-  List<Object> get props => [gender];
-}
-
 class SignUpInputDeviceLanguageChanged extends SignUpInputEvent {
   const SignUpInputDeviceLanguageChanged(this.deviceLanguage);
   final DeviceLanguage deviceLanguage;
@@ -64,18 +36,54 @@ class SignUpInputDeviceLanguageChanged extends SignUpInputEvent {
   List<Object> get props => [deviceLanguage];
 }
 
-class SignUpInputLanguagesChanged extends SignUpInputEvent {
-  const SignUpInputLanguagesChanged(this.languages);
-  final List<Language> languages;
+class SignUpInputGenderChanged extends SignUpInputEvent {
+  const SignUpInputGenderChanged(this.gender);
+  final Gender gender;
 
   @override
-  List<Object> get props => [languages];
+  List<Object> get props => [gender];
 }
 
-class SignUpInputBackStep extends SignUpInputEvent {
-  const SignUpInputBackStep();
+class SignUpInputLanguageAdded extends SignUpInputEvent {
+  const SignUpInputLanguageAdded(this.language);
+  final Language language;
+
+  @override
+  List<Object> get props => [language];
+}
+
+class SignUpInputLanguageRemoved extends SignUpInputEvent {
+  const SignUpInputLanguageRemoved(this.language);
+  final Language language;
+
+  @override
+  List<Object> get props => [language];
+}
+
+class SignUpInputNameChanged extends SignUpInputEvent {
+  const SignUpInputNameChanged(this.name);
+  final String name;
+
+  @override
+  List<Object> get props => [name];
 }
 
 class SignUpInputNextStep extends SignUpInputEvent {
   const SignUpInputNextStep();
+}
+
+class SignUpInputProfileImageChanged extends SignUpInputEvent {
+  const SignUpInputProfileImageChanged(this.profileImage);
+  final File profileImage;
+
+  @override
+  List<Object> get props => [profileImage];
+}
+
+class SignUpInputTypeChanged extends SignUpInputEvent {
+  const SignUpInputTypeChanged(this.type);
+  final UserType type;
+
+  @override
+  List<Object> get props => [type];
 }

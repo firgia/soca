@@ -15,54 +15,51 @@ import 'package:soca/logic/logic.dart';
 
 void main() {
   group(".add()", () {
-    group("SignUpInputNameChanged()", () {
+    group("SignUpInputBackStep()", () {
       blocTest<SignUpInputBloc, SignUpInputState>(
-        'Should emits [SignUpInputState] and change the [name] value.',
+        'Should emits [SignUpInputState] and change the [currentStep] value to SignUpStep.selectLanguage when [currentStep] is SignUpStep.inputPersonalInformation.',
         build: () => SignUpInputBloc(),
+        seed: () => const SignUpInputState(
+          currentStep: SignUpStep.inputPersonalInformation,
+        ),
         act: (signUp) {
-          signUp.add(const SignUpInputNameChanged("fir"));
-          signUp.add(const SignUpInputNameChanged("firgia"));
+          signUp.add(const SignUpInputBackStep());
         },
         expect: () => const <SignUpInputState>[
-          SignUpInputState(name: "fir"),
-          SignUpInputState(name: "firgia"),
+          SignUpInputState(
+            currentStep: SignUpStep.selectLanguage,
+          ),
         ],
       );
-    });
 
-    group("SignUpInputTypeChanged()", () {
       blocTest<SignUpInputBloc, SignUpInputState>(
-        'Should emits [SignUpInputState] and change the [type] value.',
+        'Should emits [SignUpInputState] and change the [currentStep] value to SignUpStep.selectUserType when [currentStep] is SignUpStep.selectLanguage.',
         build: () => SignUpInputBloc(),
+        seed: () => const SignUpInputState(
+          currentStep: SignUpStep.selectLanguage,
+        ),
         act: (signUp) {
-          signUp.add(const SignUpInputTypeChanged(UserType.volunteer));
-          signUp.add(const SignUpInputTypeChanged(UserType.blind));
+          signUp.add(const SignUpInputBackStep());
         },
         expect: () => const <SignUpInputState>[
-          SignUpInputState(type: UserType.volunteer),
-          SignUpInputState(type: UserType.blind),
+          SignUpInputState(
+            currentStep: SignUpStep.selectUserType,
+          ),
         ],
       );
-    });
 
-    // TODO: Fix this test
-    // group("SignUpInputProfileImageChanged()", () {
-    //   blocTest<SignUpInputBloc, SignUpInputState>(
-    //     'Should emits [SignUpInputState] and change the [profileImage] value.',
-    //     build: () => SignUpInputBloc(),
-    //     act: (signUp) {
-    //       signUp.add(SignUpInputProfileImageChanged(
-    //           File("assets/images/raster/avatar.png")));
-    //       signUp.add(SignUpInputProfileImageChanged(
-    //           File("assets/images/raster/soca-logo-lg.png")));
-    //     },
-    //     expect: () => <SignUpInputState>[
-    //       SignUpInputState(profileImage: File("assets/images/raster/avatar.png")),
-    //       SignUpInputState(
-    //           profileImage: File("assets/images/raster/soca-logo-lg.png")),
-    //     ],
-    //   );
-    // });
+      blocTest<SignUpInputBloc, SignUpInputState>(
+        'Should not emits [SignUpInputState] when [currentStep] is SignUpStep.selectUserType.',
+        build: () => SignUpInputBloc(),
+        seed: () => const SignUpInputState(
+          currentStep: SignUpStep.selectUserType,
+        ),
+        act: (signUp) {
+          signUp.add(const SignUpInputBackStep());
+        },
+        expect: () => const <SignUpInputState>[],
+      );
+    });
 
     group("SignUpInputDateOfBirthChanged()", () {
       blocTest<SignUpInputBloc, SignUpInputState>(
@@ -75,21 +72,6 @@ void main() {
         expect: () => <SignUpInputState>[
           SignUpInputState(dateOfBirth: DateTime(2000)),
           SignUpInputState(dateOfBirth: DateTime(2001)),
-        ],
-      );
-    });
-
-    group("SignUpInputGenderChanged()", () {
-      blocTest<SignUpInputBloc, SignUpInputState>(
-        'Should emits [SignUpInputState] and change the [gender] value.',
-        build: () => SignUpInputBloc(),
-        act: (signUp) {
-          signUp.add(const SignUpInputGenderChanged(Gender.male));
-          signUp.add(const SignUpInputGenderChanged(Gender.female));
-        },
-        expect: () => const <SignUpInputState>[
-          SignUpInputState(gender: Gender.male),
-          SignUpInputState(gender: Gender.female),
         ],
       );
     });
@@ -111,17 +93,95 @@ void main() {
       );
     });
 
-    group("SignUpInputLanguagesChanged()", () {
+    group("SignUpInputGenderChanged()", () {
+      blocTest<SignUpInputBloc, SignUpInputState>(
+        'Should emits [SignUpInputState] and change the [gender] value.',
+        build: () => SignUpInputBloc(),
+        act: (signUp) {
+          signUp.add(const SignUpInputGenderChanged(Gender.male));
+          signUp.add(const SignUpInputGenderChanged(Gender.female));
+        },
+        expect: () => const <SignUpInputState>[
+          SignUpInputState(gender: Gender.male),
+          SignUpInputState(gender: Gender.female),
+        ],
+      );
+    });
+    group("SignUpInputLanguageAdded()", () {
       blocTest<SignUpInputBloc, SignUpInputState>(
         'Should emits [SignUpInputState] and change the [languages] value.',
         build: () => SignUpInputBloc(),
         act: (signUp) {
-          signUp.add(const SignUpInputLanguagesChanged([Language(code: "id")]));
-          signUp.add(const SignUpInputLanguagesChanged([Language(code: "en")]));
+          signUp.add(const SignUpInputLanguageAdded(Language(code: "id")));
+          signUp.add(const SignUpInputLanguageAdded(Language(code: "en")));
         },
         expect: () => const <SignUpInputState>[
           SignUpInputState(languages: [Language(code: "id")]),
-          SignUpInputState(languages: [Language(code: "en")]),
+          SignUpInputState(languages: [
+            Language(code: "id"),
+            Language(code: "en"),
+          ]),
+        ],
+      );
+
+      blocTest<SignUpInputBloc, SignUpInputState>(
+        'Should note emits [SignUpInputState] and change the [languages] if the language is reach maximum.',
+        build: () => SignUpInputBloc(),
+        seed: () => const SignUpInputState(languages: [
+          Language(code: "id"),
+          Language(code: "en"),
+          Language(code: "es"),
+        ]),
+        act: (signUp) {
+          signUp.add(const SignUpInputLanguageAdded(Language(code: "id")));
+        },
+        expect: () => const <SignUpInputState>[],
+      );
+    });
+
+    group("SignUpInputLanguageRemoved()", () {
+      blocTest<SignUpInputBloc, SignUpInputState>(
+        'Should emits [SignUpInputState] and change the [languages] value.',
+        build: () => SignUpInputBloc(),
+        act: (signUp) {
+          signUp.add(const SignUpInputLanguageAdded(Language(code: "id")));
+          signUp.add(const SignUpInputLanguageAdded(Language(code: "en")));
+        },
+        expect: () => const <SignUpInputState>[
+          SignUpInputState(languages: [Language(code: "id")]),
+          SignUpInputState(languages: [
+            Language(code: "id"),
+            Language(code: "en"),
+          ]),
+        ],
+      );
+
+      blocTest<SignUpInputBloc, SignUpInputState>(
+        'Should note emits [SignUpInputState] and change the [languages] if the language is reach maximum.',
+        build: () => SignUpInputBloc(),
+        seed: () => const SignUpInputState(languages: [
+          Language(code: "id"),
+          Language(code: "en"),
+          Language(code: "es"),
+        ]),
+        act: (signUp) {
+          signUp.add(const SignUpInputLanguageAdded(Language(code: "id")));
+        },
+        expect: () => const <SignUpInputState>[],
+      );
+    });
+
+    group("SignUpInputNameChanged()", () {
+      blocTest<SignUpInputBloc, SignUpInputState>(
+        'Should emits [SignUpInputState] and change the [name] value.',
+        build: () => SignUpInputBloc(),
+        act: (signUp) {
+          signUp.add(const SignUpInputNameChanged("fir"));
+          signUp.add(const SignUpInputNameChanged("firgia"));
+        },
+        expect: () => const <SignUpInputState>[
+          SignUpInputState(name: "fir"),
+          SignUpInputState(name: "firgia"),
         ],
       );
     });
@@ -191,49 +251,37 @@ void main() {
       );
     });
 
-    group("SignUpInputBackStep()", () {
+    // TODO: Fix this test
+    // group("SignUpInputProfileImageChanged()", () {
+    //   blocTest<SignUpInputBloc, SignUpInputState>(
+    //     'Should emits [SignUpInputState] and change the [profileImage] value.',
+    //     build: () => SignUpInputBloc(),
+    //     act: (signUp) {
+    //       signUp.add(SignUpInputProfileImageChanged(
+    //           File("assets/images/raster/avatar.png")));
+    //       signUp.add(SignUpInputProfileImageChanged(
+    //           File("assets/images/raster/soca-logo-lg.png")));
+    //     },
+    //     expect: () => <SignUpInputState>[
+    //       SignUpInputState(profileImage: File("assets/images/raster/avatar.png")),
+    //       SignUpInputState(
+    //           profileImage: File("assets/images/raster/soca-logo-lg.png")),
+    //     ],
+    //   );
+    // });
+
+    group("SignUpInputTypeChanged()", () {
       blocTest<SignUpInputBloc, SignUpInputState>(
-        'Should emits [SignUpInputState] and change the [currentStep] value to SignUpStep.selectLanguage when [currentStep] is SignUpStep.inputPersonalInformation.',
+        'Should emits [SignUpInputState] and change the [type] value.',
         build: () => SignUpInputBloc(),
-        seed: () => const SignUpInputState(
-          currentStep: SignUpStep.inputPersonalInformation,
-        ),
         act: (signUp) {
-          signUp.add(const SignUpInputBackStep());
+          signUp.add(const SignUpInputTypeChanged(UserType.volunteer));
+          signUp.add(const SignUpInputTypeChanged(UserType.blind));
         },
         expect: () => const <SignUpInputState>[
-          SignUpInputState(
-            currentStep: SignUpStep.selectLanguage,
-          ),
+          SignUpInputState(type: UserType.volunteer),
+          SignUpInputState(type: UserType.blind),
         ],
-      );
-
-      blocTest<SignUpInputBloc, SignUpInputState>(
-        'Should emits [SignUpInputState] and change the [currentStep] value to SignUpStep.selectUserType when [currentStep] is SignUpStep.selectLanguage.',
-        build: () => SignUpInputBloc(),
-        seed: () => const SignUpInputState(
-          currentStep: SignUpStep.selectLanguage,
-        ),
-        act: (signUp) {
-          signUp.add(const SignUpInputBackStep());
-        },
-        expect: () => const <SignUpInputState>[
-          SignUpInputState(
-            currentStep: SignUpStep.selectUserType,
-          ),
-        ],
-      );
-
-      blocTest<SignUpInputBloc, SignUpInputState>(
-        'Should not emits [SignUpInputState] when [currentStep] is SignUpStep.selectUserType.',
-        build: () => SignUpInputBloc(),
-        seed: () => const SignUpInputState(
-          currentStep: SignUpStep.selectUserType,
-        ),
-        act: (signUp) {
-          signUp.add(const SignUpInputBackStep());
-        },
-        expect: () => const <SignUpInputState>[],
       );
     });
   });

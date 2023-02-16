@@ -10,37 +10,38 @@
 part of 'sign_up_input_bloc.dart';
 
 class SignUpInputState extends Equatable {
-  final UserType? type;
+  final SignUpStep currentStep;
+  final DateTime? dateOfBirth;
+  final DeviceLanguage? deviceLanguage;
+  final Gender? gender;
+  final List<Language>? languages;
   final String? name;
   final File? profileImage;
-  final DateTime? dateOfBirth;
-  final Gender? gender;
-  final DeviceLanguage? deviceLanguage;
-  final List<Language>? languages;
-  final SignUpStep currentStep;
+  final UserType? type;
 
   const SignUpInputState({
-    this.type,
+    this.currentStep = SignUpStep.selectUserType,
+    this.dateOfBirth,
+    this.deviceLanguage,
+    this.gender,
+    this.languages,
     this.name,
     this.profileImage,
-    this.dateOfBirth,
-    this.gender,
-    this.deviceLanguage,
-    this.languages,
-    this.currentStep = SignUpStep.selectUserType,
+    this.type,
   });
 
   SignUpInputState copyWith({
-    UserType? type,
+    SignUpStep? currentStep,
+    DateTime? dateOfBirth,
+    DeviceLanguage? deviceLanguage,
+    Gender? gender,
+    List<Language>? languages,
     String? name,
     File? profileImage,
-    DateTime? dateOfBirth,
-    Gender? gender,
-    DeviceLanguage? deviceLanguage,
-    List<Language>? languages,
-    SignUpStep? currentStep,
+    UserType? type,
   }) {
     return SignUpInputState(
+      currentStep: currentStep ?? this.currentStep,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       deviceLanguage: deviceLanguage ?? this.deviceLanguage,
       gender: gender ?? this.gender,
@@ -48,7 +49,6 @@ class SignUpInputState extends Equatable {
       name: name ?? this.name,
       profileImage: profileImage ?? this.profileImage,
       type: type ?? this.type,
-      currentStep: currentStep ?? this.currentStep,
     );
   }
 
@@ -79,8 +79,11 @@ class SignUpInputState extends Equatable {
     return false;
   }
 
+  bool isCanAddLanguage() =>
+      languages == null ? true : (languages!.length < _maxLanguage);
+
   SignUpStep get validStep {
-    if (type != null && languages != null) {
+    if (type != null && (languages?.isNotEmpty ?? false)) {
       return SignUpStep.inputPersonalInformation;
     } else if (type != null) {
       return SignUpStep.selectLanguage;
@@ -91,14 +94,14 @@ class SignUpInputState extends Equatable {
 
   @override
   List<Object?> get props => [
-        type,
+        currentStep,
+        dateOfBirth,
+        deviceLanguage,
+        gender,
+        languages,
         name,
         profileImage,
-        dateOfBirth,
-        gender,
-        deviceLanguage,
-        languages,
+        type,
         validStep,
-        currentStep,
       ];
 }

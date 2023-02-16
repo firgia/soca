@@ -53,7 +53,7 @@ void main() {
 
     group(".validStep", () {
       test(
-          "Should return [SignUpStep.inputPersonalInformation] when [type] and [languages] is not null",
+          "Should return [SignUpStep.inputPersonalInformation] when [type] and [languages] is not empty",
           () {
         SignUpInputState state = SignUpInputState(
           dateOfBirth: DateTime(2000),
