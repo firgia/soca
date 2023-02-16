@@ -7,6 +7,9 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:soca/data/providers/local_language_provider.dart';
@@ -24,11 +27,25 @@ void main() {
     registerLocator();
     secureStorage = getMockFlutterSecureStorage();
     languageProvider = LocalLanguageProvider();
+    TestWidgetsFlutterBinding.ensureInitialized();
   });
 
   tearDown(() => unregisterLocator());
 
   group("Functions", () {
+    group("getLanguage", () {
+      test("Should load from local json file and decode the json file",
+          () async {
+        final language = await languageProvider.getLanguages();
+
+        final String response =
+            await rootBundle.loadString('assets/json/language.json');
+        final jsonLanguageResult = await json.decode(response);
+
+        expect(language, jsonLanguageResult);
+      });
+    });
+
     group("getLastChanged", () {
       test("Should return last language data based on storage data", () async {
         when(secureStorage.read(key: _lastChangedKey))
