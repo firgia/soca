@@ -59,7 +59,85 @@ class _SelectLanguagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text("Select Language Page");
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _PageTitleText(LocaleKeys.select_language.tr()),
+        const SizedBox(height: 4),
+        const Text(LocaleKeys.add_language_desc).tr(),
+        const SizedBox(height: kDefaultSpacing),
+        Expanded(child: _buildLanguage()),
+        const SizedBox(height: kDefaultSpacing),
+        BlocBuilder<SignUpInputBloc, SignUpInputState>(
+          builder: (context, state) {
+            UserType? type = state.type;
+
+            return _PageInfoText(type == UserType.blind
+                ? LocaleKeys.select_language_blind_desc.tr()
+                : LocaleKeys.select_language_volunteer_desc.tr());
+          },
+        ),
+        const SizedBox(height: kDefaultSpacing),
+        Row(
+          children: const [
+            _BackIconButton(),
+            SizedBox(width: kDefaultSpacing),
+            Expanded(child: _NextButton()),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLanguage() {
+    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
+      builder: (context, state) {
+        SignUpInputBloc signUpInputBloc = context.read<SignUpInputBloc>();
+
+        List<Language> selectedLanguages = state.languages ?? [];
+        bool isCanAddLanguage = state.isCanAddLanguage();
+
+        return ListView.builder(
+          itemCount: selectedLanguages.length + ((isCanAddLanguage) ? 1 : 0),
+          itemBuilder: (context, index) {
+            bool isTimeToShowAddButton = index == selectedLanguages.length;
+
+            if (isTimeToShowAddButton) {
+              return _AddLanguageButton(
+                onPressed: () {
+                  LanguageBloc languageBloc = context.read<LanguageBloc>();
+                  LanguageState languageState = languageBloc.state;
+
+                  if (languageState is LanguageLoaded) {
+                    LanguageSelectionModal(context).showSelectionLanguageUI(
+                      selected: selectedLanguages,
+                      selection: languageState.languages,
+                      onSelected: (selected) {
+                        signUpInputBloc.add(SignUpInputLanguageAdded(selected));
+                      },
+                    );
+                  } else {
+                    languageBloc.add(const LanguageFetched());
+                  }
+                },
+              );
+            } else {
+              final language = selectedLanguages[index];
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: kDefaultSpacing),
+                child: LanguageCard(
+                  language,
+                  onTapRemove: () {
+                    signUpInputBloc.add(SignUpInputLanguageRemoved(language));
+                  },
+                ),
+              );
+            }
+          },
+        );
+      },
+    );
   }
 }
 

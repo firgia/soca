@@ -13,6 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
+import 'package:soca/data/data.dart';
 import 'package:soca/logic/logic.dart';
 import 'package:soca/presentation/presentation.dart';
 
@@ -22,6 +23,7 @@ import '../../../mock/mock.mocks.dart';
 void main() {
   late MockAppNavigator appNavigator;
   late MockAccountCubit accountCubit;
+  late MockLanguageBloc languageBloc;
   late MockSignUpBloc signUpBloc;
   late MockSignUpInputBloc signUpInputBloc;
   late MockSignOutCubit signOutCubit;
@@ -32,10 +34,10 @@ void main() {
 
     appNavigator = getMockAppNavigator();
     accountCubit = getMockAccountCubit();
+    languageBloc = getMockLanguageBloc();
     signUpBloc = getMockSignUpBloc();
     signUpInputBloc = getMockSignUpInputBloc();
     signOutCubit = getMockSignOutCubit();
-
     widgetBinding = getMockWidgetsBinding();
 
     MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
@@ -629,6 +631,348 @@ void main() {
 
           await tester.pumpApp(child: SignUpScreen());
           expect(find.text(LocaleKeys.sign_up_rule_desc.tr()), findsOneWidget);
+        });
+      });
+    });
+  });
+
+  group("SelectLanguagePage()", () {
+    group("Add Language Button", () {
+      testWidgets("Should show add button when language is not reaching max",
+          (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(
+              currentStep: SignUpStep.selectLanguage,
+            ),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+
+          expect(
+            find.byKey(const Key("sign_up_screen_add_language_button")),
+            findsOneWidget,
+          );
+
+          expect(
+            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findsOneWidget,
+          );
+        });
+      });
+
+      testWidgets("Should hide add button when language is reaching max",
+          (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(
+                currentStep: SignUpStep.selectLanguage,
+                languages: [
+                  Language(),
+                  Language(),
+                  Language(),
+                ]),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+
+          expect(
+            find.byKey(const Key("sign_up_screen_add_language_button")),
+            findsNothing,
+          );
+
+          expect(
+            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findsOneWidget,
+          );
+        });
+      });
+
+      testWidgets("Should show selection language when tap add language button",
+          (tester) async {
+        await tester.runAsync(() async {
+          when(languageBloc.state).thenReturn(const LanguageLoaded([
+            Language(
+              code: "id",
+              name: "Indonesian",
+            ),
+            Language(
+              code: "ru",
+              name: "Russian",
+            ),
+          ]));
+
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(
+              currentStep: SignUpStep.selectLanguage,
+            ),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+          await tester.tap(
+            find.byKey(const Key("sign_up_screen_add_language_button")),
+          );
+
+          await tester.pumpAndSettle();
+
+          expect(find.byType(LanguageSelectionCard), findsOneWidget);
+          expect(
+            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findsOneWidget,
+          );
+          expect(find.text("Indonesian"), findsOneWidget);
+          expect(find.text("Russian"), findsOneWidget);
+        });
+      });
+    });
+
+    group("Selection Language", () {
+      setUp(() {
+        when(languageBloc.state).thenReturn(const LanguageLoaded([
+          Language(
+            code: "id",
+            name: "Indonesian",
+          ),
+          Language(
+            code: "ru",
+            name: "Russian",
+          ),
+        ]));
+
+        when(signUpInputBloc.state).thenReturn(
+          const SignUpInputState(
+              currentStep: SignUpStep.selectLanguage,
+              languages: [
+                Language(
+                  code: "ru",
+                  name: "Russian",
+                ),
+                Language(
+                  code: "en",
+                  name: "English",
+                ),
+              ]),
+        );
+      });
+
+      testWidgets(
+          "Should show LanguageCard based on [SignUpInputState.languages]",
+          (tester) async {
+        await tester.runAsync(() async {
+          await tester.pumpApp(child: SignUpScreen());
+
+          expect(find.byType(LanguageCard), findsNWidgets(2));
+          expect(find.byKey(const Key("language_card_ru")), findsOneWidget);
+          expect(find.byKey(const Key("language_card_en")), findsOneWidget);
+        });
+      });
+
+      testWidgets(
+          "Should call the [SignUpInputLanguageAdded] when tap selection language",
+          (tester) async {
+        await tester.runAsync(() async {
+          await tester.pumpApp(child: SignUpScreen());
+
+          // Tap to show selection language
+          await tester.tap(
+            find.byKey(const Key("sign_up_screen_add_language_button")),
+          );
+          await tester.pumpAndSettle();
+
+          // Tap to select the language
+          await tester.tap(find.text("Indonesian"));
+          await tester.pumpAndSettle();
+
+          verify(
+            signUpInputBloc.add(
+              const SignUpInputLanguageAdded(
+                Language(
+                  code: "id",
+                  name: "Indonesian",
+                ),
+              ),
+            ),
+          );
+        });
+      });
+
+      testWidgets(
+          "Should call the [SignUpInputLanguageRemoved] when tap remove button on Language Card",
+          (tester) async {
+        await tester.runAsync(() async {
+          await tester.pumpApp(child: SignUpScreen());
+
+          await tester.tap(
+            find.byKey(const Key("language_card_remove_button_ru")),
+          );
+          await tester.pumpAndSettle();
+
+          verify(
+            signUpInputBloc.add(
+              const SignUpInputLanguageRemoved(
+                Language(
+                  code: "ru",
+                  name: "Russian",
+                ),
+              ),
+            ),
+          );
+        });
+      });
+    });
+
+    group("Next Button", () {
+      testWidgets("Should show next button", (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(currentStep: SignUpStep.selectLanguage),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+
+          expect(
+            find.byKey(const Key("sign_up_screen_next_button")),
+            findsOneWidget,
+          );
+          expect(
+            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findsOneWidget,
+          );
+        });
+      });
+
+      testWidgets(
+          "Should enable next button when [SignUpInputState.type] is not null and [SignUpInputState.languages] is not empty",
+          (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(
+              type: UserType.volunteer,
+              languages: [Language(code: "id", name: "Indonesia")],
+              currentStep: SignUpStep.selectLanguage,
+            ),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+          ElevatedButton nextButton = find
+              .byKey(const Key("sign_up_screen_next_button"))
+              .getWidget() as ElevatedButton;
+
+          expect(nextButton.onPressed, isNotNull);
+          expect(
+            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findsOneWidget,
+          );
+        });
+      });
+
+      testWidgets(
+          "Should disable next button when [SignUpInputState.type] is null or [SignUpInputState.languages] is not empty",
+          (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(
+              type: null,
+              languages: null,
+              currentStep: SignUpStep.selectLanguage,
+            ),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+          ElevatedButton nextButton = find
+              .byKey(const Key("sign_up_screen_next_button"))
+              .getWidget() as ElevatedButton;
+
+          expect(nextButton.onPressed, null);
+          expect(
+            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findsOneWidget,
+          );
+        });
+      });
+
+      testWidgets(
+          "Should call [SignUpInputNextStep()] when next button is pressed and enabled",
+          (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(
+              type: UserType.volunteer,
+              languages: [Language(code: "id", name: "Indonesia")],
+              currentStep: SignUpStep.selectLanguage,
+            ),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+
+          await tester.tap(find.byKey(const Key("sign_up_screen_next_button")));
+          await tester.pumpAndSettle();
+
+          verify(signUpInputBloc.add(const SignUpInputNextStep()));
+          expect(
+            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findsOneWidget,
+          );
+        });
+      });
+    });
+
+    group("Text", () {
+      testWidgets("Should show title text", (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(currentStep: SignUpStep.selectLanguage),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+          expect(find.text(LocaleKeys.select_language.tr()), findsOneWidget);
+        });
+      });
+
+      testWidgets("Should show add language text", (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(currentStep: SignUpStep.selectLanguage),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+          expect(find.text(LocaleKeys.add_language_desc.tr()), findsOneWidget);
+        });
+      });
+
+      testWidgets("Should show blind info text when blind is selected",
+          (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(
+              currentStep: SignUpStep.selectLanguage,
+              type: UserType.blind,
+            ),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+          expect(
+            find.text(LocaleKeys.select_language_blind_desc.tr()),
+            findsOneWidget,
+          );
+        });
+      });
+
+      testWidgets("Should show volunteer info text when volunteer is selected",
+          (tester) async {
+        await tester.runAsync(() async {
+          when(signUpInputBloc.state).thenReturn(
+            const SignUpInputState(
+              currentStep: SignUpStep.selectLanguage,
+              type: UserType.volunteer,
+            ),
+          );
+
+          await tester.pumpApp(child: SignUpScreen());
+          expect(
+            find.text(LocaleKeys.select_language_volunteer_desc.tr()),
+            findsOneWidget,
+          );
         });
       });
     });

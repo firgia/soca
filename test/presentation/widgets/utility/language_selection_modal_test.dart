@@ -10,7 +10,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:soca/data/models/models.dart';
+import 'package:soca/data/data.dart';
 import 'package:soca/presentation/presentation.dart';
 
 import '../../../helper/helper.dart';

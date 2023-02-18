@@ -17,20 +17,14 @@ import '../loading/loading.dart';
 class LanguageCard extends _LanguageCardItem {
   const LanguageCard(
     Language data, {
-    Key? key,
     VoidCallback? onTapRemove,
   }) : super(
           isLoading: false,
           data: data,
           onTapRemove: onTapRemove,
-          key: key,
         );
 
-  const LanguageCard.loading({Key? key})
-      : super(
-          isLoading: true,
-          key: key,
-        );
+  const LanguageCard.loading() : super(isLoading: true);
 }
 
 class _LanguageCardItem extends StatelessWidget {
@@ -38,8 +32,7 @@ class _LanguageCardItem extends StatelessWidget {
     required this.isLoading,
     this.data,
     this.onTapRemove,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final Language? data;
   final VoidCallback? onTapRemove;
@@ -65,7 +58,7 @@ class _LanguageCard extends StatelessWidget {
     this.data, {
     Key? key,
     this.onTapRemove,
-  }) : super(key: key);
+  });
 
   final Language data;
   final VoidCallback? onTapRemove;
@@ -73,6 +66,7 @@ class _LanguageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      key: Key("language_card_${data.code}"),
       margin: EdgeInsets.zero,
       child: Container(
         width: double.maxFinite,
@@ -98,7 +92,7 @@ class _LanguageCard extends StatelessWidget {
 
   Widget _buildRemoveButton() {
     return IconButton(
-      key: const Key("language_card_remove_button"),
+      key: Key("language_card_remove_button_${data.code}"),
       onPressed: onTapRemove,
       padding: EdgeInsets.zero,
       constraints: const BoxConstraints(),

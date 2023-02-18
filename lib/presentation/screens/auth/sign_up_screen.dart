@@ -7,10 +7,13 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:custom_icons/custom_icons.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:soca/core/core.dart';
+import 'package:soca/data/data.dart';
 import 'package:soca/injection.dart';
 import 'package:soca/logic/logic.dart';
 import 'package:soca/presentation/presentation.dart';
@@ -25,6 +28,7 @@ class SignUpScreen extends StatelessWidget
     implements ResponsiveLayoutInterface {
   final AppNavigator _appNavigator = sl<AppNavigator>();
   final AccountCubit _accountCubit = sl<AccountCubit>();
+  final LanguageBloc _languageBloc = sl<LanguageBloc>();
   final SignUpBloc _signUpBloc = sl<SignUpBloc>();
   final SignUpInputBloc _signUpInputBloc = sl<SignUpInputBloc>();
   final SignOutCubit _signOutCubit = sl<SignOutCubit>();
@@ -34,10 +38,12 @@ class SignUpScreen extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     _accountCubit.getAccountData();
+    _languageBloc.add(const LanguageFetched());
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => _accountCubit),
+        BlocProvider(create: (context) => _languageBloc),
         BlocProvider(create: (context) => _signUpBloc),
         BlocProvider(create: (context) => _signUpInputBloc),
         BlocProvider(create: (context) => _signOutCubit),
@@ -51,6 +57,11 @@ class SignUpScreen extends StatelessWidget
         child: Scaffold(
           body: MultiBlocListener(
             listeners: [
+              BlocListener<SignUpInputBloc, SignUpInputState>(
+                listener: (context, state) {
+                  print(state);
+                },
+              ),
               BlocListener<SignOutCubit, SignOutState>(
                 listener: (context, state) {
                   if (state is SignOutSuccessfully || state is SignOutError) {

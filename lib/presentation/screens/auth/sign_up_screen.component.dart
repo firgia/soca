@@ -222,6 +222,46 @@ class _NextButton extends StatelessWidget {
   }
 }
 
+class _BackIconButton extends StatelessWidget with UIMixin {
+  const _BackIconButton()
+      : super(key: const Key("sign_up_screen_back_icon_button"));
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () =>
+          context.read<SignUpInputBloc>().add(const SignUpInputBackStep()),
+      color: AppColors.fontPallets[2],
+      icon: Icon(
+        isRTL(context)
+            ? FontAwesomeIcons.arrowRight
+            : FontAwesomeIcons.arrowLeftLong,
+      ),
+    );
+  }
+}
+
+class _AddLanguageButton extends StatelessWidget {
+  const _AddLanguageButton({
+    required this.onPressed,
+  }) : super(key: const Key("sign_up_screen_add_language_button"));
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+      icon: const Icon(
+        CustomIcons.add,
+        size: 18,
+      ),
+      onPressed: onPressed,
+      label: const Text(LocaleKeys.add).tr(),
+      style: OutlinedButtonStyle(expanded: true),
+    );
+  }
+}
+
 /// Showing account to sign out with bottomsheet or dialog
 void _showAccount(
   BuildContext context, {

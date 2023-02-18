@@ -48,7 +48,7 @@ void main() {
           );
 
           Finder removeButton =
-              find.byKey(const Key("language_card_remove_button"));
+              find.byKey(const Key("language_card_remove_button_id"));
           expect(removeButton, findsOneWidget);
           expect(removeButton.getWidget(), isA<IconButton>());
         });
@@ -62,7 +62,7 @@ void main() {
           );
 
           Finder removeButton =
-              find.byKey(const Key("language_card_remove_button"));
+              find.byKey(const Key("language_card_remove_button_id"));
           expect(removeButton, findsNothing);
         });
       });
@@ -82,7 +82,7 @@ void main() {
           );
 
           Finder removeButton =
-              find.byKey(const Key("language_card_remove_button"));
+              find.byKey(const Key("language_card_remove_button_id"));
 
           await tester.tap(removeButton);
           await tester.pumpAndSettle();
