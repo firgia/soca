@@ -8,4 +8,5 @@
  */
 
 export 'adaptive_loading.dart';
+export 'custom_shimmer.dart';
 export 'loading_panel.dart';
