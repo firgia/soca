@@ -33,3 +33,13 @@ class LanguageSelected extends LanguageState {
         language,
       ];
 }
+
+class LanguageLoaded extends LanguageState {
+  final List<Language> languages;
+  const LanguageLoaded(this.languages);
+
+  @override
+  List<Object?> get props => [
+        languages,
+      ];
+}

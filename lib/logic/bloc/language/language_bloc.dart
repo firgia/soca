@@ -23,6 +23,7 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
 
   LanguageBloc() : super(const LanguageUnselected()) {
     on<LanguageChanged>(_onChanged);
+    on<LanguageFetched>(_onFetched);
   }
 
   Future<void> _onChanged(
@@ -41,5 +42,16 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
       _logger.info("Unselected Language");
       emit(const LanguageUnselected());
     }
+  }
+
+  Future<void> _onFetched(
+    LanguageFetched event,
+    Emitter<LanguageState> emit,
+  ) async {
+    _logger.info("Get language...");
+    emit(const LanguageLoading());
+    List<Language> languages = await _languageRepository.getLanguages();
+    _logger.info("Successfully to get language...");
+    emit(LanguageLoaded(languages));
   }
 }

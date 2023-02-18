@@ -26,3 +26,7 @@ class LanguageChanged extends LanguageEvent {
         language,
       ];
 }
+
+class LanguageFetched extends LanguageEvent {
+  const LanguageFetched();
+}
