@@ -14,6 +14,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'config/config.dart';
@@ -40,6 +42,7 @@ void setupInjection() {
   sl.registerLazySingleton<UserProvider>(() => UserProvider());
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepository());
+  sl.registerLazySingleton<FileRepository>(() => FileRepository());
   sl.registerLazySingleton<LanguageRepository>(() => LanguageRepository());
   sl.registerLazySingleton<OnesignalRepository>(() => OnesignalRepository());
   sl.registerLazySingleton<UserRepository>(() => UserRepository());
@@ -50,6 +53,8 @@ void setupInjection() {
   sl.registerSingleton<FirebaseFunctions>(FirebaseFunctions.instance);
   sl.registerSingleton<FirebaseStorage>(FirebaseStorage.instance);
   sl.registerSingleton<GoogleSignIn>(GoogleSignIn());
+  sl.registerSingleton<ImageCropper>(ImageCropper());
+  sl.registerSingleton<ImagePicker>(ImagePicker());
   sl.registerSingleton<InternetConnectionChecker>(
     InternetConnectionChecker.createInstance(
       checkTimeout: const Duration(seconds: 5),

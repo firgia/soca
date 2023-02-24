@@ -79,6 +79,14 @@ MockAuthRepository getMockAuthRepository() {
   return mock;
 }
 
+MockFileRepository getMockFileRepository() {
+  MockFileRepository mock = MockFileRepository();
+  _removeRegistrationIfExists<FileRepository>();
+  locator.registerSingleton<FileRepository>(mock);
+
+  return mock;
+}
+
 MockLanguageRepository getMockLanguageRepository() {
   MockLanguageRepository mock = MockLanguageRepository();
   _removeRegistrationIfExists<LanguageRepository>();
@@ -133,6 +141,22 @@ MockGoogleSignIn getMockGoogleSignIn() {
   MockGoogleSignIn mock = MockGoogleSignIn();
   _removeRegistrationIfExists<GoogleSignIn>();
   locator.registerSingleton<GoogleSignIn>(mock);
+
+  return mock;
+}
+
+MockImageCropper getMockImageCropper() {
+  MockImageCropper mock = MockImageCropper();
+  _removeRegistrationIfExists<ImageCropper>();
+  locator.registerSingleton<ImageCropper>(mock);
+
+  return mock;
+}
+
+MockImagePicker getMockImagePicker() {
+  MockImagePicker mock = MockImagePicker();
+  _removeRegistrationIfExists<ImagePicker>();
+  locator.registerSingleton<ImagePicker>(mock);
 
   return mock;
 }
@@ -233,6 +257,7 @@ void registerLocator() {
   getMockUserProvider();
   getMockLocalLanguageProvider();
   getMockAuthRepository();
+  getMockFileRepository();
   getMockLanguageRepository();
   getMockUserRepository();
 
@@ -242,6 +267,8 @@ void registerLocator() {
   getMockFirebaseFunctions();
   getMockFirebaseStorage();
   getMockGoogleSignIn();
+  getMockImageCropper();
+  getMockImagePicker();
   getMockInternetConnectionChecker();
   getMockOneSignal();
   getMockWidgetsBinding();
@@ -270,6 +297,7 @@ void unregisterLocator() {
   locator.unregister<UserProvider>();
   locator.unregister<LocalLanguageProvider>();
   locator.unregister<AuthRepository>();
+  locator.unregister<FileRepository>();
   locator.unregister<LanguageRepository>();
   locator.unregister<UserRepository>();
 
@@ -279,6 +307,8 @@ void unregisterLocator() {
   locator.unregister<FirebaseFunctions>();
   locator.unregister<FirebaseStorage>();
   locator.unregister<GoogleSignIn>();
+  locator.unregister<ImageCropper>();
+  locator.unregister<ImagePicker>();
   locator.unregister<InternetConnectionChecker>();
   locator.unregister<OneSignal>();
   locator.unregister<WidgetsBinding>();
