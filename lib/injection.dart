@@ -31,6 +31,7 @@ void setupInjection() {
   sl.registerLazySingleton<AppNavigator>(() => AppNavigator());
 
   /* ---------------------------------> CORE <------------------------------- */
+  sl.registerLazySingleton<DeviceFeedback>(() => DeviceFeedback());
   sl.registerLazySingleton<DeviceInfo>(() => DeviceInfo());
 
   /* ---------------------------------> DATA <------------------------------- */
@@ -65,6 +66,7 @@ void setupInjection() {
   sl.registerSingleton<WidgetsBinding>(WidgetsBinding.instance);
 
   /* --------------------------------> LOGIC <------------------------------- */
+  sl.registerFactory<FileBloc>(() => FileBloc());
   sl.registerFactory<LanguageBloc>(() => LanguageBloc());
   sl.registerFactory<SignInBloc>(() => SignInBloc());
   sl.registerFactory<SignUpInputBloc>(() => SignUpInputBloc());
