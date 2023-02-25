@@ -22,6 +22,14 @@ MockAppNavigator getMockAppNavigator() {
 
 /* ----------------------------------> CORE <-------------------------------- */
 
+MockDeviceFeedback getMockDeviceFeedback() {
+  MockDeviceFeedback mock = MockDeviceFeedback();
+  _removeRegistrationIfExists<DeviceFeedback>();
+  locator.registerSingleton<DeviceFeedback>(mock);
+
+  return mock;
+}
+
 MockDeviceInfo getMockDeviceInfo() {
   MockDeviceInfo mock = MockDeviceInfo();
   _removeRegistrationIfExists<DeviceInfo>();
@@ -248,6 +256,7 @@ void registerLocator() {
   getMockAppNavigator();
 
   /* ---------------------------------> CORE <------------------------------- */
+  getMockDeviceFeedback();
   getMockDeviceInfo();
 
   /* ---------------------------------> DATA <------------------------------- */
@@ -288,6 +297,7 @@ void unregisterLocator() {
   locator.unregister<AppNavigator>();
 
   /* ---------------------------------> CORE <------------------------------- */
+  locator.unregister<DeviceFeedback>();
   locator.unregister<DeviceInfo>();
 
   /* ---------------------------------> DATA <------------------------------- */

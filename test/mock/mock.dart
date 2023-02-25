@@ -29,6 +29,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<AppNavigator>(),
 
   /* ---------------------------------> CORE <------------------------------- */
+  MockSpec<DeviceFeedback>(),
   MockSpec<DeviceInfo>(),
 
   /* ---------------------------------> DATA <------------------------------- */

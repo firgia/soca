@@ -15,4 +15,5 @@ export 'device_platform.dart';
 export 'environtment_type.dart';
 export 'gender.dart';
 export 'sign_up_step.dart';
+export 'snackbar_style.dart';
 export 'user_type.dart';
