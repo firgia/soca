@@ -52,6 +52,7 @@ abstract class LocaleKeys {
   static const error_something_wrong = 'error_something_wrong';
   static const error_something_wrong_desc = 'error_something_wrong_desc';
   static const fail_to_call_no_volunteers = 'fail_to_call_no_volunteers';
+  static const female = "female";
   static const fill_in_form_to_continue = 'fill_in_form_to_continue';
   static const friends = 'friends';
   static const gallery = 'gallery';
@@ -60,6 +61,7 @@ abstract class LocaleKeys {
   static const joined_desc = 'joined_desc';
   static const language = 'language';
   static const lets_get_started = 'lets_get_started';
+  static const male = "male";
   static const microphone = 'microphone';
   static const name = 'name';
   static const no_call_data_yet = 'no_call_data_yet';
