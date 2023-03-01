@@ -11,6 +11,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:soca/core/core.dart';
 
 void main() {
+  group(".capitalize", () {
+    test("Should convert capitalize the letter", () {
+      String case1 = "firgia".capitalize;
+      String case2 = "mochamad firgia".capitalize;
+
+      expect(case1, "Firgia");
+      expect(case2, "Mochamad Firgia");
+    });
+  });
+
   group(".capitalizeFirst", () {
     test("Should convert capitalize the first letter", () {
       String case1 = "firgia".capitalizeFirst;

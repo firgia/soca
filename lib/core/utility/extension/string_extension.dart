@@ -20,6 +20,22 @@ extension StringExtension on String {
     }
   }
 
+  String get capitalize {
+    String val = this;
+
+    if (val.trim().isEmpty) {
+      return val;
+    } else {
+      String result = "";
+      List<String> list = val.split(" ");
+      for (String value in list) {
+        result +=
+            "${value[0].toUpperCase()}${value.substring(1).toLowerCase()} ";
+      }
+      return result.trim();
+    }
+  }
+
   Gender? toGender() {
     String value = this;
 
