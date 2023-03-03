@@ -35,6 +35,29 @@ class SignUpSubmitted extends SignUpEvent {
     required this.languages,
   });
 
+  factory SignUpSubmitted.fromSignUpInputState(
+      SignUpInputState signUpInputState) {
+    assert(
+        signUpInputState.type != null &&
+            signUpInputState.name != null &&
+            signUpInputState.profileImage != null &&
+            signUpInputState.dateOfBirth != null &&
+            signUpInputState.gender != null &&
+            signUpInputState.deviceLanguage != null &&
+            signUpInputState.languages != null,
+        "Invalid argument");
+
+    return SignUpSubmitted(
+      type: signUpInputState.type!,
+      name: signUpInputState.name!,
+      profileImage: signUpInputState.profileImage!,
+      dateOfBirth: signUpInputState.dateOfBirth!,
+      gender: signUpInputState.gender!,
+      deviceLanguage: signUpInputState.deviceLanguage!,
+      languages: signUpInputState.languages!,
+    );
+  }
+
   @override
   List<Object?> get props => [
         type,

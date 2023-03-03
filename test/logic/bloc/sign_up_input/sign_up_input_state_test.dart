@@ -230,5 +230,67 @@ void main() {
         });
       });
     });
+
+    group(".isValidToSubmit", () {
+      test("Should return true when all field is not empty", () {
+        SignUpInputState signUpInputState = SignUpInputState(
+          dateOfBirth: DateTime(2000),
+          deviceLanguage: DeviceLanguage.arabic,
+          gender: Gender.male,
+          languages: const [Language(code: "id")],
+          name: "Firgia",
+          profileImage: File("assets/images/raster/avatar.png"),
+          type: UserType.volunteer,
+        );
+
+        expect(signUpInputState.isValidToSubmit(), true);
+      });
+
+      test(
+          "Should return true when all field is not empty except [deviceLanguage]",
+          () {
+        SignUpInputState signUpInputState = SignUpInputState(
+          dateOfBirth: DateTime(2000),
+          deviceLanguage: null,
+          gender: Gender.male,
+          languages: const [Language(code: "id")],
+          name: "Firgia",
+          profileImage: File("assets/images/raster/avatar.png"),
+          type: UserType.volunteer,
+        );
+
+        expect(signUpInputState.isValidToSubmit(), true);
+      });
+
+      test(
+          "Should return false when name is invalid even all input is not empty",
+          () {
+        SignUpInputState signUpInputState = SignUpInputState(
+          dateOfBirth: DateTime(2000),
+          deviceLanguage: DeviceLanguage.arabic,
+          gender: Gender.male,
+          languages: const [Language(code: "id")],
+          name: ".a",
+          profileImage: File("assets/images/raster/avatar.png"),
+          type: UserType.volunteer,
+        );
+
+        expect(signUpInputState.isValidToSubmit(), false);
+      });
+
+      test("Should return false when some field is empty", () {
+        SignUpInputState signUpInputState = SignUpInputState(
+          dateOfBirth: DateTime(2000),
+          deviceLanguage: null,
+          gender: null,
+          languages: const [Language(code: "id")],
+          name: "Firgia",
+          profileImage: File("assets/images/raster/avatar.png"),
+          type: UserType.volunteer,
+        );
+
+        expect(signUpInputState.isValidToSubmit(), false);
+      });
+    });
   });
 }

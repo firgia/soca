@@ -62,6 +62,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<WidgetsBinding>(),
 
   /* --------------------------------> LOGIC <------------------------------- */
+  MockSpec<FileBloc>(),
   MockSpec<LanguageBloc>(),
   MockSpec<SignInBloc>(),
   MockSpec<SignUpBloc>(),

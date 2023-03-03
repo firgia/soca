@@ -9,7 +9,7 @@
 
 part of 'sign_up_input_bloc.dart';
 
-class SignUpInputState extends Equatable {
+class SignUpInputState extends Equatable with ValidateName {
   final SignUpStep currentStep;
   final DateTime? dateOfBirth;
   final DeviceLanguage? deviceLanguage;
@@ -57,7 +57,8 @@ class SignUpInputState extends Equatable {
       profileImage != null &&
       dateOfBirth != null &&
       gender != null &&
-      languages != null);
+      languages != null &&
+      validateName(name) == null);
 
   bool isCanNext() {
     switch (currentStep) {
