@@ -11,28 +11,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:soca/data/data.dart';
 
 void main() {
-  group(".fromMap()", () {
-    test("Should convert map value to fields", () {
-      final actual = URLImage.fromMap(
-        const {
-          "small": "small.png",
-          "medium": "medium.png",
-          "large": "large.png",
-          "original": "original.png",
-        },
-      );
-
-      const expected = URLImage(
-        small: "small.png",
-        medium: "medium.png",
-        large: "large.png",
-        original: "original.png",
-      );
-
-      expect(actual, expected);
-    });
-  });
-
   group(".fixed", () {
     test("Should return small, medium, large, or original when available", () {
       const case1 = URLImage(
@@ -74,6 +52,28 @@ void main() {
       expect(case3.fixed, "large.png");
       expect(case4.fixed, "original.png");
       expect(case5.fixed, null);
+    });
+  });
+
+  group(".fromMap()", () {
+    test("Should convert map value to fields", () {
+      final actual = URLImage.fromMap(
+        const {
+          "small": "small.png",
+          "medium": "medium.png",
+          "large": "large.png",
+          "original": "original.png",
+        },
+      );
+
+      const expected = URLImage(
+        small: "small.png",
+        medium: "medium.png",
+        large: "large.png",
+        original: "original.png",
+      );
+
+      expect(actual, expected);
     });
   });
 }

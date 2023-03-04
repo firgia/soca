@@ -11,6 +11,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:soca/data/data.dart';
 
 void main() {
+  group(".localDateJoined", () {
+    test("Should convert dateJoined to local date", () {
+      final userInfo = UserInfo(
+        dateJoined: DateTime.tryParse("2023-02-11T14:12:06.182067"),
+        listOfCallYears: const ["2022", "2023"],
+        totalCalls: 12,
+        totalFriends: 13,
+        totalVisitors: 14,
+      );
+
+      expect(userInfo.localDateJoined, userInfo.dateJoined?.toLocal());
+    });
+  });
+
   group(".fromMap()", () {
     test("Should convert map value to fields", () {
       final actual = UserInfo.fromMap(
@@ -32,20 +46,6 @@ void main() {
       );
 
       expect(actual, expected);
-    });
-  });
-
-  group(".localDateJoined", () {
-    test("Should convert dateJoined to local date", () {
-      final userInfo = UserInfo(
-        dateJoined: DateTime.tryParse("2023-02-11T14:12:06.182067"),
-        listOfCallYears: const ["2022", "2023"],
-        totalCalls: 12,
-        totalFriends: 13,
-        totalVisitors: 14,
-      );
-
-      expect(userInfo.localDateJoined, userInfo.dateJoined?.toLocal());
     });
   });
 }
