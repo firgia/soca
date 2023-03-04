@@ -7,6 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:soca/core/core.dart';
@@ -27,6 +29,40 @@ void main() {
   tearDown(() => unregisterLocator());
 
   group("Functions", () {
+    group("getLanguage", () {
+      test("Should convert json to [List<Language>]", () async {
+        when(localLanguageProvider.getLanguages()).thenAnswer(
+          (_) => Future.value(
+            json.decode(
+              json.encode([
+                {"code": "en", "name": "English", "nativeName": "English"},
+                {
+                  "code": "id",
+                  "name": "Indonesian",
+                  "nativeName": "Bahasa Indonesia"
+                },
+              ]),
+            ),
+          ),
+        );
+
+        final result = await languageProvider.getLanguages();
+        expect(result, const [
+          Language(
+            code: "en",
+            name: "English",
+            nativeName: "English",
+          ),
+          Language(
+            code: "id",
+            name: "Indonesian",
+            nativeName: "Bahasa Indonesia",
+          )
+        ]);
+        verify(localLanguageProvider.getLanguages());
+      });
+    });
+
     group("getLastChanged", () {
       test("Should return last DeviceLanguage data based on storage data",
           () async {

@@ -29,26 +29,35 @@ class LanguageScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => languageBloc,
       child: Scaffold(
-        body: CustomAppBar(
-          key: const Key("language_screen_app_bar"),
-          title: LocaleKeys.language.tr(),
-          body: Column(
-            children: [
-              Expanded(
-                child: BlocBuilder<LanguageBloc, LanguageState>(
-                  builder: (context, state) {
-                    final isLoading = (state is LanguageLoading);
+        body: Center(
+          child: Container(
+            constraints: const BoxConstraints(
+              maxWidth: 600,
+              maxHeight: 1100,
+            ),
+            child: CustomAppBar.header(
+              key: const Key("language_screen_app_bar"),
+              title: LocaleKeys.language.tr(),
+              body: Column(
+                children: [
+                  Expanded(
+                    child: BlocBuilder<LanguageBloc, LanguageState>(
+                      builder: (context, state) {
+                        final isLoading = (state is LanguageLoading);
 
-                    return IgnorePointer(
-                      key: const Key("language_screen_ignore_pointer_items"),
-                      ignoring: isLoading,
-                      child: _buildLanguageItems(),
-                    );
-                  },
-                ),
+                        return IgnorePointer(
+                          key:
+                              const Key("language_screen_ignore_pointer_items"),
+                          ignoring: isLoading,
+                          child: _buildLanguageItems(),
+                        );
+                      },
+                    ),
+                  ),
+                  _buildNextButton(context),
+                ],
               ),
-              _buildNextButton(context),
-            ],
+            ),
           ),
         ),
       ),
@@ -56,49 +65,36 @@ class LanguageScreen extends StatelessWidget {
   }
 
   Widget _buildLanguageItems() {
-    return SafeArea(
+    return LiveGrid(
       key: const Key("language_screen_language_items"),
-      child: Center(
-        child: Container(
-          constraints: const BoxConstraints(
-            maxWidth: 600,
-            maxHeight: 800,
-          ),
-          padding: const EdgeInsets.all(kDefaultSpacing * 1.5),
-          child: LiveGrid(
-            itemBuilder: (context, index, animation) {
-              return FadeAndSlideAnimation(
-                animation: animation,
-                child: BlocBuilder<LanguageBloc, LanguageState>(
-                  builder: (context, state) {
-                    final deviceLanguage = DeviceLanguage.values[index];
-                    bool isSelected = false;
+      itemBuilder: (context, index, animation) {
+        return FadeAndSlideAnimation(
+          animation: animation,
+          child: BlocBuilder<LanguageBloc, LanguageState>(
+            builder: (context, state) {
+              final deviceLanguage = DeviceLanguage.values[index];
+              bool isSelected = false;
 
-                    if (state is LanguageSelected) {
-                      isSelected = deviceLanguage == state.language;
-                    }
+              if (state is LanguageSelected) {
+                isSelected = deviceLanguage == state.language;
+              }
 
-                    return FlagButton(
-                      key: Key(
-                          "language_screen_flag_button_${deviceLanguage.name}"),
-                      language: deviceLanguage,
-                      onTap: () => _changeLanguage(context, deviceLanguage),
-                      selected: isSelected,
-                    );
-                  },
-                ),
+              return FlagButton(
+                key: Key("language_screen_flag_button_${deviceLanguage.name}"),
+                language: deviceLanguage,
+                onTap: () => _changeLanguage(context, deviceLanguage),
+                selected: isSelected,
               );
             },
-            showItemDuration: const Duration(milliseconds: 400),
-            showItemInterval: const Duration(milliseconds: 40),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-            ),
-            itemCount: DeviceLanguage.values.length,
-            physics: const NeverScrollableScrollPhysics(),
           ),
-        ),
+        );
+      },
+      showItemDuration: const Duration(milliseconds: 400),
+      showItemInterval: const Duration(milliseconds: 40),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
       ),
+      itemCount: DeviceLanguage.values.length,
     );
   }
 

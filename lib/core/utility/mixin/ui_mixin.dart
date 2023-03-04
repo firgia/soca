@@ -18,9 +18,9 @@ mixin UIMixin {
     return Directionality.of(context) == TextDirection.ltr;
   }
 
-  bool isSmartphone(BuildContext context) =>
-      MediaQuery.of(context).size.width < 600;
+  bool isMobile(BuildContext context) =>
+      MediaQuery.of(context).size.width < 768;
 
   bool isTablet(BuildContext context) =>
-      MediaQuery.of(context).size.width >= 600;
+      MediaQuery.of(context).size.width >= 768;
 }

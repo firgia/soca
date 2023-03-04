@@ -21,40 +21,65 @@ class SignInScreen extends StatelessWidget with UIMixin {
   final AppNavigator appNavigator = sl<AppNavigator>();
   final DeviceInfo deviceInfo = sl<DeviceInfo>();
   final SignInBloc signInBloc = sl<SignInBloc>();
+  final RouteCubit routeCubit = sl<RouteCubit>();
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => signInBloc,
-      child: BlocListener<SignInBloc, SignInState>(
-        listener: (context, state) {
-          // TODO: Must add validate to sign up page
-          if (state is SignInSuccessfully) {
-            appNavigator.goToHome(context);
-          }
-          // Error handling
-          else if (state is SignInWithAppleError) {
-            SignInWithAppleFailureCode code = state.failure.code;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => signInBloc),
+        BlocProvider(create: (context) => routeCubit),
+      ],
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<RouteCubit, RouteState>(
+            listener: (context, state) {
+              if (state is RouteTarget) {
+                if (state.name == AppPages.home) {
+                  appNavigator.goToHome(context);
+                } else if (state.name == AppPages.signUp) {
+                  appNavigator.goToSignUp(context);
+                }
+              }
 
-            if (code != SignInWithAppleFailureCode.canceled) {
-              Alert(context).showAuthenticationErrorMessage(
-                errorCode: code.name,
-              );
-            }
-          } else if (state is SignInWithGoogleError) {
-            SignInWithGoogleFailureCode code = state.failure.code;
+              if (state is RouteError) {
+                /// Allow user to retry when got any error
+                Alert(context).showSomethingErrorMessage(
+                  onActionPressed: () => routeCubit.getTargetRoute(),
+                );
+              }
+            },
+          ),
+          BlocListener<SignInBloc, SignInState>(
+            listener: (context, state) {
+              if (state is SignInSuccessfully) {
+                routeCubit.getTargetRoute();
+              }
+              // Error handling
+              else if (state is SignInWithAppleError) {
+                SignInWithAppleFailureCode code = state.failure.code;
 
-            if (code == SignInWithGoogleFailureCode.networkRequestFailed) {
-              Alert(context).showInternetErrorMessage();
-            } else {
-              Alert(context).showAuthenticationErrorMessage(
-                errorCode: code.name,
-              );
-            }
-          } else if (state is SignInError) {
-            Alert(context).showAuthenticationErrorMessage();
-          }
-        },
+                if (code != SignInWithAppleFailureCode.canceled) {
+                  Alert(context).showAuthenticationErrorMessage(
+                    errorCode: code.name,
+                  );
+                }
+              } else if (state is SignInWithGoogleError) {
+                SignInWithGoogleFailureCode code = state.failure.code;
+
+                if (code == SignInWithGoogleFailureCode.networkRequestFailed) {
+                  Alert(context).showInternetErrorMessage();
+                } else {
+                  Alert(context).showAuthenticationErrorMessage(
+                    errorCode: code.name,
+                  );
+                }
+              } else if (state is SignInError) {
+                Alert(context).showAuthenticationErrorMessage();
+              }
+            },
+          ),
+        ],
         child: Scaffold(
           body: Stack(
             alignment: Alignment.center,

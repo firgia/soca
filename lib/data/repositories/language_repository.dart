@@ -10,6 +10,7 @@
 import 'package:logging/logging.dart';
 import '../../injection.dart';
 import '../../core/core.dart';
+import '../models/models.dart';
 import '../providers/providers.dart';
 
 class LanguageRepository {
@@ -19,6 +20,25 @@ class LanguageRepository {
       sl<LocalLanguageProvider>();
 
   final Logger _logger = Logger("Language Repository");
+
+  /// Get list of language
+  Future<List<Language>> getLanguages() async {
+    _logger.shout("Getting languages...");
+
+    List<Language> languages = [];
+
+    try {
+      List<dynamic> json = await _localLanguageProvider.getLanguages();
+
+      for (Map<String, dynamic> map in json) {
+        languages.add(Language.fromMap(map));
+      }
+    } catch (e) {
+      _logger.shout("Failed to load language");
+    }
+
+    return languages;
+  }
 
   /// Get the last saved changed language.
   Future<DeviceLanguage?> getLastChanged() async {

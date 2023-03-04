@@ -7,12 +7,12 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logging/logging.dart';
-import 'package:soca/core/core.dart';
+import '../../core/core.dart';
 import '../../data/data.dart';
-
 import '../../injection.dart';
 
 class AuthRepository {
@@ -21,7 +21,17 @@ class AuthRepository {
   final FirebaseAuth _firebaseAuth = sl<FirebaseAuth>();
   final GoogleSignIn _googleSignIn = sl<GoogleSignIn>();
   final AuthProvider _signInProvider = sl<AuthProvider>();
+  final UserProvider _userProvider = sl<UserProvider>();
   final Logger _logger = Logger("Auth Repository");
+
+  /// The users email address.
+  String? get email => _firebaseAuth.currentUser?.email;
+
+  /// The user's unique ID.
+  String? get uid => _firebaseAuth.currentUser?.uid;
+
+  /// {@macro get_sign_in_method}
+  Future<AuthMethod?> getSignInMethod() => _authProvider.getSignInMethod();
 
   /// Check current user is signed in
   ///
@@ -175,6 +185,69 @@ class AuthRepository {
     await _signInProvider.setSignInMethod(null);
     await _signInProvider.setIsSignInOnProcess(false);
     _logger.fine("All sign out process 100% successfully");
+  }
+
+  /// Sign up
+  ///
+  /// `Exception`
+  ///
+  /// A [SignUpFailure] maybe thrown when a failure occurs.
+  Future<void> signUp({
+    required UserType type,
+    required String name,
+    required File profileImage,
+    required DateTime dateOfBirth,
+    required Gender gender,
+    required DeviceLanguage? deviceLanguage,
+    required List<Language> languages,
+  }) async {
+    try {
+      final uid = this.uid;
+      final currentDeviceLanguage = deviceLanguage ?? DeviceLanguage.english;
+
+      if (uid == null) {
+        _logger.severe("Failed to create user, please sign in to continue");
+
+        throw const SignUpFailure(
+          code: SignUpFailureCode.unauthenticated,
+          message:
+              "The request does not have valid authentication credentials for the operation.",
+        );
+      }
+
+      String deviceID = await _deviceProvider.getDeviceID();
+      DevicePlatform devicePlatform =
+          _deviceProvider.getPlatform() ?? DevicePlatform.android;
+      String? voipToken = await _deviceProvider.getVoIP();
+      String oneSignalPlayerID =
+          await _deviceProvider.getOnesignalPlayerID() ?? "";
+
+      await _userProvider.createUser(
+        type: type,
+        name: name,
+        dateOfBirth: dateOfBirth,
+        gender: gender,
+        deviceLanguage: currentDeviceLanguage,
+        languages: languages,
+        deviceID: deviceID,
+        oneSignalPlayerID: oneSignalPlayerID,
+        voipToken: voipToken,
+        devicePlatform: devicePlatform,
+      );
+
+      await _userProvider.uploadAvatar(
+        file: profileImage,
+        uid: uid,
+      );
+
+      _logger.finest("Successfully to sign up");
+    } on SignUpFailure catch (_) {
+      rethrow;
+    } on Exception catch (e) {
+      throw SignUpFailure.fromException(e);
+    } catch (e) {
+      throw const SignUpFailure();
+    }
   }
 
   Future<void> _notifyIsSignInSuccessfully() async {

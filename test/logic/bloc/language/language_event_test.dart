@@ -12,18 +12,16 @@ import 'package:soca/core/core.dart';
 import 'package:soca/logic/logic.dart';
 
 void main() {
-  group("LanguageSet", () {
-    group("Fields", () {
-      group("language", () {
-        test("Should return language value based on constructor", () {
-          const lang1 = LanguageChanged(DeviceLanguage.english);
-          const lang2 = LanguageChanged(DeviceLanguage.indonesian);
-          const lang3 = LanguageChanged();
+  group("LanguageChanged", () {
+    group("()", () {
+      test("Should fill up the fields based on the constructor parameter", () {
+        const lang1 = LanguageChanged(DeviceLanguage.english);
+        const lang2 = LanguageChanged(DeviceLanguage.indonesian);
+        const lang3 = LanguageChanged();
 
-          expect(lang1.language, DeviceLanguage.english);
-          expect(lang2.language, DeviceLanguage.indonesian);
-          expect(lang3.language, null);
-        });
+        expect(lang1.language, DeviceLanguage.english);
+        expect(lang2.language, DeviceLanguage.indonesian);
+        expect(lang3.language, null);
       });
     });
   });

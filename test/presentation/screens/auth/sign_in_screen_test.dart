@@ -21,6 +21,7 @@ import '../../../mock/mock.mocks.dart';
 void main() {
   late MockAppNavigator appNavigator;
   late MockDeviceInfo deviceInfo;
+  late MockRouteCubit routeCubit;
   late MockSignInBloc signInBloc;
   late MockWidgetsBinding widgetBinding;
 
@@ -29,6 +30,7 @@ void main() {
 
     appNavigator = getMockAppNavigator();
     deviceInfo = getMockDeviceInfo();
+    routeCubit = getMockRouteCubit();
     signInBloc = getMockSignInBloc();
     widgetBinding = getMockWidgetsBinding();
 
@@ -49,7 +51,7 @@ void main() {
   });
 
   group("Route", () {
-    testWidgets("Should navigate to home when SignInSuccessfully",
+    testWidgets("Should call getTargetRoute() when SignInSuccessfully",
         (tester) async {
       await tester.runAsync(() async {
         when(signInBloc.stream)
@@ -61,7 +63,98 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(signInBloc.add(const SignInWithGoogle()));
+        verify(routeCubit.getTargetRoute());
+      });
+    });
+
+    testWidgets(
+        "Should navigate to home page when [RouteTarget(AppPages.home)]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signInBloc.stream)
+            .thenAnswer((_) => Stream.value(const SignInSuccessfully()));
+
+        when(routeCubit.stream)
+            .thenAnswer((_) => Stream.value(RouteTarget(AppPages.home)));
+
+        await tester.pumpApp(child: SignInScreen());
+
+        await tester.tap(find.byType(SignInWithGoogleButton));
+        await tester.pumpAndSettle();
+
+        verify(signInBloc.add(const SignInWithGoogle()));
         verify(appNavigator.goToHome(any));
+      });
+    });
+
+    testWidgets(
+        "Should navigate to sign up page when [RouteTarget(AppPages.signUp)]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signInBloc.stream)
+            .thenAnswer((_) => Stream.value(const SignInSuccessfully()));
+
+        when(routeCubit.stream)
+            .thenAnswer((_) => Stream.value(RouteTarget(AppPages.signUp)));
+
+        await tester.pumpApp(child: SignInScreen());
+
+        await tester.tap(find.byType(SignInWithGoogleButton));
+        await tester.pumpAndSettle();
+
+        verify(signInBloc.add(const SignInWithGoogle()));
+        verify(appNavigator.goToSignUp(any));
+      });
+    });
+
+    testWidgets("Should show alert something error when getting error",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signInBloc.stream)
+            .thenAnswer((_) => Stream.value(const SignInSuccessfully()));
+
+        when(routeCubit.stream)
+            .thenAnswer((_) => Stream.value(const RouteError()));
+        await tester.pumpApp(child: SignInScreen());
+
+        await tester
+            .tapAt(tester.getCenter(find.byType(SignInWithGoogleButton)));
+        await tester.pump();
+
+        expect(
+          find.byKey(const Key("error_message_something_error")),
+          findsOneWidget,
+        );
+        verify(routeCubit.getTargetRoute());
+      });
+    });
+
+    testWidgets(
+        "Should call getTargetRoute() again when press ok on alert something error",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signInBloc.stream)
+            .thenAnswer((_) => Stream.value(const SignInSuccessfully()));
+
+        when(routeCubit.stream)
+            .thenAnswer((_) => Stream.value(const RouteError()));
+        await tester.pumpApp(child: SignInScreen());
+
+        await tester
+            .tapAt(tester.getCenter(find.byType(SignInWithGoogleButton)));
+        await tester.pump();
+
+        expect(
+          find.byKey(const Key("error_message_something_error")),
+          findsOneWidget,
+        );
+        verify(routeCubit.getTargetRoute());
+
+        when(routeCubit.stream)
+            .thenAnswer((_) => Stream.value(RouteTarget(AppPages.signUp)));
+        await tester.tap(find.text(LocaleKeys.ok.tr()));
+        await tester.pump();
+        verify(routeCubit.getTargetRoute());
       });
     });
   });

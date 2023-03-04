@@ -3,11 +3,11 @@
  * Website    : https://www.firgia.com
  * Repository : https://github.com/firgia/soca
  * 
- * Created on Fri Feb 03 2023
+ * Created on Sun Feb 12 2023
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-part of 'sign_out_bloc.dart';
+part of 'sign_out_cubit.dart';
 
 @immutable
 abstract class SignOutState {

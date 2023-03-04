@@ -29,3 +29,9 @@ class RouteTarget extends RouteState {
 
   const RouteTarget(this.name);
 }
+
+class RouteError extends RouteState {
+  final Exception? failure;
+
+  const RouteError([this.failure]);
+}

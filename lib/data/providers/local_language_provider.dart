@@ -7,6 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logging/logging.dart';
 import '../../injection.dart';
@@ -19,6 +21,13 @@ class LocalLanguageProvider {
 
   final FlutterSecureStorage _secureStorage = sl<FlutterSecureStorage>();
   final Logger _logger = Logger("Local Language Provider");
+
+  /// Get list of language
+  Future<dynamic> getLanguages() async {
+    final String response =
+        await rootBundle.loadString('assets/json/language.json');
+    return await json.decode(response);
+  }
 
   /// Get the last saved changed language.
   Future<String?> getLastChanged() async {

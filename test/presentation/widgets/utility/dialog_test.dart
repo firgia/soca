@@ -7,6 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -27,7 +28,131 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
-  group("show", () {
+  group(".pickImage()", () {
+    setUp(() {
+      when(window.platformBrightness).thenReturn(Brightness.dark);
+      when(widgetBinding.window).thenReturn(window);
+    });
+
+    Future showPickImage(
+      WidgetTester tester, {
+      VoidCallback? onTapCamera,
+      VoidCallback? onTapGallery,
+    }) async {
+      await tester.pumpApp(
+        child: Scaffold(
+          body: Builder(
+            builder: (context) {
+              return ElevatedButton(
+                onPressed: () {
+                  AppDialog dialog = AppDialog(context);
+                  dialog.pickImage(
+                    onTapCamera: onTapCamera,
+                    onTapGallery: onTapGallery,
+                  );
+                },
+                child: const Text("show dialog"),
+              );
+            },
+          ),
+        ),
+      );
+
+      await tester.tap(find.text("show dialog"));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets("Should show the title text", (tester) async {
+      await tester.runAsync(() async {
+        await showPickImage(tester);
+
+        expect(
+          find.text(LocaleKeys.choose_an_image.tr()),
+          findsOneWidget,
+        );
+      });
+    });
+
+    testWidgets("Should show the camera icons and camera text", (tester) async {
+      await tester.runAsync(() async {
+        await showPickImage(tester);
+
+        expect(
+          find.text(LocaleKeys.camera.tr()),
+          findsOneWidget,
+        );
+
+        expect(
+          find.byKey(const Key("dialog_pick_image_camera_icon_button")),
+          findsOneWidget,
+        );
+      });
+    });
+
+    testWidgets("Should show the gallery icons and gallery text",
+        (tester) async {
+      await tester.runAsync(() async {
+        await showPickImage(tester);
+
+        expect(
+          find.text(LocaleKeys.gallery.tr()),
+          findsOneWidget,
+        );
+
+        expect(
+          find.byKey(const Key("dialog_pick_image_gallery_icon_button")),
+          findsOneWidget,
+        );
+      });
+    });
+
+    testWidgets("Should execute onTapCamera when camera icon button is tapped",
+        (tester) async {
+      await tester.runAsync(() async {
+        bool isCameraTapped = false;
+        bool isGaleryTapped = false;
+
+        await showPickImage(
+          tester,
+          onTapCamera: () => isCameraTapped = true,
+          onTapGallery: () => isGaleryTapped = true,
+        );
+
+        Finder cameraButton =
+            find.byKey(const Key("dialog_pick_image_camera_icon_button"));
+        await tester.tap(cameraButton);
+        await tester.pumpAndSettle();
+
+        expect(isCameraTapped, true);
+        expect(isGaleryTapped, false);
+      });
+    });
+
+    testWidgets(
+        "Should execute onTapGallery when gallery icon button is tapped",
+        (tester) async {
+      await tester.runAsync(() async {
+        bool isCameraTapped = false;
+        bool isGaleryTapped = false;
+
+        await showPickImage(
+          tester,
+          onTapCamera: () => isCameraTapped = true,
+          onTapGallery: () => isGaleryTapped = true,
+        );
+
+        Finder cameraButton =
+            find.byKey(const Key("dialog_pick_image_gallery_icon_button"));
+        await tester.tap(cameraButton);
+        await tester.pumpAndSettle();
+
+        expect(isCameraTapped, false);
+        expect(isGaleryTapped, true);
+      });
+    });
+  });
+
+  group(".show()", () {
     testWidgets("Should show the child", (tester) async {
       when(window.platformBrightness).thenReturn(Brightness.dark);
       when(widgetBinding.window).thenReturn(window);

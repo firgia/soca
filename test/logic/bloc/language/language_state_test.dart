@@ -9,19 +9,53 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:soca/core/core.dart';
+import 'package:soca/data/models/models.dart';
 import 'package:soca/logic/logic.dart';
 
 void main() {
   group("LanguageSelected", () {
-    group("Fields", () {
-      group("language", () {
-        test("Should return language value based on constructor", () {
-          const lang1 = LanguageSelected(DeviceLanguage.english);
-          const lang2 = LanguageSelected(DeviceLanguage.indonesian);
+    group("()", () {
+      test("Should return language value based on constructor", () {
+        const lang1 = LanguageSelected(DeviceLanguage.english);
+        const lang2 = LanguageSelected(DeviceLanguage.indonesian);
 
-          expect(lang1.language, DeviceLanguage.english);
-          expect(lang2.language, DeviceLanguage.indonesian);
-        });
+        expect(lang1.language, DeviceLanguage.english);
+        expect(lang2.language, DeviceLanguage.indonesian);
+      });
+    });
+  });
+
+  group("LanguageLoaded", () {
+    group("()", () {
+      test("Should fill up the fields based on the constructor parameter", () {
+        const langList = LanguageLoaded([
+          Language(
+            code: "id",
+            name: "Indonesian",
+            nativeName: "Bahasa Indonesia",
+          ),
+          Language(
+            code: "en",
+            name: "English",
+            nativeName: "English",
+          ),
+        ]);
+
+        expect(
+          langList.languages,
+          const [
+            Language(
+              code: "id",
+              name: "Indonesian",
+              nativeName: "Bahasa Indonesia",
+            ),
+            Language(
+              code: "en",
+              name: "English",
+              nativeName: "English",
+            ),
+          ],
+        );
       });
     });
   });

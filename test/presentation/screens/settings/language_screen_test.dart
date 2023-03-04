@@ -106,7 +106,7 @@ void main() async {
         await tester.pumpApp(child: LanguageScreen());
 
         // We need to drag to make sure all button is shown
-        await tester.drag(find.byType(CustomAppBar), const Offset(0, -200));
+        await tester.drag(find.byType(CustomAppBar), const Offset(0, -100));
         await tester.pump();
 
         for (DeviceLanguage deviceLanguage in DeviceLanguage.values) {
@@ -129,7 +129,7 @@ void main() async {
         await tester.pumpApp(child: LanguageScreen());
 
         // We need to drag to make sure all button is shown
-        await tester.drag(find.byType(CustomAppBar), const Offset(0, -200));
+        await tester.drag(find.byType(CustomAppBar), const Offset(0, -100));
         await tester.pump();
 
         for (DeviceLanguage deviceLanguage in DeviceLanguage.values) {
@@ -155,7 +155,7 @@ void main() async {
         await tester.pumpApp(child: LanguageScreen());
 
         // We need to drag to make sure all button is shown
-        await tester.drag(find.byType(CustomAppBar), const Offset(0, -200));
+        await tester.drag(find.byType(CustomAppBar), const Offset(0, -100));
         await tester.pump();
 
         for (DeviceLanguage deviceLanguage in DeviceLanguage.values) {
