@@ -19,6 +19,10 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  Finder findAdaptiveLoading() => find.byType(AdaptiveLoading);
+  Finder findSignOutButton() => find.byType(SignOutButton);
+  Finder findSignOutText() => find.text(LocaleKeys.sign_out.tr());
+
   group("Action", () {
     testWidgets("Should execute [onPressed] when tap the button",
         (tester) async {
@@ -35,7 +39,7 @@ void main() {
           ),
         );
 
-        await tester.tap(find.byType(SignOutButton));
+        await tester.tap(findSignOutButton());
         await tester.pumpAndSettle();
         expect(isPressed, true);
       });
@@ -52,7 +56,7 @@ void main() {
           ),
         );
 
-        expect(find.byType(AdaptiveLoading), findsOneWidget);
+        expect(findAdaptiveLoading(), findsOneWidget);
       });
     });
 
@@ -65,7 +69,7 @@ void main() {
           ),
         );
 
-        expect(find.byType(AdaptiveLoading), findsNothing);
+        expect(findAdaptiveLoading(), findsNothing);
       });
     });
   });
@@ -79,7 +83,7 @@ void main() {
           ),
         );
 
-        expect(find.text(LocaleKeys.sign_out.tr()), findsOneWidget);
+        expect(findSignOutText(), findsOneWidget);
       });
     });
 
@@ -91,7 +95,7 @@ void main() {
           ),
         );
 
-        expect(find.text(LocaleKeys.sign_out.tr()), findsNothing);
+        expect(findSignOutText(), findsNothing);
       });
     });
   });
