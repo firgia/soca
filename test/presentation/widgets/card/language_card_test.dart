@@ -29,6 +29,10 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  Finder findRemoveButtonID() =>
+      find.byKey(const Key("language_card_remove_button_id"));
+  Finder findCustomShimmer() => find.byType(CustomShimmer);
+
   group("LanguageCard()", () {
     const Language language = Language(
       code: "id",
@@ -47,10 +51,8 @@ void main() {
             ),
           );
 
-          Finder removeButton =
-              find.byKey(const Key("language_card_remove_button_id"));
-          expect(removeButton, findsOneWidget);
-          expect(removeButton.getWidget(), isA<IconButton>());
+          expect(findRemoveButtonID(), findsOneWidget);
+          expect(findRemoveButtonID().getWidget(), isA<IconButton>());
         });
       });
 
@@ -61,9 +63,7 @@ void main() {
             child: const LanguageCard(language),
           );
 
-          Finder removeButton =
-              find.byKey(const Key("language_card_remove_button_id"));
-          expect(removeButton, findsNothing);
+          expect(findRemoveButtonID(), findsNothing);
         });
       });
 
@@ -81,10 +81,7 @@ void main() {
             ),
           );
 
-          Finder removeButton =
-              find.byKey(const Key("language_card_remove_button_id"));
-
-          await tester.tap(removeButton);
+          await tester.tap(findRemoveButtonID());
           await tester.pumpAndSettle();
 
           expect(isTap, true);
@@ -123,7 +120,7 @@ void main() {
             child: const LanguageCard.loading(),
           );
 
-          expect(find.byType(CustomShimmer), findsAtLeastNWidgets(1));
+          expect(findCustomShimmer(), findsAtLeastNWidgets(1));
         });
       });
     });
