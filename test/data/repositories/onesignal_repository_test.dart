@@ -28,162 +28,160 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
-  group("Functions", () {
-    group("updateLanguage", () {
-      test(
-        "Should update the onesignal language only when last selected language is different with onesignal language",
-        () async {
-          const deviceLanguage = DeviceLanguage.indonesian;
-          const onesignalLanguage = DeviceLanguage.english;
+  group(".updateLanguage()", () {
+    test(
+      "Should update the onesignal language only when last selected language is different with onesignal language",
+      () async {
+        const deviceLanguage = DeviceLanguage.indonesian;
+        const onesignalLanguage = DeviceLanguage.english;
 
-          when(languageRepository.getLastChanged())
-              .thenAnswer((_) => Future.value(deviceLanguage));
-          when(languageRepository.getLastChangedOnesignal())
-              .thenAnswer((_) => Future.value(onesignalLanguage));
+        when(languageRepository.getLastChanged())
+            .thenAnswer((_) => Future.value(deviceLanguage));
+        when(languageRepository.getLastChangedOnesignal())
+            .thenAnswer((_) => Future.value(onesignalLanguage));
 
-          when(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
-              .thenAnswer((_) => Future.value({}));
+        when(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
+            .thenAnswer((_) => Future.value({}));
 
-          final result = await onesignalRepository.updateLanguage();
+        final result = await onesignalRepository.updateLanguage();
 
-          expect(result, true);
+        expect(result, true);
 
-          verify(languageRepository.getLastChanged()).called(1);
-          verify(languageRepository.getLastChangedOnesignal()).called(1);
-          verify(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
-              .called(1);
-          verify(languageRepository.updateLastChangedOnesignal(deviceLanguage))
-              .called(1);
-        },
-      );
+        verify(languageRepository.getLastChanged()).called(1);
+        verify(languageRepository.getLastChangedOnesignal()).called(1);
+        verify(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
+            .called(1);
+        verify(languageRepository.updateLastChangedOnesignal(deviceLanguage))
+            .called(1);
+      },
+    );
 
-      test(
-        "Should ignore the update onesignal language when device language is same",
-        () async {
-          const deviceLanguage = DeviceLanguage.indonesian;
-          const onesignalLanguage = DeviceLanguage.indonesian;
+    test(
+      "Should ignore the update onesignal language when device language is same",
+      () async {
+        const deviceLanguage = DeviceLanguage.indonesian;
+        const onesignalLanguage = DeviceLanguage.indonesian;
 
-          when(languageRepository.getLastChanged())
-              .thenAnswer((_) => Future.value(deviceLanguage));
-          when(languageRepository.getLastChangedOnesignal())
-              .thenAnswer((_) => Future.value(onesignalLanguage));
+        when(languageRepository.getLastChanged())
+            .thenAnswer((_) => Future.value(deviceLanguage));
+        when(languageRepository.getLastChangedOnesignal())
+            .thenAnswer((_) => Future.value(onesignalLanguage));
 
-          final result = await onesignalRepository.updateLanguage();
+        final result = await onesignalRepository.updateLanguage();
 
-          expect(result, true);
+        expect(result, true);
 
-          verify(languageRepository.getLastChanged()).called(1);
-          verify(languageRepository.getLastChangedOnesignal()).called(1);
-          verifyNever(onesignal.setLanguage(any));
-          verifyNever(languageRepository.updateLastChangedOnesignal(any));
-        },
-      );
+        verify(languageRepository.getLastChanged()).called(1);
+        verify(languageRepository.getLastChangedOnesignal()).called(1);
+        verifyNever(onesignal.setLanguage(any));
+        verifyNever(languageRepository.updateLastChangedOnesignal(any));
+      },
+    );
 
-      test(
-        "Should ignore the update onesignal language when device language is not selected",
-        () async {
-          when(languageRepository.getLastChanged())
-              .thenAnswer((_) => Future.value(null));
+    test(
+      "Should ignore the update onesignal language when device language is not selected",
+      () async {
+        when(languageRepository.getLastChanged())
+            .thenAnswer((_) => Future.value(null));
 
-          final result = await onesignalRepository.updateLanguage();
+        final result = await onesignalRepository.updateLanguage();
 
-          expect(result, true);
+        expect(result, true);
 
-          verify(languageRepository.getLastChanged()).called(1);
-          verifyNever(languageRepository.getLastChangedOnesignal());
-          verifyNever(onesignal.setLanguage(any));
-          verifyNever(languageRepository.updateLastChangedOnesignal(any));
-        },
-      );
+        verify(languageRepository.getLastChanged()).called(1);
+        verifyNever(languageRepository.getLastChangedOnesignal());
+        verifyNever(onesignal.setLanguage(any));
+        verifyNever(languageRepository.updateLastChangedOnesignal(any));
+      },
+    );
 
-      test(
-        "Should return false when onesignal update language thrown exception",
-        () async {
-          const deviceLanguage = DeviceLanguage.indonesian;
-          const onesignalLanguage = DeviceLanguage.english;
+    test(
+      "Should return false when onesignal update language thrown exception",
+      () async {
+        const deviceLanguage = DeviceLanguage.indonesian;
+        const onesignalLanguage = DeviceLanguage.english;
 
-          when(languageRepository.getLastChanged())
-              .thenAnswer((_) => Future.value(deviceLanguage));
-          when(languageRepository.getLastChangedOnesignal())
-              .thenAnswer((_) => Future.value(onesignalLanguage));
+        when(languageRepository.getLastChanged())
+            .thenAnswer((_) => Future.value(deviceLanguage));
+        when(languageRepository.getLastChangedOnesignal())
+            .thenAnswer((_) => Future.value(onesignalLanguage));
 
-          when(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
-              .thenThrow(Exception());
+        when(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
+            .thenThrow(Exception());
 
-          final result = await onesignalRepository.updateLanguage();
+        final result = await onesignalRepository.updateLanguage();
 
-          expect(result, false);
+        expect(result, false);
 
-          verify(languageRepository.getLastChanged()).called(1);
-          verify(languageRepository.getLastChangedOnesignal()).called(1);
-          verify(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
-              .called(1);
-          verifyNever(languageRepository.updateLastChangedOnesignal(any));
-        },
-      );
+        verify(languageRepository.getLastChanged()).called(1);
+        verify(languageRepository.getLastChangedOnesignal()).called(1);
+        verify(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
+            .called(1);
+        verifyNever(languageRepository.updateLastChangedOnesignal(any));
+      },
+    );
 
-      test(
-        "Should try to re call when internet connection connected and failed to update",
-        () async {
-          const deviceLanguage = DeviceLanguage.indonesian;
-          const onesignalLanguage = DeviceLanguage.english;
+    test(
+      "Should try to re call when internet connection connected and failed to update",
+      () async {
+        const deviceLanguage = DeviceLanguage.indonesian;
+        const onesignalLanguage = DeviceLanguage.english;
 
-          when(languageRepository.getLastChanged())
-              .thenAnswer((_) => Future.value(deviceLanguage));
-          when(languageRepository.getLastChangedOnesignal())
-              .thenAnswer((_) => Future.value(onesignalLanguage));
+        when(languageRepository.getLastChanged())
+            .thenAnswer((_) => Future.value(deviceLanguage));
+        when(languageRepository.getLastChangedOnesignal())
+            .thenAnswer((_) => Future.value(onesignalLanguage));
 
-          when(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
-              .thenThrow(Exception());
+        when(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
+            .thenThrow(Exception());
 
-          final result = await onesignalRepository.updateLanguage();
+        final result = await onesignalRepository.updateLanguage();
 
-          expect(result, false);
+        expect(result, false);
 
-          verify(languageRepository.getLastChanged()).called(1);
-          verify(languageRepository.getLastChangedOnesignal()).called(1);
-          verify(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
-              .called(1);
-          verifyNever(languageRepository.updateLastChangedOnesignal(any));
+        verify(languageRepository.getLastChanged()).called(1);
+        verify(languageRepository.getLastChangedOnesignal()).called(1);
+        verify(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
+            .called(1);
+        verifyNever(languageRepository.updateLastChangedOnesignal(any));
 
-          onesignalRepository.onInternetConnected();
-          verify(languageRepository.getLastChanged()).called(1);
-        },
-      );
+        onesignalRepository.onInternetConnected();
+        verify(languageRepository.getLastChanged()).called(1);
+      },
+    );
 
-      test(
-        "Should not to re call when internet connection connected and update language has been successfully",
-        () async {
-          const deviceLanguage = DeviceLanguage.indonesian;
-          const onesignalLanguage = DeviceLanguage.english;
+    test(
+      "Should not to re call when internet connection connected and update language has been successfully",
+      () async {
+        const deviceLanguage = DeviceLanguage.indonesian;
+        const onesignalLanguage = DeviceLanguage.english;
 
-          when(languageRepository.getLastChanged())
-              .thenAnswer((_) => Future.value(deviceLanguage));
-          when(languageRepository.getLastChangedOnesignal())
-              .thenAnswer((_) => Future.value(onesignalLanguage));
+        when(languageRepository.getLastChanged())
+            .thenAnswer((_) => Future.value(deviceLanguage));
+        when(languageRepository.getLastChangedOnesignal())
+            .thenAnswer((_) => Future.value(onesignalLanguage));
 
-          when(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
-              .thenAnswer((_) => Future.value({}));
+        when(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
+            .thenAnswer((_) => Future.value({}));
 
-          final result = await onesignalRepository.updateLanguage();
+        final result = await onesignalRepository.updateLanguage();
 
-          expect(result, true);
+        expect(result, true);
 
-          verify(languageRepository.getLastChanged()).called(1);
-          verify(languageRepository.getLastChangedOnesignal()).called(1);
-          verify(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
-              .called(1);
-          verify(languageRepository.updateLastChangedOnesignal(any)).called(1);
+        verify(languageRepository.getLastChanged()).called(1);
+        verify(languageRepository.getLastChangedOnesignal()).called(1);
+        verify(onesignal.setLanguage(deviceLanguage.toLocale().languageCode))
+            .called(1);
+        verify(languageRepository.updateLastChangedOnesignal(any)).called(1);
 
-          onesignalRepository.onInternetConnected();
-          verifyNever(languageRepository.getLastChanged());
-          verifyNever(languageRepository.getLastChanged());
-          verifyNever(languageRepository.getLastChangedOnesignal());
-          verifyNever(
-              onesignal.setLanguage(deviceLanguage.toLocale().languageCode));
-          verifyNever(languageRepository.updateLastChangedOnesignal(any));
-        },
-      );
-    });
+        onesignalRepository.onInternetConnected();
+        verifyNever(languageRepository.getLastChanged());
+        verifyNever(languageRepository.getLastChanged());
+        verifyNever(languageRepository.getLastChangedOnesignal());
+        verifyNever(
+            onesignal.setLanguage(deviceLanguage.toLocale().languageCode));
+        verifyNever(languageRepository.updateLastChangedOnesignal(any));
+      },
+    );
   });
 }
