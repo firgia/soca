@@ -30,7 +30,7 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
-  testWidgets("Should render [Shimmer]", (tester) async {
+  testWidgets("Should use [Shimmer] widget", (tester) async {
     await tester.runAsync(() async {
       await tester.pumpApp(child: const CustomShimmer());
 

@@ -18,7 +18,7 @@ void main() {
   setUp(() => registerLocator());
   tearDown(() => registerLocator());
 
-  testWidgets("Should render AdaptiveLoading", (tester) async {
+  testWidgets("Should show [AdaptiveLoading] widget", (tester) async {
     await tester.runAsync(() async {
       await tester.pumpApp(child: const LoadingPanel());
 
