@@ -61,11 +61,7 @@ class SignUpScreen extends StatelessWidget
         BlocProvider(create: (context) => _signOutCubit),
       ],
       child: WillPopScope(
-        onWillPop: () async {
-          // TODO: Implement this
-          //  controller.back();
-          return false;
-        },
+        onWillPop: () async => false,
         child: Scaffold(
           body: MultiBlocListener(
             listeners: [
