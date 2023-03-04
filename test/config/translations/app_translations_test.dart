@@ -12,34 +12,32 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:soca/config/config.dart';
 
 void main() async {
-  group("Fields", () {
-    group("fallbackLocale", () {
-      test("Should return Locale(en)", () {
-        expect(AppTranslations.fallbackLocale, const Locale("en"));
-      });
+  group(".fallbackLocale", () {
+    test("Should return Locale(en)", () {
+      expect(AppTranslations.fallbackLocale, const Locale("en"));
     });
+  });
 
-    group("path", () {
-      test("Should return the correct i18n location files", () {
-        expect(AppTranslations.path, "assets/json/i18n");
-      });
+  group(".path", () {
+    test("Should return the correct i18n location files", () {
+      expect(AppTranslations.path, "assets/json/i18n");
     });
+  });
 
-    group("supportedLocales", () {
-      test("Should return ar, en, es, id, hi, ru, zh Locales", () {
-        expect(
-          AppTranslations.supportedLocales,
-          const [
-            Locale('ar'),
-            Locale('en'),
-            Locale('es'),
-            Locale('id'),
-            Locale('hi'),
-            Locale('ru'),
-            Locale('zh'),
-          ],
-        );
-      });
+  group(".supportedLocales", () {
+    test("Should return ar, en, es, id, hi, ru, zh Locales", () {
+      expect(
+        AppTranslations.supportedLocales,
+        const [
+          Locale('ar'),
+          Locale('en'),
+          Locale('es'),
+          Locale('id'),
+          Locale('hi'),
+          Locale('ru'),
+          Locale('zh'),
+        ],
+      );
     });
   });
 }

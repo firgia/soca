@@ -14,7 +14,6 @@ import '../../core/enum/environtment_type.dart';
 
 /// This Environment is used for use Third Party Service
 abstract class Environtment {
-  /// This dotEnv used for testing only
   static final Logger _log = Logger("Environtment");
 
   static EnvirontmentType _current = EnvirontmentType.development;
