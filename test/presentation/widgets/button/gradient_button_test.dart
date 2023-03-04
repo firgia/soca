@@ -15,6 +15,9 @@ void main() {
   setUp(() => registerLocator());
   tearDown(() => unregisterLocator());
 
+  Finder findAdaptiveLoading() => find.byType(AdaptiveLoading);
+  Finder findGradientButton() => find.byType(GradientButton);
+
   group("Action", () {
     testWidgets(
         "Should call [onPressed] when [GradientButton] is tapped and [isLoading] is false",
@@ -32,7 +35,7 @@ void main() {
           ),
         );
 
-        await tester.tap(find.byType(GradientButton));
+        await tester.tap(findGradientButton());
         await tester.pumpAndSettle();
 
         expect(isTapped, true);
@@ -55,7 +58,7 @@ void main() {
           ),
         );
 
-        await tester.tap(find.byType(GradientButton));
+        await tester.tap(findGradientButton());
         await tester.pump();
 
         expect(isTapped, false);
@@ -99,7 +102,7 @@ void main() {
         );
 
         expect(find.text("Gradient Button"), findsNothing);
-        expect(find.byType(AdaptiveLoading), findsOneWidget);
+        expect(findAdaptiveLoading(), findsOneWidget);
       });
     });
   });
@@ -117,7 +120,7 @@ void main() {
         );
 
         expect(find.text("Gradient Button"), findsOneWidget);
-        expect(find.byType(AdaptiveLoading), findsNothing);
+        expect(findAdaptiveLoading(), findsNothing);
       });
     });
   });
