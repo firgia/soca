@@ -25,124 +25,126 @@ void main() {
     });
     tearDown(() => unregisterLocator());
 
-    group("SignInWithApple", () {
-      const signInWithAppleFailure =
-          SignInWithAppleFailure(code: SignInWithAppleFailureCode.failed);
+    group(".add()", () {
+      group("SignInWithApple", () {
+        const signInWithAppleFailure =
+            SignInWithAppleFailure(code: SignInWithAppleFailureCode.failed);
 
-      blocTest<SignInBloc, SignInState>(
-        'Should emits [SignInLoading, SignInSuccessfully] when succesfully to sign in with Apple.',
-        build: () => SignInBloc(),
-        act: (bloc) => bloc.add(const SignInWithApple()),
-        setUp: () {
-          when(authRepository.signInWithApple())
-              .thenAnswer((_) => Future.value(true));
-        },
-        expect: () => const <SignInState>[
-          SignInLoading(),
-          SignInSuccessfully(),
-        ],
-      );
+        blocTest<SignInBloc, SignInState>(
+          'Should emits [SignInLoading, SignInSuccessfully] when succesfully to sign in with Apple.',
+          build: () => SignInBloc(),
+          act: (bloc) => bloc.add(const SignInWithApple()),
+          setUp: () {
+            when(authRepository.signInWithApple())
+                .thenAnswer((_) => Future.value(true));
+          },
+          expect: () => const <SignInState>[
+            SignInLoading(),
+            SignInSuccessfully(),
+          ],
+        );
 
-      blocTest<SignInBloc, SignInState>(
-        'Should emits [SignInLoading, SignInFailed] when failed to sign in with Apple.',
-        build: () => SignInBloc(),
-        act: (bloc) => bloc.add(const SignInWithApple()),
-        setUp: () {
-          when(authRepository.signInWithApple())
-              .thenAnswer((_) => Future.value(false));
-        },
-        expect: () => const <SignInState>[
-          SignInLoading(),
-          SignInFailed(),
-        ],
-      );
+        blocTest<SignInBloc, SignInState>(
+          'Should emits [SignInLoading, SignInFailed] when failed to sign in with Apple.',
+          build: () => SignInBloc(),
+          act: (bloc) => bloc.add(const SignInWithApple()),
+          setUp: () {
+            when(authRepository.signInWithApple())
+                .thenAnswer((_) => Future.value(false));
+          },
+          expect: () => const <SignInState>[
+            SignInLoading(),
+            SignInFailed(),
+          ],
+        );
 
-      blocTest<SignInBloc, SignInState>(
-        'Should emits [SignInLoading, SignInWithAppleError] when error to sign in with Apple.',
-        build: () => SignInBloc(),
-        act: (bloc) => bloc.add(const SignInWithApple()),
-        setUp: () {
-          when(authRepository.signInWithApple())
-              .thenThrow(signInWithAppleFailure);
-        },
-        expect: () => const <SignInState>[
-          SignInLoading(),
-          SignInWithAppleError(signInWithAppleFailure),
-        ],
-      );
+        blocTest<SignInBloc, SignInState>(
+          'Should emits [SignInLoading, SignInWithAppleError] when error to sign in with Apple.',
+          build: () => SignInBloc(),
+          act: (bloc) => bloc.add(const SignInWithApple()),
+          setUp: () {
+            when(authRepository.signInWithApple())
+                .thenThrow(signInWithAppleFailure);
+          },
+          expect: () => const <SignInState>[
+            SignInLoading(),
+            SignInWithAppleError(signInWithAppleFailure),
+          ],
+        );
 
-      blocTest<SignInBloc, SignInState>(
-        'Should emits [SignInLoading, SignInError] when unpredictable error to sign in with Apple.',
-        build: () => SignInBloc(),
-        act: (bloc) => bloc.add(const SignInWithApple()),
-        setUp: () {
-          when(authRepository.signInWithApple()).thenThrow(Exception());
-        },
-        expect: () => const <SignInState>[
-          SignInLoading(),
-          SignInError(),
-        ],
-      );
-    });
+        blocTest<SignInBloc, SignInState>(
+          'Should emits [SignInLoading, SignInError] when unpredictable error to sign in with Apple.',
+          build: () => SignInBloc(),
+          act: (bloc) => bloc.add(const SignInWithApple()),
+          setUp: () {
+            when(authRepository.signInWithApple()).thenThrow(Exception());
+          },
+          expect: () => const <SignInState>[
+            SignInLoading(),
+            SignInError(),
+          ],
+        );
+      });
 
-    group("SignInWithGoogle", () {
-      const signInWithGoogleFailure = SignInWithGoogleFailure(
-          code: SignInWithGoogleFailureCode.userDisabled);
+      group("SignInWithGoogle", () {
+        const signInWithGoogleFailure = SignInWithGoogleFailure(
+            code: SignInWithGoogleFailureCode.userDisabled);
 
-      blocTest<SignInBloc, SignInState>(
-        'Should emits [SignInLoading, SignInSuccessfully] when succesfully to sign in with Google.',
-        build: () => SignInBloc(),
-        act: (bloc) => bloc.add(const SignInWithGoogle()),
-        setUp: () {
-          when(authRepository.signInWithGoogle())
-              .thenAnswer((_) => Future.value(true));
-        },
-        expect: () => const <SignInState>[
-          SignInLoading(),
-          SignInSuccessfully(),
-        ],
-      );
+        blocTest<SignInBloc, SignInState>(
+          'Should emits [SignInLoading, SignInSuccessfully] when succesfully to sign in with Google.',
+          build: () => SignInBloc(),
+          act: (bloc) => bloc.add(const SignInWithGoogle()),
+          setUp: () {
+            when(authRepository.signInWithGoogle())
+                .thenAnswer((_) => Future.value(true));
+          },
+          expect: () => const <SignInState>[
+            SignInLoading(),
+            SignInSuccessfully(),
+          ],
+        );
 
-      blocTest<SignInBloc, SignInState>(
-        'Should emits [SignInLoading, SignInFailed] when failed to sign in with Google.',
-        build: () => SignInBloc(),
-        act: (bloc) => bloc.add(const SignInWithGoogle()),
-        setUp: () {
-          when(authRepository.signInWithGoogle())
-              .thenAnswer((_) => Future.value(false));
-        },
-        expect: () => const <SignInState>[
-          SignInLoading(),
-          SignInFailed(),
-        ],
-      );
+        blocTest<SignInBloc, SignInState>(
+          'Should emits [SignInLoading, SignInFailed] when failed to sign in with Google.',
+          build: () => SignInBloc(),
+          act: (bloc) => bloc.add(const SignInWithGoogle()),
+          setUp: () {
+            when(authRepository.signInWithGoogle())
+                .thenAnswer((_) => Future.value(false));
+          },
+          expect: () => const <SignInState>[
+            SignInLoading(),
+            SignInFailed(),
+          ],
+        );
 
-      blocTest<SignInBloc, SignInState>(
-        'Should emits [SignInLoading, SignInWithGoogleError] when error to sign in with Google.',
-        build: () => SignInBloc(),
-        act: (bloc) => bloc.add(const SignInWithGoogle()),
-        setUp: () {
-          when(authRepository.signInWithGoogle())
-              .thenThrow(signInWithGoogleFailure);
-        },
-        expect: () => const <SignInState>[
-          SignInLoading(),
-          SignInWithGoogleError(signInWithGoogleFailure),
-        ],
-      );
+        blocTest<SignInBloc, SignInState>(
+          'Should emits [SignInLoading, SignInWithGoogleError] when error to sign in with Google.',
+          build: () => SignInBloc(),
+          act: (bloc) => bloc.add(const SignInWithGoogle()),
+          setUp: () {
+            when(authRepository.signInWithGoogle())
+                .thenThrow(signInWithGoogleFailure);
+          },
+          expect: () => const <SignInState>[
+            SignInLoading(),
+            SignInWithGoogleError(signInWithGoogleFailure),
+          ],
+        );
 
-      blocTest<SignInBloc, SignInState>(
-        'Should emits [SignInLoading, SignInError] when unpredictable error to sign in with Google.',
-        build: () => SignInBloc(),
-        act: (bloc) => bloc.add(const SignInWithGoogle()),
-        setUp: () {
-          when(authRepository.signInWithGoogle()).thenThrow(Exception());
-        },
-        expect: () => const <SignInState>[
-          SignInLoading(),
-          SignInError(),
-        ],
-      );
+        blocTest<SignInBloc, SignInState>(
+          'Should emits [SignInLoading, SignInError] when unpredictable error to sign in with Google.',
+          build: () => SignInBloc(),
+          act: (bloc) => bloc.add(const SignInWithGoogle()),
+          setUp: () {
+            when(authRepository.signInWithGoogle()).thenThrow(Exception());
+          },
+          expect: () => const <SignInState>[
+            SignInLoading(),
+            SignInError(),
+          ],
+        );
+      });
     });
   });
 }

@@ -13,38 +13,33 @@ import 'package:soca/logic/logic.dart';
 
 void main() {
   group("SignInWithAppleError", () {
-    group("Fields", () {
-      group("failure", () {
-        test("Should return failure value based on constructor", () {
-          const signInError = SignInWithAppleError(
-            SignInWithAppleFailure(code: SignInWithAppleFailureCode.failed),
-          );
+    group(".failure", () {
+      test("Should return failure value based on constructor", () {
+        const signInError = SignInWithAppleError(
+          SignInWithAppleFailure(code: SignInWithAppleFailureCode.failed),
+        );
 
-          expect(
-            signInError.failure,
-            const SignInWithAppleFailure(
-                code: SignInWithAppleFailureCode.failed),
-          );
-        });
+        expect(
+          signInError.failure,
+          const SignInWithAppleFailure(code: SignInWithAppleFailureCode.failed),
+        );
       });
     });
   });
 
   group("SignInWithGoogleError", () {
-    group("Fields", () {
-      group("failure", () {
-        test("Should return failure value based on constructor", () {
-          const signInError = SignInWithGoogleError(
-            SignInWithGoogleFailure(
-                code: SignInWithGoogleFailureCode.userDisabled),
-          );
+    group(".failure", () {
+      test("Should return failure value based on constructor", () {
+        const signInError = SignInWithGoogleError(
+          SignInWithGoogleFailure(
+              code: SignInWithGoogleFailureCode.userDisabled),
+        );
 
-          expect(
-            signInError.failure,
-            const SignInWithGoogleFailure(
-                code: SignInWithGoogleFailureCode.userDisabled),
-          );
-        });
+        expect(
+          signInError.failure,
+          const SignInWithGoogleFailure(
+              code: SignInWithGoogleFailureCode.userDisabled),
+        );
       });
     });
   });
