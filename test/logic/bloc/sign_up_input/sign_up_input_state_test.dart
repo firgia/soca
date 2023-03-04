@@ -231,7 +231,7 @@ void main() {
       });
     });
 
-    group(".isValidToSubmit", () {
+    group(".isValidToSubmit()", () {
       test("Should return true when all field is not empty", () {
         SignUpInputState signUpInputState = SignUpInputState(
           dateOfBirth: DateTime(2000),

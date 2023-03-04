@@ -143,11 +143,32 @@ class _SelectLanguagePage extends StatelessWidget {
 
 class _PersonalInformationPage extends StatelessWidget {
   const _PersonalInformationPage()
-      : super(
-            key: const Key("sign_up_screen_select_personal_information_page"));
+      : super(key: const Key("sign_up_screen_personal_information_page"));
 
   @override
   Widget build(BuildContext context) {
-    return const Text("Personal Information Page");
+    return Column(
+      children: [
+        _PageTitleText(LocaleKeys.personal_information.tr()),
+        const SizedBox(height: kDefaultSpacing),
+        const _ProfileImageButton(),
+        const SizedBox(height: kDefaultSpacing),
+        const _NameField(),
+        const SizedBox(height: kDefaultSpacing * 1.5),
+        _DateOfBirthField(),
+        const SizedBox(height: kDefaultSpacing * 2),
+        const _GenderButton(),
+        const Spacer(),
+        _PageInfoText(LocaleKeys.sign_up_rule_desc.tr()),
+        const SizedBox(height: kDefaultSpacing),
+        Row(
+          children: const [
+            _BackIconButton(),
+            SizedBox(width: kDefaultSpacing),
+            Expanded(child: _SaveButton()),
+          ],
+        ),
+      ],
+    );
   }
 }

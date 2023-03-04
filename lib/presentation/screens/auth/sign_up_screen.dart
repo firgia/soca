@@ -7,11 +7,15 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
+import 'dart:io';
+
 import 'package:custom_icons/custom_icons.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
 import 'package:soca/injection.dart';
@@ -28,6 +32,7 @@ class SignUpScreen extends StatelessWidget
     implements ResponsiveLayoutInterface {
   final AppNavigator _appNavigator = sl<AppNavigator>();
   final AccountCubit _accountCubit = sl<AccountCubit>();
+  final FileBloc _fileBloc = sl<FileBloc>();
   final LanguageBloc _languageBloc = sl<LanguageBloc>();
   final SignUpBloc _signUpBloc = sl<SignUpBloc>();
   final SignUpInputBloc _signUpInputBloc = sl<SignUpInputBloc>();
@@ -40,9 +45,16 @@ class SignUpScreen extends StatelessWidget
     _accountCubit.getAccountData();
     _languageBloc.add(const LanguageFetched());
 
+    DeviceLanguage? deviceLanguage = context.locale.toDeviceLanguage();
+
+    if (deviceLanguage != null) {
+      _signUpInputBloc.add(SignUpInputDeviceLanguageChanged(deviceLanguage));
+    }
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => _accountCubit),
+        BlocProvider(create: (context) => _fileBloc),
         BlocProvider(create: (context) => _languageBloc),
         BlocProvider(create: (context) => _signUpBloc),
         BlocProvider(create: (context) => _signUpInputBloc),
@@ -57,9 +69,26 @@ class SignUpScreen extends StatelessWidget
         child: Scaffold(
           body: MultiBlocListener(
             listeners: [
-              BlocListener<SignUpInputBloc, SignUpInputState>(
+              BlocListener<FileBloc, FileState>(
                 listener: (context, state) {
-                  print(state);
+                  if (state is FileError) {
+                    AppSnackbar(context).showMessage(
+                      LocaleKeys.error_failed_to_choose_image.tr(),
+                    );
+                  }
+
+                  if (state is FilePicked) {
+                    _signUpInputBloc.add(
+                      SignUpInputProfileImageChanged(state.file),
+                    );
+                  }
+                },
+              ),
+              BlocListener<SignUpBloc, SignUpState>(
+                listener: (context, state) {
+                  if (state is SignUpSuccessfully) {
+                    _appNavigator.goToHome(context);
+                  }
                 },
               ),
               BlocListener<SignOutCubit, SignOutState>(

@@ -241,6 +241,76 @@ class _BackIconButton extends StatelessWidget with UIMixin {
   }
 }
 
+class _SaveButton extends StatelessWidget {
+  const _SaveButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignUpBloc, SignUpState>(
+      builder: (context, state) {
+        bool isLoading = state is SignUpLoading;
+
+        return BlocBuilder<SignUpInputBloc, SignUpInputState>(
+          builder: (context, state) {
+            SignUpBloc signUpBloc = context.read<SignUpBloc>();
+            bool enable = state.isValidToSubmit();
+
+            return AsyncButton(
+              key: const Key("sign_up_screen_save_button"),
+              isLoading: isLoading,
+              onPressed: !enable
+                  ? null
+                  : () => signUpBloc
+                      .add(SignUpSubmitted.fromSignUpInputState(state)),
+              style: FlatButtonStyle(expanded: true),
+              child: const Text(LocaleKeys.save).tr(),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class _ProfileImageButton extends StatelessWidget with UIMixin {
+  const _ProfileImageButton()
+      : super(key: const Key("sign_up_screen_profile_image_button"));
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
+      builder: (context, state) {
+        FileBloc fileBloc = context.read<FileBloc>();
+        File? profileImage = state.profileImage;
+
+        void pickImage(ImageSource source) {
+          fileBloc.add(FileProfileImagePicked(source));
+        }
+
+        return Align(
+          alignment: Alignment.center,
+          child: ProfileImageButton(
+            onTap: () {
+              if (isTablet(context)) {
+                AppDialog(context).pickImage(
+                  onTapCamera: () => pickImage(ImageSource.camera),
+                  onTapGallery: () => pickImage(ImageSource.gallery),
+                );
+              } else {
+                AppBottomSheet(context).pickImage(
+                  onTapCamera: () => pickImage(ImageSource.camera),
+                  onTapGallery: () => pickImage(ImageSource.gallery),
+                );
+              }
+            },
+            fileImage: profileImage,
+          ),
+        );
+      },
+    );
+  }
+}
+
 class _AddLanguageButton extends StatelessWidget {
   const _AddLanguageButton({
     required this.onPressed,
@@ -258,6 +328,94 @@ class _AddLanguageButton extends StatelessWidget {
       onPressed: onPressed,
       label: const Text(LocaleKeys.add).tr(),
       style: OutlinedButtonStyle(expanded: true),
+    );
+  }
+}
+
+class _NameField extends StatefulWidget {
+  const _NameField() : super(key: const Key("sign_up_screen_name_field"));
+
+  @override
+  State<_NameField> createState() => _NameFieldState();
+}
+
+class _NameFieldState extends State<_NameField> {
+  late TextEditingController controller;
+  Timer? _debounce;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = TextEditingController();
+    SignUpInputBloc signUpInputBloc = context.read<SignUpInputBloc>();
+    controller.text = signUpInputBloc.state.name ?? "";
+
+    controller.addListener(() {
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
+      _debounce = Timer(const Duration(milliseconds: 600), () {
+        signUpInputBloc.add(SignUpInputNameChanged(controller.text));
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return NameField(controller: controller);
+  }
+}
+
+class _DateOfBirthField extends StatelessWidget {
+  _DateOfBirthField()
+      : super(key: const Key("sign_up_screen_date_of_birth_field"));
+
+  final TextEditingController controller = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    SignUpInputBloc signUpInputBloc = context.read<SignUpInputBloc>();
+    return DateOfBirthField(
+      initial: signUpInputBloc.state.dateOfBirth,
+      onChanged: (date) {
+        SignUpInputBloc signUpInputBloc = context.read<SignUpInputBloc>();
+        signUpInputBloc.add(SignUpInputDateOfBirthChanged(date));
+      },
+      controller: controller,
+    );
+  }
+}
+
+class _GenderButton extends StatelessWidget {
+  const _GenderButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
+      builder: (context, state) {
+        SignUpInputBloc signUpInputBloc = context.read<SignUpInputBloc>();
+        Gender? gender = state.gender;
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GenderButton(
+              key: const Key("sign_up_screen_gender_male_button"),
+              gender: Gender.male,
+              onPressed: () => signUpInputBloc
+                  .add(const SignUpInputGenderChanged(Gender.male)),
+              selected: gender == Gender.male,
+            ),
+            const SizedBox(width: kDefaultSpacing),
+            GenderButton(
+              key: const Key("sign_up_screen_gender_female_button"),
+              gender: Gender.female,
+              onPressed: () => signUpInputBloc
+                  .add(const SignUpInputGenderChanged(Gender.female)),
+              selected: gender == Gender.female,
+            ),
+          ],
+        );
+      },
     );
   }
 }
