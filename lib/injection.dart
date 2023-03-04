@@ -11,6 +11,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -49,6 +50,7 @@ void setupInjection() {
   sl.registerLazySingleton<UserRepository>(() => UserRepository());
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
+  sl.registerSingleton<DotEnv>(dotenv);
   sl.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage());
   sl.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
   sl.registerSingleton<FirebaseFunctions>(FirebaseFunctions.instance);
