@@ -38,37 +38,35 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
-  group("Functions", () {
-    group("call", () {
-      MockHttpsCallable httpsCallable = MockHttpsCallable();
-      MockHttpsCallableResult httpCallableResult = MockHttpsCallableResult();
+  group(".call()", () {
+    MockHttpsCallable httpsCallable = MockHttpsCallable();
+    MockHttpsCallableResult httpCallableResult = MockHttpsCallableResult();
 
-      test("Should return the data from MockHttpsCallableResult", () async {
-        when(httpCallableResult.data).thenReturn({"name": "hello"});
-        when(httpsCallable.call())
-            .thenAnswer((_) => Future.value(httpCallableResult));
-        when(firebaseFunctions.httpsCallable(_functionsName))
-            .thenReturn(httpsCallable);
+    test("Should return the data from MockHttpsCallableResult", () async {
+      when(httpCallableResult.data).thenReturn({"name": "hello"});
+      when(httpsCallable.call())
+          .thenAnswer((_) => Future.value(httpCallableResult));
+      when(firebaseFunctions.httpsCallable(_functionsName))
+          .thenReturn(httpsCallable);
 
-        final result =
-            await functionsProvider.call(functionsName: _functionsName);
-        expect(result, {"name": "hello"});
-      });
+      final result =
+          await functionsProvider.call(functionsName: _functionsName);
+      expect(result, {"name": "hello"});
+    });
 
-      test("Should throw exception when a failure occurs", () async {
-        Exception exception = FirebaseFunctionsException(
-          message: "unknown",
-          code: "unknown",
-        );
+    test("Should throw exception when a failure occurs", () async {
+      Exception exception = FirebaseFunctionsException(
+        message: "unknown",
+        code: "unknown",
+      );
 
-        when(firebaseFunctions.httpsCallable(_functionsName))
-            .thenThrow(exception);
+      when(firebaseFunctions.httpsCallable(_functionsName))
+          .thenThrow(exception);
 
-        expect(
-          () => functionsProvider.call(functionsName: _functionsName),
-          throwsA(exception),
-        );
-      });
+      expect(
+        () => functionsProvider.call(functionsName: _functionsName),
+        throwsA(exception),
+      );
     });
   });
 }
