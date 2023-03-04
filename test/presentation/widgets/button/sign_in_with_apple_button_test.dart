@@ -25,8 +25,11 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  Finder findIcon() => find.byType(Icon);
+  Finder findSignInButton() => find.byType(SignInButton);
+
   group("Button", () {
-    testWidgets("Should use SignInButton", (tester) async {
+    testWidgets("Should use [SignInButton]", (tester) async {
       await tester.runAsync(() async {
         MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
 
@@ -37,7 +40,7 @@ void main() {
           child: SignInWithAppleButton(onPressed: () {}),
         );
 
-        expect(find.byType(SignInButton), findsOneWidget);
+        expect(findSignInButton(), findsOneWidget);
       });
     });
   });
@@ -62,8 +65,8 @@ void main() {
           child: SignInWithAppleButton(onPressed: () {}),
         );
 
-        final button = find.byType(SignInButton).getWidget() as SignInButton;
-        final icon = find.byType(Icon).getWidget() as Icon;
+        SignInButton button = findSignInButton().getWidget() as SignInButton;
+        Icon icon = findIcon().getWidget() as Icon;
 
         expect(button.primaryColor, primaryDarkColor);
         expect(button.onPrimaryColor, onPrimaryDarkColor);
@@ -80,8 +83,8 @@ void main() {
           child: SignInWithAppleButton(onPressed: () {}),
         );
 
-        final button = find.byType(SignInButton).getWidget() as SignInButton;
-        final icon = find.byType(Icon).getWidget() as Icon;
+        SignInButton button = findSignInButton().getWidget() as SignInButton;
+        Icon icon = findIcon().getWidget() as Icon;
 
         expect(button.primaryColor, primaryLightColor);
         expect(button.onPrimaryColor, onPrimaryLightColor);
