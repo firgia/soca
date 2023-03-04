@@ -17,6 +17,12 @@ void main() {
   setUp(() => registerLocator());
   tearDown(() => unregisterLocator());
 
+  Finder findAppleIcon() => find.byKey(const Key("account_card_apple_icon"));
+  Finder findGoogleIcon() => find.byKey(const Key("account_card_google_icon"));
+  Finder findAccountCardDefault() =>
+      find.byKey(const Key("account_card_default"));
+  Finder findAccountCardLarge() => find.byKey(const Key("account_card_large"));
+
   group("AccountCard()", () {
     group("Card", () {
       testWidgets("Should show default account card", (tester) async {
@@ -28,7 +34,7 @@ void main() {
             ),
           );
 
-          expect(find.byKey(const Key("account_card_default")), findsOneWidget);
+          expect(findAccountCardDefault(), findsOneWidget);
         });
       });
     });
@@ -46,12 +52,12 @@ void main() {
           );
 
           expect(
-            find.byKey(const Key("account_card_apple_icon")),
+            findAppleIcon(),
             findsOneWidget,
           );
 
           expect(
-            find.byKey(const Key("account_card_google_icon")),
+            findGoogleIcon(),
             findsNothing,
           );
         });
@@ -69,12 +75,12 @@ void main() {
           );
 
           expect(
-            find.byKey(const Key("account_card_google_icon")),
+            findGoogleIcon(),
             findsOneWidget,
           );
 
           expect(
-            find.byKey(const Key("account_card_apple_icon")),
+            findAppleIcon(),
             findsNothing,
           );
         });
@@ -96,7 +102,7 @@ void main() {
             ),
           );
 
-          await tester.tap(find.byKey(const Key("account_card_google_icon")));
+          await tester.tap(findGoogleIcon());
           await tester.pumpAndSettle();
 
           expect(isTap, true);
@@ -116,7 +122,7 @@ void main() {
             ),
           );
 
-          expect(find.byKey(const Key("account_card_large")), findsOneWidget);
+          expect(findAccountCardLarge(), findsOneWidget);
         });
       });
     });
@@ -134,12 +140,12 @@ void main() {
           );
 
           expect(
-            find.byKey(const Key("account_card_apple_icon")),
+            findAppleIcon(),
             findsOneWidget,
           );
 
           expect(
-            find.byKey(const Key("account_card_google_icon")),
+            findGoogleIcon(),
             findsNothing,
           );
         });
@@ -157,12 +163,12 @@ void main() {
           );
 
           expect(
-            find.byKey(const Key("account_card_google_icon")),
+            findGoogleIcon(),
             findsOneWidget,
           );
 
           expect(
-            find.byKey(const Key("account_card_apple_icon")),
+            findAppleIcon(),
             findsNothing,
           );
         });
