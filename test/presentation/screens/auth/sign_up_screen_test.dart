@@ -33,6 +33,8 @@ void main() {
   late MockSignOutCubit signOutCubit;
   late MockWidgetsBinding widgetBinding;
 
+  File file = File("assets/images/raster/avatar.png");
+
   Finder findNameField() => find.byKey(const Key("sign_up_screen_name_field"));
   Finder findProfileImageButton() =>
       find.byKey(const Key("sign_up_screen_profile_image_button"));
@@ -50,6 +52,8 @@ void main() {
       find.byKey(const Key("sign_up_screen_gender_male_button"));
   Finder findGenderFemaleButton() =>
       find.byKey(const Key("sign_up_screen_gender_female_button"));
+  Finder findErrorChooseImageText() =>
+      find.text(LocaleKeys.error_failed_to_choose_image.tr());
 
   setUp(() {
     registerLocator();
@@ -69,6 +73,91 @@ void main() {
   });
 
   tearDown(() => unregisterLocator());
+
+  group("Bloc Listener", () {
+    testWidgets("Should show error choose image message when [FileError]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signUpInputBloc.state).thenReturn(
+          const SignUpInputState(currentStep: SignUpStep.selectUserType),
+        );
+
+        when(fileBloc.stream).thenAnswer(
+          (_) => Stream.value(const FileError()),
+        );
+
+        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpAndSettle();
+
+        expect(findErrorChooseImageText(), findsOneWidget);
+      });
+    });
+
+    testWidgets(
+        "Should call add [SignUpInputProfileImageChanged] when [FilePicked]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signUpInputBloc.state).thenReturn(
+          const SignUpInputState(currentStep: SignUpStep.selectUserType),
+        );
+
+        when(fileBloc.stream).thenAnswer(
+          (_) => Stream.value(FilePicked(file)),
+        );
+
+        await tester.pumpApp(child: SignUpScreen());
+        verify(signUpInputBloc.add(SignUpInputProfileImageChanged(file)));
+      });
+    });
+
+    testWidgets("Should navigate to home page when [SignUpSuccessfully]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signUpInputBloc.state).thenReturn(
+          const SignUpInputState(currentStep: SignUpStep.selectUserType),
+        );
+
+        when(signUpBloc.stream).thenAnswer(
+          (_) => Stream.value(const SignUpSuccessfully()),
+        );
+
+        await tester.pumpApp(child: SignUpScreen());
+        verify(appNavigator.goToHome(any));
+      });
+    });
+
+    testWidgets("Should navigate to splash page when [SignOutSuccessfully]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signUpInputBloc.state).thenReturn(
+          const SignUpInputState(currentStep: SignUpStep.selectUserType),
+        );
+
+        when(signOutCubit.stream).thenAnswer(
+          (_) => Stream.value(const SignOutSuccessfully()),
+        );
+
+        await tester.pumpApp(child: SignUpScreen());
+        verify(appNavigator.goToSplash(any));
+      });
+    });
+
+    testWidgets("Should navigate to splash page when [SignOutError]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signUpInputBloc.state).thenReturn(
+          const SignUpInputState(currentStep: SignUpStep.selectUserType),
+        );
+
+        when(signOutCubit.stream).thenAnswer(
+          (_) => Stream.value(const SignOutError()),
+        );
+
+        await tester.pumpApp(child: SignUpScreen());
+        verify(appNavigator.goToSplash(any));
+      });
+    });
+  });
 
   group("Responsive Layout", () {
     setUp(() {
