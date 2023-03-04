@@ -16,6 +16,13 @@ import 'package:soca/presentation/presentation.dart';
 import '../../../helper/helper.dart';
 
 void main() {
+  Finder findCameraIcon() =>
+      find.byKey(const Key("profile_image_button_camera_icon"));
+  Finder findImage() => find.byType(Image);
+  Finder findLargeCameraIcon() =>
+      find.byKey(const Key("profile_image_button_large_camera_icon"));
+  Finder findProfileImageButton() => find.byType(ProfileImageButton);
+
   group("Action", () {
     testWidgets("Should call [onTap] when [ProfileImageButton] is tapped",
         (tester) async {
@@ -32,7 +39,7 @@ void main() {
           ),
         ));
 
-        await tester.tap(find.byType(ProfileImageButton));
+        await tester.tap(findProfileImageButton());
         await tester.pumpAndSettle();
 
         expect(isTapped, true);
@@ -51,7 +58,7 @@ void main() {
         ));
 
         expect(
-          find.byKey(const Key("profile_image_button_large_camera_icon")),
+          findLargeCameraIcon(),
           findsNothing,
         );
       });
@@ -69,7 +76,7 @@ void main() {
         ));
 
         expect(
-          find.byKey(const Key("profile_image_button_large_camera_icon")),
+          findLargeCameraIcon(),
           findsOneWidget,
         );
       });
@@ -85,9 +92,9 @@ void main() {
               onTap: () {}, fileImage: File("assets/images/raster/avatar.png")),
         ));
 
-        expect(find.byType(Image), findsOneWidget);
+        expect(findImage(), findsOneWidget);
         expect(
-          find.byKey(const Key("profile_image_button_camera_icon")),
+          findCameraIcon(),
           findsOneWidget,
         );
       });
@@ -100,7 +107,7 @@ void main() {
           body: ProfileImageButton(onTap: () {}, fileImage: null),
         ));
 
-        expect(find.byType(Image), findsNothing);
+        expect(findImage(), findsNothing);
       });
     });
   });
