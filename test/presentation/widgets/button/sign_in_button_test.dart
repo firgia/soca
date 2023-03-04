@@ -14,6 +14,12 @@ import 'package:soca/presentation/presentation.dart';
 import '../../../helper/helper.dart';
 
 void main() {
+  Finder findContainer() => find.byType(Container);
+  Finder findElevatedButton() =>
+      find.byKey(const Key("sign_in_button_elevated_button"));
+  Finder findIcon() => find.byType(Icon);
+  Finder findText() => find.byType(Text);
+
   group("Size", () {
     testWidgets("Should set max width to 400", (tester) async {
       await tester.runAsync(() async {
@@ -25,14 +31,14 @@ void main() {
           ),
         );
 
-        final container = find.byType(Container).getWidget() as Container;
+        Container container = findContainer().getWidget() as Container;
         expect(container.constraints?.maxWidth, 400);
       });
     });
   });
 
   group("Style", () {
-    testWidgets("Should use the ElevatedButton with FlatButtonStyle ",
+    testWidgets("Should use the [ElevatedButton] with [FlatButtonStyle]",
         (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(
@@ -43,8 +49,8 @@ void main() {
           ),
         );
 
-        final finder = find.byKey(const Key("sign_in_button_elevated_button"));
-        final button = finder.getWidget() as ElevatedButton;
+        ElevatedButton button =
+            findElevatedButton().getWidget() as ElevatedButton;
         expect(button.style, isA<FlatButtonStyle>());
       });
     });
@@ -61,9 +67,9 @@ void main() {
           ),
         );
 
-        final icon = find.byType(Icon).getWidget() as Icon;
+        Icon icon = findIcon().getWidget() as Icon;
         expect(icon.icon, Icons.abc);
-        expect(find.byType(Icon), findsOneWidget);
+        expect(findIcon(), findsOneWidget);
       });
     });
 
@@ -77,9 +83,9 @@ void main() {
           ),
         );
 
-        final text = find.byType(Text).getWidget() as Text;
+        Text text = findText().getWidget() as Text;
         expect(text.data, "button");
-        expect(find.byType(Text), findsOneWidget);
+        expect(findText(), findsOneWidget);
       });
     });
   });
