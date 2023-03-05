@@ -16,6 +16,10 @@ import 'package:soca/presentation/presentation.dart';
 import '../../../helper/helper.dart';
 
 void main() {
+  Finder findIcon() => find.byType(Icon);
+  Finder findNameField() => find.byType(NameField);
+  Finder findNameText() => find.text(LocaleKeys.name.tr());
+
   group("icon", () {
     testWidgets("Should show icon", (tester) async {
       await tester.runAsync(() async {
@@ -25,7 +29,7 @@ void main() {
           ),
         );
 
-        expect(find.byType(Icon), findsOneWidget);
+        expect(findIcon(), findsOneWidget);
       });
     });
   });
@@ -40,7 +44,7 @@ void main() {
           ),
         );
 
-        expect(find.text(LocaleKeys.name.tr()), findsOneWidget);
+        expect(findNameText(), findsOneWidget);
       });
     });
 
@@ -57,11 +61,11 @@ void main() {
     //       ),
     //     );
 
-    //     await tester.enterText(find.byType(NameField), "Firgia");
+    //     await tester.enterText(findNameText(), "Firgia");
     //     await tester.pumpAndSettle();
     //     await tester.pump();
 
-    //     expect(find.text(LocaleKeys.name.tr()), findsNothing);
+    //     expect(findNameText(), findsNothing);
     //     expect(
     //         find.bySemanticsLabel(LocaleKeys.tf_name_change_conditions
     //             .tr(namedArgs: {'min': "4", 'max': '25'})),
@@ -87,7 +91,7 @@ void main() {
           ),
         );
 
-        await tester.enterText(find.byType(NameField), "Fir");
+        await tester.enterText(findNameField(), "Fir");
         await tester.pumpAndSettle();
         await tester.pump();
 
@@ -107,7 +111,7 @@ void main() {
           ),
         );
 
-        await tester.enterText(find.byType(NameField), "Firgia");
+        await tester.enterText(findNameField(), "Firgia");
         await tester.pumpAndSettle();
         await tester.pump();
 
