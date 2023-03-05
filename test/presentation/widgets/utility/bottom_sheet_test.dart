@@ -28,7 +28,9 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  Finder findCameraText() => find.text(LocaleKeys.camera.tr());
   Finder findChooseAnImageText() => find.text(LocaleKeys.choose_an_image.tr());
+  Finder findGalleryText() => find.text(LocaleKeys.gallery.tr());
   Finder findPickImageCameraIcon() =>
       find.byKey(const Key("bottom_sheet_pick_image_camera_icon_button"));
   Finder findPickImageGalleryIcon() =>
@@ -84,7 +86,7 @@ void main() {
         await showPickImage(tester);
 
         expect(
-          find.text(LocaleKeys.camera.tr()),
+          findCameraText(),
           findsOneWidget,
         );
 
@@ -101,7 +103,7 @@ void main() {
         await showPickImage(tester);
 
         expect(
-          find.text(LocaleKeys.gallery.tr()),
+          findGalleryText(),
           findsOneWidget,
         );
 
