@@ -30,6 +30,10 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  Finder findBottomSheetTitleText() => find.byType(BottomSheetTitleText);
+  Finder findDialogTitleText() => find.byType(DialogTitleText);
+  Finder findLanguageSelectionCard() => find.byType(LanguageSelectionCard);
+
   group("Language Selection Content", () {
     testWidgets("Should show [LanguageSelectionCard]", (tester) async {
       await tester.runAsync(() async {
@@ -65,7 +69,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(
-          find.byType(LanguageSelectionCard),
+          findLanguageSelectionCard(),
           findsOneWidget,
         );
 
@@ -105,13 +109,14 @@ void main() {
 
         await tester.tap(find.text("show selection language"));
         await tester.pumpAndSettle();
+
         expect(
-          find.byType(DialogTitleText),
+          findDialogTitleText(),
           findsOneWidget,
         );
 
         expect(
-          find.byType(BottomSheetTitleText),
+          findBottomSheetTitleText(),
           findsNothing,
         );
       });
@@ -129,12 +134,12 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(
-          find.byType(BottomSheetTitleText),
+          findBottomSheetTitleText(),
           findsOneWidget,
         );
 
         expect(
-          find.byType(DialogTitleText),
+          findDialogTitleText(),
           findsNothing,
         );
       });

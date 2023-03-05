@@ -21,55 +21,61 @@ void main() {
   setUp(() => registerLocator());
   tearDown(() => unregisterLocator());
 
+  Finder findAndroidIndicator() =>
+      find.byKey(const Key("adaptive_loading_android_indicator"));
+  Finder findCupertinoActivityIndicator() =>
+      find.byType(CupertinoActivityIndicator);
+  Finder findCircularProgressIndicator() =>
+      find.byType(CircularProgressIndicator);
+
   group("Platform", () {
-    testWidgets("Should render CupertinoActivityIndicator if platform is iOS",
+    testWidgets("Should show [CupertinoActivityIndicator] if platform is iOS",
         (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(
           child: const AdaptiveLoading(platform: AdaptivePlatform.ios),
         );
 
-        expect(find.byType(CupertinoActivityIndicator), findsOneWidget);
-        expect(find.byType(CircularProgressIndicator), findsNothing);
+        expect(findCupertinoActivityIndicator(), findsOneWidget);
+        expect(findCircularProgressIndicator(), findsNothing);
       });
     });
 
     testWidgets(
-        "Should render CircularProgressIndicator if platform is android",
+        "Should show [CircularProgressIndicator] if platform is android",
         (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(
           child: const AdaptiveLoading(platform: AdaptivePlatform.android),
         );
 
-        expect(find.byType(CupertinoActivityIndicator), findsNothing);
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        expect(findCupertinoActivityIndicator(), findsNothing);
+        expect(findCircularProgressIndicator(), findsOneWidget);
       });
     });
 
-    testWidgets("Should render Automatically by target platform",
-        (tester) async {
+    testWidgets("Should show Automatically by target platform", (tester) async {
       MockDeviceInfo deviceInfo = getMockDeviceInfo();
 
       await tester.runAsync(() async {
         // Check is Android
         when(deviceInfo.isIOS()).thenReturn(false);
         await tester.pumpApp(child: const AdaptiveLoading());
-        expect(find.byType(CupertinoActivityIndicator), findsNothing);
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        expect(findCupertinoActivityIndicator(), findsNothing);
+        expect(findCircularProgressIndicator(), findsOneWidget);
 
         // Check is IOS
         when(deviceInfo.isIOS()).thenReturn(true);
         await tester.pumpApp(child: const AdaptiveLoading());
-        expect(find.byType(CupertinoActivityIndicator), findsOneWidget);
-        expect(find.byType(CircularProgressIndicator), findsNothing);
+        expect(findCupertinoActivityIndicator(), findsOneWidget);
+        expect(findCircularProgressIndicator(), findsNothing);
       });
     });
   });
 
   group("Color", () {
     testWidgets(
-        "Should set CircularProgressIndicator color based on parameter color",
+        "Should set [CircularProgressIndicator] color based on parameter color",
         (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(
@@ -79,15 +85,15 @@ void main() {
           ),
         );
 
-        final indicator = find.byType(CircularProgressIndicator).getWidget()
-            as CircularProgressIndicator;
+        CircularProgressIndicator indicator = findCircularProgressIndicator()
+            .getWidget() as CircularProgressIndicator;
 
         expect(indicator.color, const Color.fromRGBO(20, 20, 20, 1));
       });
     });
 
     testWidgets(
-        "Should set CupertinoActivityIndicator color based on parameter color",
+        "Should set [CupertinoActivityIndicator] color based on parameter color",
         (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(
@@ -97,8 +103,8 @@ void main() {
           ),
         );
 
-        final indicator = find.byType(CupertinoActivityIndicator).getWidget()
-            as CupertinoActivityIndicator;
+        CupertinoActivityIndicator indicator = findCupertinoActivityIndicator()
+            .getWidget() as CupertinoActivityIndicator;
 
         expect(indicator.color, const Color.fromRGBO(20, 20, 20, 1));
       });
@@ -107,7 +113,7 @@ void main() {
 
   group("Radius", () {
     testWidgets(
-        "Should set CircularProgressIndicator radius based on parameter",
+        "Should set [CircularProgressIndicator] radius based on parameter",
         (tester) async {
       await tester.runAsync(() async {
         double radius = 12;
@@ -119,9 +125,7 @@ void main() {
           ),
         );
 
-        final indicator = find
-            .byKey(const Key("adaptive_loading_android_indicator"))
-            .getWidget() as SizedBox;
+        SizedBox indicator = findAndroidIndicator().getWidget() as SizedBox;
 
         expect(indicator.height, radius * 2);
         expect(indicator.width, radius * 2);
@@ -129,7 +133,7 @@ void main() {
     });
 
     testWidgets(
-        "Should set CupertinoActivityIndicator radius based on parameter",
+        "Should set [CupertinoActivityIndicator] radius based on parameter",
         (tester) async {
       await tester.runAsync(() async {
         double radius = 12;
@@ -141,8 +145,8 @@ void main() {
           ),
         );
 
-        final indicator = find.byType(CupertinoActivityIndicator).getWidget()
-            as CupertinoActivityIndicator;
+        CupertinoActivityIndicator indicator = findCupertinoActivityIndicator()
+            .getWidget() as CupertinoActivityIndicator;
 
         expect(indicator.radius, radius);
       });

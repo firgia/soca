@@ -31,6 +31,11 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  Finder findCheckAnimationIcon() =>
+      find.byKey(const Key("illustration_card_button_check_animation_icon"));
+  Finder findIllustrationCardButton() => find.byType(IllustrationCardButton);
+  Finder findSvgPicture() => find.byType(SvgPicture);
+
   group("Action", () {
     testWidgets("Should execute [onPressed] when tap the button",
         (tester) async {
@@ -50,7 +55,7 @@ void main() {
           ),
         );
 
-        await tester.tap(find.byType(IllustrationCardButton));
+        await tester.tap(findIllustrationCardButton());
         await tester.pumpAndSettle();
 
         expect(isPressed, true);
@@ -77,8 +82,7 @@ void main() {
         );
 
         expect(
-          find.byKey(
-              const Key("illustration_card_button_check_animation_icon")),
+          findCheckAnimationIcon(),
           findsOneWidget,
         );
       });
@@ -92,8 +96,7 @@ void main() {
         );
 
         expect(
-          find.byKey(
-              const Key("illustration_card_button_check_animation_icon")),
+          findCheckAnimationIcon(),
           findsNothing,
         );
       });
@@ -115,8 +118,7 @@ void main() {
           ),
         );
 
-        SvgPicture svgPicture =
-            find.byType(SvgPicture).getWidget() as SvgPicture;
+        SvgPicture svgPicture = findSvgPicture().getWidget() as SvgPicture;
         SvgAssetLoader svgAssetLoader =
             svgPicture.bytesLoader as SvgAssetLoader;
 

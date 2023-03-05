@@ -14,35 +14,8 @@ import 'package:soca/presentation/presentation.dart';
 import '../../../helper/helper.dart';
 
 void main() {
-  group("Icon", () {
-    testWidgets("Should show apple icon when [type] is AuthMethod.apple",
-        (tester) async {
-      await tester.runAsync(() async {
-        await tester.pumpApp(
-          child: const Scaffold(
-            body: AuthIconButton(type: AuthMethod.apple),
-          ),
-        );
-
-        expect(find.byKey(const Key("auth_icon_apple")), findsOneWidget);
-        expect(find.byKey(const Key("auth_icon_google")), findsNothing);
-      });
-    });
-
-    testWidgets("Should show google icon when [type] is AuthMethod.google",
-        (tester) async {
-      await tester.runAsync(() async {
-        await tester.pumpApp(
-          child: const Scaffold(
-            body: AuthIconButton(type: AuthMethod.google),
-          ),
-        );
-
-        expect(find.byKey(const Key("auth_icon_google")), findsOneWidget);
-        expect(find.byKey(const Key("auth_icon_apple")), findsNothing);
-      });
-    });
-  });
+  Finder findIconApple() => find.byKey(const Key("auth_icon_apple"));
+  Finder findIconGoogle() => find.byKey(const Key("auth_icon_google"));
 
   group("Action", () {
     testWidgets("Should exceute [onTap] when tap the icon button",
@@ -64,6 +37,36 @@ void main() {
         await tester.tap(find.byType(AuthIconButton));
         await tester.pumpAndSettle();
         expect(isTap, true);
+      });
+    });
+  });
+
+  group("Icon", () {
+    testWidgets("Should show apple icon when [type] is [AuthMethod.apple]",
+        (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(
+          child: const Scaffold(
+            body: AuthIconButton(type: AuthMethod.apple),
+          ),
+        );
+
+        expect(findIconApple(), findsOneWidget);
+        expect(findIconGoogle(), findsNothing);
+      });
+    });
+
+    testWidgets("Should show google icon when [type] is [AuthMethod.google]",
+        (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(
+          child: const Scaffold(
+            body: AuthIconButton(type: AuthMethod.google),
+          ),
+        );
+
+        expect(findIconGoogle(), findsOneWidget);
+        expect(findIconApple(), findsNothing);
       });
     });
   });

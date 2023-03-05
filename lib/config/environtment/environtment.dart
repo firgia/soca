@@ -7,30 +7,20 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logging/logging.dart';
+import 'package:soca/injection.dart';
 import '../../core/enum/environtment_type.dart';
 
 /// This Environment is used for use Third Party Service
 abstract class Environtment {
-  /// This dotEnv used for testing only
-  static DotEnv? _dotEnvTest;
   static final Logger _log = Logger("Environtment");
-
-  /// Do not call this test in app
-  ///
-  /// This functions is only for testing
-  @visibleForTesting
-  static test(DotEnv testDotEnv) {
-    _dotEnvTest = testDotEnv;
-  }
 
   static EnvirontmentType _current = EnvirontmentType.development;
 
   /// Return OneSignal App ID to access OneSignal
   static String get onesignalAppID {
-    String result = (_dotEnvTest ?? dotenv).env["ONESIGNAL_APP_ID"] ?? "";
+    String result = sl<DotEnv>().env["ONESIGNAL_APP_ID"] ?? "";
     if (result.isEmpty) {
       _log.shout("Value of ONESIGNAL_APP_ID is not available on .env");
     }
@@ -39,7 +29,7 @@ abstract class Environtment {
 
   /// Return Agora App ID to access Agora
   static String get agoraAppID {
-    String result = (_dotEnvTest ?? dotenv).env["AGORA_APP_ID"] ?? "";
+    String result = sl<DotEnv>().env["AGORA_APP_ID"] ?? "";
     if (result.isEmpty) {
       _log.shout("Value of AGORA_APP_ID is not available on .env");
     }

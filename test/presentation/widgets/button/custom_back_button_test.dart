@@ -21,28 +21,31 @@ void main() {
   setUp(() => registerLocator());
   tearDown(() => unregisterLocator());
 
+  Finder findBackTooltip() => find.byTooltip(LocaleKeys.back.tr());
+  Finder findIconButton() => find.byType(IconButton);
+
   group("Visibility", () {
     testWidgets(
-        "Should show the CustomBackButton when navigator.canPop() is true",
+        "Should show the [CustomBackButton] when navigator.canPop() is true",
         (tester) async {
       MockAppNavigator appNavigator = getMockAppNavigator();
       when(appNavigator.canPop(any)).thenReturn(true);
 
       await tester.runAsync(() async {
         await tester.pumpApp(child: const Scaffold(body: CustomBackButton()));
-        expect(find.byType(IconButton), findsOneWidget);
+        expect(findIconButton(), findsOneWidget);
       });
     });
 
     testWidgets(
-        "Should hide the CustomBackButton when navigator.canPop() is false",
+        "Should hide the [CustomBackButton] when navigator.canPop() is false",
         (tester) async {
       MockAppNavigator appNavigator = getMockAppNavigator();
       when(appNavigator.canPop(any)).thenReturn(false);
 
       await tester.runAsync(() async {
         await tester.pumpApp(child: const Scaffold(body: CustomBackButton()));
-        expect(find.byType(IconButton), findsNothing);
+        expect(findIconButton(), findsNothing);
       });
     });
   });
@@ -54,7 +57,7 @@ void main() {
 
       await tester.runAsync(() async {
         await tester.pumpApp(child: const Scaffold(body: CustomBackButton()));
-        expect(find.byTooltip(LocaleKeys.back.tr()), findsOneWidget);
+        expect(findBackTooltip(), findsOneWidget);
       });
     });
   });

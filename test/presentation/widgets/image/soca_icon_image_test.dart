@@ -26,6 +26,9 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  Finder findHero() => find.byType(Hero);
+  Finder findImage() => find.byType(Image);
+
   group("Brightness", () {
     late MockSingletonFlutterWindow window;
 
@@ -42,7 +45,7 @@ void main() {
           child: const SocaIconImage(),
         );
 
-        final image = find.byType(Image).getWidget() as Image;
+        Image image = findImage().getWidget() as Image;
         expect(image.image, isA<AssetImage>());
 
         final assetImage = image.image as AssetImage;
@@ -59,7 +62,7 @@ void main() {
           child: const SocaIconImage(),
         );
 
-        final image = find.byType(Image).getWidget() as Image;
+        Image image = findImage().getWidget() as Image;
         expect(image.image, isA<AssetImage>());
 
         final assetImage = image.image as AssetImage;
@@ -77,26 +80,25 @@ void main() {
       when(widgetBinding.window).thenReturn(window);
     });
 
-    testWidgets("Should render the Hero widget when heroTag is exists",
+    testWidgets("Should show the [Hero] widget when [heroTag] is exists",
         (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(child: const SocaIconImage(heroTag: "abc"));
 
-        final heroFinder = find.byType(Hero);
-        expect(heroFinder, findsOneWidget);
+        expect(findHero(), findsOneWidget);
 
-        final hero = heroFinder.getWidget() as Hero;
+        final hero = findHero().getWidget() as Hero;
         expect(hero.tag, "abc");
       });
     });
 
-    testWidgets("Should not render the Hero widget when heroTag is not exists",
+    testWidgets(
+        "Should not show the [Hero] widget when [heroTag] is not exists",
         (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(child: const SocaIconImage());
 
-        final heroFinder = find.byType(Hero);
-        expect(heroFinder, findsNothing);
+        expect(findHero(), findsNothing);
       });
     });
   });
@@ -114,7 +116,7 @@ void main() {
       await tester.runAsync(() async {
         await tester.pumpApp(child: const SocaIconImage());
 
-        final image = find.byType(Image).getWidget() as Image;
+        Image image = findImage().getWidget() as Image;
         expect(image.height, 200);
       });
     });
@@ -124,7 +126,7 @@ void main() {
       await tester.runAsync(() async {
         await tester.pumpApp(child: const SocaIconImage(size: 300));
 
-        final image = find.byType(Image).getWidget() as Image;
+        Image image = findImage().getWidget() as Image;
         expect(image.height, 300);
       });
     });

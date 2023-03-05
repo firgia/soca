@@ -15,51 +15,12 @@ import 'package:soca/presentation/presentation.dart';
 import '../../../helper/helper.dart';
 
 void main() {
-  group("Image", () {
-    testWidgets("Should render image based on DeviceLanguage", (tester) async {
-      await tester.runAsync(() async {
-        const deviceLanguage = DeviceLanguage.indonesian;
+  Finder findButtonImage() => find.byKey(const Key("flag_button_image"));
+  Finder findButtonText() => find.byKey(const Key("flag_button_text"));
+  Finder findCheckIcon() => find.byKey(const Key("flag_button_check_icon"));
 
-        await tester.pumpApp(
-          child: FlagButton(
-            language: deviceLanguage,
-            onTap: () {},
-            selected: false,
-          ),
-        );
-
-        final image =
-            find.byKey(const Key("flag_button_image")).getWidget() as Image;
-
-        expect(image.image, deviceLanguage.getImage());
-      });
-    });
-  });
-
-  group("Text", () {
-    testWidgets("Should render text based on DeviceLanguage native name",
-        (tester) async {
-      await tester.runAsync(() async {
-        const deviceLanguage = DeviceLanguage.indonesian;
-
-        await tester.pumpApp(
-          child: FlagButton(
-            language: deviceLanguage,
-            onTap: () {},
-            selected: false,
-          ),
-        );
-
-        final text =
-            find.byKey(const Key("flag_button_text")).getWidget() as Text;
-        expect(text.data, deviceLanguage.getNativeName());
-      });
-    });
-  });
-
-  group("CheckIcon", () {
-    testWidgets("Should render check icon when selected is true",
-        (tester) async {
+  group("Check Icon", () {
+    testWidgets("Should show check icon when selected is true", (tester) async {
       await tester.runAsync(() async {
         const deviceLanguage = DeviceLanguage.indonesian;
 
@@ -71,11 +32,11 @@ void main() {
           ),
         );
 
-        expect(find.byKey(const Key("flag_button_check_icon")), findsOneWidget);
+        expect(findCheckIcon(), findsOneWidget);
       });
     });
 
-    testWidgets("Shouldn't render check icon when selected is false",
+    testWidgets("Shouldn't show check icon when selected is false",
         (tester) async {
       await tester.runAsync(() async {
         const deviceLanguage = DeviceLanguage.indonesian;
@@ -88,7 +49,46 @@ void main() {
           ),
         );
 
-        expect(find.byKey(const Key("flag_button_check_icon")), findsNothing);
+        expect(findCheckIcon(), findsNothing);
+      });
+    });
+  });
+
+  group("Image", () {
+    testWidgets("Should show image based on [DeviceLanguage]", (tester) async {
+      await tester.runAsync(() async {
+        const deviceLanguage = DeviceLanguage.indonesian;
+
+        await tester.pumpApp(
+          child: FlagButton(
+            language: deviceLanguage,
+            onTap: () {},
+            selected: false,
+          ),
+        );
+
+        Image image = findButtonImage().getWidget() as Image;
+        expect(image.image, deviceLanguage.getImage());
+      });
+    });
+  });
+
+  group("Text", () {
+    testWidgets("Should show text based on [DeviceLanguage] native name",
+        (tester) async {
+      await tester.runAsync(() async {
+        const deviceLanguage = DeviceLanguage.indonesian;
+
+        await tester.pumpApp(
+          child: FlagButton(
+            language: deviceLanguage,
+            onTap: () {},
+            selected: false,
+          ),
+        );
+
+        Text text = findButtonText().getWidget() as Text;
+        expect(text.data, deviceLanguage.getNativeName());
       });
     });
   });

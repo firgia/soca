@@ -32,6 +32,24 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  Finder findAuthenticationError() =>
+      find.byKey(const Key("error_message_authentication_error"));
+  Finder findErrorAuthText() => find.text(LocaleKeys.error_auth.tr());
+  Finder findErrorCheckYourConnectionText() =>
+      find.text(LocaleKeys.error_check_your_connection.tr());
+  Finder findErrorCheckYourConnectionDescText() =>
+      find.text(LocaleKeys.error_check_your_connection_desc.tr());
+  Finder findErrorSignedInText() => find.text(LocaleKeys.error_signed_in.tr());
+  Finder findErrorSomethingWrongText() =>
+      find.text(LocaleKeys.error_something_wrong.tr());
+  Finder findErrorSomethingWrongDescText() =>
+      find.text(LocaleKeys.error_something_wrong_desc.tr());
+  Finder findInternetError() =>
+      find.byKey(const Key("error_message_internet_error"));
+  Finder findLottieBuilder() => find.byType(LottieBuilder);
+  Finder findSomethingError() =>
+      find.byKey(const Key("error_message_something_error"));
+
   group("Authentication Error", () {
     testWidgets("Show authentication error", (tester) async {
       await tester.runAsync(() async {
@@ -40,7 +58,7 @@ void main() {
         );
 
         expect(
-          find.byKey(const Key("error_message_authentication_error")),
+          findAuthenticationError(),
           findsOneWidget,
         );
       });
@@ -53,12 +71,12 @@ void main() {
         );
 
         expect(
-          find.text(LocaleKeys.error_auth.tr()),
+          findErrorAuthText(),
           findsOneWidget,
         );
 
         expect(
-          find.text(LocaleKeys.error_signed_in.tr()),
+          findErrorSignedInText(),
           findsOneWidget,
         );
       });
@@ -71,7 +89,7 @@ void main() {
         );
 
         expect(
-          find.byType(LottieBuilder),
+          findLottieBuilder(),
           findsOneWidget,
         );
       });
@@ -86,7 +104,7 @@ void main() {
         );
 
         expect(
-          find.byKey(const Key("error_message_internet_error")),
+          findInternetError(),
           findsOneWidget,
         );
       });
@@ -98,12 +116,12 @@ void main() {
           child: const ErrorMessage.internetError(),
         );
         expect(
-          find.text(LocaleKeys.error_check_your_connection.tr()),
+          findErrorCheckYourConnectionText(),
           findsOneWidget,
         );
 
         expect(
-          find.text(LocaleKeys.error_check_your_connection_desc.tr()),
+          findErrorCheckYourConnectionDescText(),
           findsOneWidget,
         );
       });
@@ -116,7 +134,7 @@ void main() {
         );
 
         expect(
-          find.byType(LottieBuilder),
+          findLottieBuilder(),
           findsOneWidget,
         );
       });
@@ -131,7 +149,7 @@ void main() {
         );
 
         expect(
-          find.byKey(const Key("error_message_something_error")),
+          findSomethingError(),
           findsOneWidget,
         );
       });
@@ -143,12 +161,12 @@ void main() {
           child: const ErrorMessage.somethingError(),
         );
         expect(
-          find.text(LocaleKeys.error_something_wrong.tr()),
+          findErrorSomethingWrongText(),
           findsOneWidget,
         );
 
         expect(
-          find.text(LocaleKeys.error_something_wrong_desc.tr()),
+          findErrorSomethingWrongDescText(),
           findsOneWidget,
         );
       });
@@ -161,7 +179,7 @@ void main() {
         );
 
         expect(
-          find.byType(LottieBuilder),
+          findLottieBuilder(),
           findsOneWidget,
         );
       });

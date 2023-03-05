@@ -37,9 +37,12 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  Finder findErrorMessageSomethingError() =>
+      find.byKey(const Key("error_message_something_error"));
+
   group("Route", () {
     testWidgets(
-        "Should navigate to sign in page when routeTarget return AppPages.signIn",
+        "Should navigate to sign in page when routeTarget return [AppPages.signIn]",
         (tester) async {
       await tester.runAsync(() async {
         when(routeCubit.stream)
@@ -53,7 +56,7 @@ void main() {
     });
 
     testWidgets(
-        "Should navigate to language page when routeTarget return AppPages.language",
+        "Should navigate to language page when routeTarget return [AppPages.language]",
         (tester) async {
       await tester.runAsync(() async {
         when(routeCubit.stream)
@@ -67,7 +70,7 @@ void main() {
     });
 
     testWidgets(
-        "Should navigate to home page when routeTarget return AppPages.home",
+        "Should navigate to home page when routeTarget return [AppPages.home]",
         (tester) async {
       await tester.runAsync(() async {
         when(routeCubit.stream)
@@ -81,7 +84,7 @@ void main() {
     });
 
     testWidgets(
-        "Should navigate to sign up page when routeTarget return AppPages.signUp",
+        "Should navigate to sign up page when routeTarget return [AppPages.signUp]",
         (tester) async {
       await tester.runAsync(() async {
         when(routeCubit.stream)
@@ -104,7 +107,7 @@ void main() {
         await tester.pump();
 
         expect(
-          find.byKey(const Key("error_message_something_error")),
+          findErrorMessageSomethingError(),
           findsOneWidget,
         );
         verify(routeCubit.getTargetRoute());
@@ -122,7 +125,7 @@ void main() {
         await tester.pump();
 
         expect(
-          find.byKey(const Key("error_message_something_error")),
+          findErrorMessageSomethingError(),
           findsOneWidget,
         );
         verify(routeCubit.getTargetRoute());

@@ -36,144 +36,142 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
-  group("Functions", () {
-    group("getAppleIDCredential", () {
-      test("Should return Apple ID Credential", () async {
-        const credential = AuthorizationCredentialAppleID(
-          authorizationCode: "1234",
-          email: "test@gmail.com",
-          familyName: "familyName",
-          givenName: "givenName",
-          identityToken: "123",
-          state: "state",
-          userIdentifier: "123",
-        );
+  group(".getAppleIDCredential()", () {
+    test("Should return Apple ID Credential", () async {
+      const credential = AuthorizationCredentialAppleID(
+        authorizationCode: "1234",
+        email: "test@gmail.com",
+        familyName: "familyName",
+        givenName: "givenName",
+        identityToken: "123",
+        state: "state",
+        userIdentifier: "123",
+      );
 
-        when(deviceInfo.getAppleIDCredential(scopes: anyNamed("scopes")))
-            .thenAnswer(
-          (_) => Future.value(credential),
-        );
+      when(deviceInfo.getAppleIDCredential(scopes: anyNamed("scopes")))
+          .thenAnswer(
+        (_) => Future.value(credential),
+      );
 
-        final result = await authProvider.getAppleIDCredential();
+      final result = await authProvider.getAppleIDCredential();
 
-        expect(result, credential);
-        verify(deviceInfo.getAppleIDCredential(scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ]));
-      });
-
-      test("Should throw exception if failure occurs", () async {
-        const exception = SignInWithAppleNotSupportedException(message: "test");
-        when(deviceInfo.getAppleIDCredential(scopes: anyNamed("scopes")))
-            .thenThrow(exception);
-
-        expect(
-          () => authProvider.getAppleIDCredential(),
-          throwsA(isA<SignInWithAppleNotSupportedException>()),
-        );
-      });
+      expect(result, credential);
+      verify(deviceInfo.getAppleIDCredential(scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ]));
     });
 
-    group("getSignInMethod", () {
-      test("Should return sign in method based on storage data", () async {
-        when(secureStorage.read(key: _signInMethodKey))
-            .thenAnswer((_) => Future.value("google"));
-        final result = await authProvider.getSignInMethod();
-        expect(result, AuthMethod.google);
-        verify(secureStorage.read(key: _signInMethodKey)).called(1);
-      });
+    test("Should throw exception if failure occurs", () async {
+      const exception = SignInWithAppleNotSupportedException(message: "test");
+      when(deviceInfo.getAppleIDCredential(scopes: anyNamed("scopes")))
+          .thenThrow(exception);
 
-      test("Should return null when data is not found", () async {
-        when(secureStorage.read(key: _signInMethodKey))
-            .thenAnswer((_) => Future.value(null));
-        final result = await authProvider.getSignInMethod();
-        expect(result, null);
-        verify(secureStorage.read(key: _signInMethodKey)).called(1);
-      });
+      expect(
+        () => authProvider.getAppleIDCredential(),
+        throwsA(isA<SignInWithAppleNotSupportedException>()),
+      );
+    });
+  });
+
+  group(".getSignInMethod()", () {
+    test("Should return sign in method based on storage data", () async {
+      when(secureStorage.read(key: _signInMethodKey))
+          .thenAnswer((_) => Future.value("google"));
+      final result = await authProvider.getSignInMethod();
+      expect(result, AuthMethod.google);
+      verify(secureStorage.read(key: _signInMethodKey)).called(1);
     });
 
-    group("isSignInOnProcess", () {
-      test("Should return isSignInOnProcess based on storage data", () async {
-        when(secureStorage.read(key: _signInOnProcessKey))
-            .thenAnswer((_) => Future.value("true"));
-        final result = await authProvider.isSignInOnProcess();
-        expect(result, true);
-        verify(secureStorage.read(key: _signInOnProcessKey)).called(1);
-      });
+    test("Should return null when data is not found", () async {
+      when(secureStorage.read(key: _signInMethodKey))
+          .thenAnswer((_) => Future.value(null));
+      final result = await authProvider.getSignInMethod();
+      expect(result, null);
+      verify(secureStorage.read(key: _signInMethodKey)).called(1);
+    });
+  });
 
-      test("Should return null when data is not found", () async {
-        when(secureStorage.read(key: _signInOnProcessKey))
-            .thenAnswer((_) => Future.value(null));
-        final result = await authProvider.isSignInOnProcess();
-        expect(result, null);
-        verify(secureStorage.read(key: _signInOnProcessKey)).called(1);
-      });
+  group(".isSignInOnProcess()", () {
+    test("Should return isSignInOnProcess based on storage data", () async {
+      when(secureStorage.read(key: _signInOnProcessKey))
+          .thenAnswer((_) => Future.value("true"));
+      final result = await authProvider.isSignInOnProcess();
+      expect(result, true);
+      verify(secureStorage.read(key: _signInOnProcessKey)).called(1);
     });
 
-    group("setSignInMethod", () {
-      test("Should save data to storage", () async {
-        await authProvider.setSignInMethod(AuthMethod.apple);
-        verify(secureStorage.write(key: _signInMethodKey, value: "apple"))
-            .called(1);
-      });
+    test("Should return null when data is not found", () async {
+      when(secureStorage.read(key: _signInOnProcessKey))
+          .thenAnswer((_) => Future.value(null));
+      final result = await authProvider.isSignInOnProcess();
+      expect(result, null);
+      verify(secureStorage.read(key: _signInOnProcessKey)).called(1);
+    });
+  });
+
+  group(".setSignInMethod()", () {
+    test("Should save data to storage", () async {
+      await authProvider.setSignInMethod(AuthMethod.apple);
+      verify(secureStorage.write(key: _signInMethodKey, value: "apple"))
+          .called(1);
+    });
+  });
+
+  group(".setIsSignInOnProcess()", () {
+    test("Should save data to storage", () async {
+      await authProvider.setIsSignInOnProcess(true);
+      verify(secureStorage.write(key: _signInOnProcessKey, value: "true"))
+          .called(1);
+    });
+  });
+
+  group(".notifyIsSignInSuccessfully()", () {
+    test("Should send the argument based on parameter ", () async {
+      when(
+        functionsProvider.call(
+          functionsName: _onSignIn,
+          parameters: anyNamed("parameters"),
+        ),
+      ).thenAnswer((_) => Future.value({}));
+
+      await authProvider.notifyIsSignInSuccessfully(
+        deviceID: "123",
+        devicePlatform: DevicePlatform.ios,
+        oneSignalPlayerID: "123456",
+        voipToken: "abcdef",
+      );
+
+      verify(functionsProvider.call(functionsName: _onSignIn, parameters: {
+        "device_id": "123",
+        "player_id": "123456",
+        "voip_token": "abcdef",
+        "platform": "ios",
+      }));
     });
 
-    group("setIsSignInOnProcess", () {
-      test("Should save data to storage", () async {
-        await authProvider.setIsSignInOnProcess(true);
-        verify(secureStorage.write(key: _signInOnProcessKey, value: "true"))
-            .called(1);
-      });
-    });
+    test("Should thrown Exception when getting error", () async {
+      Exception exception = FirebaseFunctionsException(
+        message: "unknown",
+        code: "unknown",
+      );
 
-    group("notifyIsSignInSuccessfully", () {
-      test("Should send the argument based on parameter ", () async {
-        when(
-          functionsProvider.call(
-            functionsName: _onSignIn,
-            parameters: anyNamed("parameters"),
-          ),
-        ).thenAnswer((_) => Future.value({}));
+      when(
+        functionsProvider.call(
+          functionsName: _onSignIn,
+          parameters: anyNamed("parameters"),
+        ),
+      ).thenThrow(exception);
 
-        await authProvider.notifyIsSignInSuccessfully(
+      expect(
+        () => authProvider.notifyIsSignInSuccessfully(
           deviceID: "123",
           devicePlatform: DevicePlatform.ios,
           oneSignalPlayerID: "123456",
           voipToken: "abcdef",
-        );
-
-        verify(functionsProvider.call(functionsName: _onSignIn, parameters: {
-          "device_id": "123",
-          "player_id": "123456",
-          "voip_token": "abcdef",
-          "platform": "ios",
-        }));
-      });
-
-      test("Should thrown Exception when getting error", () async {
-        Exception exception = FirebaseFunctionsException(
-          message: "unknown",
-          code: "unknown",
-        );
-
-        when(
-          functionsProvider.call(
-            functionsName: _onSignIn,
-            parameters: anyNamed("parameters"),
-          ),
-        ).thenThrow(exception);
-
-        expect(
-          () => authProvider.notifyIsSignInSuccessfully(
-            deviceID: "123",
-            devicePlatform: DevicePlatform.ios,
-            oneSignalPlayerID: "123456",
-            voipToken: "abcdef",
-          ),
-          throwsA(exception),
-        );
-      });
+        ),
+        throwsA(exception),
+      );
     });
   });
 }

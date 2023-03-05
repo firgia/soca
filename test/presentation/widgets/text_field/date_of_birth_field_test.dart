@@ -17,6 +17,12 @@ import 'package:soca/presentation/presentation.dart';
 import '../../../helper/helper.dart';
 
 void main() {
+  Finder findCancelText() => find.text("CANCEL");
+  Finder findDateOfBirthField() => find.byType(DateOfBirthField);
+  Finder findDateOfBirthText() => find.text(LocaleKeys.date_of_birth.tr());
+  Finder findIcon() => find.byType(Icon);
+  Finder findOKText() => find.text("OK");
+
   group("Action", () {
     testWidgets(
         "Should show [DatePickerDialog] when tap the [DateOfBirthField]",
@@ -33,7 +39,7 @@ void main() {
 
         Finder selectDate = find.byType(DatePickerDialog);
         expect(selectDate, findsNothing);
-        await tester.tap(find.byType(DateOfBirthField));
+        await tester.tap(findDateOfBirthField());
         await tester.pumpAndSettle();
         expect(selectDate, findsOneWidget);
       });
@@ -55,9 +61,9 @@ void main() {
           ),
         );
 
-        await tester.tap(find.byType(DateOfBirthField));
+        await tester.tap(findDateOfBirthField());
         await tester.pumpAndSettle();
-        await tester.tap(find.text("OK"));
+        await tester.tap(findOKText());
         await tester.pumpAndSettle();
 
         expect(selected, isNotNull);
@@ -81,9 +87,9 @@ void main() {
           ),
         );
 
-        await tester.tap(find.byType(DateOfBirthField));
+        await tester.tap(findDateOfBirthField());
         await tester.pumpAndSettle();
-        await tester.tap(find.text("CANCEL"));
+        await tester.tap(findCancelText());
         await tester.pumpAndSettle();
 
         expect(selected, isNull);
@@ -108,9 +114,9 @@ void main() {
         );
 
         expect(controller.text, isEmpty);
-        await tester.tap(find.byType(DateOfBirthField));
+        await tester.tap(findDateOfBirthField());
         await tester.pumpAndSettle();
-        await tester.tap(find.text("OK"));
+        await tester.tap(findOKText());
         await tester.pumpAndSettle();
         expect(selected, isNotNull);
         expect(controller.text, selected!.formatdMMMMY());
@@ -130,7 +136,7 @@ void main() {
           ),
         );
 
-        expect(find.byType(Icon), findsOneWidget);
+        expect(findIcon(), findsOneWidget);
       });
     });
   });
@@ -148,7 +154,7 @@ void main() {
           ),
         );
 
-        expect(find.text(LocaleKeys.date_of_birth.tr()), findsOneWidget);
+        expect(findDateOfBirthText(), findsOneWidget);
       });
     });
 

@@ -17,8 +17,11 @@ void main() {
   setUp(() => registerLocator());
   tearDown(() => unregisterLocator());
 
+  Finder findAdaptiveLoading() => find.byType(AdaptiveLoading);
+  Finder findIcon() => find.byType(Icon);
+
   group("Child", () {
-    testWidgets("Should render the widget child", (tester) async {
+    testWidgets("Should show the widget child", (tester) async {
       await tester.runAsync(() async {
         const child = Text("Hello world");
         await tester.pumpApp(
@@ -34,7 +37,7 @@ void main() {
   });
 
   group("Icon", () {
-    testWidgets("Should render the widget icon", (tester) async {
+    testWidgets("Should show the widget icon", (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(
           child: AsyncButton.icon(
@@ -45,12 +48,12 @@ void main() {
           ),
         );
 
-        final icon = find.byType(Icon).getWidget() as Icon;
+        Icon icon = findIcon().getWidget() as Icon;
         expect(icon.icon, Icons.abc);
       });
     });
 
-    testWidgets("Shouldn't render the widget icon when isLoading true",
+    testWidgets("Shouldn't show the widget icon when [isLoading] true",
         (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(
@@ -62,13 +65,13 @@ void main() {
           ),
         );
 
-        expect(find.byType(Icon), findsNothing);
+        expect(findIcon(), findsNothing);
       });
     });
   });
 
   group("Label", () {
-    testWidgets("Should render the widget label", (tester) async {
+    testWidgets("Should show the widget label", (tester) async {
       await tester.runAsync(() async {
         const child = Text("Hello world");
 
@@ -86,7 +89,7 @@ void main() {
   });
 
   group("Loading", () {
-    testWidgets("Should render the loading indicator when isLoading true",
+    testWidgets("Should show the loading indicator when [isLoading] true",
         (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(
@@ -96,7 +99,7 @@ void main() {
             child: Container(),
           ),
         );
-        expect(find.byType(AdaptiveLoading), findsOneWidget);
+        expect(findAdaptiveLoading(), findsOneWidget);
       });
 
       await tester.runAsync(() async {
@@ -108,11 +111,11 @@ void main() {
             label: Container(),
           ),
         );
-        expect(find.byType(AdaptiveLoading), findsOneWidget);
+        expect(findAdaptiveLoading(), findsOneWidget);
       });
     });
 
-    testWidgets("Shouldn't render the loading indicator when isLoading false",
+    testWidgets("Shouldn't show the loading indicator when [isLoading] false",
         (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(
@@ -122,7 +125,7 @@ void main() {
             child: Container(),
           ),
         );
-        expect(find.byType(AdaptiveLoading), findsNothing);
+        expect(findAdaptiveLoading(), findsNothing);
       });
 
       await tester.runAsync(() async {
@@ -134,11 +137,11 @@ void main() {
             label: Container(),
           ),
         );
-        expect(find.byType(AdaptiveLoading), findsNothing);
+        expect(findAdaptiveLoading(), findsNothing);
       });
     });
 
-    testWidgets("Should update the loadingRadius based on parameter",
+    testWidgets("Should update the [loadingRadius] based on parameter",
         (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(
@@ -150,8 +153,8 @@ void main() {
           ),
         );
 
-        final adaptiveLoading =
-            find.byType(AdaptiveLoading).getWidget() as AdaptiveLoading;
+        AdaptiveLoading adaptiveLoading =
+            findAdaptiveLoading().getWidget() as AdaptiveLoading;
         expect(adaptiveLoading.radius, 20);
       });
 
@@ -166,8 +169,8 @@ void main() {
           ),
         );
 
-        final adaptiveLoading =
-            find.byType(AdaptiveLoading).getWidget() as AdaptiveLoading;
+        AdaptiveLoading adaptiveLoading =
+            findAdaptiveLoading().getWidget() as AdaptiveLoading;
         expect(adaptiveLoading.radius, 20);
       });
     });

@@ -55,6 +55,61 @@ void main() {
   Finder findErrorChooseImageText() =>
       find.text(LocaleKeys.error_failed_to_choose_image.tr());
 
+  Finder findResponsiveBuilder() => find.byType(ResponsiveBuilder);
+  Finder findMobileLayout() =>
+      find.byKey(const Key("sign_up_screen_mobile_layout"));
+  Finder findTabletLayout() =>
+      find.byKey(const Key("sign_up_screen_tablet_layout"));
+  Finder findHelloText() => find.text(LocaleKeys.hello.tr());
+  Finder findLetsGetStartedText() =>
+      find.text(LocaleKeys.lets_get_started.tr());
+  Finder findFillInFormToContinueText() =>
+      find.text(LocaleKeys.fill_in_form_to_continue.tr());
+  Finder findAuthIconButton() =>
+      find.byKey(const Key("sign_up_screen_auth_icon_button"));
+  Finder findAccountCard() =>
+      find.byKey(const Key("sign_up_screen_account_card"));
+  Finder findSignOutButton() => find.byType(SignOutButton);
+
+  Finder findSelectUserTypePage() =>
+      find.byKey(const Key("sign_up_screen_select_user_type_page"));
+  Finder findSelectLanguagePage() =>
+      find.byKey(const Key("sign_up_screen_select_language_page"));
+
+  Finder findNextButton() =>
+      find.byKey(const Key("sign_up_screen_next_button"));
+
+  Finder findBlindUserButton() =>
+      find.byKey(const Key("sign_up_screen_blind_user_button"));
+  Finder findVolunteerUserButton() =>
+      find.byKey(const Key("sign_up_screen_volunteer_user_button"));
+
+  Finder findSelectUserTypeText() =>
+      find.text(LocaleKeys.select_user_type.tr());
+  Finder findSelectUserTypeDescText() =>
+      find.text(LocaleKeys.sign_up_rule_desc.tr());
+
+  Finder findAddLanguageButton() =>
+      find.byKey(const Key("sign_up_screen_add_language_button"));
+
+  Finder findLanguageSelectionCard() => find.byType(LanguageSelectionCard);
+
+  Finder findBackIconButton() =>
+      find.byKey(const Key("sign_up_screen_back_icon_button"));
+
+  Finder findLanguageCard() => find.byType(LanguageCard);
+
+  Finder findSelectLanguageText() => find.text(LocaleKeys.select_language.tr());
+  Finder findAddLanguageDescText() =>
+      find.text(LocaleKeys.add_language_desc.tr());
+  Finder findSelectLanguageVolunteerDescText() =>
+      find.text(LocaleKeys.select_language_volunteer_desc.tr());
+  Finder findSelectLanguageBlindDescText() =>
+      find.text(LocaleKeys.select_language_blind_desc.tr());
+
+  Finder findSaveButton() =>
+      find.byKey(const Key("sign_up_screen_save_button"));
+
   setUp(() {
     registerLocator();
 
@@ -178,7 +233,7 @@ void main() {
 
         await tester.pumpApp(child: SignUpScreen());
 
-        expect(find.byType(ResponsiveBuilder), findsOneWidget);
+        expect(findResponsiveBuilder(), findsOneWidget);
       });
     });
 
@@ -192,10 +247,8 @@ void main() {
         await tester.setScreenSize(iphone14);
         await tester.pumpAndSettle();
 
-        expect(find.byKey(const Key("sign_up_screen_mobile_layout")),
-            findsOneWidget);
-        expect(find.byKey(const Key("sign_up_screen_tablet_layout")),
-            findsNothing);
+        expect(findMobileLayout(), findsOneWidget);
+        expect(findTabletLayout(), findsNothing);
       });
     });
 
@@ -209,10 +262,8 @@ void main() {
         await tester.setScreenSize(ipad12Pro);
         await tester.pumpAndSettle();
 
-        expect(find.byKey(const Key("sign_up_screen_mobile_layout")),
-            findsNothing);
-        expect(find.byKey(const Key("sign_up_screen_tablet_layout")),
-            findsOneWidget);
+        expect(findMobileLayout(), findsNothing);
+        expect(findTabletLayout(), findsOneWidget);
       });
     });
   });
@@ -233,12 +284,12 @@ void main() {
         await tester.setScreenSize(iphone14);
         await tester.pumpAndSettle();
 
-        expect(find.text(LocaleKeys.hello.tr()), findsOneWidget);
+        expect(findHelloText(), findsOneWidget);
 
         await tester.setScreenSize(ipad12Pro);
         await tester.pumpAndSettle();
 
-        expect(find.text(LocaleKeys.hello.tr()), findsOneWidget);
+        expect(findHelloText(), findsOneWidget);
       });
     });
 
@@ -251,12 +302,12 @@ void main() {
         await tester.setScreenSize(iphone14);
         await tester.pumpAndSettle();
 
-        expect(find.text(LocaleKeys.lets_get_started.tr()), findsOneWidget);
+        expect(findLetsGetStartedText(), findsOneWidget);
 
         await tester.setScreenSize(ipad12Pro);
         await tester.pumpAndSettle();
 
-        expect(find.text(LocaleKeys.lets_get_started.tr()), findsOneWidget);
+        expect(findLetsGetStartedText(), findsOneWidget);
       });
     });
 
@@ -270,7 +321,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(
-          find.text(LocaleKeys.fill_in_form_to_continue.tr()),
+          findFillInFormToContinueText(),
           findsOneWidget,
         );
 
@@ -278,7 +329,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(
-          find.text(LocaleKeys.fill_in_form_to_continue.tr()),
+          findFillInFormToContinueText(),
           findsOneWidget,
         );
       });
@@ -310,12 +361,12 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(
-          find.byKey(const Key("sign_up_screen_auth_icon_button")),
+          findAuthIconButton(),
           findsOneWidget,
         );
 
         expect(
-          find.byKey(const Key("sign_up_screen_account_card")),
+          findAccountCard(),
           findsNothing,
         );
       });
@@ -339,12 +390,12 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(
-          find.byKey(const Key("sign_up_screen_auth_icon_button")),
+          findAuthIconButton(),
           findsNothing,
         );
 
         expect(
-          find.byKey(const Key("sign_up_screen_account_card")),
+          findAccountCard(),
           findsOneWidget,
         );
       });
@@ -367,11 +418,10 @@ void main() {
         await tester.setScreenSize(iphone14);
         await tester.pumpAndSettle();
 
-        await tester.tapAt(tester.getCenter(
-            find.byKey(const Key("sign_up_screen_auth_icon_button"))));
+        await tester.tapAt(tester.getCenter(findAuthIconButton()));
         await tester.pumpAndSettle();
 
-        expect(find.byType(SignOutButton), findsOneWidget);
+        expect(findSignOutButton(), findsOneWidget);
       });
     });
 
@@ -392,11 +442,10 @@ void main() {
         await tester.setScreenSize(ipad12Pro);
         await tester.pumpAndSettle();
 
-        await tester.tapAt(tester
-            .getCenter(find.byKey(const Key("sign_up_screen_account_card"))));
+        await tester.tapAt(tester.getCenter(findAccountCard()));
         await tester.pumpAndSettle();
 
-        expect(find.byType(SignOutButton), findsOneWidget);
+        expect(findSignOutButton(), findsOneWidget);
       });
     });
 
@@ -416,8 +465,7 @@ void main() {
         await tester.setScreenSize(ipad12Pro);
         await tester.pumpAndSettle();
 
-        await tester.tapAt(tester
-            .getCenter(find.byKey(const Key("sign_up_screen_account_card"))));
+        await tester.tapAt(tester.getCenter(findAccountCard()));
         await tester.pumpAndSettle();
 
         expect(find.byType(AccountCard), findsNWidgets(2));
@@ -436,11 +484,10 @@ void main() {
       await tester.pumpApp(child: SignUpScreen());
       await tester.setScreenSize(iphone14);
       await tester.pumpAndSettle();
-      await tester.tapAt(tester
-          .getCenter(find.byKey(const Key("sign_up_screen_auth_icon_button"))));
+      await tester.tapAt(tester.getCenter(findAuthIconButton()));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(SignOutButton));
+      await tester.tap(findSignOutButton());
       await tester.pumpAndSettle();
     }
 
@@ -508,12 +555,12 @@ void main() {
         await tester.pumpApp(child: SignUpScreen());
 
         expect(
-          find.byKey(const Key("sign_up_screen_select_user_type_page")),
+          findSelectUserTypePage(),
           findsOneWidget,
         );
 
         expect(
-          find.byKey(const Key("sign_up_screen_select_language_page")),
+          findSelectLanguagePage(),
           findsNothing,
         );
 
@@ -535,12 +582,12 @@ void main() {
         await tester.pumpApp(child: SignUpScreen());
 
         expect(
-          find.byKey(const Key("sign_up_screen_select_user_type_page")),
+          findSelectUserTypePage(),
           findsNothing,
         );
 
         expect(
-          find.byKey(const Key("sign_up_screen_select_language_page")),
+          findSelectLanguagePage(),
           findsOneWidget,
         );
 
@@ -564,12 +611,12 @@ void main() {
         await tester.pumpApp(child: SignUpScreen());
 
         expect(
-          find.byKey(const Key("sign_up_screen_select_user_type_page")),
+          findSelectUserTypePage(),
           findsNothing,
         );
 
         expect(
-          find.byKey(const Key("sign_up_screen_select_language_page")),
+          findSelectLanguagePage(),
           findsNothing,
         );
 
@@ -591,8 +638,7 @@ void main() {
 
           await tester.pumpApp(child: SignUpScreen());
 
-          expect(find.byKey(const Key("sign_up_screen_next_button")),
-              findsOneWidget);
+          expect(findNextButton(), findsOneWidget);
         });
       });
 
@@ -605,9 +651,8 @@ void main() {
           );
 
           await tester.pumpApp(child: SignUpScreen());
-          ElevatedButton nextButton = find
-              .byKey(const Key("sign_up_screen_next_button"))
-              .getWidget() as ElevatedButton;
+          ElevatedButton nextButton =
+              findNextButton().getWidget() as ElevatedButton;
 
           expect(nextButton.onPressed, isNotNull);
         });
@@ -622,9 +667,8 @@ void main() {
           );
 
           await tester.pumpApp(child: SignUpScreen());
-          ElevatedButton nextButton = find
-              .byKey(const Key("sign_up_screen_next_button"))
-              .getWidget() as ElevatedButton;
+          ElevatedButton nextButton =
+              findNextButton().getWidget() as ElevatedButton;
 
           expect(nextButton.onPressed, null);
         });
@@ -640,7 +684,7 @@ void main() {
 
           await tester.pumpApp(child: SignUpScreen());
 
-          await tester.tap(find.byKey(const Key("sign_up_screen_next_button")));
+          await tester.tap(findNextButton());
           await tester.pumpAndSettle();
 
           verify(signUpInputBloc.add(const SignUpInputNextStep()));
@@ -658,7 +702,7 @@ void main() {
           await tester.pumpApp(child: SignUpScreen());
 
           expect(
-            find.byKey(const Key("sign_up_screen_blind_user_button")),
+            findBlindUserButton(),
             findsOneWidget,
           );
         });
@@ -673,7 +717,7 @@ void main() {
           await tester.pumpApp(child: SignUpScreen());
 
           expect(
-            find.byKey(const Key("sign_up_screen_volunteer_user_button")),
+            findVolunteerUserButton(),
             findsOneWidget,
           );
         });
@@ -688,9 +732,7 @@ void main() {
           );
 
           await tester.pumpApp(child: SignUpScreen());
-          await tester.tap(
-            find.byKey(const Key("sign_up_screen_blind_user_button")),
-          );
+          await tester.tap(findBlindUserButton());
           await tester.pumpAndSettle();
 
           verify(
@@ -708,9 +750,7 @@ void main() {
           );
 
           await tester.pumpApp(child: SignUpScreen());
-          await tester.tap(
-            find.byKey(const Key("sign_up_screen_volunteer_user_button")),
-          );
+          await tester.tap(findVolunteerUserButton());
           await tester.pumpAndSettle();
 
           verify(
@@ -729,7 +769,7 @@ void main() {
           );
 
           await tester.pumpApp(child: SignUpScreen());
-          expect(find.text(LocaleKeys.select_user_type.tr()), findsOneWidget);
+          expect(findSelectUserTypeText(), findsOneWidget);
         });
       });
 
@@ -740,7 +780,7 @@ void main() {
           );
 
           await tester.pumpApp(child: SignUpScreen());
-          expect(find.text(LocaleKeys.sign_up_rule_desc.tr()), findsOneWidget);
+          expect(findSelectUserTypeDescText(), findsOneWidget);
         });
       });
     });
@@ -760,12 +800,12 @@ void main() {
           await tester.pumpApp(child: SignUpScreen());
 
           expect(
-            find.byKey(const Key("sign_up_screen_add_language_button")),
+            findAddLanguageButton(),
             findsOneWidget,
           );
 
           expect(
-            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findSelectLanguagePage(),
             findsOneWidget,
           );
         });
@@ -787,12 +827,12 @@ void main() {
           await tester.pumpApp(child: SignUpScreen());
 
           expect(
-            find.byKey(const Key("sign_up_screen_add_language_button")),
+            findAddLanguageButton(),
             findsNothing,
           );
 
           expect(
-            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findSelectLanguagePage(),
             findsOneWidget,
           );
         });
@@ -819,15 +859,13 @@ void main() {
           );
 
           await tester.pumpApp(child: SignUpScreen());
-          await tester.tap(
-            find.byKey(const Key("sign_up_screen_add_language_button")),
-          );
+          await tester.tap(findAddLanguageButton());
 
           await tester.pumpAndSettle();
 
-          expect(find.byType(LanguageSelectionCard), findsOneWidget);
+          expect(findLanguageSelectionCard(), findsOneWidget);
           expect(
-            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findSelectLanguagePage(),
             findsOneWidget,
           );
           expect(find.text("Indonesian"), findsOneWidget);
@@ -846,11 +884,11 @@ void main() {
           await tester.pumpApp(child: SignUpScreen());
 
           expect(
-            find.byKey(const Key("sign_up_screen_back_icon_button")),
+            findBackIconButton(),
             findsOneWidget,
           );
           expect(
-            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findSelectLanguagePage(),
             findsOneWidget,
           );
         });
@@ -870,13 +908,12 @@ void main() {
 
           await tester.pumpApp(child: SignUpScreen());
 
-          await tester
-              .tap(find.byKey(const Key("sign_up_screen_back_icon_button")));
+          await tester.tap(findBackIconButton());
           await tester.pumpAndSettle();
 
           verify(signUpInputBloc.add(const SignUpInputBackStep()));
           expect(
-            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findSelectLanguagePage(),
             findsOneWidget,
           );
         });
@@ -893,11 +930,11 @@ void main() {
           await tester.pumpApp(child: SignUpScreen());
 
           expect(
-            find.byKey(const Key("sign_up_screen_next_button")),
+            findNextButton(),
             findsOneWidget,
           );
           expect(
-            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findSelectLanguagePage(),
             findsOneWidget,
           );
         });
@@ -916,13 +953,12 @@ void main() {
           );
 
           await tester.pumpApp(child: SignUpScreen());
-          ElevatedButton nextButton = find
-              .byKey(const Key("sign_up_screen_next_button"))
-              .getWidget() as ElevatedButton;
+          ElevatedButton nextButton =
+              findNextButton().getWidget() as ElevatedButton;
 
           expect(nextButton.onPressed, isNotNull);
           expect(
-            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findSelectLanguagePage(),
             findsOneWidget,
           );
         });
@@ -941,13 +977,12 @@ void main() {
           );
 
           await tester.pumpApp(child: SignUpScreen());
-          ElevatedButton nextButton = find
-              .byKey(const Key("sign_up_screen_next_button"))
-              .getWidget() as ElevatedButton;
+          ElevatedButton nextButton =
+              findNextButton().getWidget() as ElevatedButton;
 
           expect(nextButton.onPressed, null);
           expect(
-            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findSelectLanguagePage(),
             findsOneWidget,
           );
         });
@@ -967,12 +1002,12 @@ void main() {
 
           await tester.pumpApp(child: SignUpScreen());
 
-          await tester.tap(find.byKey(const Key("sign_up_screen_next_button")));
+          await tester.tap(findNextButton());
           await tester.pumpAndSettle();
 
           verify(signUpInputBloc.add(const SignUpInputNextStep()));
           expect(
-            find.byKey(const Key("sign_up_screen_select_language_page")),
+            findSelectLanguagePage(),
             findsOneWidget,
           );
         });
@@ -1014,7 +1049,7 @@ void main() {
         await tester.runAsync(() async {
           await tester.pumpApp(child: SignUpScreen());
 
-          expect(find.byType(LanguageCard), findsNWidgets(2));
+          expect(findLanguageCard(), findsNWidgets(2));
           expect(find.byKey(const Key("language_card_ru")), findsOneWidget);
           expect(find.byKey(const Key("language_card_en")), findsOneWidget);
         });
@@ -1027,9 +1062,7 @@ void main() {
           await tester.pumpApp(child: SignUpScreen());
 
           // Tap to show selection language
-          await tester.tap(
-            find.byKey(const Key("sign_up_screen_add_language_button")),
-          );
+          await tester.tap(findAddLanguageButton());
           await tester.pumpAndSettle();
 
           // Tap to select the language
@@ -1082,7 +1115,7 @@ void main() {
           );
 
           await tester.pumpApp(child: SignUpScreen());
-          expect(find.text(LocaleKeys.select_language.tr()), findsOneWidget);
+          expect(findSelectLanguageText(), findsOneWidget);
         });
       });
 
@@ -1093,7 +1126,7 @@ void main() {
           );
 
           await tester.pumpApp(child: SignUpScreen());
-          expect(find.text(LocaleKeys.add_language_desc.tr()), findsOneWidget);
+          expect(findAddLanguageDescText(), findsOneWidget);
         });
       });
 
@@ -1109,7 +1142,7 @@ void main() {
 
           await tester.pumpApp(child: SignUpScreen());
           expect(
-            find.text(LocaleKeys.select_language_blind_desc.tr()),
+            findSelectLanguageBlindDescText(),
             findsOneWidget,
           );
         });
@@ -1127,7 +1160,7 @@ void main() {
 
           await tester.pumpApp(child: SignUpScreen());
           expect(
-            find.text(LocaleKeys.select_language_volunteer_desc.tr()),
+            findSelectLanguageVolunteerDescText(),
             findsOneWidget,
           );
         });
@@ -1148,7 +1181,7 @@ void main() {
           await tester.pumpApp(child: SignUpScreen());
 
           expect(
-            find.byKey(const Key("sign_up_screen_back_icon_button")),
+            findBackIconButton(),
             findsOneWidget,
           );
           expect(
@@ -1173,8 +1206,7 @@ void main() {
           await tester.setScreenSize(iphone14);
           await tester.pumpApp(child: SignUpScreen());
 
-          await tester
-              .tap(find.byKey(const Key("sign_up_screen_back_icon_button")));
+          await tester.tap(findBackIconButton());
           await tester.pumpAndSettle();
 
           verify(signUpInputBloc.add(const SignUpInputBackStep()));
@@ -1481,7 +1513,7 @@ void main() {
           await tester.pumpApp(child: SignUpScreen());
 
           expect(
-            find.byKey(const Key("sign_up_screen_save_button")),
+            findSaveButton(),
             findsOneWidget,
           );
           expect(
@@ -1510,9 +1542,7 @@ void main() {
           await tester.setScreenSize(iphone14);
           await tester.pumpApp(child: SignUpScreen());
 
-          AsyncButton saveButton = find
-              .byKey(const Key("sign_up_screen_save_button"))
-              .getWidget() as AsyncButton;
+          AsyncButton saveButton = findSaveButton().getWidget() as AsyncButton;
 
           expect(saveButton.onPressed, isNotNull);
           expect(
@@ -1537,9 +1567,7 @@ void main() {
           await tester.setScreenSize(iphone14);
           await tester.pumpApp(child: SignUpScreen());
 
-          AsyncButton saveButton = find
-              .byKey(const Key("sign_up_screen_save_button"))
-              .getWidget() as AsyncButton;
+          AsyncButton saveButton = findSaveButton().getWidget() as AsyncButton;
 
           expect(saveButton.onPressed, isNull);
           expect(
@@ -1569,7 +1597,7 @@ void main() {
           await tester.setScreenSize(iphone14);
           await tester.pumpApp(child: SignUpScreen());
 
-          await tester.tap(find.byKey(const Key("sign_up_screen_save_button")));
+          await tester.tap(findSaveButton());
           await tester.pumpAndSettle();
 
           verify(signUpBloc
@@ -1611,7 +1639,7 @@ void main() {
 
           await tester.setScreenSize(iphone14);
           await tester.pumpApp(child: SignUpScreen());
-          expect(find.text(LocaleKeys.sign_up_rule_desc.tr()), findsOneWidget);
+          expect(findSelectUserTypeDescText(), findsOneWidget);
         });
       });
     });

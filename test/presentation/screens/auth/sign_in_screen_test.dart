@@ -41,6 +41,16 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  Finder findErrorMessageSomethingError() =>
+      find.byKey(const Key("error_message_something_error"));
+  Finder findOkText() => find.text(LocaleKeys.ok.tr());
+  Finder findSignInText() => find.text(LocaleKeys.sign_in.tr());
+  Finder findSignInInfoText() => find.text(LocaleKeys.sign_in_info.tr());
+  Finder findSignInWithAppleButton() => find.byType(SignInWithAppleButton);
+  Finder findSignInWithGoogleButton() => find.byType(SignInWithGoogleButton);
+  Finder findVolunteerSignInInfoText() =>
+      find.text(LocaleKeys.volunteer_sign_in_info.tr());
+
   group("Icons", () {
     testWidgets("Should show the app icon", (tester) async {
       await tester.runAsync(() async {
@@ -51,7 +61,7 @@ void main() {
   });
 
   group("Route", () {
-    testWidgets("Should call getTargetRoute() when SignInSuccessfully",
+    testWidgets("Should call getTargetRoute() when [SignInSuccessfully]",
         (tester) async {
       await tester.runAsync(() async {
         when(signInBloc.stream)
@@ -59,7 +69,7 @@ void main() {
 
         await tester.pumpApp(child: SignInScreen());
 
-        await tester.tap(find.byType(SignInWithGoogleButton));
+        await tester.tap(findSignInWithGoogleButton());
         await tester.pumpAndSettle();
 
         verify(signInBloc.add(const SignInWithGoogle()));
@@ -79,7 +89,7 @@ void main() {
 
         await tester.pumpApp(child: SignInScreen());
 
-        await tester.tap(find.byType(SignInWithGoogleButton));
+        await tester.tap(findSignInWithGoogleButton());
         await tester.pumpAndSettle();
 
         verify(signInBloc.add(const SignInWithGoogle()));
@@ -99,7 +109,7 @@ void main() {
 
         await tester.pumpApp(child: SignInScreen());
 
-        await tester.tap(find.byType(SignInWithGoogleButton));
+        await tester.tap(findSignInWithGoogleButton());
         await tester.pumpAndSettle();
 
         verify(signInBloc.add(const SignInWithGoogle()));
@@ -117,12 +127,11 @@ void main() {
             .thenAnswer((_) => Stream.value(const RouteError()));
         await tester.pumpApp(child: SignInScreen());
 
-        await tester
-            .tapAt(tester.getCenter(find.byType(SignInWithGoogleButton)));
+        await tester.tapAt(tester.getCenter(findSignInWithGoogleButton()));
         await tester.pump();
 
         expect(
-          find.byKey(const Key("error_message_something_error")),
+          findErrorMessageSomethingError(),
           findsOneWidget,
         );
         verify(routeCubit.getTargetRoute());
@@ -140,19 +149,18 @@ void main() {
             .thenAnswer((_) => Stream.value(const RouteError()));
         await tester.pumpApp(child: SignInScreen());
 
-        await tester
-            .tapAt(tester.getCenter(find.byType(SignInWithGoogleButton)));
+        await tester.tapAt(tester.getCenter(findSignInWithGoogleButton()));
         await tester.pump();
 
         expect(
-          find.byKey(const Key("error_message_something_error")),
+          findErrorMessageSomethingError(),
           findsOneWidget,
         );
         verify(routeCubit.getTargetRoute());
 
         when(routeCubit.stream)
             .thenAnswer((_) => Stream.value(RouteTarget(AppPages.signUp)));
-        await tester.tap(find.text(LocaleKeys.ok.tr()));
+        await tester.tap(findOkText());
         await tester.pump();
         verify(routeCubit.getTargetRoute());
       });
@@ -168,8 +176,8 @@ void main() {
 
         await tester.pumpApp(child: SignInScreen());
 
-        expect(find.byType(SignInWithAppleButton), findsOneWidget);
-        expect(find.byType(SignInWithGoogleButton), findsOneWidget);
+        expect(findSignInWithAppleButton(), findsOneWidget);
+        expect(findSignInWithGoogleButton(), findsOneWidget);
       });
     });
 
@@ -181,20 +189,20 @@ void main() {
 
         await tester.pumpApp(child: SignInScreen());
 
-        expect(find.byType(SignInWithAppleButton), findsNothing);
-        expect(find.byType(SignInWithGoogleButton), findsOneWidget);
+        expect(findSignInWithAppleButton(), findsNothing);
+        expect(findSignInWithGoogleButton(), findsOneWidget);
       });
     });
 
     testWidgets(
-        "Should call the SignInWithApple event when tap the SignInWithAppleButton",
+        "Should call the SignInWithApple event when tap the [SignInWithAppleButton]",
         (tester) async {
       await tester.runAsync(() async {
         when(deviceInfo.isIOS()).thenReturn(true);
 
         await tester.pumpApp(child: SignInScreen());
 
-        await tester.tap(find.byType(SignInWithAppleButton));
+        await tester.tap(findSignInWithAppleButton());
         await tester.pumpAndSettle();
 
         verify(signInBloc.add(const SignInWithApple()));
@@ -202,14 +210,14 @@ void main() {
     });
 
     testWidgets(
-        "Should call the SignInWithGoogle event when tap the SignInWithGoogleButton",
+        "Should call the SignInWithGoogle event when tap the [SignInWithGoogleButton]",
         (tester) async {
       await tester.runAsync(() async {
         when(deviceInfo.isIOS()).thenReturn(true);
 
         await tester.pumpApp(child: SignInScreen());
 
-        await tester.tap(find.byType(SignInWithGoogleButton));
+        await tester.tap(findSignInWithGoogleButton());
         await tester.pumpAndSettle();
 
         verify(signInBloc.add(const SignInWithGoogle()));
@@ -221,16 +229,15 @@ void main() {
     testWidgets("Should show the sign in text", (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(child: SignInScreen());
-        expect(find.text(LocaleKeys.sign_in.tr()), findsOneWidget);
-        expect(find.text(LocaleKeys.sign_in_info.tr()), findsOneWidget);
+        expect(findSignInText(), findsOneWidget);
+        expect(findSignInInfoText(), findsOneWidget);
       });
     });
 
     testWidgets("Should show the volunteer text info", (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(child: SignInScreen());
-        expect(
-            find.text(LocaleKeys.volunteer_sign_in_info.tr()), findsOneWidget);
+        expect(findVolunteerSignInInfoText(), findsOneWidget);
       });
     });
   });

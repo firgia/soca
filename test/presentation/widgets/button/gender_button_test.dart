@@ -17,6 +17,14 @@ import 'package:soca/presentation/presentation.dart';
 import '../../../helper/helper.dart';
 
 void main() {
+  Finder findMaleText() => find.text(LocaleKeys.male.tr());
+  Finder findFemaleText() => find.text(LocaleKeys.female.tr());
+  Finder findGenderButton() => find.byType(GenderButton);
+  Finder findGenderButtonSelected() =>
+      find.byKey(const Key("gender_button_selected"));
+  Finder findGenderButtonUnselected() =>
+      find.byKey(const Key("gender_button_unselected"));
+
   group("Action", () {
     testWidgets(
         "Should call [onPressed] when [GenderButton] is tapped even selected is true",
@@ -34,7 +42,7 @@ void main() {
           ),
         );
 
-        await tester.tap(find.byType(GenderButton));
+        await tester.tap(findGenderButton());
         await tester.pumpAndSettle();
 
         expect(isTapped, true);
@@ -57,7 +65,7 @@ void main() {
           ),
         );
 
-        await tester.tap(find.byType(GenderButton));
+        await tester.tap(findGenderButton());
         await tester.pumpAndSettle();
 
         expect(isTapped, true);
@@ -77,8 +85,8 @@ void main() {
           ),
         );
 
-        expect(find.byKey(const Key("gender_button_selected")), findsOneWidget);
-        expect(find.byKey(const Key("gender_button_unselected")), findsNothing);
+        expect(findGenderButtonSelected(), findsOneWidget);
+        expect(findGenderButtonUnselected(), findsNothing);
       });
     });
 
@@ -93,9 +101,8 @@ void main() {
           ),
         );
 
-        expect(
-            find.byKey(const Key("gender_button_unselected")), findsOneWidget);
-        expect(find.byKey(const Key("gender_button_selected")), findsNothing);
+        expect(findGenderButtonUnselected(), findsOneWidget);
+        expect(findGenderButtonSelected(), findsNothing);
       });
     });
   });
@@ -111,8 +118,8 @@ void main() {
           ),
         );
 
-        expect(find.text(LocaleKeys.male.tr()), findsOneWidget);
-        expect(find.text(LocaleKeys.female.tr()), findsNothing);
+        expect(findMaleText(), findsOneWidget);
+        expect(findFemaleText(), findsNothing);
       });
     });
 
@@ -126,8 +133,8 @@ void main() {
           ),
         );
 
-        expect(find.text(LocaleKeys.male.tr()), findsNothing);
-        expect(find.text(LocaleKeys.female.tr()), findsOneWidget);
+        expect(findMaleText(), findsNothing);
+        expect(findFemaleText(), findsOneWidget);
       });
     });
   });

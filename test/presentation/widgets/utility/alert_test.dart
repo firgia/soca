@@ -29,6 +29,13 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  Finder findErrorMessageAuthenticationError() =>
+      find.byKey(const Key("error_message_authentication_error"));
+  Finder findErrorMessageInternetError() =>
+      find.byKey(const Key("error_message_internet_error"));
+  Finder findErrorMessageSomethingError() =>
+      find.byKey(const Key("error_message_something_error"));
+
   testWidgets("Should show authentication error message", (tester) async {
     await tester.runAsync(() async {
       await tester.pumpApp(
@@ -50,7 +57,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.byKey(const Key("error_message_authentication_error")),
+        findErrorMessageAuthenticationError(),
         findsOneWidget,
       );
 
@@ -79,7 +86,7 @@ void main() {
       await tester.pump();
 
       expect(
-        find.byKey(const Key("error_message_internet_error")),
+        findErrorMessageInternetError(),
         findsOneWidget,
       );
 
@@ -108,7 +115,7 @@ void main() {
       await tester.pump();
 
       expect(
-        find.byKey(const Key("error_message_something_error")),
+        findErrorMessageSomethingError(),
         findsOneWidget,
       );
 

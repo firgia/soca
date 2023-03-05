@@ -33,62 +33,59 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
-  group("Functions", () {
-    group("getDeviceID", () {
-      test("Should not generate new device ID when device ID already exists",
-          () async {
-        when(secureStorage.read(key: _deviceIDKey))
-            .thenAnswer((_) => Future.value("12345"));
+  group(".getDeviceID()", () {
+    test("Should not generate new device ID when device ID already exists",
+        () async {
+      when(secureStorage.read(key: _deviceIDKey))
+          .thenAnswer((_) => Future.value("12345"));
 
-        final deviceID = await deviceProvider.getDeviceID();
+      final deviceID = await deviceProvider.getDeviceID();
 
-        expect(deviceID, "12345");
-        verify(secureStorage.read(key: _deviceIDKey));
-        verifyNever(
-            secureStorage.write(key: _deviceIDKey, value: anyNamed("value")));
-      });
-
-      test("Should generate new device ID when device ID is empty", () async {
-        when(secureStorage.read(key: _deviceIDKey))
-            .thenAnswer((_) => Future.value(null));
-
-        await deviceProvider.getDeviceID();
-
-        verify(secureStorage.read(key: _deviceIDKey));
-        verify(
-            secureStorage.write(key: _deviceIDKey, value: anyNamed("value")));
-      });
+      expect(deviceID, "12345");
+      verify(secureStorage.read(key: _deviceIDKey));
+      verifyNever(
+          secureStorage.write(key: _deviceIDKey, value: anyNamed("value")));
     });
 
-    group("getOnesignalPlayerID", () {
-      test("Should return onesignal player ID", () async {
-        when(oneSignal.getDeviceState()).thenAnswer(
-          (_) => Future.value(OSDeviceState({
-            'hasNotificationPermission': false,
-            'pushDisabled': false,
-            'subscribed': false,
-            'emailSubscribed': false,
-            'smsSubscribed': false,
-            'userId': "12345-12345",
-          })),
-        );
+    test("Should generate new device ID when device ID is empty", () async {
+      when(secureStorage.read(key: _deviceIDKey))
+          .thenAnswer((_) => Future.value(null));
 
-        final playerID = await deviceProvider.getOnesignalPlayerID();
+      await deviceProvider.getDeviceID();
 
-        expect(playerID, "12345-12345");
-        verify(oneSignal.getDeviceState());
-      });
+      verify(secureStorage.read(key: _deviceIDKey));
+      verify(secureStorage.write(key: _deviceIDKey, value: anyNamed("value")));
     });
+  });
 
-    group("getVoIP", () {
-      test("Should return voip from getDevicePushTokenVoIP()", () async {
-        when(deviceInfo.getDevicePushTokenVoIP())
-            .thenAnswer((_) => Future.value("1234"));
+  group(".getOnesignalPlayerID()", () {
+    test("Should return onesignal player ID", () async {
+      when(oneSignal.getDeviceState()).thenAnswer(
+        (_) => Future.value(OSDeviceState({
+          'hasNotificationPermission': false,
+          'pushDisabled': false,
+          'subscribed': false,
+          'emailSubscribed': false,
+          'smsSubscribed': false,
+          'userId': "12345-12345",
+        })),
+      );
 
-        final voip = await deviceProvider.getVoIP();
-        expect(voip, "1234");
-        verify(deviceInfo.getDevicePushTokenVoIP());
-      });
+      final playerID = await deviceProvider.getOnesignalPlayerID();
+
+      expect(playerID, "12345-12345");
+      verify(oneSignal.getDeviceState());
+    });
+  });
+
+  group(".getVoIP()", () {
+    test("Should return voip from getDevicePushTokenVoIP()", () async {
+      when(deviceInfo.getDevicePushTokenVoIP())
+          .thenAnswer((_) => Future.value("1234"));
+
+      final voip = await deviceProvider.getVoIP();
+      expect(voip, "1234");
+      verify(deviceInfo.getDevicePushTokenVoIP());
     });
   });
 }

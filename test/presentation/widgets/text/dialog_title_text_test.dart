@@ -29,6 +29,9 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  Finder findCloseButton() =>
+      find.byKey(const Key("dialog_title_text_close_button"));
+
   group("Action", () {
     testWidgets("Should call [onClosePressed] when tap close button",
         (tester) async {
@@ -46,8 +49,7 @@ void main() {
           ),
         );
 
-        await tester
-            .tap(find.byKey(const Key("dialog_title_text_close_button")));
+        await tester.tap(findCloseButton());
         await tester.pumpAndSettle();
 
         expect(isPressed, true);
@@ -67,7 +69,7 @@ void main() {
         );
 
         expect(
-          find.byKey(const Key("dialog_title_text_close_button")),
+          findCloseButton(),
           findsNothing,
         );
       });
