@@ -28,6 +28,12 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  Finder findChooseAnImageText() => find.text(LocaleKeys.choose_an_image.tr());
+  Finder findPickImageCameraIcon() =>
+      find.byKey(const Key("bottom_sheet_pick_image_camera_icon_button"));
+  Finder findPickImageGalleryIcon() =>
+      find.byKey(const Key("bottom_sheet_pick_image_gallery_icon_button"));
+
   group(".pickImage()", () {
     setUp(() {
       when(window.platformBrightness).thenReturn(Brightness.dark);
@@ -67,7 +73,7 @@ void main() {
         await showPickImage(tester);
 
         expect(
-          find.text(LocaleKeys.choose_an_image.tr()),
+          findChooseAnImageText(),
           findsOneWidget,
         );
       });
@@ -83,7 +89,7 @@ void main() {
         );
 
         expect(
-          find.byKey(const Key("bottom_sheet_pick_image_camera_icon_button")),
+          findPickImageCameraIcon(),
           findsOneWidget,
         );
       });
@@ -100,7 +106,7 @@ void main() {
         );
 
         expect(
-          find.byKey(const Key("bottom_sheet_pick_image_gallery_icon_button")),
+          findPickImageGalleryIcon(),
           findsOneWidget,
         );
       });
@@ -118,9 +124,7 @@ void main() {
           onTapGallery: () => isGaleryTapped = true,
         );
 
-        Finder cameraButton =
-            find.byKey(const Key("bottom_sheet_pick_image_camera_icon_button"));
-        await tester.tap(cameraButton);
+        await tester.tap(findPickImageCameraIcon());
         await tester.pumpAndSettle();
 
         expect(isCameraTapped, true);
@@ -141,9 +145,7 @@ void main() {
           onTapGallery: () => isGaleryTapped = true,
         );
 
-        Finder cameraButton = find
-            .byKey(const Key("bottom_sheet_pick_image_gallery_icon_button"));
-        await tester.tap(cameraButton);
+        await tester.tap(findPickImageGalleryIcon());
         await tester.pumpAndSettle();
 
         expect(isCameraTapped, false);

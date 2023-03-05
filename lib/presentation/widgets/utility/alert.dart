@@ -10,7 +10,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/core.dart';
 import '../message/message.dart';
-import 'bottomsheet.dart';
+import 'bottom_sheet.dart';
 import 'dialog.dart';
 
 class Alert with UIMixin {
