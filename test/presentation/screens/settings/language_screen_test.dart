@@ -23,8 +23,16 @@ void main() async {
   setUp(() => registerLocator());
   tearDown(() => unregisterLocator());
 
+  Finder findCustomAppBar() => find.byType(CustomAppBar);
+  Finder findIgnorePointerItems() =>
+      find.byKey(const Key("language_screen_ignore_pointer_items"));
+  Finder findLanguageItems() =>
+      find.byKey(const Key("language_screen_language_items"));
+  Finder findNextButton() =>
+      find.byKey(const Key("language_screen_next_button"));
+
   group("AppBar", () {
-    testWidgets("Should show the CustomAppBar", (tester) async {
+    testWidgets("Should show the [CustomAppBar]", (tester) async {
       await tester.runAsync(() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(
@@ -32,7 +40,7 @@ void main() async {
         );
 
         await tester.pumpApp(child: LanguageScreen());
-        expect(find.byType(CustomAppBar), findsOneWidget);
+        expect(findCustomAppBar(), findsOneWidget);
       });
     });
 
@@ -44,8 +52,8 @@ void main() async {
         );
 
         await tester.pumpApp(child: LanguageScreen());
-        final customAppBar =
-            find.byType(CustomAppBar).getWidget() as CustomAppBar;
+        CustomAppBar customAppBar =
+            findCustomAppBar().getWidget() as CustomAppBar;
 
         expect(customAppBar.title, LocaleKeys.language.tr());
       });
@@ -53,7 +61,8 @@ void main() async {
   });
 
   group("IgnorePointer", () {
-    testWidgets("Should ignore the pointer language items when LanguageLoading",
+    testWidgets(
+        "Should ignore the pointer language items when [LanguageLoading()]",
         (tester) async {
       await tester.runAsync(() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
@@ -61,16 +70,15 @@ void main() async {
 
         await tester.pumpApp(child: LanguageScreen());
 
-        final ignorePointer = find
-            .byKey(const Key("language_screen_ignore_pointer_items"))
-            .getWidget() as IgnorePointer;
+        IgnorePointer ignorePointer =
+            findIgnorePointerItems().getWidget() as IgnorePointer;
 
         expect(ignorePointer.ignoring, true);
       });
     });
 
     testWidgets(
-        "Shouldn't ignore the pointer language items when state is not LanguageLoading",
+        "Shouldn't ignore the pointer language items when state is not [LanguageLoading()]",
         (tester) async {
       await tester.runAsync(() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
@@ -78,9 +86,8 @@ void main() async {
 
         await tester.pumpApp(child: LanguageScreen());
 
-        final ignorePointer = find
-            .byKey(const Key("language_screen_ignore_pointer_items"))
-            .getWidget() as IgnorePointer;
+        IgnorePointer ignorePointer =
+            findIgnorePointerItems().getWidget() as IgnorePointer;
 
         expect(ignorePointer.ignoring, false);
       });
@@ -93,12 +100,11 @@ void main() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageUnselected());
         await tester.pumpApp(child: LanguageScreen());
-        expect(find.byKey(const Key("language_screen_language_items")),
-            findsOneWidget);
+        expect(findLanguageItems(), findsOneWidget);
       });
     });
 
-    testWidgets("Should show the flag button based on DeviceLanguage",
+    testWidgets("Should show the flag button based on [DeviceLanguage]",
         (tester) async {
       await tester.runAsync(() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
@@ -106,7 +112,7 @@ void main() async {
         await tester.pumpApp(child: LanguageScreen());
 
         // We need to drag to make sure all button is shown
-        await tester.drag(find.byType(CustomAppBar), const Offset(0, -100));
+        await tester.drag(findCustomAppBar(), const Offset(0, -100));
         await tester.pump();
 
         for (DeviceLanguage deviceLanguage in DeviceLanguage.values) {
@@ -119,7 +125,7 @@ void main() async {
     });
 
     testWidgets(
-        "Should set the selected FlagButton to true when DeviceLanguage is selected",
+        "Should set the selected [FlagButton] to true when [DeviceLanguage] is selected",
         (tester) async {
       await tester.runAsync(() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
@@ -129,7 +135,7 @@ void main() async {
         await tester.pumpApp(child: LanguageScreen());
 
         // We need to drag to make sure all button is shown
-        await tester.drag(find.byType(CustomAppBar), const Offset(0, -100));
+        await tester.drag(findCustomAppBar(), const Offset(0, -100));
         await tester.pump();
 
         for (DeviceLanguage deviceLanguage in DeviceLanguage.values) {
@@ -145,7 +151,7 @@ void main() async {
     });
 
     testWidgets(
-        "Should set the selected FlagButton to false when DeviceLanguage is not selected",
+        "Should set the selected [FlagButton] to false when [DeviceLanguage] is not selected",
         (tester) async {
       await tester.runAsync(() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
@@ -155,7 +161,7 @@ void main() async {
         await tester.pumpApp(child: LanguageScreen());
 
         // We need to drag to make sure all button is shown
-        await tester.drag(find.byType(CustomAppBar), const Offset(0, -100));
+        await tester.drag(findCustomAppBar(), const Offset(0, -100));
         await tester.pump();
 
         for (DeviceLanguage deviceLanguage in DeviceLanguage.values) {
@@ -177,39 +183,32 @@ void main() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageUnselected());
         await tester.pumpApp(child: LanguageScreen());
-        expect(find.byKey(const Key("language_screen_next_button")),
-            findsOneWidget);
+        expect(findNextButton(), findsOneWidget);
       });
     });
 
     testWidgets(
-        "Should set the isLoading of AsyncButton to true when state is LanguageLoading",
+        "Should set the isLoading of [AsyncButton] to true when state is [LanguageLoading()]",
         (tester) async {
       await tester.runAsync(() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageLoading());
         await tester.pumpApp(child: LanguageScreen());
 
-        final nextButton = find
-            .byKey(const Key("language_screen_next_button"))
-            .getWidget() as AsyncButton;
-
+        AsyncButton nextButton = findNextButton().getWidget() as AsyncButton;
         expect(nextButton.isLoading, true);
       });
     });
 
     testWidgets(
-        "Should set the isLoading of AsyncButton to false when state is not LanguageLoading",
+        "Should set the isLoading of [AsyncButton] to false when state is not [LanguageLoading()]",
         (tester) async {
       await tester.runAsync(() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageUnselected());
         await tester.pumpApp(child: LanguageScreen());
 
-        final nextButton = find
-            .byKey(const Key("language_screen_next_button"))
-            .getWidget() as AsyncButton;
-
+        AsyncButton nextButton = findNextButton().getWidget() as AsyncButton;
         expect(nextButton.isLoading, false);
       });
     });
@@ -222,7 +221,6 @@ void main() async {
         );
 
         await tester.pumpApp(child: LanguageScreen());
-
         expect(find.text(LocaleKeys.next.tr()), findsOneWidget);
       });
     });
