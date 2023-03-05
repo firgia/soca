@@ -8,7 +8,22 @@ A new Flutter project.
 
 ## Getting Started
 
-This project uses Flavor for the environment, and the current environment is development, staging, and Production. Therefore, you need to configure the project before the run or to build the project. Please follow this step to configure it.
+This project uses Flavor for the environment, and the current environment is development, staging, and Production. Therefore, you need to configure the project before the run or to build the project.
+
+### Environtment
+This project uses Flutter Flavor and has 3 environments. 
+|                     | Development                     | Staging                        | Production                        |
+|---------------------|---------------------------------|--------------------------------|-----------------------------------|
+| `Debuging`          | ✅                              | ❌                              | ❌                                |
+| `App Identifier`    | com.firgia.soca.dev             | com.firgia.soca.stg            | com.firgia.soca                   |
+| `App Name Android`  | Soca - Dev                      | Soca - Stg                     | Soca                              |
+| `App Name IOS`      | Soca - Dev                      | Soca - Stg                     | Soca                              |
+| `App Icons`         | ![d](http://bit.ly/3YhoyWx)     |![s](https://bit.ly/soca-icon-s)| ![p](https://bit.ly/soca-icon-pp) |
+
+
+* Development: Select this environment while updating or adding new features to test.
+* Staging: Select this environment if you want to test the release app and share the App with your team.
+* Production: Select this environment when the App is ready to deploy for public.
 
 ### Firebase Configuration
 We use firebase service to store the data and handle the Backend section. Don't hesitate to contact the code owner if you need to access the Firebase project for a real project. But if you want to use this project for personal only, you can create 3 Firebase projects (for development, staging & Production). You can follow this step if you have a prepared Firebase project (Development, Staging, and Production).
