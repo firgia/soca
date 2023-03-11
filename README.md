@@ -44,16 +44,19 @@ We use firebase service to store the data and handle the Backend section. Don't 
 #### Android
 1. Open your Firebase project > Project Settings > download the google-services.json file (if you don't have it, add a new android app by clicking the "Add app" button on your Firebase project Settings).
 ![Group 2](https://user-images.githubusercontent.com/89120990/222965455-79157a85-8120-4bf3-8b0f-5d743f945ebe.png)
-2. Now you have 3 google-services.json with different environments (Development, Staging, and Production)
-3. Move the google-services.json to folder android/app/src/{environtment}. Remember you need to move to a specific environment
+
+2. Now you have 3 google-services.json with different environments (Development, Staging, and Production.
+3. Move the google-services.json to folder android/app/src/{environtment} (remember you need to move to a specific environment).
 ![Group 5](https://user-images.githubusercontent.com/89120990/222965708-aaa50c1f-c224-4931-8898-61c0bff641b6.png)
 4. Done!
+
+(Notes: You will need to add "SHA certificate fingerprints" for using Google Auth features.)
 
 #### IOS
 1. Open your Firebase project > Project Settings > download the GoogleService-info.plist file. (if you don't have it, add a new iOS app by clicking the "Add app" button on your Firebase project Settings).
 ![Group 7](https://user-images.githubusercontent.com/89120990/224487684-0faaa432-a1dd-498d-b5ef-99af4b6ed55f.png)
 
-2. Now you have 3 GoogleService-info.plist file with different environments (Development, Staging, and Production)
+2. Now you have 3 GoogleService-info.plist file with different environments (Development, Staging, and Production).
 3. Create a "config" folder, and create three folders inside "config" folder with the following name "production", "development", and "staging". Move all GoogleService-Info.plist to a specific environment folder. 
 <img width="344" alt="Screenshot 2023-03-11 at 20 39 06" src="https://user-images.githubusercontent.com/89120990/224488079-63dca4d1-bc6c-4e77-b581-a25611ec1993.png">
 
@@ -62,7 +65,7 @@ We use firebase service to store the data and handle the Backend section. Don't 
 6. Check "copy items if needed", and "Runner". And then click finish button.
 ![Group 8](https://user-images.githubusercontent.com/89120990/224488536-69573d9e-d8d8-4d3e-baf7-4b556aaededc.png)
 
-7. You will see the config folder on runner after click finish button
+7. You will see the config folder on runner after click finish button.
 ![Group 9](https://user-images.githubusercontent.com/89120990/224488722-ebfeb8f3-81a3-4628-b3ba-ab2ea0901e8c.png)
 
 8. Open GoogleService-Info.plist on your config > Development folder and copy "REVERSED_CLIENT_ID" value. 
@@ -71,7 +74,7 @@ We use firebase service to store the data and handle the Backend section. Don't 
 9. Go to targets Runner > Build Settings > fill out filter with "Reversed_Client_ID", and paste your REVERSED_CLIENT_ID to Debug-Development, Profile-Development, and Release-Development value.
 ![Group 11](https://user-images.githubusercontent.com/89120990/224489482-0bb19bac-7160-40c5-bd24-329c2623e25c.png)
 
-10. Repeat step 8 and 9 for staging and production environtment.
-12. Done!
+10. Repeat steps 8 and 9 for the staging and production environments.
+11. Done!
 
 
