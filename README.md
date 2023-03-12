@@ -5,6 +5,10 @@
 Soca is a blind-person helper app to connects blind people and volunteers. Soca used video calling and integrated with Google Assistant and Siri.
 
 ## Getting Started
+````
+The owner still migrates the old project to the new Flutter project with a Bloc pattern. 
+Some features are not available on this new Flutter project.
+````
 
 This section describes an overview of the project being built. 
 
@@ -77,4 +81,4 @@ We use firebase service to store the data and handle the Backend section. Don't 
 10. Repeat steps 8 and 9 for the staging and production environments.
 11. Done!
 
-
+# MORE CONFIGURATION WILL BE ADDED SOON..

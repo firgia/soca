@@ -14,11 +14,11 @@ import 'package:soca/data/data.dart';
 import 'package:soca/logic/logic.dart';
 
 void main() {
-  group("SignUpInputState", () {
-    late SignUpInputState defaultState;
+  group("SignUpFormState", () {
+    late SignUpFormState defaultState;
 
     setUp(() {
-      defaultState = SignUpInputState(
+      defaultState = SignUpFormState(
         dateOfBirth: DateTime(2000),
         deviceLanguage: DeviceLanguage.arabic,
         gender: Gender.male,
@@ -31,7 +31,7 @@ void main() {
 
     group("()", () {
       test("Should fill up the fields based on the constructor parameter", () {
-        SignUpInputState state = SignUpInputState(
+        SignUpFormState state = SignUpFormState(
           dateOfBirth: DateTime(2000),
           deviceLanguage: DeviceLanguage.arabic,
           gender: Gender.male,
@@ -55,7 +55,7 @@ void main() {
       test(
           "Should return [SignUpStep.inputPersonalInformation] when [type] and [languages] is not empty",
           () {
-        SignUpInputState state = SignUpInputState(
+        SignUpFormState state = SignUpFormState(
           dateOfBirth: DateTime(2000),
           deviceLanguage: DeviceLanguage.arabic,
           gender: Gender.male,
@@ -70,7 +70,7 @@ void main() {
 
       test("Should return [SignUpStep.selectLanguage] when [type] is not null",
           () {
-        SignUpInputState state = const SignUpInputState(
+        SignUpFormState state = const SignUpFormState(
           languages: null,
           type: UserType.volunteer,
         );
@@ -79,7 +79,7 @@ void main() {
       });
 
       test("Should return [SignUpStep.selectLanguage] when [type] is null", () {
-        SignUpInputState state = const SignUpInputState(
+        SignUpFormState state = const SignUpFormState(
           type: null,
         );
 
@@ -180,22 +180,22 @@ void main() {
     group(".isCanNext()", () {
       group("When [currentStep] is [SignUpStep.selectUserType]", () {
         test("Should return true when [type] is not null", () {
-          SignUpInputState inputState =
-              const SignUpInputState(type: UserType.blind);
+          SignUpFormState formState =
+              const SignUpFormState(type: UserType.blind);
 
-          expect(inputState.isCanNext(), true);
+          expect(formState.isCanNext(), true);
         });
 
         test("Should return false when [type] is null", () {
-          SignUpInputState inputState = const SignUpInputState();
+          SignUpFormState formState = const SignUpFormState();
 
-          expect(inputState.isCanNext(), false);
+          expect(formState.isCanNext(), false);
         });
       });
 
       group("When [currentStep] is [SignUpStep.selectLanguage]", () {
         test("Should return true when [type] and [language] is not null", () {
-          SignUpInputState inputState = const SignUpInputState(
+          SignUpFormState formState = const SignUpFormState(
             type: UserType.blind,
             languages: [
               Language(code: "id"),
@@ -203,22 +203,22 @@ void main() {
             currentStep: SignUpStep.selectLanguage,
           );
 
-          expect(inputState.isCanNext(), true);
+          expect(formState.isCanNext(), true);
         });
 
         test("Should return false when [type] or [language] is null", () {
-          SignUpInputState inputState = const SignUpInputState(
+          SignUpFormState formState = const SignUpFormState(
             type: UserType.blind,
             currentStep: SignUpStep.selectLanguage,
           );
 
-          expect(inputState.isCanNext(), false);
+          expect(formState.isCanNext(), false);
         });
       });
 
       group("When [currentStep] is [SignUpStep.inputPersonalInformation]", () {
         test("Should always return false", () {
-          SignUpInputState inputState = const SignUpInputState(
+          SignUpFormState formState = const SignUpFormState(
             type: UserType.blind,
             languages: [
               Language(code: "id"),
@@ -226,14 +226,14 @@ void main() {
             currentStep: SignUpStep.inputPersonalInformation,
           );
 
-          expect(inputState.isCanNext(), false);
+          expect(formState.isCanNext(), false);
         });
       });
     });
 
     group(".isValidToSubmit()", () {
       test("Should return true when all field is not empty", () {
-        SignUpInputState signUpInputState = SignUpInputState(
+        SignUpFormState signUpFormState = SignUpFormState(
           dateOfBirth: DateTime(2000),
           deviceLanguage: DeviceLanguage.arabic,
           gender: Gender.male,
@@ -243,13 +243,13 @@ void main() {
           type: UserType.volunteer,
         );
 
-        expect(signUpInputState.isValidToSubmit(), true);
+        expect(signUpFormState.isValidToSubmit(), true);
       });
 
       test(
           "Should return true when all field is not empty except [deviceLanguage]",
           () {
-        SignUpInputState signUpInputState = SignUpInputState(
+        SignUpFormState signUpFormState = SignUpFormState(
           dateOfBirth: DateTime(2000),
           deviceLanguage: null,
           gender: Gender.male,
@@ -259,13 +259,13 @@ void main() {
           type: UserType.volunteer,
         );
 
-        expect(signUpInputState.isValidToSubmit(), true);
+        expect(signUpFormState.isValidToSubmit(), true);
       });
 
       test(
           "Should return false when name is invalid even all input is not empty",
           () {
-        SignUpInputState signUpInputState = SignUpInputState(
+        SignUpFormState signUpFormState = SignUpFormState(
           dateOfBirth: DateTime(2000),
           deviceLanguage: DeviceLanguage.arabic,
           gender: Gender.male,
@@ -275,11 +275,11 @@ void main() {
           type: UserType.volunteer,
         );
 
-        expect(signUpInputState.isValidToSubmit(), false);
+        expect(signUpFormState.isValidToSubmit(), false);
       });
 
       test("Should return false when some field is empty", () {
-        SignUpInputState signUpInputState = SignUpInputState(
+        SignUpFormState signUpFormState = SignUpFormState(
           dateOfBirth: DateTime(2000),
           deviceLanguage: null,
           gender: null,
@@ -289,7 +289,7 @@ void main() {
           type: UserType.volunteer,
         );
 
-        expect(signUpInputState.isValidToSubmit(), false);
+        expect(signUpFormState.isValidToSubmit(), false);
       });
     });
   });

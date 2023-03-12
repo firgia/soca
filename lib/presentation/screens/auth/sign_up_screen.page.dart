@@ -14,7 +14,7 @@ class _SignUpFormPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
+    return BlocBuilder<SignUpFormBloc, SignUpFormState>(
       builder: (context, state) {
         SignUpStep step = state.currentStep;
 
@@ -68,7 +68,7 @@ class _SelectLanguagePage extends StatelessWidget {
         const SizedBox(height: kDefaultSpacing),
         Expanded(child: _buildLanguage()),
         const SizedBox(height: kDefaultSpacing),
-        BlocBuilder<SignUpInputBloc, SignUpInputState>(
+        BlocBuilder<SignUpFormBloc, SignUpFormState>(
           builder: (context, state) {
             UserType? type = state.type;
 
@@ -90,9 +90,9 @@ class _SelectLanguagePage extends StatelessWidget {
   }
 
   Widget _buildLanguage() {
-    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
+    return BlocBuilder<SignUpFormBloc, SignUpFormState>(
       builder: (context, state) {
-        SignUpInputBloc signUpInputBloc = context.read<SignUpInputBloc>();
+        SignUpFormBloc signUpFormBloc = context.read<SignUpFormBloc>();
 
         List<Language> selectedLanguages = state.languages ?? [];
         bool isCanAddLanguage = state.isCanAddLanguage();
@@ -113,7 +113,7 @@ class _SelectLanguagePage extends StatelessWidget {
                       selected: selectedLanguages,
                       selection: languageState.languages,
                       onSelected: (selected) {
-                        signUpInputBloc.add(SignUpInputLanguageAdded(selected));
+                        signUpFormBloc.add(SignUpFormLanguageAdded(selected));
                       },
                     );
                   } else {
@@ -129,7 +129,7 @@ class _SelectLanguagePage extends StatelessWidget {
                 child: LanguageCard(
                   language,
                   onTapRemove: () {
-                    signUpInputBloc.add(SignUpInputLanguageRemoved(language));
+                    signUpFormBloc.add(SignUpFormLanguageRemoved(language));
                   },
                 ),
               );

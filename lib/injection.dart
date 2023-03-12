@@ -71,7 +71,7 @@ void setupInjection() {
   sl.registerFactory<FileBloc>(() => FileBloc());
   sl.registerFactory<LanguageBloc>(() => LanguageBloc());
   sl.registerFactory<SignInBloc>(() => SignInBloc());
-  sl.registerFactory<SignUpInputBloc>(() => SignUpInputBloc());
+  sl.registerFactory<SignUpFormBloc>(() => SignUpFormBloc());
   sl.registerFactory<SignUpBloc>(() => SignUpBloc());
   sl.registerFactory<AccountCubit>(() => AccountCubit());
   sl.registerFactory<RouteCubit>(() => RouteCubit());

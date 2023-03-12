@@ -7,9 +7,9 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-part of 'sign_up_input_bloc.dart';
+part of 'sign_up_form_bloc.dart';
 
-class SignUpInputState extends Equatable with ValidateName {
+class SignUpFormState extends Equatable with ValidateName {
   final SignUpStep currentStep;
   final DateTime? dateOfBirth;
   final DeviceLanguage? deviceLanguage;
@@ -19,7 +19,7 @@ class SignUpInputState extends Equatable with ValidateName {
   final File? profileImage;
   final UserType? type;
 
-  const SignUpInputState({
+  const SignUpFormState({
     this.currentStep = SignUpStep.selectUserType,
     this.dateOfBirth,
     this.deviceLanguage,
@@ -30,7 +30,7 @@ class SignUpInputState extends Equatable with ValidateName {
     this.type,
   });
 
-  SignUpInputState copyWith({
+  SignUpFormState copyWith({
     SignUpStep? currentStep,
     DateTime? dateOfBirth,
     DeviceLanguage? deviceLanguage,
@@ -40,7 +40,7 @@ class SignUpInputState extends Equatable with ValidateName {
     File? profileImage,
     UserType? type,
   }) {
-    return SignUpInputState(
+    return SignUpFormState(
       currentStep: currentStep ?? this.currentStep,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       deviceLanguage: deviceLanguage ?? this.deviceLanguage,

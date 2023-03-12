@@ -44,7 +44,7 @@ import 'package:soca/logic/bloc/file/file_bloc.dart' as _i19;
 import 'package:soca/logic/bloc/language/language_bloc.dart' as _i20;
 import 'package:soca/logic/bloc/sign_in/sign_in_bloc.dart' as _i21;
 import 'package:soca/logic/bloc/sign_up/sign_up_bloc.dart' as _i23;
-import 'package:soca/logic/bloc/sign_up_input/sign_up_input_bloc.dart' as _i24;
+import 'package:soca/logic/bloc/sign_up_form/sign_up_form_bloc.dart' as _i24;
 import 'package:soca/logic/cubit/account/account_cubit.dart' as _i25;
 import 'package:soca/logic/cubit/route/route_cubit.dart' as _i26;
 import 'package:soca/logic/cubit/sign_out/sign_out_cubit.dart' as _i27;
@@ -662,9 +662,9 @@ class _FakeSignUpState_55 extends _i1.SmartFake implements _i23.SignUpState {
         );
 }
 
-class _FakeSignUpInputState_56 extends _i1.SmartFake
-    implements _i24.SignUpInputState {
-  _FakeSignUpInputState_56(
+class _FakeSignUpFormState_56 extends _i1.SmartFake
+    implements _i24.SignUpFormState {
+  _FakeSignUpFormState_56(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -6029,28 +6029,28 @@ class MockSignUpBloc extends _i1.Mock implements _i23.SignUpBloc {
       );
 }
 
-/// A class which mocks [SignUpInputBloc].
+/// A class which mocks [SignUpFormBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSignUpInputBloc extends _i1.Mock implements _i24.SignUpInputBloc {
+class MockSignUpFormBloc extends _i1.Mock implements _i24.SignUpFormBloc {
   @override
-  _i24.SignUpInputState get state => (super.noSuchMethod(
+  _i24.SignUpFormState get state => (super.noSuchMethod(
         Invocation.getter(#state),
-        returnValue: _FakeSignUpInputState_56(
+        returnValue: _FakeSignUpFormState_56(
           this,
           Invocation.getter(#state),
         ),
-        returnValueForMissingStub: _FakeSignUpInputState_56(
+        returnValueForMissingStub: _FakeSignUpFormState_56(
           this,
           Invocation.getter(#state),
         ),
-      ) as _i24.SignUpInputState);
+      ) as _i24.SignUpFormState);
   @override
-  _i30.Stream<_i24.SignUpInputState> get stream => (super.noSuchMethod(
+  _i30.Stream<_i24.SignUpFormState> get stream => (super.noSuchMethod(
         Invocation.getter(#stream),
-        returnValue: _i30.Stream<_i24.SignUpInputState>.empty(),
-        returnValueForMissingStub: _i30.Stream<_i24.SignUpInputState>.empty(),
-      ) as _i30.Stream<_i24.SignUpInputState>);
+        returnValue: _i30.Stream<_i24.SignUpFormState>.empty(),
+        returnValueForMissingStub: _i30.Stream<_i24.SignUpFormState>.empty(),
+      ) as _i30.Stream<_i24.SignUpFormState>);
   @override
   bool get isClosed => (super.noSuchMethod(
         Invocation.getter(#isClosed),
@@ -6058,7 +6058,7 @@ class MockSignUpInputBloc extends _i1.Mock implements _i24.SignUpInputBloc {
         returnValueForMissingStub: false,
       ) as bool);
   @override
-  void add(_i24.SignUpInputEvent? event) => super.noSuchMethod(
+  void add(_i24.SignUpFormEvent? event) => super.noSuchMethod(
         Invocation.method(
           #add,
           [event],
@@ -6066,7 +6066,7 @@ class MockSignUpInputBloc extends _i1.Mock implements _i24.SignUpInputBloc {
         returnValueForMissingStub: null,
       );
   @override
-  void onEvent(_i24.SignUpInputEvent? event) => super.noSuchMethod(
+  void onEvent(_i24.SignUpFormEvent? event) => super.noSuchMethod(
         Invocation.method(
           #onEvent,
           [event],
@@ -6074,7 +6074,7 @@ class MockSignUpInputBloc extends _i1.Mock implements _i24.SignUpInputBloc {
         returnValueForMissingStub: null,
       );
   @override
-  void emit(_i24.SignUpInputState? state) => super.noSuchMethod(
+  void emit(_i24.SignUpFormState? state) => super.noSuchMethod(
         Invocation.method(
           #emit,
           [state],
@@ -6082,8 +6082,8 @@ class MockSignUpInputBloc extends _i1.Mock implements _i24.SignUpInputBloc {
         returnValueForMissingStub: null,
       );
   @override
-  void on<E extends _i24.SignUpInputEvent>(
-    _i41.EventHandler<E, _i24.SignUpInputState>? handler, {
+  void on<E extends _i24.SignUpFormEvent>(
+    _i41.EventHandler<E, _i24.SignUpFormState>? handler, {
     _i41.EventTransformer<E>? transformer,
   }) =>
       super.noSuchMethod(
@@ -6096,7 +6096,7 @@ class MockSignUpInputBloc extends _i1.Mock implements _i24.SignUpInputBloc {
       );
   @override
   void onTransition(
-          _i41.Transition<_i24.SignUpInputEvent, _i24.SignUpInputState>?
+          _i41.Transition<_i24.SignUpFormEvent, _i24.SignUpFormState>?
               transition) =>
       super.noSuchMethod(
         Invocation.method(
@@ -6115,7 +6115,7 @@ class MockSignUpInputBloc extends _i1.Mock implements _i24.SignUpInputBloc {
         returnValueForMissingStub: _i30.Future<void>.value(),
       ) as _i30.Future<void>);
   @override
-  void onChange(_i41.Change<_i24.SignUpInputState>? change) =>
+  void onChange(_i41.Change<_i24.SignUpFormState>? change) =>
       super.noSuchMethod(
         Invocation.method(
           #onChange,
