@@ -47,6 +47,14 @@ MockAuthProvider getMockAuthProvider() {
   return mock;
 }
 
+MockDatabaseProvider getMockDatabaseProvider() {
+  MockDatabaseProvider mock = MockDatabaseProvider();
+  _removeRegistrationIfExists<DatabaseProvider>();
+  locator.registerSingleton<DatabaseProvider>(mock);
+
+  return mock;
+}
+
 MockDeviceProvider getMockDeviceProvider() {
   MockDeviceProvider mock = MockDeviceProvider();
   _removeRegistrationIfExists<DeviceProvider>();
@@ -132,6 +140,14 @@ MockFirebaseAuth getMockFirebaseAuth() {
   MockFirebaseAuth mock = MockFirebaseAuth();
   _removeRegistrationIfExists<FirebaseAuth>();
   locator.registerSingleton<FirebaseAuth>(mock);
+
+  return mock;
+}
+
+MockFirebaseDatabase getMockFirebaseDatabase() {
+  MockFirebaseDatabase mock = MockFirebaseDatabase();
+  _removeRegistrationIfExists<FirebaseDatabase>();
+  locator.registerSingleton<FirebaseDatabase>(mock);
 
   return mock;
 }
@@ -276,6 +292,7 @@ void registerLocator() {
 
   /* ---------------------------------> DATA <------------------------------- */
   getMockAuthProvider();
+  getMockDatabaseProvider();
   getMockDeviceProvider();
   getMockFunctionsProvider();
   getMockUserProvider();
@@ -289,6 +306,7 @@ void registerLocator() {
   getMockDotEnv();
   getMockFlutterSecureStorage();
   getMockFirebaseAuth();
+  getMockFirebaseDatabase();
   getMockFirebaseFunctions();
   getMockFirebaseStorage();
   getMockGoogleSignIn();
@@ -319,6 +337,7 @@ void unregisterLocator() {
 
   /* ---------------------------------> DATA <------------------------------- */
   locator.unregister<AuthProvider>();
+  locator.unregister<DatabaseProvider>();
   locator.unregister<DeviceProvider>();
   locator.unregister<FunctionsProvider>();
   locator.unregister<UserProvider>();
@@ -332,6 +351,7 @@ void unregisterLocator() {
   locator.unregister<DotEnv>();
   locator.unregister<FlutterSecureStorage>();
   locator.unregister<FirebaseAuth>();
+  locator.unregister<FirebaseDatabase>();
   locator.unregister<FirebaseFunctions>();
   locator.unregister<FirebaseStorage>();
   locator.unregister<GoogleSignIn>();
