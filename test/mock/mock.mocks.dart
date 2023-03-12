@@ -780,6 +780,14 @@ class MockAppNavigator extends _i1.Mock implements _i28.AppNavigator {
         ),
         returnValueForMissingStub: null,
       );
+  @override
+  void goToUnknownDevice(_i15.BuildContext? context) => super.noSuchMethod(
+        Invocation.method(
+          #goToUnknownDevice,
+          [context],
+        ),
+        returnValueForMissingStub: null,
+      );
 }
 
 /// A class which mocks [DeviceFeedback].

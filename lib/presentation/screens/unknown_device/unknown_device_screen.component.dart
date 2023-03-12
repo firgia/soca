@@ -55,6 +55,7 @@ class _IllustrationImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return LottieBuilder.asset(
       ImageAnimation.cyberSecurity,
+      key: const Key("unknown_device_screen_illustration_image"),
       height: 250,
       width: 250,
     );
@@ -69,6 +70,7 @@ class _GotItButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
+      key: const Key("unknown_device_screen_got_it_button"),
       onPressed: () => _appNavigator.goToSignIn(context),
       style: FlatButtonStyle(
         expanded: true,
