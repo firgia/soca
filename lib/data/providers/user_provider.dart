@@ -16,10 +16,12 @@ import 'package:path/path.dart' as path;
 import '../../injection.dart';
 import '../../core/core.dart';
 import '../models/models.dart';
+import 'database_provider.dart';
 import 'functions_provider.dart';
 
 class UserProvider {
   final FirebaseStorage _firebaseStorage = sl<FirebaseStorage>();
+  final DatabaseProvider _databaseProvider = sl<DatabaseProvider>();
   final FunctionsProvider _functionsProvider = sl<FunctionsProvider>();
   final Logger _logger = Logger("User Provider");
 
@@ -83,6 +85,11 @@ class UserProvider {
       functionsName: FunctionName.getProfileUser,
       parameters: {if (uid != null) "uid": uid},
     );
+  }
+
+  /// Get user device data based on [uid]
+  Future<dynamic> getUserDevice(String uid) async {
+    return await _databaseProvider.get("users/$uid/device");
   }
 
   /// Uploading new avatar image

@@ -23,10 +23,12 @@ String get _getProfile => "getProfileUser";
 
 void main() {
   late UserProvider userProvider;
+  late MockDatabaseProvider databaseProvider;
   late MockFunctionsProvider functionsProvider;
 
   setUp(() {
     registerLocator();
+    databaseProvider = getMockDatabaseProvider();
     functionsProvider = getMockFunctionsProvider();
     userProvider = UserProvider();
   });
@@ -153,6 +155,31 @@ void main() {
       );
     });
   });
+
+  group(".getUserDevice()", () {
+    test("Should call databaseProvider.get()", () async {
+      when(
+        databaseProvider.get("users/1234/device"),
+      ).thenAnswer((_) => Future.value({}));
+
+      await userProvider.getUserDevice("1234");
+      verify(databaseProvider.get("users/1234/device"));
+    });
+
+    test("Should thrown Exception when getting error", () async {
+      Exception exception = Exception("unknown");
+
+      when(
+        databaseProvider.get("users/1234/device"),
+      ).thenThrow(exception);
+
+      expect(
+        () => userProvider.getUserDevice("1234"),
+        throwsA(exception),
+      );
+    });
+  });
+
   group(".uploadAvatar()", () {
     test("Should send the correct path", () async {
       File file = File("assets/images/raster/avatar.png");

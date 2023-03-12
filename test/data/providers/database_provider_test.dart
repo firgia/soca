@@ -73,5 +73,17 @@ void main() {
       final response = await databaseProvider.get(path);
       expect(response, isNull);
     });
+
+    test("Should throw exception when a failure occurs", () async {
+      String path = "/user-test";
+      Exception exception = Exception("unknown");
+
+      when(firebaseDatabase.ref(path)).thenThrow(exception);
+
+      expect(
+        () => databaseProvider.get(path),
+        throwsA(exception),
+      );
+    });
   });
 }
