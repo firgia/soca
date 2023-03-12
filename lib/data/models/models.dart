@@ -10,5 +10,6 @@
 export 'language.dart';
 export 'url_image.dart';
 export 'user_activity.dart';
+export 'user_device.dart';
 export 'user_info.dart';
 export 'user.dart';
