@@ -234,10 +234,10 @@ MockSignUpBloc getMockSignUpBloc() {
   return mock;
 }
 
-MockSignUpInputBloc getMockSignUpInputBloc() {
-  MockSignUpInputBloc mock = MockSignUpInputBloc();
-  _removeRegistrationIfExists<SignUpInputBloc>();
-  locator.registerSingleton<SignUpInputBloc>(mock);
+MockSignUpFormBloc getMockSignUpFormBloc() {
+  MockSignUpFormBloc mock = MockSignUpFormBloc();
+  _removeRegistrationIfExists<SignUpFormBloc>();
+  locator.registerSingleton<SignUpFormBloc>(mock);
 
   return mock;
 }
@@ -303,7 +303,7 @@ void registerLocator() {
   getMockLanguageBloc();
   getMockSignInBloc();
   getMockSignUpBloc();
-  getMockSignUpInputBloc();
+  getMockSignUpFormBloc();
   getMockAccountCubit();
   getMockRouteCubit();
   getMockSignOutCubit();
@@ -346,7 +346,7 @@ void unregisterLocator() {
   locator.unregister<LanguageBloc>();
   locator.unregister<SignInBloc>();
   locator.unregister<SignUpBloc>();
-  locator.unregister<SignUpInputBloc>();
+  locator.unregister<SignUpFormBloc>();
   locator.unregister<AccountCubit>();
   locator.unregister<RouteCubit>();
   locator.unregister<SignOutCubit>();

@@ -66,7 +66,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<LanguageBloc>(),
   MockSpec<SignInBloc>(),
   MockSpec<SignUpBloc>(),
-  MockSpec<SignUpInputBloc>(),
+  MockSpec<SignUpFormBloc>(),
   MockSpec<AccountCubit>(),
   MockSpec<RouteCubit>(),
   MockSpec<SignOutCubit>(),

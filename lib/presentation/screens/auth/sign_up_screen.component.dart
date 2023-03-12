@@ -157,15 +157,15 @@ class _BlindUserButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
+    return BlocBuilder<SignUpFormBloc, SignUpFormState>(
       builder: (context, state) {
         bool isSelected = state.type == UserType.blind;
 
         return IllustrationCardButton(
           selected: isSelected,
           onPressed: () => context
-              .read<SignUpInputBloc>()
-              .add(const SignUpInputTypeChanged(UserType.blind)),
+              .read<SignUpFormBloc>()
+              .add(const SignUpFormTypeChanged(UserType.blind)),
           subtitle: LocaleKeys.blind_info.tr(),
           title: LocaleKeys.blind.tr(),
           vectorAsset: ImageVector.blindIllustration,
@@ -181,15 +181,15 @@ class _VolunteerUserButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
+    return BlocBuilder<SignUpFormBloc, SignUpFormState>(
       builder: (context, state) {
         bool isSelected = state.type == UserType.volunteer;
 
         return IllustrationCardButton(
           selected: isSelected,
           onPressed: () => context
-              .read<SignUpInputBloc>()
-              .add(const SignUpInputTypeChanged(UserType.volunteer)),
+              .read<SignUpFormBloc>()
+              .add(const SignUpFormTypeChanged(UserType.volunteer)),
           subtitle: LocaleKeys.volunteer_info.tr(),
           title: LocaleKeys.volunteer.tr(),
           vectorAsset: ImageVector.greetingIllustration,
@@ -204,16 +204,16 @@ class _NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
+    return BlocBuilder<SignUpFormBloc, SignUpFormState>(
       builder: (context, state) {
-        SignUpInputBloc signUpInputBloc = context.read<SignUpInputBloc>();
+        SignUpFormBloc signUpFormBloc = context.read<SignUpFormBloc>();
         bool enable = state.isCanNext();
 
         return ElevatedButton(
           key: const Key("sign_up_screen_next_button"),
           onPressed: !enable
               ? null
-              : () => signUpInputBloc.add(const SignUpInputNextStep()),
+              : () => signUpFormBloc.add(const SignUpFormNextStep()),
           style: FlatButtonStyle(expanded: true),
           child: const Text(LocaleKeys.next).tr(),
         );
@@ -230,7 +230,7 @@ class _BackIconButton extends StatelessWidget with UIMixin {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () =>
-          context.read<SignUpInputBloc>().add(const SignUpInputBackStep()),
+          context.read<SignUpFormBloc>().add(const SignUpFormBackStep()),
       color: AppColors.fontPallets[2],
       icon: Icon(
         isRTL(context)
@@ -250,7 +250,7 @@ class _SaveButton extends StatelessWidget {
       builder: (context, state) {
         bool isLoading = state is SignUpLoading;
 
-        return BlocBuilder<SignUpInputBloc, SignUpInputState>(
+        return BlocBuilder<SignUpFormBloc, SignUpFormState>(
           builder: (context, state) {
             SignUpBloc signUpBloc = context.read<SignUpBloc>();
             bool enable = state.isValidToSubmit();
@@ -261,7 +261,7 @@ class _SaveButton extends StatelessWidget {
               onPressed: !enable
                   ? null
                   : () => signUpBloc
-                      .add(SignUpSubmitted.fromSignUpInputState(state)),
+                      .add(SignUpSubmitted.fromSignUpFormState(state)),
               style: FlatButtonStyle(expanded: true),
               child: const Text(LocaleKeys.save).tr(),
             );
@@ -278,7 +278,7 @@ class _ProfileImageButton extends StatelessWidget with UIMixin {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
+    return BlocBuilder<SignUpFormBloc, SignUpFormState>(
       builder: (context, state) {
         FileBloc fileBloc = context.read<FileBloc>();
         File? profileImage = state.profileImage;
@@ -348,13 +348,13 @@ class _NameFieldState extends State<_NameField> {
     super.initState();
 
     controller = TextEditingController();
-    SignUpInputBloc signUpInputBloc = context.read<SignUpInputBloc>();
-    controller.text = signUpInputBloc.state.name ?? "";
+    SignUpFormBloc signUpFormBloc = context.read<SignUpFormBloc>();
+    controller.text = signUpFormBloc.state.name ?? "";
 
     controller.addListener(() {
       if (_debounce?.isActive ?? false) _debounce?.cancel();
       _debounce = Timer(const Duration(milliseconds: 600), () {
-        signUpInputBloc.add(SignUpInputNameChanged(controller.text));
+        signUpFormBloc.add(SignUpFormNameChanged(controller.text));
       });
     });
   }
@@ -373,12 +373,12 @@ class _DateOfBirthField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SignUpInputBloc signUpInputBloc = context.read<SignUpInputBloc>();
+    SignUpFormBloc signUpFormBloc = context.read<SignUpFormBloc>();
     return DateOfBirthField(
-      initial: signUpInputBloc.state.dateOfBirth,
+      initial: signUpFormBloc.state.dateOfBirth,
       onChanged: (date) {
-        SignUpInputBloc signUpInputBloc = context.read<SignUpInputBloc>();
-        signUpInputBloc.add(SignUpInputDateOfBirthChanged(date));
+        SignUpFormBloc signUpFormBloc = context.read<SignUpFormBloc>();
+        signUpFormBloc.add(SignUpFormDateOfBirthChanged(date));
       },
       controller: controller,
     );
@@ -390,9 +390,9 @@ class _GenderButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SignUpInputBloc, SignUpInputState>(
+    return BlocBuilder<SignUpFormBloc, SignUpFormState>(
       builder: (context, state) {
-        SignUpInputBloc signUpInputBloc = context.read<SignUpInputBloc>();
+        SignUpFormBloc signUpFormBloc = context.read<SignUpFormBloc>();
         Gender? gender = state.gender;
 
         return Row(
@@ -401,16 +401,16 @@ class _GenderButton extends StatelessWidget {
             GenderButton(
               key: const Key("sign_up_screen_gender_male_button"),
               gender: Gender.male,
-              onPressed: () => signUpInputBloc
-                  .add(const SignUpInputGenderChanged(Gender.male)),
+              onPressed: () => signUpFormBloc
+                  .add(const SignUpFormGenderChanged(Gender.male)),
               selected: gender == Gender.male,
             ),
             const SizedBox(width: kDefaultSpacing),
             GenderButton(
               key: const Key("sign_up_screen_gender_female_button"),
               gender: Gender.female,
-              onPressed: () => signUpInputBloc
-                  .add(const SignUpInputGenderChanged(Gender.female)),
+              onPressed: () => signUpFormBloc
+                  .add(const SignUpFormGenderChanged(Gender.female)),
               selected: gender == Gender.female,
             ),
           ],

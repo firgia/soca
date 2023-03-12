@@ -15,30 +15,30 @@ import 'package:logging/logging.dart';
 import '../../../core/core.dart';
 import '../../../data/data.dart';
 
-part 'sign_up_input_event.dart';
-part 'sign_up_input_state.dart';
+part 'sign_up_form_event.dart';
+part 'sign_up_form_state.dart';
 
 const int _maxLanguage = 3;
 
-class SignUpInputBloc extends Bloc<SignUpInputEvent, SignUpInputState> {
-  final Logger _logger = Logger("Sign Up Input Bloc");
+class SignUpFormBloc extends Bloc<SignUpFormEvent, SignUpFormState> {
+  final Logger _logger = Logger("Sign Up Form Bloc");
 
-  SignUpInputBloc() : super(const SignUpInputState()) {
-    on<SignUpInputBackStep>(_onBackStep);
-    on<SignUpInputDateOfBirthChanged>(_onDateOfBirthChanged);
-    on<SignUpInputDeviceLanguageChanged>(_onDeviceLanguageChanged);
-    on<SignUpInputGenderChanged>(_onGenderChanged);
-    on<SignUpInputLanguageAdded>(_onLanguageAdded);
-    on<SignUpInputLanguageRemoved>(_onLanguageRemoved);
-    on<SignUpInputNameChanged>(_onNameChanged);
-    on<SignUpInputNextStep>(_onNextStep);
-    on<SignUpInputProfileImageChanged>(_onProfileImageChanged);
-    on<SignUpInputTypeChanged>(_onTypeChanged);
+  SignUpFormBloc() : super(const SignUpFormState()) {
+    on<SignUpFormBackStep>(_onBackStep);
+    on<SignUpFormDateOfBirthChanged>(_onDateOfBirthChanged);
+    on<SignUpFormDeviceLanguageChanged>(_onDeviceLanguageChanged);
+    on<SignUpFormGenderChanged>(_onGenderChanged);
+    on<SignUpFormLanguageAdded>(_onLanguageAdded);
+    on<SignUpFormLanguageRemoved>(_onLanguageRemoved);
+    on<SignUpFormNameChanged>(_onNameChanged);
+    on<SignUpFormNextStep>(_onNextStep);
+    on<SignUpFormProfileImageChanged>(_onProfileImageChanged);
+    on<SignUpFormTypeChanged>(_onTypeChanged);
   }
 
   void _onBackStep(
-    SignUpInputBackStep event,
-    Emitter<SignUpInputState> emit,
+    SignUpFormBackStep event,
+    Emitter<SignUpFormState> emit,
   ) {
     SignUpStep? targetStep;
 
@@ -62,32 +62,32 @@ class SignUpInputBloc extends Bloc<SignUpInputEvent, SignUpInputState> {
   }
 
   void _onDateOfBirthChanged(
-    SignUpInputDateOfBirthChanged event,
-    Emitter<SignUpInputState> emit,
+    SignUpFormDateOfBirthChanged event,
+    Emitter<SignUpFormState> emit,
   ) {
     emit(state.copyWith(dateOfBirth: event.dateOfBirth));
     _logger.info("Date of birth changed");
   }
 
   void _onDeviceLanguageChanged(
-    SignUpInputDeviceLanguageChanged event,
-    Emitter<SignUpInputState> emit,
+    SignUpFormDeviceLanguageChanged event,
+    Emitter<SignUpFormState> emit,
   ) {
     emit(state.copyWith(deviceLanguage: event.deviceLanguage));
     _logger.info("Device language changed");
   }
 
   void _onGenderChanged(
-    SignUpInputGenderChanged event,
-    Emitter<SignUpInputState> emit,
+    SignUpFormGenderChanged event,
+    Emitter<SignUpFormState> emit,
   ) {
     emit(state.copyWith(gender: event.gender));
     _logger.info("Gender changed");
   }
 
   void _onLanguageAdded(
-    SignUpInputLanguageAdded event,
-    Emitter<SignUpInputState> emit,
+    SignUpFormLanguageAdded event,
+    Emitter<SignUpFormState> emit,
   ) {
     List<Language>? currentLanguages = state.languages;
 
@@ -107,8 +107,8 @@ class SignUpInputBloc extends Bloc<SignUpInputEvent, SignUpInputState> {
   }
 
   void _onLanguageRemoved(
-    SignUpInputLanguageRemoved event,
-    Emitter<SignUpInputState> emit,
+    SignUpFormLanguageRemoved event,
+    Emitter<SignUpFormState> emit,
   ) {
     List<Language>? currentLanguages = state.languages;
 
@@ -130,16 +130,16 @@ class SignUpInputBloc extends Bloc<SignUpInputEvent, SignUpInputState> {
   }
 
   void _onNameChanged(
-    SignUpInputNameChanged event,
-    Emitter<SignUpInputState> emit,
+    SignUpFormNameChanged event,
+    Emitter<SignUpFormState> emit,
   ) {
     emit(state.copyWith(name: event.name));
     _logger.info("Name changed");
   }
 
   void _onNextStep(
-    SignUpInputNextStep event,
-    Emitter<SignUpInputState> emit,
+    SignUpFormNextStep event,
+    Emitter<SignUpFormState> emit,
   ) {
     SignUpStep? targetStep;
 
@@ -168,16 +168,16 @@ class SignUpInputBloc extends Bloc<SignUpInputEvent, SignUpInputState> {
   }
 
   void _onTypeChanged(
-    SignUpInputTypeChanged event,
-    Emitter<SignUpInputState> emit,
+    SignUpFormTypeChanged event,
+    Emitter<SignUpFormState> emit,
   ) {
     emit(state.copyWith(type: event.type));
     _logger.info("Type changed");
   }
 
   void _onProfileImageChanged(
-    SignUpInputProfileImageChanged event,
-    Emitter<SignUpInputState> emit,
+    SignUpFormProfileImageChanged event,
+    Emitter<SignUpFormState> emit,
   ) {
     emit(state.copyWith(profileImage: event.profileImage));
     _logger.info("Profile image changed");

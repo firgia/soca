@@ -35,7 +35,7 @@ class SignUpScreen extends StatelessWidget
   final FileBloc _fileBloc = sl<FileBloc>();
   final LanguageBloc _languageBloc = sl<LanguageBloc>();
   final SignUpBloc _signUpBloc = sl<SignUpBloc>();
-  final SignUpInputBloc _signUpInputBloc = sl<SignUpInputBloc>();
+  final SignUpFormBloc _signUpFormBloc = sl<SignUpFormBloc>();
   final SignOutCubit _signOutCubit = sl<SignOutCubit>();
 
   SignUpScreen({super.key});
@@ -48,7 +48,7 @@ class SignUpScreen extends StatelessWidget
     DeviceLanguage? deviceLanguage = context.locale.toDeviceLanguage();
 
     if (deviceLanguage != null) {
-      _signUpInputBloc.add(SignUpInputDeviceLanguageChanged(deviceLanguage));
+      _signUpFormBloc.add(SignUpFormDeviceLanguageChanged(deviceLanguage));
     }
 
     return MultiBlocProvider(
@@ -57,7 +57,7 @@ class SignUpScreen extends StatelessWidget
         BlocProvider(create: (context) => _fileBloc),
         BlocProvider(create: (context) => _languageBloc),
         BlocProvider(create: (context) => _signUpBloc),
-        BlocProvider(create: (context) => _signUpInputBloc),
+        BlocProvider(create: (context) => _signUpFormBloc),
         BlocProvider(create: (context) => _signOutCubit),
       ],
       child: WillPopScope(
@@ -74,8 +74,8 @@ class SignUpScreen extends StatelessWidget
                   }
 
                   if (state is FilePicked) {
-                    _signUpInputBloc.add(
-                      SignUpInputProfileImageChanged(state.file),
+                    _signUpFormBloc.add(
+                      SignUpFormProfileImageChanged(state.file),
                     );
                   }
                 },

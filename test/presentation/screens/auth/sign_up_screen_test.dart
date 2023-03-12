@@ -29,7 +29,7 @@ void main() {
   late MockFileBloc fileBloc;
   late MockLanguageBloc languageBloc;
   late MockSignUpBloc signUpBloc;
-  late MockSignUpInputBloc signUpInputBloc;
+  late MockSignUpFormBloc signUpFormBloc;
   late MockSignOutCubit signOutCubit;
   late MockWidgetsBinding widgetBinding;
 
@@ -118,7 +118,7 @@ void main() {
     fileBloc = getMockFileBloc();
     languageBloc = getMockLanguageBloc();
     signUpBloc = getMockSignUpBloc();
-    signUpInputBloc = getMockSignUpInputBloc();
+    signUpFormBloc = getMockSignUpFormBloc();
     signOutCubit = getMockSignOutCubit();
     widgetBinding = getMockWidgetsBinding();
 
@@ -133,8 +133,8 @@ void main() {
     testWidgets("Should show error choose image message when [FileError]",
         (tester) async {
       await tester.runAsync(() async {
-        when(signUpInputBloc.state).thenReturn(
-          const SignUpInputState(currentStep: SignUpStep.selectUserType),
+        when(signUpFormBloc.state).thenReturn(
+          const SignUpFormState(currentStep: SignUpStep.selectUserType),
         );
 
         when(fileBloc.stream).thenAnswer(
@@ -149,11 +149,11 @@ void main() {
     });
 
     testWidgets(
-        "Should call add [SignUpInputProfileImageChanged] when [FilePicked]",
+        "Should call add [SignUpFormProfileImageChanged] when [FilePicked]",
         (tester) async {
       await tester.runAsync(() async {
-        when(signUpInputBloc.state).thenReturn(
-          const SignUpInputState(currentStep: SignUpStep.selectUserType),
+        when(signUpFormBloc.state).thenReturn(
+          const SignUpFormState(currentStep: SignUpStep.selectUserType),
         );
 
         when(fileBloc.stream).thenAnswer(
@@ -161,15 +161,15 @@ void main() {
         );
 
         await tester.pumpApp(child: SignUpScreen());
-        verify(signUpInputBloc.add(SignUpInputProfileImageChanged(file)));
+        verify(signUpFormBloc.add(SignUpFormProfileImageChanged(file)));
       });
     });
 
     testWidgets("Should navigate to home page when [SignUpSuccessfully]",
         (tester) async {
       await tester.runAsync(() async {
-        when(signUpInputBloc.state).thenReturn(
-          const SignUpInputState(currentStep: SignUpStep.selectUserType),
+        when(signUpFormBloc.state).thenReturn(
+          const SignUpFormState(currentStep: SignUpStep.selectUserType),
         );
 
         when(signUpBloc.stream).thenAnswer(
@@ -184,8 +184,8 @@ void main() {
     testWidgets("Should navigate to splash page when [SignOutSuccessfully]",
         (tester) async {
       await tester.runAsync(() async {
-        when(signUpInputBloc.state).thenReturn(
-          const SignUpInputState(currentStep: SignUpStep.selectUserType),
+        when(signUpFormBloc.state).thenReturn(
+          const SignUpFormState(currentStep: SignUpStep.selectUserType),
         );
 
         when(signOutCubit.stream).thenAnswer(
@@ -200,8 +200,8 @@ void main() {
     testWidgets("Should navigate to splash page when [SignOutError]",
         (tester) async {
       await tester.runAsync(() async {
-        when(signUpInputBloc.state).thenReturn(
-          const SignUpInputState(currentStep: SignUpStep.selectUserType),
+        when(signUpFormBloc.state).thenReturn(
+          const SignUpFormState(currentStep: SignUpStep.selectUserType),
         );
 
         when(signOutCubit.stream).thenAnswer(
@@ -216,8 +216,8 @@ void main() {
 
   group("Responsive Layout", () {
     setUp(() {
-      when(signUpInputBloc.state).thenReturn(
-        const SignUpInputState(currentStep: SignUpStep.selectUserType),
+      when(signUpFormBloc.state).thenReturn(
+        const SignUpFormState(currentStep: SignUpStep.selectUserType),
       );
     });
 
@@ -270,8 +270,8 @@ void main() {
 
   group("Text", () {
     setUp(() {
-      when(signUpInputBloc.state).thenReturn(
-        const SignUpInputState(currentStep: SignUpStep.selectUserType),
+      when(signUpFormBloc.state).thenReturn(
+        const SignUpFormState(currentStep: SignUpStep.selectUserType),
       );
     });
 
@@ -338,8 +338,8 @@ void main() {
 
   group("Account", () {
     setUp(() {
-      when(signUpInputBloc.state).thenReturn(
-        const SignUpInputState(currentStep: SignUpStep.selectUserType),
+      when(signUpFormBloc.state).thenReturn(
+        const SignUpFormState(currentStep: SignUpStep.selectUserType),
       );
     });
 
@@ -501,8 +501,8 @@ void main() {
         ),
       );
 
-      when(signUpInputBloc.state).thenReturn(
-        const SignUpInputState(currentStep: SignUpStep.selectUserType),
+      when(signUpFormBloc.state).thenReturn(
+        const SignUpFormState(currentStep: SignUpStep.selectUserType),
       );
     });
 
@@ -545,11 +545,11 @@ void main() {
 
   group("Page Transition", () {
     testWidgets(
-        "Should show select user type page when [SignUpInputBloc.currentStep] is [SignUpStep.selectType]",
+        "Should show select user type page when [SignUpFormBloc.currentStep] is [SignUpStep.selectType]",
         (tester) async {
       await tester.runAsync(() async {
-        when(signUpInputBloc.state).thenReturn(
-          const SignUpInputState(currentStep: SignUpStep.selectUserType),
+        when(signUpFormBloc.state).thenReturn(
+          const SignUpFormState(currentStep: SignUpStep.selectUserType),
         );
 
         await tester.pumpApp(child: SignUpScreen());
@@ -572,11 +572,11 @@ void main() {
     });
 
     testWidgets(
-        "Should show select language page when [SignUpInputBloc.currentStep] is [SignUpStep.selectLanguage]",
+        "Should show select language page when [SignUpFormBloc.currentStep] is [SignUpStep.selectLanguage]",
         (tester) async {
       await tester.runAsync(() async {
-        when(signUpInputBloc.state).thenReturn(
-          const SignUpInputState(currentStep: SignUpStep.selectLanguage),
+        when(signUpFormBloc.state).thenReturn(
+          const SignUpFormState(currentStep: SignUpStep.selectLanguage),
         );
 
         await tester.pumpApp(child: SignUpScreen());
@@ -599,11 +599,11 @@ void main() {
     });
 
     testWidgets(
-        "Should show personal information page when [SignUpInputBloc.currentStep] is [SignUpStep.inputPersonalInformation]",
+        "Should show personal information page when [SignUpFormBloc.currentStep] is [SignUpStep.inputPersonalInformation]",
         (tester) async {
       await tester.runAsync(() async {
-        when(signUpInputBloc.state).thenReturn(
-          const SignUpInputState(
+        when(signUpFormBloc.state).thenReturn(
+          const SignUpFormState(
               currentStep: SignUpStep.inputPersonalInformation),
         );
 
@@ -632,8 +632,8 @@ void main() {
     group("Next Button", () {
       testWidgets("Should show next button", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(currentStep: SignUpStep.selectUserType),
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(currentStep: SignUpStep.selectUserType),
           );
 
           await tester.pumpApp(child: SignUpScreen());
@@ -643,11 +643,11 @@ void main() {
       });
 
       testWidgets(
-          "Should enable next button when [SignUpInputState.type] is not null",
+          "Should enable next button when [SignUpFormState.type] is not null",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(type: UserType.volunteer),
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(type: UserType.volunteer),
           );
 
           await tester.pumpApp(child: SignUpScreen());
@@ -659,11 +659,11 @@ void main() {
       });
 
       testWidgets(
-          "Should disable next button when [SignUpInputState.type] is null",
+          "Should disable next button when [SignUpFormState.type] is null",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(type: null),
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(type: null),
           );
 
           await tester.pumpApp(child: SignUpScreen());
@@ -675,11 +675,11 @@ void main() {
       });
 
       testWidgets(
-          "Should call [SignUpInputNextStep()] when next button is pressed and enabled",
+          "Should call [SignUpFormNextStep()] when next button is pressed and enabled",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(type: UserType.volunteer),
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(type: UserType.volunteer),
           );
 
           await tester.pumpApp(child: SignUpScreen());
@@ -687,7 +687,7 @@ void main() {
           await tester.tap(findNextButton());
           await tester.pumpAndSettle();
 
-          verify(signUpInputBloc.add(const SignUpInputNextStep()));
+          verify(signUpFormBloc.add(const SignUpFormNextStep()));
         });
       });
     });
@@ -695,8 +695,8 @@ void main() {
     group("User type button", () {
       testWidgets("Should show blind user button", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(currentStep: SignUpStep.selectUserType),
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(currentStep: SignUpStep.selectUserType),
           );
 
           await tester.pumpApp(child: SignUpScreen());
@@ -710,8 +710,8 @@ void main() {
 
       testWidgets("Should show volunteer user button", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(currentStep: SignUpStep.selectUserType),
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(currentStep: SignUpStep.selectUserType),
           );
 
           await tester.pumpApp(child: SignUpScreen());
@@ -724,11 +724,11 @@ void main() {
       });
 
       testWidgets(
-          "Should call the [SignUpInputTypeChanged(UserType.blind)] when pressed blind user button",
+          "Should call the [SignUpFormTypeChanged(UserType.blind)] when pressed blind user button",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(currentStep: SignUpStep.selectUserType),
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(currentStep: SignUpStep.selectUserType),
           );
 
           await tester.pumpApp(child: SignUpScreen());
@@ -736,17 +736,17 @@ void main() {
           await tester.pumpAndSettle();
 
           verify(
-            signUpInputBloc.add(const SignUpInputTypeChanged(UserType.blind)),
+            signUpFormBloc.add(const SignUpFormTypeChanged(UserType.blind)),
           );
         });
       });
 
       testWidgets(
-          "Should call the [SignUpInputTypeChanged(UserType.volunteer)] when pressed volunteer user button",
+          "Should call the [SignUpFormTypeChanged(UserType.volunteer)] when pressed volunteer user button",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(currentStep: SignUpStep.selectUserType),
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(currentStep: SignUpStep.selectUserType),
           );
 
           await tester.pumpApp(child: SignUpScreen());
@@ -754,8 +754,7 @@ void main() {
           await tester.pumpAndSettle();
 
           verify(
-            signUpInputBloc
-                .add(const SignUpInputTypeChanged(UserType.volunteer)),
+            signUpFormBloc.add(const SignUpFormTypeChanged(UserType.volunteer)),
           );
         });
       });
@@ -764,8 +763,8 @@ void main() {
     group("Text", () {
       testWidgets("Should show title text", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(currentStep: SignUpStep.selectUserType),
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(currentStep: SignUpStep.selectUserType),
           );
 
           await tester.pumpApp(child: SignUpScreen());
@@ -775,8 +774,8 @@ void main() {
 
       testWidgets("Should show info text", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(currentStep: SignUpStep.selectUserType),
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(currentStep: SignUpStep.selectUserType),
           );
 
           await tester.pumpApp(child: SignUpScreen());
@@ -791,8 +790,8 @@ void main() {
       testWidgets("Should show add button when language is not reaching max",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               currentStep: SignUpStep.selectLanguage,
             ),
           );
@@ -814,8 +813,8 @@ void main() {
       testWidgets("Should hide add button when language is reaching max",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
                 currentStep: SignUpStep.selectLanguage,
                 languages: [
                   Language(),
@@ -852,8 +851,8 @@ void main() {
             ),
           ]));
 
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               currentStep: SignUpStep.selectLanguage,
             ),
           );
@@ -877,8 +876,8 @@ void main() {
     group("Back Button", () {
       testWidgets("Should show back button", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(currentStep: SignUpStep.selectLanguage),
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(currentStep: SignUpStep.selectLanguage),
           );
 
           await tester.pumpApp(child: SignUpScreen());
@@ -895,11 +894,11 @@ void main() {
       });
 
       testWidgets(
-          "Should call [SignUpInputBackStep()] when back button is pressed",
+          "Should call [SignUpFormBackStep()] when back button is pressed",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               type: UserType.volunteer,
               languages: [Language(code: "id", name: "Indonesia")],
               currentStep: SignUpStep.selectLanguage,
@@ -911,7 +910,7 @@ void main() {
           await tester.tap(findBackIconButton());
           await tester.pumpAndSettle();
 
-          verify(signUpInputBloc.add(const SignUpInputBackStep()));
+          verify(signUpFormBloc.add(const SignUpFormBackStep()));
           expect(
             findSelectLanguagePage(),
             findsOneWidget,
@@ -923,8 +922,8 @@ void main() {
     group("Next Button", () {
       testWidgets("Should show next button", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(currentStep: SignUpStep.selectLanguage),
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(currentStep: SignUpStep.selectLanguage),
           );
 
           await tester.pumpApp(child: SignUpScreen());
@@ -941,11 +940,11 @@ void main() {
       });
 
       testWidgets(
-          "Should enable next button when [SignUpInputState.type] is not null and [SignUpInputState.languages] is not empty",
+          "Should enable next button when [SignUpFormState.type] is not null and [SignUpFormState.languages] is not empty",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               type: UserType.volunteer,
               languages: [Language(code: "id", name: "Indonesia")],
               currentStep: SignUpStep.selectLanguage,
@@ -965,11 +964,11 @@ void main() {
       });
 
       testWidgets(
-          "Should disable next button when [SignUpInputState.type] is null or [SignUpInputState.languages] is not empty",
+          "Should disable next button when [SignUpFormState.type] is null or [SignUpFormState.languages] is not empty",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               type: null,
               languages: null,
               currentStep: SignUpStep.selectLanguage,
@@ -989,11 +988,11 @@ void main() {
       });
 
       testWidgets(
-          "Should call [SignUpInputNextStep()] when next button is pressed and enabled",
+          "Should call [SignUpFormNextStep()] when next button is pressed and enabled",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               type: UserType.volunteer,
               languages: [Language(code: "id", name: "Indonesia")],
               currentStep: SignUpStep.selectLanguage,
@@ -1005,7 +1004,7 @@ void main() {
           await tester.tap(findNextButton());
           await tester.pumpAndSettle();
 
-          verify(signUpInputBloc.add(const SignUpInputNextStep()));
+          verify(signUpFormBloc.add(const SignUpFormNextStep()));
           expect(
             findSelectLanguagePage(),
             findsOneWidget,
@@ -1027,8 +1026,8 @@ void main() {
           ),
         ]));
 
-        when(signUpInputBloc.state).thenReturn(
-          const SignUpInputState(
+        when(signUpFormBloc.state).thenReturn(
+          const SignUpFormState(
               currentStep: SignUpStep.selectLanguage,
               languages: [
                 Language(
@@ -1044,7 +1043,7 @@ void main() {
       });
 
       testWidgets(
-          "Should show LanguageCard based on [SignUpInputState.languages]",
+          "Should show LanguageCard based on [SignUpFormState.languages]",
           (tester) async {
         await tester.runAsync(() async {
           await tester.pumpApp(child: SignUpScreen());
@@ -1056,7 +1055,7 @@ void main() {
       });
 
       testWidgets(
-          "Should call the [SignUpInputLanguageAdded] when tap selection language",
+          "Should call the [SignUpFormLanguageAdded] when tap selection language",
           (tester) async {
         await tester.runAsync(() async {
           await tester.pumpApp(child: SignUpScreen());
@@ -1070,8 +1069,8 @@ void main() {
           await tester.pumpAndSettle();
 
           verify(
-            signUpInputBloc.add(
-              const SignUpInputLanguageAdded(
+            signUpFormBloc.add(
+              const SignUpFormLanguageAdded(
                 Language(
                   code: "id",
                   name: "Indonesian",
@@ -1083,7 +1082,7 @@ void main() {
       });
 
       testWidgets(
-          "Should call the [SignUpInputLanguageRemoved] when tap remove button on Language Card",
+          "Should call the [SignUpFormLanguageRemoved] when tap remove button on Language Card",
           (tester) async {
         await tester.runAsync(() async {
           await tester.pumpApp(child: SignUpScreen());
@@ -1094,8 +1093,8 @@ void main() {
           await tester.pumpAndSettle();
 
           verify(
-            signUpInputBloc.add(
-              const SignUpInputLanguageRemoved(
+            signUpFormBloc.add(
+              const SignUpFormLanguageRemoved(
                 Language(
                   code: "ru",
                   name: "Russian",
@@ -1110,8 +1109,8 @@ void main() {
     group("Text", () {
       testWidgets("Should show title text", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(currentStep: SignUpStep.selectLanguage),
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(currentStep: SignUpStep.selectLanguage),
           );
 
           await tester.pumpApp(child: SignUpScreen());
@@ -1121,8 +1120,8 @@ void main() {
 
       testWidgets("Should show add language text", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(currentStep: SignUpStep.selectLanguage),
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(currentStep: SignUpStep.selectLanguage),
           );
 
           await tester.pumpApp(child: SignUpScreen());
@@ -1133,8 +1132,8 @@ void main() {
       testWidgets("Should show blind info text when blind is selected",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               currentStep: SignUpStep.selectLanguage,
               type: UserType.blind,
             ),
@@ -1151,8 +1150,8 @@ void main() {
       testWidgets("Should show volunteer info text when volunteer is selected",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               currentStep: SignUpStep.selectLanguage,
               type: UserType.volunteer,
             ),
@@ -1172,8 +1171,8 @@ void main() {
     group("Back Button", () {
       testWidgets("Should show back button", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
                 currentStep: SignUpStep.inputPersonalInformation),
           );
 
@@ -1192,11 +1191,11 @@ void main() {
       });
 
       testWidgets(
-          "Should call [SignUpInputBackStep()] when back button is pressed",
+          "Should call [SignUpFormBackStep()] when back button is pressed",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               type: UserType.volunteer,
               languages: [Language(code: "id", name: "Indonesia")],
               currentStep: SignUpStep.inputPersonalInformation,
@@ -1209,7 +1208,7 @@ void main() {
           await tester.tap(findBackIconButton());
           await tester.pumpAndSettle();
 
-          verify(signUpInputBloc.add(const SignUpInputBackStep()));
+          verify(signUpFormBloc.add(const SignUpFormBackStep()));
           expect(
             findPersonalInformationPage(),
             findsOneWidget,
@@ -1221,8 +1220,8 @@ void main() {
     group("Date Of Birth Field", () {
       testWidgets("Should show date of birth field", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
                 currentStep: SignUpStep.inputPersonalInformation),
           );
 
@@ -1242,11 +1241,11 @@ void main() {
       });
 
       testWidgets(
-          "Should call [SignUpInputDateOfBirthChanged()] when date of birth field is changed",
+          "Should call [SignUpFormDateOfBirthChanged()] when date of birth field is changed",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
                 currentStep: SignUpStep.inputPersonalInformation),
           );
 
@@ -1266,8 +1265,8 @@ void main() {
               DateTime.now().add(-const Duration(days: 365 * 17));
 
           verify(
-            signUpInputBloc.add(
-              SignUpInputDateOfBirthChanged(
+            signUpFormBloc.add(
+              SignUpFormDateOfBirthChanged(
                 DateTime(
                   currentDate.year,
                   currentDate.month,
@@ -1288,8 +1287,8 @@ void main() {
     group("Gender", () {
       testWidgets("Should show Gender male and female button", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               currentStep: SignUpStep.inputPersonalInformation,
             ),
           );
@@ -1315,11 +1314,11 @@ void main() {
       });
 
       testWidgets(
-          "Should call [SignUpInputGenderChanged()] when Gender male or female button is pressed",
+          "Should call [SignUpFormGenderChanged()] when Gender male or female button is pressed",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               currentStep: SignUpStep.inputPersonalInformation,
             ),
           );
@@ -1331,14 +1330,14 @@ void main() {
           await tester.pumpAndSettle();
 
           verify(
-            signUpInputBloc.add(const SignUpInputGenderChanged(Gender.male)),
+            signUpFormBloc.add(const SignUpFormGenderChanged(Gender.male)),
           );
 
           await tester.tap(findGenderFemaleButton());
           await tester.pumpAndSettle();
 
           verify(
-            signUpInputBloc.add(const SignUpInputGenderChanged(Gender.female)),
+            signUpFormBloc.add(const SignUpFormGenderChanged(Gender.female)),
           );
 
           expect(
@@ -1352,8 +1351,8 @@ void main() {
     group("Name Field", () {
       testWidgets("Should show name field", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
                 currentStep: SignUpStep.inputPersonalInformation),
           );
 
@@ -1373,11 +1372,11 @@ void main() {
       });
 
       testWidgets(
-          "Should call [SignUpInputNameChanged()] when name field is changed",
+          "Should call [SignUpFormNameChanged()] when name field is changed",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
                 currentStep: SignUpStep.inputPersonalInformation),
           );
 
@@ -1392,11 +1391,11 @@ void main() {
           }
 
           await enterText("Mochamad");
-          verify(signUpInputBloc.add(const SignUpInputNameChanged("Mochamad")));
+          verify(signUpFormBloc.add(const SignUpFormNameChanged("Mochamad")));
 
           await enterText("Mochamad Firgia");
-          verify(signUpInputBloc
-              .add(const SignUpInputNameChanged("Mochamad Firgia")));
+          verify(signUpFormBloc
+              .add(const SignUpFormNameChanged("Mochamad Firgia")));
 
           expect(
             findPersonalInformationPage(),
@@ -1409,8 +1408,8 @@ void main() {
     group("Profile Image Button", () {
       testWidgets("Should show profile image button", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               currentStep: SignUpStep.inputPersonalInformation,
             ),
           );
@@ -1433,8 +1432,8 @@ void main() {
       testWidgets("Should call [FileProfileImagePicked()] when pick image",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               currentStep: SignUpStep.inputPersonalInformation,
             ),
           );
@@ -1473,13 +1472,13 @@ void main() {
       });
 
       testWidgets(
-          "Should show profile file image from [SignUpInputBloc.profileImage]",
+          "Should show profile file image from [SignUpFormBloc.profileImage]",
           (tester) async {
         await tester.runAsync(() async {
           File file = File("assets/images/raster/avatar.png");
 
-          when(signUpInputBloc.state).thenReturn(
-            SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            SignUpFormState(
               currentStep: SignUpStep.inputPersonalInformation,
               profileImage: file,
             ),
@@ -1503,8 +1502,8 @@ void main() {
     group("Save Button", () {
       testWidgets("Should show save button", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               currentStep: SignUpStep.inputPersonalInformation,
             ),
           );
@@ -1524,11 +1523,11 @@ void main() {
       });
 
       testWidgets(
-          "Should enable save button when all [SignUpInputState] fields is not empty",
+          "Should enable save button when all [SignUpFormState] fields is not empty",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            SignUpFormState(
               type: UserType.volunteer,
               languages: const [Language(code: "id", name: "Indonesia")],
               currentStep: SignUpStep.inputPersonalInformation,
@@ -1553,11 +1552,11 @@ void main() {
       });
 
       testWidgets(
-          "Should disable save button when some [SignUpInputState] fields is empty",
+          "Should disable save button when some [SignUpFormState] fields is empty",
           (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               type: null,
               languages: null,
               currentStep: SignUpStep.inputPersonalInformation,
@@ -1581,7 +1580,7 @@ void main() {
           "Should call [SignUpSubmitted()] when save button is tapped and enabled",
           (tester) async {
         await tester.runAsync(() async {
-          SignUpInputState signUpInputState = SignUpInputState(
+          SignUpFormState signUpFormState = SignUpFormState(
             type: UserType.volunteer,
             languages: const [Language(code: "id", name: "Indonesia")],
             currentStep: SignUpStep.inputPersonalInformation,
@@ -1592,7 +1591,7 @@ void main() {
             deviceLanguage: DeviceLanguage.indonesian,
           );
 
-          when(signUpInputBloc.state).thenReturn(signUpInputState);
+          when(signUpFormBloc.state).thenReturn(signUpFormState);
 
           await tester.setScreenSize(iphone14);
           await tester.pumpApp(child: SignUpScreen());
@@ -1601,7 +1600,7 @@ void main() {
           await tester.pumpAndSettle();
 
           verify(signUpBloc
-              .add(SignUpSubmitted.fromSignUpInputState(signUpInputState)));
+              .add(SignUpSubmitted.fromSignUpFormState(signUpFormState)));
           expect(
             findPersonalInformationPage(),
             findsOneWidget,
@@ -1613,8 +1612,8 @@ void main() {
     group("Text", () {
       testWidgets("Should show title text", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               currentStep: SignUpStep.inputPersonalInformation,
             ),
           );
@@ -1631,8 +1630,8 @@ void main() {
 
       testWidgets("Should show info text", (tester) async {
         await tester.runAsync(() async {
-          when(signUpInputBloc.state).thenReturn(
-            const SignUpInputState(
+          when(signUpFormBloc.state).thenReturn(
+            const SignUpFormState(
               currentStep: SignUpStep.inputPersonalInformation,
             ),
           );

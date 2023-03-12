@@ -16,7 +16,7 @@ import 'package:logging/logging.dart';
 import '../../../core/core.dart';
 import '../../../data/data.dart';
 import '../../../injection.dart';
-import '../sign_up_input/sign_up_input_bloc.dart';
+import '../sign_up_form/sign_up_form_bloc.dart';
 
 part 'sign_up_event.dart';
 part 'sign_up_state.dart';
