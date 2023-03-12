@@ -180,22 +180,22 @@ void main() {
     group(".isCanNext()", () {
       group("When [currentStep] is [SignUpStep.selectUserType]", () {
         test("Should return true when [type] is not null", () {
-          SignUpFormState inputState =
+          SignUpFormState formState =
               const SignUpFormState(type: UserType.blind);
 
-          expect(inputState.isCanNext(), true);
+          expect(formState.isCanNext(), true);
         });
 
         test("Should return false when [type] is null", () {
-          SignUpFormState inputState = const SignUpFormState();
+          SignUpFormState formState = const SignUpFormState();
 
-          expect(inputState.isCanNext(), false);
+          expect(formState.isCanNext(), false);
         });
       });
 
       group("When [currentStep] is [SignUpStep.selectLanguage]", () {
         test("Should return true when [type] and [language] is not null", () {
-          SignUpFormState inputState = const SignUpFormState(
+          SignUpFormState formState = const SignUpFormState(
             type: UserType.blind,
             languages: [
               Language(code: "id"),
@@ -203,22 +203,22 @@ void main() {
             currentStep: SignUpStep.selectLanguage,
           );
 
-          expect(inputState.isCanNext(), true);
+          expect(formState.isCanNext(), true);
         });
 
         test("Should return false when [type] or [language] is null", () {
-          SignUpFormState inputState = const SignUpFormState(
+          SignUpFormState formState = const SignUpFormState(
             type: UserType.blind,
             currentStep: SignUpStep.selectLanguage,
           );
 
-          expect(inputState.isCanNext(), false);
+          expect(formState.isCanNext(), false);
         });
       });
 
       group("When [currentStep] is [SignUpStep.inputPersonalInformation]", () {
         test("Should always return false", () {
-          SignUpFormState inputState = const SignUpFormState(
+          SignUpFormState formState = const SignUpFormState(
             type: UserType.blind,
             languages: [
               Language(code: "id"),
@@ -226,7 +226,7 @@ void main() {
             currentStep: SignUpStep.inputPersonalInformation,
           );
 
-          expect(inputState.isCanNext(), false);
+          expect(formState.isCanNext(), false);
         });
       });
     });
