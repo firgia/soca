@@ -88,7 +88,7 @@ class UserProvider {
   }
 
   /// Get user device data based on [uid]
-  Future<dynamic> getUserDevice(String uid) async {
+  Future<dynamic> getUserDevice({required String uid}) async {
     return await _databaseProvider.get("users/$uid/device");
   }
 

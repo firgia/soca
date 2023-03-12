@@ -1263,10 +1263,12 @@ class MockUserProvider extends _i1.Mock implements _i23.UserProvider {
         returnValueForMissingStub: _i31.Future<dynamic>.value(),
       ) as _i31.Future<dynamic>);
   @override
-  _i31.Future<dynamic> getUserDevice(String? uid) => (super.noSuchMethod(
+  _i31.Future<dynamic> getUserDevice({required String? uid}) =>
+      (super.noSuchMethod(
         Invocation.method(
           #getUserDevice,
-          [uid],
+          [],
+          {#uid: uid},
         ),
         returnValue: _i31.Future<dynamic>.value(),
         returnValueForMissingStub: _i31.Future<dynamic>.value(),

@@ -162,7 +162,7 @@ void main() {
         databaseProvider.get("users/1234/device"),
       ).thenAnswer((_) => Future.value({}));
 
-      await userProvider.getUserDevice("1234");
+      await userProvider.getUserDevice(uid: "1234");
       verify(databaseProvider.get("users/1234/device"));
     });
 
@@ -174,7 +174,7 @@ void main() {
       ).thenThrow(exception);
 
       expect(
-        () => userProvider.getUserDevice("1234"),
+        () => userProvider.getUserDevice(uid: "1234"),
         throwsA(exception),
       );
     });
