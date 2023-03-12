@@ -25,7 +25,7 @@ class RouteCubit extends Cubit<RouteState> {
 
   final Logger _logger = Logger("Route Cubit");
 
-  void getTargetRoute() async {
+  void getTargetRoute({bool checkDifferentDevice = true}) async {
     String targetName = "/";
     emit(const RouteLoading());
     _logger.info("Checking user signed in...");
@@ -33,14 +33,24 @@ class RouteCubit extends Cubit<RouteState> {
     bool isSignedIn = await authRepository.isSignedIn();
 
     // TODO: Must add more validation
-    // Check different device
     // Check is first time use app
     if (isSignedIn) {
       RouteError? error;
 
       try {
-        await userRepository.getProfile();
-        targetName = AppPages.home;
+        bool useDifferentDevice = false;
+
+        if (checkDifferentDevice) {
+          useDifferentDevice = await userRepository.useDifferentDevice();
+        }
+
+        if (useDifferentDevice) {
+          targetName = AppPages.unknownDevice;
+          await authRepository.signOut();
+        } else {
+          await userRepository.getProfile();
+          targetName = AppPages.home;
+        }
       } on UserFailure catch (e) {
         if (e.code == UserFailureCode.notFound) {
           targetName = AppPages.signUp;

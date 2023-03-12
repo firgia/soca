@@ -31,22 +31,76 @@ void main() {
 
   group(".getTargetRoute()", () {
     blocTest<RouteCubit, RouteState>(
-      'Should emits [RouteLoading, RouteTarget(AppPages.home)] when user has been signed in and registered.',
+      'Should not call userRepository.useDifferentDevice when '
+      '[checkDifferentDevice] is false',
+      build: () => RouteCubit(),
+      setUp: () {
+        when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
+      },
+      act: (route) => route.getTargetRoute(checkDifferentDevice: false),
+      verify: (bloc) {
+        verifyNever(userRepository.useDifferentDevice());
+      },
+    );
+
+    blocTest<RouteCubit, RouteState>(
+      'Should call userRepository.useDifferentDevice when [checkDifferentDevice]'
+      ' is true',
+      build: () => RouteCubit(),
+      setUp: () {
+        when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
+      },
+      act: (route) => route.getTargetRoute(checkDifferentDevice: true),
+      verify: (bloc) {
+        verify(userRepository.useDifferentDevice());
+      },
+    );
+
+    blocTest<RouteCubit, RouteState>(
+      'Should emits [RouteLoading, RouteTarget(AppPages.unknownDevice)] when '
+      'user use different device.',
       build: () => RouteCubit(),
       act: (route) => route.getTargetRoute(),
       setUp: () {
         when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
         when(userRepository.getProfile())
             .thenAnswer((_) => Future.value(const User()));
+        when(userRepository.useDifferentDevice())
+            .thenAnswer((_) => Future.value(true));
+      },
+      expect: () => <RouteState>[
+        const RouteLoading(),
+        RouteTarget(AppPages.unknownDevice),
+      ],
+      verify: (bloc) {
+        verify(userRepository.useDifferentDevice());
+      },
+    );
+
+    blocTest<RouteCubit, RouteState>(
+      'Should emits [RouteLoading, RouteTarget(AppPages.home)] when user has '
+      'been signed in and registered.',
+      build: () => RouteCubit(),
+      act: (route) => route.getTargetRoute(),
+      setUp: () {
+        when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
+        when(userRepository.getProfile())
+            .thenAnswer((_) => Future.value(const User()));
+        when(userRepository.useDifferentDevice())
+            .thenAnswer((_) => Future.value(false));
       },
       expect: () => <RouteState>[
         const RouteLoading(),
         RouteTarget(AppPages.home),
       ],
+      verify: (bloc) {
+        verify(userRepository.useDifferentDevice());
+      },
     );
 
     blocTest<RouteCubit, RouteState>(
-      'Should emits [RouteLoading, RouteTarget(AppPages.signUp)] when user has been signed in and not registered.',
+      'Should emits [RouteLoading, RouteTarget(AppPages.signUp)] when user has '
+      'been signed in and not registered.',
       build: () => RouteCubit(),
       act: (route) => route.getTargetRoute(),
       setUp: () {
@@ -61,7 +115,8 @@ void main() {
     );
 
     blocTest<RouteCubit, RouteState>(
-      'Should emits [RouteLoading, RouteError] when user has been signed in and and get unknown error].',
+      'Should emits [RouteLoading, RouteError] when user has been signed in and '
+      'and get unknown error].',
       build: () => RouteCubit(),
       act: (route) => route.getTargetRoute(),
       setUp: () {
@@ -75,7 +130,8 @@ void main() {
     );
 
     blocTest<RouteCubit, RouteState>(
-      'Should emits [RouteLoading, RouteTarget(AppPages.signIn)] when user not signed in.',
+      'Should emits [RouteLoading, RouteTarget(AppPages.signIn)] when user not '
+      'signed in.',
       build: () => RouteCubit(),
       act: (route) => route.getTargetRoute(),
       setUp: () {
