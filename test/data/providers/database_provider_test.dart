@@ -106,7 +106,7 @@ void main() {
     });
 
     test(
-        "Should yield response data when snapshot exists and value is not null",
+        "Should emits response data when snapshot exists and value is not null",
         () async {
       String path = "/user-test";
 
@@ -124,13 +124,11 @@ void main() {
 
       expect(
         streamDatabase.streamController.stream,
-        emitsInOrder([
-          {"id": "1234"}
-        ]),
+        emits({"id": "1234"}),
       );
     });
 
-    test("Should yield null when snapshot doesn't exists", () async {
+    test("Should emits null when snapshot doesn't exists", () async {
       String path = "/user-test";
 
       MockDatabaseEvent event = MockDatabaseEvent();
@@ -147,7 +145,7 @@ void main() {
 
       expect(
         streamDatabase.streamController.stream,
-        emitsInOrder([null]),
+        emits(null),
       );
     });
 
