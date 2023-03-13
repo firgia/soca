@@ -9,6 +9,7 @@
 
 export 'language.dart';
 export 'url_image.dart';
+export 'stream_database.dart';
 export 'user_activity.dart';
 export 'user_device.dart';
 export 'user_info.dart';
