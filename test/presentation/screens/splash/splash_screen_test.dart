@@ -97,6 +97,20 @@ void main() {
       });
     });
 
+    testWidgets(
+        "Should navigate to unknown device page when routeTarget return [AppPages.unknownDevice]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(routeCubit.stream).thenAnswer(
+            (_) => Stream.value(RouteTarget(AppPages.unknownDevice)));
+
+        await tester.pumpApp(child: SplashScreen());
+
+        verify(routeCubit.getTargetRoute());
+        verify(appNavigator.goToUnknownDevice(any));
+      });
+    });
+
     testWidgets("Should show alert something error when getting error",
         (tester) async {
       await tester.runAsync(() async {

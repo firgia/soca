@@ -9,6 +9,7 @@
 
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -37,6 +38,7 @@ void setupInjection() {
 
   /* ---------------------------------> DATA <------------------------------- */
   sl.registerLazySingleton<AuthProvider>(() => AuthProvider());
+  sl.registerLazySingleton<DatabaseProvider>(() => DatabaseProvider());
   sl.registerLazySingleton<DeviceProvider>(() => DeviceProvider());
   sl.registerLazySingleton<FunctionsProvider>(() => FunctionsProvider());
   sl.registerLazySingleton<LocalLanguageProvider>(
@@ -53,6 +55,7 @@ void setupInjection() {
   sl.registerSingleton<DotEnv>(dotenv);
   sl.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage());
   sl.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
+  sl.registerSingleton<FirebaseDatabase>(FirebaseDatabase.instance);
   sl.registerSingleton<FirebaseFunctions>(FirebaseFunctions.instance);
   sl.registerSingleton<FirebaseStorage>(FirebaseStorage.instance);
   sl.registerSingleton<GoogleSignIn>(GoogleSignIn());
@@ -71,7 +74,7 @@ void setupInjection() {
   sl.registerFactory<FileBloc>(() => FileBloc());
   sl.registerFactory<LanguageBloc>(() => LanguageBloc());
   sl.registerFactory<SignInBloc>(() => SignInBloc());
-  sl.registerFactory<SignUpInputBloc>(() => SignUpInputBloc());
+  sl.registerFactory<SignUpFormBloc>(() => SignUpFormBloc());
   sl.registerFactory<SignUpBloc>(() => SignUpBloc());
   sl.registerFactory<AccountCubit>(() => AccountCubit());
   sl.registerFactory<RouteCubit>(() => RouteCubit());

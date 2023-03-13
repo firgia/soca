@@ -9,6 +9,7 @@
 
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -34,6 +35,7 @@ import 'package:soca/logic/logic.dart';
 
   /* ---------------------------------> DATA <------------------------------- */
   MockSpec<AuthProvider>(),
+  MockSpec<DatabaseProvider>(),
   MockSpec<DeviceProvider>(),
   MockSpec<FunctionsProvider>(),
   MockSpec<LocalLanguageProvider>(),
@@ -44,9 +46,13 @@ import 'package:soca/logic/logic.dart';
   MockSpec<UserRepository>(),
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
+  MockSpec<DatabaseEvent>(),
+  MockSpec<DatabaseReference>(),
+  MockSpec<DataSnapshot>(),
   MockSpec<DotEnv>(),
   MockSpec<FlutterSecureStorage>(),
   MockSpec<auth.FirebaseAuth>(),
+  MockSpec<FirebaseDatabase>(),
   MockSpec<FirebaseFunctions>(),
   MockSpec<GoogleSignIn>(),
   MockSpec<GoogleSignInAuthentication>(),
@@ -66,7 +72,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<LanguageBloc>(),
   MockSpec<SignInBloc>(),
   MockSpec<SignUpBloc>(),
-  MockSpec<SignUpInputBloc>(),
+  MockSpec<SignUpFormBloc>(),
   MockSpec<AccountCubit>(),
   MockSpec<RouteCubit>(),
   MockSpec<SignOutCubit>(),

@@ -7,7 +7,9 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
 import 'dart:io';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:logging/logging.dart';
 // ignore: depend_on_referenced_packages
@@ -16,12 +18,25 @@ import 'package:path/path.dart' as path;
 import '../../injection.dart';
 import '../../core/core.dart';
 import '../models/models.dart';
+import 'database_provider.dart';
 import 'functions_provider.dart';
 
 class UserProvider {
   final FirebaseStorage _firebaseStorage = sl<FirebaseStorage>();
+  final DatabaseProvider _databaseProvider = sl<DatabaseProvider>();
   final FunctionsProvider _functionsProvider = sl<FunctionsProvider>();
   final Logger _logger = Logger("User Provider");
+
+  StreamController<dynamic>? _onUserDeviceStreamController;
+  StreamSubscription? _onUserDeviceSubscription;
+  DatabaseReference? _onUserDeviceDatabaseReference;
+
+  /// Cancel subscribtion to user device data
+  void cancelOnUserDeviceUpdated() {
+    _onUserDeviceSubscription?.cancel();
+    _onUserDeviceStreamController?.close();
+    _onUserDeviceDatabaseReference?.keepSynced(false);
+  }
 
   /// Create new User data
   ///
@@ -83,6 +98,23 @@ class UserProvider {
       functionsName: FunctionName.getProfileUser,
       parameters: {if (uid != null) "uid": uid},
     );
+  }
+
+  /// Get user device data based on [uid]
+  Future<dynamic> getUserDevice({required String uid}) async {
+    return await _databaseProvider.get("users/$uid/device");
+  }
+
+  /// Fires when the [uid] device data is updated.
+  Stream<dynamic> onUserDeviceUpdated({required String uid}) {
+    StreamDatabase streamDatabase =
+        _databaseProvider.onValue("users/$uid/device");
+
+    _onUserDeviceSubscription = streamDatabase.streamSubscription;
+    _onUserDeviceStreamController = streamDatabase.streamController;
+    _onUserDeviceDatabaseReference = streamDatabase.databaseReference;
+
+    return streamDatabase.streamController.stream;
   }
 
   /// Uploading new avatar image

@@ -45,7 +45,8 @@ class SignInScreen extends StatelessWidget with UIMixin {
               if (state is RouteError) {
                 /// Allow user to retry when got any error
                 Alert(context).showSomethingErrorMessage(
-                  onActionPressed: () => routeCubit.getTargetRoute(),
+                  onActionPressed: () =>
+                      routeCubit.getTargetRoute(checkDifferentDevice: false),
                 );
               }
             },
@@ -53,7 +54,7 @@ class SignInScreen extends StatelessWidget with UIMixin {
           BlocListener<SignInBloc, SignInState>(
             listener: (context, state) {
               if (state is SignInSuccessfully) {
-                routeCubit.getTargetRoute();
+                routeCubit.getTargetRoute(checkDifferentDevice: false);
               }
               // Error handling
               else if (state is SignInWithAppleError) {
@@ -120,15 +121,20 @@ class SignInScreen extends StatelessWidget with UIMixin {
   }
 
   Widget _buildLoading() {
-    return BlocBuilder<SignInBloc, SignInState>(
-      builder: (context, state) {
-        bool isLoading = state is SignInLoading;
+    return BlocBuilder<RouteCubit, RouteState>(
+      builder: (context, routeState) {
+        return BlocBuilder<SignInBloc, SignInState>(
+          builder: (context, signInState) {
+            bool isLoading =
+                signInState is SignInLoading || routeState is RouteLoading;
 
-        if (isLoading) {
-          return const LoadingPanel();
-        } else {
-          return const SizedBox();
-        }
+            if (isLoading) {
+              return const LoadingPanel();
+            } else {
+              return const SizedBox();
+            }
+          },
+        );
       },
     );
   }

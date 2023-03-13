@@ -35,26 +35,25 @@ class SignUpSubmitted extends SignUpEvent {
     required this.languages,
   });
 
-  factory SignUpSubmitted.fromSignUpInputState(
-      SignUpInputState signUpInputState) {
+  factory SignUpSubmitted.fromSignUpFormState(SignUpFormState signUpFormState) {
     assert(
-        signUpInputState.type != null &&
-            signUpInputState.name != null &&
-            signUpInputState.profileImage != null &&
-            signUpInputState.dateOfBirth != null &&
-            signUpInputState.gender != null &&
-            signUpInputState.deviceLanguage != null &&
-            signUpInputState.languages != null,
+        signUpFormState.type != null &&
+            signUpFormState.name != null &&
+            signUpFormState.profileImage != null &&
+            signUpFormState.dateOfBirth != null &&
+            signUpFormState.gender != null &&
+            signUpFormState.deviceLanguage != null &&
+            signUpFormState.languages != null,
         "Invalid argument");
 
     return SignUpSubmitted(
-      type: signUpInputState.type!,
-      name: signUpInputState.name!,
-      profileImage: signUpInputState.profileImage!,
-      dateOfBirth: signUpInputState.dateOfBirth!,
-      gender: signUpInputState.gender!,
-      deviceLanguage: signUpInputState.deviceLanguage!,
-      languages: signUpInputState.languages!,
+      type: signUpFormState.type!,
+      name: signUpFormState.name!,
+      profileImage: signUpFormState.profileImage!,
+      dateOfBirth: signUpFormState.dateOfBirth!,
+      gender: signUpFormState.gender!,
+      deviceLanguage: signUpFormState.deviceLanguage!,
+      languages: signUpFormState.languages!,
     );
   }
 

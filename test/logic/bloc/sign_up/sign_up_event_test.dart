@@ -15,10 +15,10 @@ import 'package:soca/logic/logic.dart';
 
 void main() {
   group("SignUpSubmitted", () {
-    group(".fromSignUpInputState", () {
-      test("Should create [SignUpSubmitted] based on [SignUpInputState] data",
+    group(".fromSignUpFormState", () {
+      test("Should create [SignUpSubmitted] based on [SignUpFormState] data",
           () {
-        SignUpInputState signUpInputState = SignUpInputState(
+        SignUpFormState signUpFormState = SignUpFormState(
           dateOfBirth: DateTime(2000),
           deviceLanguage: DeviceLanguage.arabic,
           gender: Gender.male,
@@ -29,15 +29,15 @@ void main() {
         );
 
         SignUpSubmitted signUpSubmitted =
-            SignUpSubmitted.fromSignUpInputState(signUpInputState);
+            SignUpSubmitted.fromSignUpFormState(signUpFormState);
 
-        expect(signUpSubmitted.dateOfBirth, signUpInputState.dateOfBirth);
-        expect(signUpSubmitted.deviceLanguage, signUpInputState.deviceLanguage);
-        expect(signUpSubmitted.gender, signUpInputState.gender);
-        expect(signUpSubmitted.languages, signUpInputState.languages);
-        expect(signUpSubmitted.name, signUpInputState.name);
-        expect(signUpSubmitted.profileImage, signUpInputState.profileImage);
-        expect(signUpSubmitted.type, signUpInputState.type);
+        expect(signUpSubmitted.dateOfBirth, signUpFormState.dateOfBirth);
+        expect(signUpSubmitted.deviceLanguage, signUpFormState.deviceLanguage);
+        expect(signUpSubmitted.gender, signUpFormState.gender);
+        expect(signUpSubmitted.languages, signUpFormState.languages);
+        expect(signUpSubmitted.name, signUpFormState.name);
+        expect(signUpSubmitted.profileImage, signUpFormState.profileImage);
+        expect(signUpSubmitted.type, signUpFormState.type);
       });
     });
   });
