@@ -62,6 +62,18 @@ void main() {
     });
   });
 
+  group(".onSignOut", () {
+    test(
+      "Should emits onSignOut when signOut is called",
+      () async {
+        when(googleSignIn.isSignedIn()).thenAnswer((_) => Future.value(true));
+
+        expectLater(authRepository.onSignOut, emits(isA<DateTime>()));
+        await authRepository.signOut();
+      },
+    );
+  });
+
   group(".getSignInMethod()", () {
     test("Should return data from AuthProvider.getSignInMethod()", () async {
       when(authProvider.getSignInMethod()).thenAnswer(

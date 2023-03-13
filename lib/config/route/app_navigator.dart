@@ -34,4 +34,7 @@ class AppNavigator {
 
   void goToSignUp(BuildContext context) =>
       context.pushReplacementNamed(AppPages.signUp);
+
+  void goToUnknownDevice(BuildContext context) =>
+      context.pushReplacementNamed(AppPages.unknownDevice);
 }

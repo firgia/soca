@@ -38,8 +38,9 @@ class SplashScreen extends StatelessWidget with UIMixin {
             appNavigator.goToHome(context);
           } else if (state.name == AppPages.signUp) {
             appNavigator.goToSignUp(context);
+          } else if (state.name == AppPages.unknownDevice) {
+            appNavigator.goToUnknownDevice(context);
           }
-          // TODO: add Different device
         }
 
         if (state is RouteError) {

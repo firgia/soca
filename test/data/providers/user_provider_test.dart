@@ -7,6 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_functions/cloud_functions.dart';
@@ -23,15 +24,47 @@ String get _getProfile => "getProfileUser";
 
 void main() {
   late UserProvider userProvider;
+  late MockDatabaseProvider databaseProvider;
   late MockFunctionsProvider functionsProvider;
 
   setUp(() {
     registerLocator();
+    databaseProvider = getMockDatabaseProvider();
     functionsProvider = getMockFunctionsProvider();
     userProvider = UserProvider();
   });
 
   tearDown(() => unregisterLocator());
+
+  group(".cancelOnUserDeviceUpdated", () {
+    test("Should close stream and deactivate sync to Database", () {
+      final StreamController<int> streamController = StreamController();
+      final MockDatabaseReference databaseReference = MockDatabaseReference();
+      final StreamSubscription subscription = streamController.stream.listen(
+        (event) {},
+      );
+
+      when(
+        databaseProvider.onValue("users/1234/device"),
+      ).thenReturn(
+        StreamDatabase(
+          databaseReference: databaseReference,
+          streamController: streamController,
+          streamSubscription: subscription,
+        ),
+      );
+
+      userProvider.onUserDeviceUpdated(uid: "1234");
+      expect(streamController.isClosed, false);
+      expect(streamController.hasListener, true);
+      verifyNever(databaseReference.keepSynced(false));
+
+      userProvider.cancelOnUserDeviceUpdated();
+      expect(streamController.isClosed, true);
+      expect(streamController.hasListener, false);
+      verify(databaseReference.keepSynced(false));
+    });
+  });
 
   group(".createUser()", () {
     Future<void> runCreateUser() {
@@ -153,6 +186,65 @@ void main() {
       );
     });
   });
+
+  group(".getUserDevice()", () {
+    test("Should call databaseProvider.get()", () async {
+      when(
+        databaseProvider.get("users/1234/device"),
+      ).thenAnswer((_) => Future.value({}));
+
+      await userProvider.getUserDevice(uid: "1234");
+      verify(databaseProvider.get("users/1234/device"));
+    });
+
+    test("Should thrown Exception when getting error", () async {
+      Exception exception = Exception("unknown");
+
+      when(
+        databaseProvider.get("users/1234/device"),
+      ).thenThrow(exception);
+
+      expect(
+        () => userProvider.getUserDevice(uid: "1234"),
+        throwsA(exception),
+      );
+    });
+  });
+
+  group(".onUserDeviceUpdated()", () {
+    test("Should call databaseProvider.onValue()", () async {
+      when(
+        databaseProvider.onValue("users/1234/device"),
+      ).thenReturn(
+        StreamDatabase(
+          databaseReference: MockDatabaseReference(),
+          streamController: StreamController(),
+          streamSubscription: StreamController().stream.listen((event) {}),
+        ),
+      );
+
+      userProvider.onUserDeviceUpdated(uid: "1234");
+      verify(databaseProvider.onValue("users/1234/device"));
+    });
+
+    test("Should return Stream from databaseProvider.onValue()", () async {
+      final StreamController<int> streamController = StreamController();
+
+      when(
+        databaseProvider.onValue("users/1234/device"),
+      ).thenReturn(
+        StreamDatabase(
+          databaseReference: MockDatabaseReference(),
+          streamController: streamController,
+          streamSubscription: streamController.stream.listen((event) {}),
+        ),
+      );
+
+      Stream stream = userProvider.onUserDeviceUpdated(uid: "1234");
+      expect(stream, streamController.stream);
+    });
+  });
+
   group(".uploadAvatar()", () {
     test("Should send the correct path", () async {
       File file = File("assets/images/raster/avatar.png");

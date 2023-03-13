@@ -40,6 +40,11 @@ abstract class AppRoutes {
             name: AppPages.language,
             builder: (context, state) => LanguageScreen(),
           ),
+          GoRoute(
+            path: "/${AppPages.unknownDevice}",
+            name: AppPages.unknownDevice,
+            builder: (context, state) => const UnknownDeviceScreen(),
+          ),
         ],
       );
 }
