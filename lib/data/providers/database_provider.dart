@@ -10,7 +10,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:soca/data/models/stream_database.dart';
+import '../models/models.dart';
 import '../../injection.dart';
 
 class DatabaseProvider {

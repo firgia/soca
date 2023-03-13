@@ -7,7 +7,9 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
 import 'dart:io';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:logging/logging.dart';
 // ignore: depend_on_referenced_packages
@@ -24,6 +26,17 @@ class UserProvider {
   final DatabaseProvider _databaseProvider = sl<DatabaseProvider>();
   final FunctionsProvider _functionsProvider = sl<FunctionsProvider>();
   final Logger _logger = Logger("User Provider");
+
+  StreamController<dynamic>? _onUsedDeviceStreamController;
+  StreamSubscription? _onUsedDeviceSubscription;
+  DatabaseReference? _onUsedDeviceDatabaseReference;
+
+  /// Cancel subscribtion to user device data
+  void cancelOnUserDeviceUpdated() {
+    _onUsedDeviceSubscription?.cancel();
+    _onUsedDeviceStreamController?.close();
+    _onUsedDeviceDatabaseReference?.keepSynced(false);
+  }
 
   /// Create new User data
   ///
@@ -90,6 +103,18 @@ class UserProvider {
   /// Get user device data based on [uid]
   Future<dynamic> getUserDevice({required String uid}) async {
     return await _databaseProvider.get("users/$uid/device");
+  }
+
+  /// Fires when the [uid] device data is updated.
+  Stream<dynamic> onUserDeviceUpdated({required String uid}) {
+    StreamDatabase streamDatabase =
+        _databaseProvider.onValue("users/$uid/device");
+
+    _onUsedDeviceSubscription = streamDatabase.streamSubscription;
+    _onUsedDeviceStreamController = streamDatabase.streamController;
+    _onUsedDeviceDatabaseReference = streamDatabase.databaseReference;
+
+    return streamDatabase.streamController.stream;
   }
 
   /// Uploading new avatar image
