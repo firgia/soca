@@ -7,6 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
 import 'package:logging/logging.dart';
 
 import '../../core/core.dart';
@@ -14,11 +15,47 @@ import '../../injection.dart';
 import '../data.dart';
 
 class UserRepository {
-  UserRepository();
+  UserRepository() {
+    _authRepository.onSignOut.listen((event) {
+      _userProvider.cancelOnUserDeviceUpdated();
+    });
+  }
+
   final AuthRepository _authRepository = sl<AuthRepository>();
   final UserProvider _userProvider = sl<UserProvider>();
   final DeviceProvider _deviceProvider = sl<DeviceProvider>();
   final Logger _logger = Logger("User Repository");
+
+  /// Fires when the user device data is updated.
+  ///
+  /// `Exception`
+  ///
+  /// A [UserFailure] maybe thrown when a failure occurs.
+  Stream<UserDevice?> get onUserDeviceUpdated {
+    String? authUID = _authRepository.uid;
+
+    if (authUID == null) {
+      _logger.severe("Failed to get user device, please sign in to continue");
+
+      throw const UserFailure(
+        code: UserFailureCode.unauthenticated,
+        message:
+            "The request does not have valid authentication credentials for the operation.",
+      );
+    } else {
+      final controller = StreamController<UserDevice?>();
+      _userProvider.onUserDeviceUpdated(uid: authUID).listen((response) {
+        if (response != null) {
+          controller.sink.add(UserDevice.fromMap(response));
+        } else {
+          controller.sink.add(null);
+        }
+      });
+
+      _logger.fine("Subscribe User Device data on Realtime Database");
+      return controller.stream;
+    }
+  }
 
   /// {@macro get_profile_user}
   ///
@@ -96,6 +133,14 @@ class UserRepository {
     }
   }
 
+  /// Check [userDevice] ID difference with the current user device ID.
+  ///
+  /// Return true if different
+  Future<bool> isDifferentDeviceID(UserDevice userDevice) async {
+    String deviceID = await _deviceProvider.getDeviceID();
+    return deviceID != userDevice.id;
+  }
+
   /// Check user use different device
   ///
   /// `Exception`
@@ -106,9 +151,7 @@ class UserRepository {
 
     try {
       UserDevice userDevice = await getUserDevice();
-      String deviceID = await _deviceProvider.getDeviceID();
-
-      bool isDifferent = deviceID != userDevice.id;
+      bool isDifferent = await isDifferentDeviceID(userDevice);
 
       _logger.fine(
           "Successfully to check different device with status $isDifferent");

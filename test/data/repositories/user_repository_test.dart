@@ -32,6 +32,78 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  group("()", () {
+    test("Should call userProvider.cancelOnUserDeviceUpdated() when sign out",
+        () async {
+      when(authRepository.onSignOut)
+          .thenAnswer((_) => Stream.value(DateTime.now()));
+
+      UserRepository();
+      verify(authRepository.onSignOut);
+      await Future.delayed(const Duration(milliseconds: 500));
+      verify(userProvider.cancelOnUserDeviceUpdated());
+    });
+  });
+
+  group(".onUserDeviceUpdated", () {
+    test("Should emits user device data", () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(userProvider.onUserDeviceUpdated(uid: anyNamed("uid"))).thenAnswer(
+        (_) => Stream.value({
+          "id": "54321",
+          "player_id": "12345",
+          "language": "id",
+        }),
+      );
+
+      Stream<UserDevice?> onUserDeviceUpdated =
+          userRepository.onUserDeviceUpdated;
+      expect(
+        onUserDeviceUpdated,
+        emits(
+          const UserDevice(
+            id: "54321",
+            playerID: "12345",
+            language: "id",
+          ),
+        ),
+      );
+
+      verify(userProvider.onUserDeviceUpdated(uid: anyNamed("uid")));
+    });
+
+    test("Should emits null when data is null", () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(userProvider.onUserDeviceUpdated(uid: anyNamed("uid"))).thenAnswer(
+        (_) => Stream.value(null),
+      );
+
+      Stream<UserDevice?> onUserDeviceUpdated =
+          userRepository.onUserDeviceUpdated;
+      expect(
+        onUserDeviceUpdated,
+        emits(null),
+      );
+
+      verify(userProvider.onUserDeviceUpdated(uid: anyNamed("uid")));
+    });
+
+    test("Should throw UserFailureCode.unauthenticated when not signed in",
+        () async {
+      when(authRepository.uid).thenReturn(null);
+      expect(() => userRepository.onUserDeviceUpdated,
+          throwsA(isA<UserFailure>()));
+
+      try {
+        userRepository.onUserDeviceUpdated;
+      } on UserFailure catch (e) {
+        expect(e.code, UserFailureCode.unauthenticated);
+      }
+
+      verifyNever(userProvider.onUserDeviceUpdated(uid: anyNamed("uid")));
+    });
+  });
+
   group(".getProfile()", () {
     test("Should return the user data", () async {
       when(authRepository.uid).thenReturn("1234");
@@ -229,6 +301,28 @@ void main() {
       } on UserFailure catch (e) {
         expect(e.code, UserFailureCode.unknown);
       }
+    });
+  });
+
+  group(".isDifferentDeviceID()", () {
+    test("Should return true when device ID is different", () async {
+      UserDevice userDevice = const UserDevice(id: "124");
+      when(deviceProvider.getDeviceID()).thenAnswer(
+        (_) => Future.value("1234"),
+      );
+
+      bool isDifferent = await userRepository.isDifferentDeviceID(userDevice);
+      expect(isDifferent, true);
+    });
+
+    test("Should return false when device ID is same", () async {
+      UserDevice userDevice = const UserDevice(id: "1234");
+      when(deviceProvider.getDeviceID()).thenAnswer(
+        (_) => Future.value("1234"),
+      );
+
+      bool isDifferent = await userRepository.isDifferentDeviceID(userDevice);
+      expect(isDifferent, false);
     });
   });
 
