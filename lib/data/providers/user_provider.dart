@@ -27,15 +27,15 @@ class UserProvider {
   final FunctionsProvider _functionsProvider = sl<FunctionsProvider>();
   final Logger _logger = Logger("User Provider");
 
-  StreamController<dynamic>? _onUsedDeviceStreamController;
-  StreamSubscription? _onUsedDeviceSubscription;
-  DatabaseReference? _onUsedDeviceDatabaseReference;
+  StreamController<dynamic>? _onUserDeviceStreamController;
+  StreamSubscription? _onUserDeviceSubscription;
+  DatabaseReference? _onUserDeviceDatabaseReference;
 
   /// Cancel subscribtion to user device data
   void cancelOnUserDeviceUpdated() {
-    _onUsedDeviceSubscription?.cancel();
-    _onUsedDeviceStreamController?.close();
-    _onUsedDeviceDatabaseReference?.keepSynced(false);
+    _onUserDeviceSubscription?.cancel();
+    _onUserDeviceStreamController?.close();
+    _onUserDeviceDatabaseReference?.keepSynced(false);
   }
 
   /// Create new User data
@@ -110,9 +110,9 @@ class UserProvider {
     StreamDatabase streamDatabase =
         _databaseProvider.onValue("users/$uid/device");
 
-    _onUsedDeviceSubscription = streamDatabase.streamSubscription;
-    _onUsedDeviceStreamController = streamDatabase.streamController;
-    _onUsedDeviceDatabaseReference = streamDatabase.databaseReference;
+    _onUserDeviceSubscription = streamDatabase.streamSubscription;
+    _onUserDeviceStreamController = streamDatabase.streamController;
+    _onUserDeviceDatabaseReference = streamDatabase.databaseReference;
 
     return streamDatabase.streamController.stream;
   }
