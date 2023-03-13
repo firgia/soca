@@ -43,6 +43,7 @@ void main() {
 
   Finder findErrorMessageSomethingError() =>
       find.byKey(const Key("error_message_something_error"));
+  Finder findLoadingPanel() => find.byType(LoadingPanel);
   Finder findOkText() => find.text(LocaleKeys.ok.tr());
   Finder findSignInText() => find.text(LocaleKeys.sign_in.tr());
   Finder findSignInInfoText() => find.text(LocaleKeys.sign_in_info.tr());
@@ -60,6 +61,40 @@ void main() {
     });
   });
 
+  group("Loading", () {
+    testWidgets(
+        'Should hide [LoadingPanel] when state is not [RouteLoading] or '
+        '[SignInLoading]', (tester) async {
+      await tester.runAsync(() async {
+        when(routeCubit.state).thenReturn(const RouteError());
+        when(signInBloc.state).thenReturn(const SignInError());
+
+        await tester.pumpApp(child: SignInScreen());
+        expect(findLoadingPanel(), findsNothing);
+      });
+    });
+
+    testWidgets("Should show LoadingPanel when state is [RouteLoading]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(routeCubit.state).thenReturn(const RouteLoading());
+
+        await tester.pumpApp(child: SignInScreen());
+        expect(findLoadingPanel(), findsOneWidget);
+      });
+    });
+
+    testWidgets("Should show LoadingPanel when state is [SignInLoading]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signInBloc.state).thenReturn(const SignInLoading());
+
+        await tester.pumpApp(child: SignInScreen());
+        expect(findLoadingPanel(), findsOneWidget);
+      });
+    });
+  });
+
   group("Route", () {
     testWidgets("Should call getTargetRoute() when [SignInSuccessfully]",
         (tester) async {
@@ -73,7 +108,7 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(signInBloc.add(const SignInWithGoogle()));
-        verify(routeCubit.getTargetRoute());
+        verify(routeCubit.getTargetRoute(checkDifferentDevice: false));
       });
     });
 
@@ -134,7 +169,7 @@ void main() {
           findErrorMessageSomethingError(),
           findsOneWidget,
         );
-        verify(routeCubit.getTargetRoute());
+        verify(routeCubit.getTargetRoute(checkDifferentDevice: false));
       });
     });
 
@@ -156,13 +191,13 @@ void main() {
           findErrorMessageSomethingError(),
           findsOneWidget,
         );
-        verify(routeCubit.getTargetRoute());
+        verify(routeCubit.getTargetRoute(checkDifferentDevice: false));
 
         when(routeCubit.stream)
             .thenAnswer((_) => Stream.value(RouteTarget(AppPages.signUp)));
         await tester.tap(findOkText());
         await tester.pump();
-        verify(routeCubit.getTargetRoute());
+        verify(routeCubit.getTargetRoute(checkDifferentDevice: false));
       });
     });
   });

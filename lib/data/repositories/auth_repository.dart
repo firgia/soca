@@ -7,6 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -32,6 +33,10 @@ class AuthRepository {
 
   /// {@macro get_sign_in_method}
   Future<AuthMethod?> getSignInMethod() => _authProvider.getSignInMethod();
+
+  final StreamController<DateTime> _signOut =
+      StreamController<DateTime>.broadcast();
+  Stream<DateTime> get onSignOut => _signOut.stream;
 
   /// Check current user is signed in
   ///
@@ -185,6 +190,7 @@ class AuthRepository {
     await _signInProvider.setSignInMethod(null);
     await _signInProvider.setIsSignInOnProcess(false);
     _logger.fine("All sign out process 100% successfully");
+    _signOut.sink.add(DateTime.now());
   }
 
   /// Sign up
