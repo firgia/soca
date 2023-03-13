@@ -86,4 +86,86 @@ void main() {
       );
     });
   });
+
+  group(".onValue()", () {
+    test("Should set .ref() with [path] parameters", () async {
+      String path = "/user-test";
+
+      MockDatabaseEvent event = MockDatabaseEvent();
+      MockDatabaseReference reference = MockDatabaseReference();
+      MockDataSnapshot snapshot = MockDataSnapshot();
+
+      when(snapshot.exists).thenReturn(false);
+      when(snapshot.value).thenReturn(null);
+      when(event.snapshot).thenReturn(snapshot);
+      when(reference.onValue).thenAnswer((_) => Stream.value(event));
+      when(firebaseDatabase.ref(path)).thenReturn(reference);
+
+      databaseProvider.onValue(path);
+      verify(firebaseDatabase.ref(path));
+    });
+
+    test(
+        "Should yield response data when snapshot exists and value is not null",
+        () async {
+      String path = "/user-test";
+
+      MockDatabaseEvent event = MockDatabaseEvent();
+      MockDatabaseReference reference = MockDatabaseReference();
+      MockDataSnapshot snapshot = MockDataSnapshot();
+
+      when(snapshot.exists).thenReturn(true);
+      when(snapshot.value).thenReturn({"id": "1234"});
+      when(event.snapshot).thenReturn(snapshot);
+      when(reference.onValue).thenAnswer((_) => Stream.value(event));
+      when(firebaseDatabase.ref(path)).thenReturn(reference);
+
+      StreamDatabase streamDatabase = databaseProvider.onValue(path);
+
+      expect(
+        streamDatabase.streamController.stream,
+        emitsInOrder([
+          {"id": "1234"}
+        ]),
+      );
+    });
+
+    test("Should yield null when snapshot doesn't exists", () async {
+      String path = "/user-test";
+
+      MockDatabaseEvent event = MockDatabaseEvent();
+      MockDatabaseReference reference = MockDatabaseReference();
+      MockDataSnapshot snapshot = MockDataSnapshot();
+
+      when(snapshot.exists).thenReturn(false);
+      when(snapshot.value).thenReturn(null);
+      when(event.snapshot).thenReturn(snapshot);
+      when(reference.onValue).thenAnswer((_) => Stream.value(event));
+      when(firebaseDatabase.ref(path)).thenReturn(reference);
+
+      StreamDatabase streamDatabase = databaseProvider.onValue(path);
+
+      expect(
+        streamDatabase.streamController.stream,
+        emitsInOrder([null]),
+      );
+    });
+
+    test("Should yeild exception when a failure occurs", () async {
+      String path = "/user-test";
+      Exception exception = Exception("unknown");
+
+      MockDatabaseReference reference = MockDatabaseReference();
+
+      when(reference.onValue).thenAnswer((_) => Stream.error(exception));
+      when(firebaseDatabase.ref(path)).thenReturn(reference);
+
+      StreamDatabase streamDatabase = databaseProvider.onValue(path);
+
+      expectLater(
+        streamDatabase.streamController.stream,
+        emitsError(isA<Exception>()),
+      );
+    });
+  });
 }

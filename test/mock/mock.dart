@@ -46,6 +46,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<UserRepository>(),
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
+  MockSpec<DatabaseEvent>(),
   MockSpec<DatabaseReference>(),
   MockSpec<DataSnapshot>(),
   MockSpec<DotEnv>(),
