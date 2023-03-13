@@ -31,8 +31,8 @@ void main() {
 
   group(".getTargetRoute()", () {
     blocTest<RouteCubit, RouteState>(
-      'Should not call userRepository.useDifferentDevice when '
-      '[checkDifferentDevice] is false',
+      'Should not call userRepository.useDifferentDevice and '
+      'userRepository.isDifferentDevice when [checkDifferentDevice] is false',
       build: () => RouteCubit(),
       setUp: () {
         when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
@@ -40,12 +40,13 @@ void main() {
       act: (route) => route.getTargetRoute(checkDifferentDevice: false),
       verify: (bloc) {
         verifyNever(userRepository.useDifferentDevice());
+        verifyNever(userRepository.isDifferentDeviceID(any));
       },
     );
 
     blocTest<RouteCubit, RouteState>(
       'Should call userRepository.useDifferentDevice when [checkDifferentDevice]'
-      ' is true',
+      ' is true and [userDevice] is null',
       build: () => RouteCubit(),
       setUp: () {
         when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
@@ -53,6 +54,24 @@ void main() {
       act: (route) => route.getTargetRoute(checkDifferentDevice: true),
       verify: (bloc) {
         verify(userRepository.useDifferentDevice());
+        verifyNever(userRepository.isDifferentDeviceID(any));
+      },
+    );
+
+    blocTest<RouteCubit, RouteState>(
+      'Should call userRepository.isDefferentDevice when '
+      '[checkDifferentDevice] is true and [userDevice] is not null',
+      build: () => RouteCubit(),
+      setUp: () {
+        when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
+      },
+      act: (route) => route.getTargetRoute(
+        checkDifferentDevice: true,
+        userDevice: const UserDevice(),
+      ),
+      verify: (bloc) {
+        verify(userRepository.isDifferentDeviceID(any));
+        verifyNever(userRepository.useDifferentDevice());
       },
     );
 

@@ -25,7 +25,10 @@ class RouteCubit extends Cubit<RouteState> {
 
   final Logger _logger = Logger("Route Cubit");
 
-  void getTargetRoute({bool checkDifferentDevice = true}) async {
+  void getTargetRoute({
+    bool checkDifferentDevice = true,
+    UserDevice? userDevice,
+  }) async {
     String targetName = "/";
     emit(const RouteLoading());
     _logger.info("Checking user signed in...");
@@ -41,7 +44,12 @@ class RouteCubit extends Cubit<RouteState> {
         bool useDifferentDevice = false;
 
         if (checkDifferentDevice) {
-          useDifferentDevice = await userRepository.useDifferentDevice();
+          if (userDevice != null) {
+            useDifferentDevice =
+                await userRepository.isDifferentDeviceID(userDevice);
+          } else {
+            useDifferentDevice = await userRepository.useDifferentDevice();
+          }
         }
 
         if (useDifferentDevice) {
