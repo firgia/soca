@@ -99,4 +99,6 @@ abstract class AppColors {
 
   static Color get disableButtonForegroundLight => fontPalletsLight[1];
   static Color get disableButtonForegroundDark => fontPalletsDark[1];
+  static Color get genderFemaleColor => Colors.pink[300]!;
+  static Color get genderMaleColor => Colors.lightBlue[300]!;
 }
