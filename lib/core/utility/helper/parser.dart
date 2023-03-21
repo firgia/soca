@@ -8,35 +8,12 @@
  */
 
 class Parser {
-  /// Make sure dynamic object have a string value
-  ///
-  ///
-  /// Return `null` if map doesn't have string value
-  static String? getString(dynamic object) {
-    String? result = object?.toString();
-    return (result == null)
-        ? null
-        : result.trim().isEmpty
-            ? null
-            : result.trim();
-  }
-
-  /// Make sure dynamic object have a int value
-  ///
-  ///
-  /// Return `null` if map doesn't have int value
-  static int? getInt(dynamic object) {
-    String? result = object?.toString();
-    return (result == null) ? null : int.tryParse(result);
-  }
-
-  /// Make sure dynamic object have a double value
-  ///
-  ///
-  /// Return `null` if map doesn't have double value
-  static double? getDouble(dynamic object) {
-    String? result = object?.toString();
-    return (result == null) ? null : double.tryParse(result);
+  static T? get<T>(dynamic object) {
+    try {
+      return object;
+    } catch (_) {
+      return null;
+    }
   }
 
   /// Make sure dynamic object have a bool value
@@ -51,6 +28,38 @@ class Parser {
     } else if (result == "false") {
       return false;
     } else {
+      return null;
+    }
+  }
+
+  /// Make sure dynamic object have a double value
+  ///
+  ///
+  /// Return `null` if map doesn't have double value
+  static double? getDouble(dynamic object) {
+    String? result = object?.toString();
+    return (result == null) ? null : double.tryParse(result);
+  }
+
+  /// Make sure dynamic object have a int value
+  ///
+  ///
+  /// Return `null` if map doesn't have int value
+  static int? getInt(dynamic object) {
+    String? result = object?.toString();
+    return (result == null) ? null : int.tryParse(result);
+  }
+
+  /// Make sure dynamic object have a list of dynamic value
+  ///
+  ///
+  /// Return `null` if map doesn't have list of dynamic value
+  static List<dynamic>? getListDynamic(dynamic data) {
+    try {
+      final List<dynamic> result = data;
+
+      return result;
+    } catch (_) {
       return null;
     }
   }
@@ -72,23 +81,9 @@ class Parser {
           result.add(o.toString().trim());
         }
 
-        return result.isEmpty ? null : result;
+        return result;
       }
     } catch (e) {
-      return null;
-    }
-  }
-
-  /// Make sure dynamic object have a list of dynamic value
-  ///
-  ///
-  /// Return `null` if map doesn't have list of dynamic value
-  static List<dynamic>? getListDynamic(dynamic data) {
-    try {
-      final List<dynamic> result = data;
-
-      return result;
-    } catch (_) {
       return null;
     }
   }
@@ -107,11 +102,16 @@ class Parser {
     }
   }
 
-  static T? get<T>(dynamic object) {
-    try {
-      return object;
-    } catch (_) {
-      return null;
-    }
+  /// Make sure dynamic object have a string value
+  ///
+  ///
+  /// Return `null` if map doesn't have string value
+  static String? getString(dynamic object) {
+    String? result = object?.toString();
+    return (result == null)
+        ? null
+        : result.trim().isEmpty
+            ? null
+            : result.trim();
   }
 }
