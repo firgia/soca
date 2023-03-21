@@ -1597,6 +1597,47 @@ class MockUserRepository extends _i1.Mock implements _i23.UserRepository {
       ) as _i31.Future<bool>);
 }
 
+/// A class which mocks [Completer].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCompleter<T> extends _i1.Mock implements _i31.Completer<T> {
+  @override
+  _i31.Future<T> get future => (super.noSuchMethod(
+        Invocation.getter(#future),
+        returnValue: _i31.Future<T>.value(null),
+        returnValueForMissingStub: _i31.Future<T>.value(null),
+      ) as _i31.Future<T>);
+  @override
+  bool get isCompleted => (super.noSuchMethod(
+        Invocation.getter(#isCompleted),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  void complete([_i31.FutureOr<T>? value]) => super.noSuchMethod(
+        Invocation.method(
+          #complete,
+          [value],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void completeError(
+    Object? error, [
+    StackTrace? stackTrace,
+  ]) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #completeError,
+          [
+            error,
+            stackTrace,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
 /// A class which mocks [DatabaseEvent].
 ///
 /// See the documentation for Mockito's code generation for more information.
