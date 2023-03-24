@@ -76,6 +76,7 @@ void setupInjection() {
   sl.registerFactory<SignInBloc>(() => SignInBloc());
   sl.registerFactory<SignUpFormBloc>(() => SignUpFormBloc());
   sl.registerFactory<SignUpBloc>(() => SignUpBloc());
+  sl.registerFactory<UserBloc>(() => UserBloc());
   sl.registerFactory<AccountCubit>(() => AccountCubit());
   sl.registerFactory<RouteCubit>(() => RouteCubit());
   sl.registerFactory<SignOutCubit>(() => SignOutCubit());

@@ -25,10 +25,9 @@ class ProfileCard extends _ProfileCardItem {
     required User user,
     bool? isOnline,
     VoidCallback? onTapEdit,
-    Key? key,
+    super.key,
   }) : super(
           isLoading: false,
-          key: key,
           user: user,
           isOnline: isOnline,
           onTapEdit: onTapEdit,
@@ -43,8 +42,8 @@ class _ProfileCardItem extends StatelessWidget {
     this.user,
     this.isOnline,
     this.onTapEdit,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final bool isLoading;
   final User? user;
@@ -58,11 +57,10 @@ class _ProfileCardItem extends StatelessWidget {
     }
 
     if (isLoading) {
-      return _ItemLoading(key: key);
+      return const _ItemLoading();
     } else {
       return _Item(
         data: user!,
-        key: key,
         isOnline: isOnline,
         onTapEdit: onTapEdit,
       );

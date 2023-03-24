@@ -258,6 +258,14 @@ MockSignUpFormBloc getMockSignUpFormBloc() {
   return mock;
 }
 
+MockUserBloc getMockUserBloc() {
+  MockUserBloc mock = MockUserBloc();
+  _removeRegistrationIfExists<UserBloc>();
+  locator.registerSingleton<UserBloc>(mock);
+
+  return mock;
+}
+
 MockAccountCubit getMockAccountCubit() {
   MockAccountCubit mock = MockAccountCubit();
   _removeRegistrationIfExists<AccountCubit>();
@@ -322,6 +330,7 @@ void registerLocator() {
   getMockSignInBloc();
   getMockSignUpBloc();
   getMockSignUpFormBloc();
+  getMockUserBloc();
   getMockAccountCubit();
   getMockRouteCubit();
   getMockSignOutCubit();
@@ -367,6 +376,7 @@ void unregisterLocator() {
   locator.unregister<SignInBloc>();
   locator.unregister<SignUpBloc>();
   locator.unregister<SignUpFormBloc>();
+  locator.unregister<UserBloc>();
   locator.unregister<AccountCubit>();
   locator.unregister<RouteCubit>();
   locator.unregister<SignOutCubit>();
