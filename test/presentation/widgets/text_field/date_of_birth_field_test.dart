@@ -158,7 +158,7 @@ void main() {
       });
     });
 
-    // TODO: This test getting failed because a flutter issue
+    // FIXME: This test getting failed because a flutter issue
     // More details: https://github.com/flutter/flutter/issues/26336
     // testWidgets("Should hide date of birth hint text when inpus is not empty",
     //     (tester) async {

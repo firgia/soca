@@ -9,6 +9,7 @@
 
 export 'async_button.dart';
 export 'auth_icon_button.dart';
+export 'call_volunteer_button.dart';
 export 'custom_back_button.dart';
 export 'flag_button.dart';
 export 'gender_button.dart';

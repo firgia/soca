@@ -7,6 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
+
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -52,6 +54,7 @@ void setupInjection() {
   sl.registerLazySingleton<UserRepository>(() => UserRepository());
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
+  sl.registerFactory<Completer>(() => Completer());
   sl.registerSingleton<DotEnv>(dotenv);
   sl.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage());
   sl.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
@@ -76,6 +79,7 @@ void setupInjection() {
   sl.registerFactory<SignInBloc>(() => SignInBloc());
   sl.registerFactory<SignUpFormBloc>(() => SignUpFormBloc());
   sl.registerFactory<SignUpBloc>(() => SignUpBloc());
+  sl.registerFactory<UserBloc>(() => UserBloc());
   sl.registerFactory<AccountCubit>(() => AccountCubit());
   sl.registerFactory<RouteCubit>(() => RouteCubit());
   sl.registerFactory<SignOutCubit>(() => SignOutCubit());

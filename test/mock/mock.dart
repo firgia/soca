@@ -7,6 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
+
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_database/firebase_database.dart';
@@ -46,6 +48,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<UserRepository>(),
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
+  MockSpec<Completer>(),
   MockSpec<DatabaseEvent>(),
   MockSpec<DatabaseReference>(),
   MockSpec<DataSnapshot>(),
@@ -73,6 +76,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<SignInBloc>(),
   MockSpec<SignUpBloc>(),
   MockSpec<SignUpFormBloc>(),
+  MockSpec<UserBloc>(),
   MockSpec<AccountCubit>(),
   MockSpec<RouteCubit>(),
   MockSpec<SignOutCubit>(),

@@ -251,7 +251,7 @@ void main() {
       );
     });
 
-    // TODO: Fix this test
+    // FIXME: Fix this test
     // group("SignUpFormProfileImageChanged()", () {
     //   blocTest<SignUpFormBloc, SignUpFormState>(
     //     'Should emits [SignUpFormState] and change the [profileImage] value.',

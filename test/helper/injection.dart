@@ -120,6 +120,14 @@ MockUserRepository getMockUserRepository() {
 }
 
 /* ------------------------------> DEPENDENCIES <---------------------------- */
+MockCompleter getMockCompleter() {
+  MockCompleter mock = MockCompleter();
+  _removeRegistrationIfExists<Completer>();
+  locator.registerSingleton<Completer>(mock);
+
+  return mock;
+}
+
 MockDotEnv getMockDotEnv() {
   MockDotEnv mock = MockDotEnv();
   _removeRegistrationIfExists<DotEnv>();
@@ -258,6 +266,14 @@ MockSignUpFormBloc getMockSignUpFormBloc() {
   return mock;
 }
 
+MockUserBloc getMockUserBloc() {
+  MockUserBloc mock = MockUserBloc();
+  _removeRegistrationIfExists<UserBloc>();
+  locator.registerSingleton<UserBloc>(mock);
+
+  return mock;
+}
+
 MockAccountCubit getMockAccountCubit() {
   MockAccountCubit mock = MockAccountCubit();
   _removeRegistrationIfExists<AccountCubit>();
@@ -303,6 +319,7 @@ void registerLocator() {
   getMockUserRepository();
 
   /* ------------------------------> DEPENDENCIES <-------------------------- */
+  getMockCompleter();
   getMockDotEnv();
   getMockFlutterSecureStorage();
   getMockFirebaseAuth();
@@ -322,6 +339,7 @@ void registerLocator() {
   getMockSignInBloc();
   getMockSignUpBloc();
   getMockSignUpFormBloc();
+  getMockUserBloc();
   getMockAccountCubit();
   getMockRouteCubit();
   getMockSignOutCubit();
@@ -348,6 +366,7 @@ void unregisterLocator() {
   locator.unregister<UserRepository>();
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
+  locator.unregister<Completer>();
   locator.unregister<DotEnv>();
   locator.unregister<FlutterSecureStorage>();
   locator.unregister<FirebaseAuth>();
@@ -367,6 +386,7 @@ void unregisterLocator() {
   locator.unregister<SignInBloc>();
   locator.unregister<SignUpBloc>();
   locator.unregister<SignUpFormBloc>();
+  locator.unregister<UserBloc>();
   locator.unregister<AccountCubit>();
   locator.unregister<RouteCubit>();
   locator.unregister<SignOutCubit>();

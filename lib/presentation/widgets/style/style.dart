@@ -8,4 +8,5 @@
  */
 
 export 'button_style.dart';
+export 'custom_shadow.dart';
 export 'fade_and_slide_animation.dart';

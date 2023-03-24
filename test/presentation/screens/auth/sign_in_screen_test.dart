@@ -95,7 +95,7 @@ void main() {
     });
   });
 
-  group("Route", () {
+  group("Routing", () {
     testWidgets("Should call getTargetRoute() when [SignInSuccessfully]",
         (tester) async {
       await tester.runAsync(() async {

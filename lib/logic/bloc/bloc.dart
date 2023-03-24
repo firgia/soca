@@ -12,3 +12,4 @@ export 'language/language_bloc.dart';
 export 'sign_in/sign_in_bloc.dart';
 export 'sign_up/sign_up_bloc.dart';
 export 'sign_up_form/sign_up_form_bloc.dart';
+export 'user/user_bloc.dart';
