@@ -80,7 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(height: kDefaultSpacing / 1.5),
                 _UserProfile(),
                 _UserAction(),
-                CustomShimmer(),
                 SizedBox(height: kDefaultSpacing * 2),
               ],
             ),
