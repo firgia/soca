@@ -120,6 +120,14 @@ MockUserRepository getMockUserRepository() {
 }
 
 /* ------------------------------> DEPENDENCIES <---------------------------- */
+MockCompleter getMockCompleter() {
+  MockCompleter mock = MockCompleter();
+  _removeRegistrationIfExists<Completer>();
+  locator.registerSingleton<Completer>(mock);
+
+  return mock;
+}
+
 MockDotEnv getMockDotEnv() {
   MockDotEnv mock = MockDotEnv();
   _removeRegistrationIfExists<DotEnv>();
@@ -311,6 +319,7 @@ void registerLocator() {
   getMockUserRepository();
 
   /* ------------------------------> DEPENDENCIES <-------------------------- */
+  getMockCompleter();
   getMockDotEnv();
   getMockFlutterSecureStorage();
   getMockFirebaseAuth();
@@ -357,6 +366,7 @@ void unregisterLocator() {
   locator.unregister<UserRepository>();
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
+  locator.unregister<Completer>();
   locator.unregister<DotEnv>();
   locator.unregister<FlutterSecureStorage>();
   locator.unregister<FirebaseAuth>();

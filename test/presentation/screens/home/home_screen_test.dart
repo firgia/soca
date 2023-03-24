@@ -7,6 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -15,12 +17,14 @@ import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
 import 'package:soca/logic/logic.dart';
 import 'package:soca/presentation/presentation.dart';
+import 'package:swipe_refresh/swipe_refresh.dart';
 
 import '../../../helper/helper.dart';
 import '../../../mock/mock.mocks.dart';
 
 void main() {
   late MockAppNavigator appNavigator;
+  late MockCompleter completer;
   late MockDeviceInfo deviceInfo;
   late MockRouteCubit routeCubit;
   late MockUserBloc userBloc;
@@ -31,6 +35,7 @@ void main() {
     registerLocator();
 
     appNavigator = getMockAppNavigator();
+    completer = getMockCompleter();
     deviceInfo = getMockDeviceInfo();
     routeCubit = getMockRouteCubit();
     userBloc = getMockUserBloc();
@@ -88,6 +93,20 @@ void main() {
             userDevice: userDevice,
           ),
         );
+      });
+    });
+  });
+
+  group("Refresh", () {
+    testWidgets("Should fetched user data when refresh", (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(child: const HomeScreen());
+        await tester.setScreenSize(iphone14);
+
+        verify(userBloc.add(const UserFetched()));
+        await tester.drag(find.byType(SwipeRefresh), const Offset(0, 400));
+        await tester.pump();
+        verify(userBloc.add(UserFetched(completer: completer)));
       });
     });
   });

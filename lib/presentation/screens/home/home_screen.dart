@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> onRefresh() async {
-    Completer completer = Completer();
+    Completer completer = sl<Completer>();
     userBloc.add(UserFetched(completer: completer));
 
     await completer.future;
