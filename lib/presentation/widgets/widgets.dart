@@ -10,6 +10,7 @@
 export 'app_bar/app_bar.dart';
 export 'button/button.dart';
 export 'card/card.dart';
+export 'chip/chip.dart';
 export 'image/image.dart';
 export 'loading/loading.dart';
 export 'message/message.dart';
