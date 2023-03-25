@@ -59,3 +59,29 @@ class _UserAction extends StatelessWidget {
     );
   }
 }
+
+class _LoadingWrapper extends StatelessWidget {
+  const _LoadingWrapper({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        child,
+        BlocBuilder<RouteCubit, RouteState>(
+          builder: (context, state) {
+            bool isLoading = state is RouteLoading;
+
+            if (isLoading) {
+              return const LoadingPanel();
+            } else {
+              return const SizedBox();
+            }
+          },
+        ),
+      ],
+    );
+  }
+}
