@@ -12,17 +12,28 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logging/logging.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import '../../core/core.dart';
 import '../../data/data.dart';
 import '../../injection.dart';
 
-class AuthRepository {
+class AuthRepository with InternetConnectionHandlerMixin {
+  AuthRepository() {
+    listenInternetConnection();
+  }
+
   final AuthProvider _authProvider = sl<AuthProvider>();
   final DeviceProvider _deviceProvider = sl<DeviceProvider>();
   final FirebaseAuth _firebaseAuth = sl<FirebaseAuth>();
   final GoogleSignIn _googleSignIn = sl<GoogleSignIn>();
   final AuthProvider _signInProvider = sl<AuthProvider>();
   final UserProvider _userProvider = sl<UserProvider>();
+  final OneSignal _oneSignal = sl<OneSignal>();
+  final OneSignalProvider _oneSignalProvider = sl<OneSignalProvider>();
+
+  bool _failedToSetOneSignalSignedInTag = false;
+  bool _failedToSetOneSignalSignedOutTag = false;
+
   final Logger _logger = Logger("Auth Repository");
 
   /// The users email address.
@@ -98,6 +109,7 @@ class AuthRepository {
       await _authProvider.setSignInMethod(AuthMethod.apple);
       await _notifyIsSignInSuccessfully();
       await _authProvider.setIsSignInOnProcess(false);
+      await _setOneSignalSignedInTags();
 
       _logger.finest("Successfully to sign in with Apple Account");
       return true;
@@ -148,6 +160,7 @@ class AuthRepository {
         _logger.info("Sign with credential is finished");
         await _notifyIsSignInSuccessfully();
         await _signInProvider.setIsSignInOnProcess(false);
+        await _setOneSignalSignedInTags();
 
         _logger.finest("Successfully to sign in with Google Account");
         return true;
@@ -189,8 +202,10 @@ class AuthRepository {
 
     await _signInProvider.setSignInMethod(null);
     await _signInProvider.setIsSignInOnProcess(false);
-    _logger.fine("All sign out process 100% successfully");
     _signOut.sink.add(DateTime.now());
+
+    await _setOneSignalSignedOutTags();
+    _logger.fine("All sign out process 100% successfully");
   }
 
   /// Sign up
@@ -246,6 +261,7 @@ class AuthRepository {
         uid: uid,
       );
 
+      await _setOneSignalSignedInTags();
       _logger.finest("Successfully to sign up");
     } on SignUpFailure catch (_) {
       rethrow;
@@ -272,5 +288,111 @@ class AuthRepository {
       voipToken: voipToken,
       devicePlatform: devicePlatform,
     );
+  }
+
+  /// Update the OneSignal Notification tags to sync with the current user
+  /// auth status.
+  Future<void> syncOneSignalTags() async {
+    bool isSignedIn = await this.isSignedIn();
+
+    if (isSignedIn) {
+      await _setOneSignalSignedInTags();
+    } else {
+      await _setOneSignalSignedOutTags();
+    }
+  }
+
+  Future<void> _setOneSignalSignedInTags() async {
+    bool isFailedToUpdate = false;
+    _logger.info("Validate OneSignal for signed in user");
+
+    final tempUID = await _oneSignalProvider.getLastUpdateUID();
+
+    if (tempUID == null) {
+      _logger.info("Set uid & is_signed_in tags");
+
+      final deviceState = await _oneSignal.getDeviceState();
+      final playerID = deviceState?.userId;
+
+      if (uid != null) {
+        final newTags = {
+          "uid": uid,
+          "is_signed_in": "true",
+          "player_id": playerID,
+        };
+
+        try {
+          await _oneSignal.sendTags(newTags);
+          await _oneSignalProvider.setLastUpdateTag(newTags);
+          await _oneSignalProvider.setLastUpdateUID(uid);
+        } catch (_) {
+          isFailedToUpdate = true;
+        }
+      }
+    }
+
+    _failedToSetOneSignalSignedInTag = isFailedToUpdate;
+
+    if (_failedToSetOneSignalSignedInTag) {
+      _logger.warning(
+          'Failed to update the tags. The app will try to update the tags '
+          'automatically when the internet connection state has changed to '
+          'connected.');
+    } else {
+      _logger.fine("Successfully to update the language");
+    }
+  }
+
+  Future<void> _setOneSignalSignedOutTags() async {
+    bool isFailedToUpdate = false;
+
+    _logger.info("Validate OneSignal tags for guest user");
+
+    String? tempUID = await _oneSignalProvider.getLastUpdateUID();
+
+    if (tempUID != null) {
+      final lastTag = await _oneSignalProvider.getLastUpdateTag();
+
+      final uid = Parser.getString(lastTag?["uid"]);
+      final isSignedIn = Parser.getBool(lastTag?["is_signed_in"]);
+
+      try {
+        // If user has logout then set the is_signed_in on onesignal to false
+        // If user is guest do not set any tags
+        if (uid != null && isSignedIn == true) {
+          await _oneSignal.sendTags({"is_signed_in": "false"});
+          await _oneSignalProvider.setLastUpdateTag({"is_signed_in": false});
+        }
+
+        await _oneSignalProvider.deleteLastUpdateUID();
+      } catch (_) {
+        isFailedToUpdate = true;
+      }
+    }
+
+    _failedToSetOneSignalSignedOutTag = isFailedToUpdate;
+
+    if (_failedToSetOneSignalSignedOutTag) {
+      _logger.warning(
+          'Failed to update the tags. The app will try to update the tags '
+          'automatically when the internet connection state has changed to '
+          'connected.');
+    } else {
+      _logger.fine("Successfully to update the language");
+    }
+  }
+
+  @override
+  void onInternetConnected() {
+    super.onInternetConnected();
+
+    if (_failedToSetOneSignalSignedInTag || _failedToSetOneSignalSignedOutTag) {
+      _logger.info("Trying to sync the OneSignal tags...");
+      syncOneSignalTags();
+    }
+  }
+
+  void dispose() {
+    cancelInternetConnectionListener();
   }
 }

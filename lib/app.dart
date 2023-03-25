@@ -79,6 +79,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> with WidgetsBindingObserver {
   final onesignalRepository = sl<OnesignalRepository>();
+  final AuthRepository authRepository = sl<AuthRepository>();
 
   @override
   void initState() {
@@ -90,6 +91,10 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     // We need to update the language to make sure the current onesignal
     // language are same as the last selected language
     onesignalRepository.updateLanguage();
+
+    // We need to syncronize OneSignal Tags to make sure the tags auth status
+    // are same with current auth status
+    authRepository.syncOneSignalTags();
   }
 
   @override
@@ -127,6 +132,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   void dispose() {
     super.dispose();
 
+    authRepository.dispose();
     onesignalRepository.dispose();
   }
 }
