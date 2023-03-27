@@ -16,9 +16,6 @@ abstract class OnesignalHandler {
   static bool _isInitialized = false;
 
   static void initialize() async {
-    // TODO: Change this to bloc
-    // final oneSignalController = Get.put(OneSignalController());
-
     if (_isInitialized != true) {
       OneSignal.shared.setNotificationWillShowInForegroundHandler(
           (OSNotificationReceivedEvent event) {
@@ -30,8 +27,6 @@ abstract class OnesignalHandler {
       OneSignal.shared
           .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
         // Will be called whenever a notification is opened/button pressed.
-        // TODO: Change this to bloc
-        // oneSignalController.onNotificationOpenedHandler(result);
       });
     }
     _isInitialized = true;

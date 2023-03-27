@@ -51,6 +51,7 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  Finder findLoadingPanel() => find.byType(LoadingPanel);
   Finder findProfileCard() => find.byKey(const Key("home_screen_profile_card"));
   Finder findProfileCardLoading() =>
       find.byKey(const Key("home_screen_profile_card_loading"));
@@ -93,6 +94,28 @@ void main() {
             userDevice: userDevice,
           ),
         );
+      });
+    });
+  });
+
+  group("Loading", () {
+    testWidgets('Should hide [LoadingPanel] when state is not [RouteLoading] ',
+        (tester) async {
+      await tester.runAsync(() async {
+        when(routeCubit.state).thenReturn(const RouteError());
+
+        await tester.pumpApp(child: const HomeScreen());
+        expect(findLoadingPanel(), findsNothing);
+      });
+    });
+
+    testWidgets("Should show LoadingPanel when state is [RouteLoading]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(routeCubit.state).thenReturn(const RouteLoading());
+
+        await tester.pumpApp(child: const HomeScreen());
+        expect(findLoadingPanel(), findsOneWidget);
       });
     });
   });

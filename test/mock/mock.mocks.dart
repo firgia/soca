@@ -1258,6 +1258,70 @@ class MockLocalLanguageProvider extends _i1.Mock
       ) as _i32.Future<void>);
 }
 
+/// A class which mocks [OneSignalProvider].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockOneSignalProvider extends _i1.Mock implements _i23.OneSignalProvider {
+  @override
+  String get lastUpdateTag => (super.noSuchMethod(
+        Invocation.getter(#lastUpdateTag),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String);
+  @override
+  String get lastUpdateUID => (super.noSuchMethod(
+        Invocation.getter(#lastUpdateUID),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String);
+  @override
+  _i32.Future<void> deleteLastUpdateUID() => (super.noSuchMethod(
+        Invocation.method(
+          #deleteLastUpdateUID,
+          [],
+        ),
+        returnValue: _i32.Future<void>.value(),
+        returnValueForMissingStub: _i32.Future<void>.value(),
+      ) as _i32.Future<void>);
+  @override
+  _i32.Future<Map<String, dynamic>?> getLastUpdateTag() => (super.noSuchMethod(
+        Invocation.method(
+          #getLastUpdateTag,
+          [],
+        ),
+        returnValue: _i32.Future<Map<String, dynamic>?>.value(),
+        returnValueForMissingStub: _i32.Future<Map<String, dynamic>?>.value(),
+      ) as _i32.Future<Map<String, dynamic>?>);
+  @override
+  _i32.Future<String?> getLastUpdateUID() => (super.noSuchMethod(
+        Invocation.method(
+          #getLastUpdateUID,
+          [],
+        ),
+        returnValue: _i32.Future<String?>.value(),
+        returnValueForMissingStub: _i32.Future<String?>.value(),
+      ) as _i32.Future<String?>);
+  @override
+  _i32.Future<void> setLastUpdateTag(Map<String, dynamic>? value) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #setLastUpdateTag,
+          [value],
+        ),
+        returnValue: _i32.Future<void>.value(),
+        returnValueForMissingStub: _i32.Future<void>.value(),
+      ) as _i32.Future<void>);
+  @override
+  _i32.Future<void> setLastUpdateUID(String? value) => (super.noSuchMethod(
+        Invocation.method(
+          #setLastUpdateUID,
+          [value],
+        ),
+        returnValue: _i32.Future<void>.value(),
+        returnValueForMissingStub: _i32.Future<void>.value(),
+      ) as _i32.Future<void>);
+}
+
 /// A class which mocks [UserProvider].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -1457,6 +1521,55 @@ class MockAuthRepository extends _i1.Mock implements _i23.AuthRepository {
         returnValue: _i32.Future<void>.value(),
         returnValueForMissingStub: _i32.Future<void>.value(),
       ) as _i32.Future<void>);
+  @override
+  _i32.Future<void> syncOneSignalTags() => (super.noSuchMethod(
+        Invocation.method(
+          #syncOneSignalTags,
+          [],
+        ),
+        returnValue: _i32.Future<void>.value(),
+        returnValueForMissingStub: _i32.Future<void>.value(),
+      ) as _i32.Future<void>);
+  @override
+  void onInternetConnected() => super.noSuchMethod(
+        Invocation.method(
+          #onInternetConnected,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void listenInternetConnection() => super.noSuchMethod(
+        Invocation.method(
+          #listenInternetConnection,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void onInternetDisconnected() => super.noSuchMethod(
+        Invocation.method(
+          #onInternetDisconnected,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void cancelInternetConnectionListener() => super.noSuchMethod(
+        Invocation.method(
+          #cancelInternetConnectionListener,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
 }
 
 /// A class which mocks [FileRepository].

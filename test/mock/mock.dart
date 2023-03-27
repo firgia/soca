@@ -41,6 +41,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<DeviceProvider>(),
   MockSpec<FunctionsProvider>(),
   MockSpec<LocalLanguageProvider>(),
+  MockSpec<OneSignalProvider>(),
   MockSpec<UserProvider>(),
   MockSpec<AuthRepository>(),
   MockSpec<FileRepository>(),

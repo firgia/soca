@@ -71,17 +71,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         child: Scaffold(
-          body: SafeArea(
-            child: SwipeRefresh.adaptive(
-              stateStream: swipeRefreshController.stream,
-              onRefresh: onRefresh,
-              platform: CustomPlatformWrapper(),
-              children: const [
-                SizedBox(height: kDefaultSpacing / 1.5),
-                _UserProfile(),
-                _UserAction(),
-                SizedBox(height: kDefaultSpacing * 2),
-              ],
+          body: _LoadingWrapper(
+            child: SafeArea(
+              child: SwipeRefresh.adaptive(
+                stateStream: swipeRefreshController.stream,
+                onRefresh: onRefresh,
+                platform: CustomPlatformWrapper(),
+                children: const [
+                  SizedBox(height: kDefaultSpacing / 1.5),
+                  _UserProfile(),
+                  _UserAction(),
+                  SizedBox(height: kDefaultSpacing * 2),
+                ],
+              ),
             ),
           ),
         ),

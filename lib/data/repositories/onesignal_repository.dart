@@ -49,14 +49,17 @@ class OnesignalRepository with InternetConnectionHandlerMixin {
       }
     }
 
+    _failedToUpdateLanguage = isFailedToUpdate;
+
     if (_failedToUpdateLanguage) {
       _logger.warning(
-          "Failed to update the language. The app will try to update the language automatically when the internet connection state has changed to connected.");
+          'Failed to update the language. The app will try to update the '
+          'language automatically when the internet connection state has '
+          'changed to connected.');
     } else {
       _logger.fine("Successfully to update the language");
     }
 
-    _failedToUpdateLanguage = isFailedToUpdate;
     return !isFailedToUpdate;
   }
 

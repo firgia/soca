@@ -63,6 +63,14 @@ MockDeviceProvider getMockDeviceProvider() {
   return mock;
 }
 
+MockFunctionsProvider getMockFunctionsProvider() {
+  MockFunctionsProvider mock = MockFunctionsProvider();
+  _removeRegistrationIfExists<FunctionsProvider>();
+  locator.registerSingleton<FunctionsProvider>(mock);
+
+  return mock;
+}
+
 MockLocalLanguageProvider getMockLocalLanguageProvider() {
   MockLocalLanguageProvider mock = MockLocalLanguageProvider();
   _removeRegistrationIfExists<LocalLanguageProvider>();
@@ -71,10 +79,10 @@ MockLocalLanguageProvider getMockLocalLanguageProvider() {
   return mock;
 }
 
-MockFunctionsProvider getMockFunctionsProvider() {
-  MockFunctionsProvider mock = MockFunctionsProvider();
-  _removeRegistrationIfExists<FunctionsProvider>();
-  locator.registerSingleton<FunctionsProvider>(mock);
+MockOneSignalProvider getMockOneSignalProvider() {
+  MockOneSignalProvider mock = MockOneSignalProvider();
+  _removeRegistrationIfExists<OneSignalProvider>();
+  locator.registerSingleton<OneSignalProvider>(mock);
 
   return mock;
 }
@@ -311,8 +319,9 @@ void registerLocator() {
   getMockDatabaseProvider();
   getMockDeviceProvider();
   getMockFunctionsProvider();
-  getMockUserProvider();
   getMockLocalLanguageProvider();
+  getMockOneSignalProvider();
+  getMockUserProvider();
   getMockAuthRepository();
   getMockFileRepository();
   getMockLanguageRepository();
@@ -358,8 +367,9 @@ void unregisterLocator() {
   locator.unregister<DatabaseProvider>();
   locator.unregister<DeviceProvider>();
   locator.unregister<FunctionsProvider>();
-  locator.unregister<UserProvider>();
   locator.unregister<LocalLanguageProvider>();
+  locator.unregister<OneSignalProvider>();
+  locator.unregister<UserProvider>();
   locator.unregister<AuthRepository>();
   locator.unregister<FileRepository>();
   locator.unregister<LanguageRepository>();
