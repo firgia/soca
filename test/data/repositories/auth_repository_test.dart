@@ -588,5 +588,83 @@ void main() {
       verifyNever(oneSignal.sendTags({"is_signed_in": "false"}));
       verifyNever(oneSignalProvider.deleteLastUpdateUID());
     });
+
+    test(
+      'Should try to recall when internet connection connected and failed to '
+      'send tags',
+      () async {
+        String playerID = "12345";
+        String uid = "121212";
+
+        when(oneSignalProvider.getLastUpdateUID())
+            .thenAnswer((_) => Future.value(null));
+
+        MockUser user = MockUser();
+        when(user.uid).thenReturn(uid);
+        when(firebaseAuth.currentUser).thenReturn(user);
+        when(oneSignal.getDeviceState()).thenAnswer(
+          (_) => Future.value(
+            OSDeviceState(
+              {
+                "hasNotificationPermission": true,
+                "pushDisabled": true,
+                "subscribed": true,
+                "emailSubscribed": true,
+                "smsSubscribed": true,
+                "userId": playerID,
+              },
+            ),
+          ),
+        );
+
+        when(oneSignal.sendTags(any)).thenThrow(Exception());
+
+        await authRepository.syncOneSignalTags();
+
+        verify(oneSignalProvider.getLastUpdateUID());
+
+        authRepository.onInternetConnected();
+
+        await Future.delayed(const Duration(seconds: 1));
+        verify(oneSignalProvider.getLastUpdateUID());
+      },
+    );
+
+    test(
+      'Should not to recall when internet connection connected and send tags '
+      'has been successfully',
+      () async {
+        String playerID = "12345";
+        String uid = "121212";
+
+        when(oneSignalProvider.getLastUpdateUID())
+            .thenAnswer((_) => Future.value(null));
+
+        MockUser user = MockUser();
+        when(user.uid).thenReturn(uid);
+        when(firebaseAuth.currentUser).thenReturn(user);
+        when(oneSignal.getDeviceState()).thenAnswer(
+          (_) => Future.value(
+            OSDeviceState(
+              {
+                "hasNotificationPermission": true,
+                "pushDisabled": true,
+                "subscribed": true,
+                "emailSubscribed": true,
+                "smsSubscribed": true,
+                "userId": playerID,
+              },
+            ),
+          ),
+        );
+
+        await authRepository.syncOneSignalTags();
+        verify(oneSignalProvider.getLastUpdateUID());
+
+        authRepository.onInternetConnected();
+        await Future.delayed(const Duration(seconds: 1));
+        verifyNever(oneSignalProvider.getLastUpdateUID());
+      },
+    );
   });
 }
