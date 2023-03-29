@@ -40,6 +40,7 @@ void setupInjection() {
 
   /* ---------------------------------> DATA <------------------------------- */
   sl.registerLazySingleton<AuthProvider>(() => AuthProvider());
+  sl.registerLazySingleton<CallingProvider>(() => CallingProvider());
   sl.registerLazySingleton<DatabaseProvider>(() => DatabaseProvider());
   sl.registerLazySingleton<DeviceProvider>(() => DeviceProvider());
   sl.registerLazySingleton<FunctionsProvider>(() => FunctionsProvider());

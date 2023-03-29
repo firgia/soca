@@ -1095,6 +1095,21 @@ class MockAuthProvider extends _i1.Mock implements _i23.AuthProvider {
       ) as _i32.Future<void>);
 }
 
+/// A class which mocks [CallingProvider].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCallingProvider extends _i1.Mock implements _i23.CallingProvider {
+  @override
+  _i32.Future<dynamic> createCall() => (super.noSuchMethod(
+        Invocation.method(
+          #createCall,
+          [],
+        ),
+        returnValue: _i32.Future<dynamic>.value(),
+        returnValueForMissingStub: _i32.Future<dynamic>.value(),
+      ) as _i32.Future<dynamic>);
+}
+
 /// A class which mocks [DatabaseProvider].
 ///
 /// See the documentation for Mockito's code generation for more information.

@@ -47,6 +47,14 @@ MockAuthProvider getMockAuthProvider() {
   return mock;
 }
 
+MockCallingProvider getMockCallingProvider() {
+  MockCallingProvider mock = MockCallingProvider();
+  _removeRegistrationIfExists<CallingProvider>();
+  locator.registerSingleton<CallingProvider>(mock);
+
+  return mock;
+}
+
 MockDatabaseProvider getMockDatabaseProvider() {
   MockDatabaseProvider mock = MockDatabaseProvider();
   _removeRegistrationIfExists<DatabaseProvider>();
@@ -316,6 +324,7 @@ void registerLocator() {
 
   /* ---------------------------------> DATA <------------------------------- */
   getMockAuthProvider();
+  getMockCallingProvider();
   getMockDatabaseProvider();
   getMockDeviceProvider();
   getMockFunctionsProvider();
@@ -364,6 +373,7 @@ void unregisterLocator() {
 
   /* ---------------------------------> DATA <------------------------------- */
   locator.unregister<AuthProvider>();
+  locator.unregister<CallingProvider>();
   locator.unregister<DatabaseProvider>();
   locator.unregister<DeviceProvider>();
   locator.unregister<FunctionsProvider>();
