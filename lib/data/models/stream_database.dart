@@ -11,12 +11,15 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-class StreamDatabase<T> extends Equatable {
+class StreamDatabase<T> with EquatableMixin {
   final DatabaseReference databaseReference;
   final StreamController<T> streamController;
   final StreamSubscription streamSubscription;
 
-  const StreamDatabase({
+  bool _isDisposed = false;
+  bool get isDisposed => _isDisposed;
+
+  StreamDatabase({
     required this.databaseReference,
     required this.streamController,
     required this.streamSubscription,
@@ -28,4 +31,11 @@ class StreamDatabase<T> extends Equatable {
         streamController,
         streamSubscription,
       ];
+
+  void dispose() {
+    streamSubscription.cancel();
+    streamController.close();
+    databaseReference.keepSynced(false);
+    _isDisposed = true;
+  }
 }
