@@ -25,4 +25,17 @@ class CallingProvider {
   Future<dynamic> createCall() async {
     return _functionsProvider.call(functionsName: FunctionName.createCall);
   }
+
+  /// {@template get_call}
+  /// Get a call based on [callID]
+  ///
+  /// {@endtemplate}
+  ///
+  /// {@macro firebase_functions_exception}
+  Future<dynamic> getCall(String callID) async {
+    return _functionsProvider.call(
+      functionsName: FunctionName.getCall,
+      parameters: {"id": callID},
+    );
+  }
 }

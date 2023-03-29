@@ -15,6 +15,7 @@ import '../../helper/helper.dart';
 import '../../mock/mock.mocks.dart';
 
 String get _createCall => "createCall";
+String get _getCall => "getCall";
 
 void main() {
   late CallingProvider callingProvider;
@@ -47,6 +48,41 @@ void main() {
 
       expect(
         () => callingProvider.createCall(),
+        throwsA(exception),
+      );
+    });
+  });
+
+  group(".getCall()", () {
+    String callID = "123";
+
+    test("Should call functionsProvider.call()", () async {
+      when(
+        functionsProvider.call(
+          functionsName: _getCall,
+          parameters: {"id": callID},
+        ),
+      ).thenAnswer((_) => Future.value({}));
+
+      await callingProvider.getCall(callID);
+      verify(functionsProvider.call(
+        functionsName: _getCall,
+        parameters: {"id": callID},
+      ));
+    });
+
+    test("Should thrown Exception when getting error", () async {
+      Exception exception = Exception("unknown");
+
+      when(
+        functionsProvider.call(
+          functionsName: _getCall,
+          parameters: {"id": callID},
+        ),
+      ).thenThrow(exception);
+
+      expect(
+        () => callingProvider.getCall(callID),
         throwsA(exception),
       );
     });
