@@ -7,6 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:soca/core/core.dart';
@@ -21,15 +23,43 @@ String get _getRTCCredential => "getRTCCredential";
 
 void main() {
   late CallingProvider callingProvider;
+  late MockDatabaseProvider databaseProvider;
   late MockFunctionsProvider functionsProvider;
 
   setUp(() {
     registerLocator();
+    databaseProvider = getMockDatabaseProvider();
     functionsProvider = getMockFunctionsProvider();
     callingProvider = CallingProvider();
   });
 
   tearDown(() => unregisterLocator());
+
+  group(".cancelOnCallStateUpdated", () {
+    test("Should dispose the [StreamDatabase]", () {
+      final StreamController<int> streamController = StreamController();
+      final MockDatabaseReference databaseReference = MockDatabaseReference();
+      final StreamSubscription subscription = streamController.stream.listen(
+        (event) {},
+      );
+
+      StreamDatabase streamDatabase = StreamDatabase(
+        databaseReference: databaseReference,
+        streamController: streamController,
+        streamSubscription: subscription,
+      );
+
+      when(
+        databaseProvider.onValue("calls/1234/state"),
+      ).thenReturn(streamDatabase);
+
+      callingProvider.onCallStateUpdated("1234");
+      expect(streamDatabase.isDisposed, false);
+
+      callingProvider.cancelOnCallStateUpdated();
+      expect(streamDatabase.isDisposed, true);
+    });
+  });
 
   group(".createCall()", () {
     test("Should call functionsProvider.call()", () async {
@@ -145,6 +175,42 @@ void main() {
         ),
         throwsA(exception),
       );
+    });
+  });
+
+  group(".onCallStateUpdated()", () {
+    String callID = "1234";
+
+    test("Should call databaseProvider.onValue()", () async {
+      when(
+        databaseProvider.onValue("calls/$callID/state"),
+      ).thenReturn(
+        StreamDatabase(
+          databaseReference: MockDatabaseReference(),
+          streamController: StreamController(),
+          streamSubscription: StreamController().stream.listen((event) {}),
+        ),
+      );
+
+      callingProvider.onCallStateUpdated(callID);
+      verify(databaseProvider.onValue("calls/$callID/state"));
+    });
+
+    test("Should return Stream from databaseProvider.onValue()", () async {
+      final StreamController<int> streamController = StreamController();
+
+      when(
+        databaseProvider.onValue("calls/$callID/state"),
+      ).thenReturn(
+        StreamDatabase(
+          databaseReference: MockDatabaseReference(),
+          streamController: streamController,
+          streamSubscription: streamController.stream.listen((event) {}),
+        ),
+      );
+
+      Stream stream = callingProvider.onCallStateUpdated(callID);
+      expect(stream, streamController.stream);
     });
   });
 }

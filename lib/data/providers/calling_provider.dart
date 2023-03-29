@@ -7,12 +7,24 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
+
 import '../../core/core.dart';
 import '../../injection.dart';
+import '../models/models.dart';
+import 'database_provider.dart';
 import 'functions_provider.dart';
 
 class CallingProvider {
+  final DatabaseProvider _databaseProvider = sl<DatabaseProvider>();
   final FunctionsProvider _functionsProvider = sl<FunctionsProvider>();
+
+  StreamDatabase? _streamCallState;
+
+  /// Cancel subscribtion call state data
+  void cancelOnCallStateUpdated() {
+    _streamCallState?.dispose();
+  }
 
   /// {@template create_call}
   /// Create a call
@@ -59,5 +71,14 @@ class CallingProvider {
         "role": role.name,
       },
     );
+  }
+
+  /// Fires when the call state data from [callID] is updated
+  Stream<dynamic> onCallStateUpdated(String callID) {
+    StreamDatabase streamDatabase =
+        _databaseProvider.onValue("calls/$callID/state");
+
+    _streamCallState = streamDatabase;
+    return streamDatabase.streamController.stream;
   }
 }
