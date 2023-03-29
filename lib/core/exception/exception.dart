@@ -7,6 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+export 'calling_failure.dart';
 export 'file_failure.dart';
 export 'sign_in_with_apple_failure.dart';
 export 'sign_in_with_google_failure.dart';
