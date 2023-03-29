@@ -7,6 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
+
 import 'package:logging/logging.dart';
 
 import '../../core/core.dart';
@@ -16,6 +18,12 @@ import '../providers/providers.dart';
 import 'auth_repository.dart';
 
 class CallingRepository {
+  CallingRepository() {
+    _authRepository.onSignOut.listen((event) {
+      _callingProvider.cancelOnCallStateUpdated();
+    });
+  }
+
   final AuthRepository _authRepository = sl<AuthRepository>();
   final CallingProvider _callingProvider = sl<CallingProvider>();
   final Logger _logger = Logger("Calling Repository");
@@ -149,6 +157,38 @@ class CallingRepository {
       throw CallingFailure.fromException(e);
     } catch (e) {
       throw const CallingFailure();
+    }
+  }
+
+  /// Fires when the call state data is updated.
+  ///
+  /// `Exception`
+  ///
+  /// A [CallingFailure] maybe thrown when a failure occurs.
+  Stream<CallState?> onCallStateUpdated(String callID) {
+    String? authUID = _authRepository.uid;
+
+    if (authUID == null) {
+      _logger.severe("Failed to get call state, please sign in to continue");
+
+      throw const CallingFailure(
+        code: CallingFailureCode.unauthenticated,
+        message:
+            'The request does not have valid authentication credentials for '
+            'the operation.',
+      );
+    } else {
+      final controller = StreamController<CallState?>();
+      _callingProvider.onCallStateUpdated(callID).listen((response) {
+        if (response != null) {
+          controller.sink.add(CallStateExtension.getFromName(response));
+        } else {
+          controller.sink.add(null);
+        }
+      });
+
+      _logger.fine("Subscribe Call State data on Realtime Database");
+      return controller.stream;
     }
   }
 }

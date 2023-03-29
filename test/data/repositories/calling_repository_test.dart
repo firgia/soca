@@ -30,6 +30,19 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  group(".()", () {
+    test("Should call callingProvider.cancelOnCallStateUpdated() when sign out",
+        () async {
+      when(authRepository.onSignOut)
+          .thenAnswer((_) => Stream.value(DateTime.now()));
+
+      CallingRepository();
+      verify(authRepository.onSignOut);
+      await Future.delayed(const Duration(milliseconds: 500));
+      verify(callingProvider.cancelOnCallStateUpdated());
+    });
+  });
+
   group(".createCall()", () {
     test("Should return the call data", () async {
       when(authRepository.uid).thenReturn("1234");
@@ -480,6 +493,57 @@ void main() {
       } on CallingFailure catch (e) {
         expect(e.code, CallingFailureCode.unknown);
       }
+    });
+  });
+
+  group(".onCallStateUpdated()", () {
+    String callID = "12345";
+
+    test("Should emits call state data", () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.onCallStateUpdated(any)).thenAnswer(
+        (_) => Stream.value("waiting"),
+      );
+
+      Stream<CallState?> onCallStateUpdated =
+          callingRepository.onCallStateUpdated(callID);
+      expect(
+        onCallStateUpdated,
+        emits(CallState.waiting),
+      );
+
+      verify(callingProvider.onCallStateUpdated(any));
+    });
+
+    test("Should emits null when data is null", () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.onCallStateUpdated(any)).thenAnswer(
+        (_) => Stream.value(null),
+      );
+
+      Stream<CallState?> onCallStateUpdated =
+          callingRepository.onCallStateUpdated(callID);
+      expect(
+        onCallStateUpdated,
+        emits(null),
+      );
+
+      verify(callingProvider.onCallStateUpdated(any));
+    });
+
+    test("Should throw CallingFailureCode.unauthenticated when not signed in",
+        () async {
+      when(authRepository.uid).thenReturn(null);
+      expect(() => callingRepository.onCallStateUpdated(callID),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        callingRepository.onCallStateUpdated(callID);
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unauthenticated);
+      }
+
+      verifyNever(callingProvider.onCallStateUpdated(any));
     });
   });
 }
