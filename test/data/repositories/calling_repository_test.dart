@@ -126,8 +126,8 @@ void main() {
     });
 
     test(
-        'Should throw CallingFailureCode.permissionDenied when get not-found '
-        'error from FirebaseFunctionsExceptions', () async {
+        'Should throw CallingFailureCode.permissionDenied when get '
+        'permission-denied error from FirebaseFunctionsExceptions', () async {
       when(authRepository.uid).thenReturn("1234");
       when(callingProvider.createCall()).thenThrow(
         FirebaseFunctionsException(message: "error", code: "permission-denied"),
@@ -151,6 +151,135 @@ void main() {
 
       try {
         await callingRepository.createCall();
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unknown);
+      }
+    });
+  });
+
+  group(".getCall()", () {
+    String callID = "123";
+
+    test("Should return the call data", () async {
+      when(authRepository.uid).thenReturn("1234");
+
+      when(callingProvider.getCall(callID)).thenAnswer(
+        (_) => Future.value({
+          "id": "123456",
+          "target_volunteer_ids": [
+            "ab",
+            "cd",
+          ],
+          "rtc_channel_id": "abcd",
+          "settings": {
+            "enable_flashlight": false,
+            "enable_flip": false,
+          },
+          "users": {
+            "blind_id": "456",
+            "volunteer_id": "123",
+          },
+          "role": "caller",
+          "state": "waiting",
+        }),
+      );
+
+      Call call = await callingRepository.getCall(callID);
+
+      expect(
+        call,
+        const Call(
+          id: "123456",
+          rtcChannelID: "abcd",
+          settings: CallSetting(
+            enableFlashlight: false,
+            enableFlip: false,
+          ),
+          users: UserCall(
+            blindID: "456",
+            volunteerID: "123",
+          ),
+          state: CallState.waiting,
+        ),
+      );
+
+      verify(authRepository.uid);
+      verify(callingProvider.getCall(callID));
+    });
+
+    test("Should throw CallingFailureCode.unauthenticated when not signed in",
+        () async {
+      when(authRepository.uid).thenReturn(null);
+      expect(() => callingRepository.getCall(callID),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getCall(callID);
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unauthenticated);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.invalidArgument when get '
+        'invalid-argument error from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.getCall(callID)).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "invalid-argument"),
+      );
+      expect(() => callingRepository.getCall(callID),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getCall(callID);
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.invalidArgument);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.notFound when get not-found error '
+        'from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.getCall(callID)).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "not-found"),
+      );
+      expect(() => callingRepository.getCall(callID),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getCall(callID);
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.notFound);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.permissionDenied when get '
+        'permission-denied error from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.getCall(callID)).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "permission-denied"),
+      );
+      expect(() => callingRepository.getCall(callID),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getCall(callID);
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.permissionDenied);
+      }
+    });
+
+    test("Should throw CallingFailureCode.unknown when get unknown exception",
+        () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.getCall(callID)).thenThrow(Exception());
+      expect(() => callingRepository.getCall(callID),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getCall(callID);
       } on CallingFailure catch (e) {
         expect(e.code, CallingFailureCode.unknown);
       }

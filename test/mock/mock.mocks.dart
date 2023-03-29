@@ -1108,6 +1108,15 @@ class MockCallingProvider extends _i1.Mock implements _i23.CallingProvider {
         returnValue: _i32.Future<dynamic>.value(),
         returnValueForMissingStub: _i32.Future<dynamic>.value(),
       ) as _i32.Future<dynamic>);
+  @override
+  _i32.Future<dynamic> getCall(String? callID) => (super.noSuchMethod(
+        Invocation.method(
+          #getCall,
+          [callID],
+        ),
+        returnValue: _i32.Future<dynamic>.value(),
+        returnValueForMissingStub: _i32.Future<dynamic>.value(),
+      ) as _i32.Future<dynamic>);
 }
 
 /// A class which mocks [DatabaseProvider].

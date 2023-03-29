@@ -29,7 +29,7 @@ class CallingRepository {
     String? authUID = _authRepository.uid;
 
     if (authUID == null) {
-      _logger.severe("Failed to get user device, please sign in to continue");
+      _logger.severe("Failed to create call, please sign in to continue");
 
       throw const CallingFailure(
         code: CallingFailureCode.unauthenticated,
@@ -45,6 +45,47 @@ class CallingRepository {
 
       if (response != null) {
         _logger.fine("Successfully to create a call");
+        return Call.fromMap(response);
+      } else {
+        throw const CallingFailure(
+          code: CallingFailureCode.notFound,
+          message: "Some requested document was not found.",
+        );
+      }
+    } on CallingFailure catch (_) {
+      rethrow;
+    } on Exception catch (e) {
+      throw CallingFailure.fromException(e);
+    } catch (e) {
+      throw const CallingFailure();
+    }
+  }
+
+  /// {@macro get_call}
+  ///
+  /// `Exception`
+  ///
+  /// A [CallingFailure] maybe thrown when a failure occurs.
+  Future<Call> getCall(String callID) async {
+    String? authUID = _authRepository.uid;
+
+    if (authUID == null) {
+      _logger.severe("Failed to get call data, please sign in to continue");
+
+      throw const CallingFailure(
+        code: CallingFailureCode.unauthenticated,
+        message:
+            'The request does not have valid authentication credentials for '
+            'the operation.',
+      );
+    }
+
+    try {
+      _logger.info("Getting call data...");
+      dynamic response = await _callingProvider.getCall(callID);
+
+      if (response != null) {
+        _logger.fine("Successfully to get call data");
         return Call.fromMap(response);
       } else {
         throw const CallingFailure(
