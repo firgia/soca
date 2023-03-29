@@ -9,6 +9,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
 
 import '../../helper/helper.dart';
@@ -16,6 +17,7 @@ import '../../mock/mock.mocks.dart';
 
 String get _createCall => "createCall";
 String get _getCall => "getCall";
+String get _getRTCCredential => "getRTCCredential";
 
 void main() {
   late CallingProvider callingProvider;
@@ -83,6 +85,64 @@ void main() {
 
       expect(
         () => callingProvider.getCall(callID),
+        throwsA(exception),
+      );
+    });
+  });
+
+  group(".getRTCCredential()", () {
+    String channelName = "sample";
+    int uid = 2;
+    RTCRole role = RTCRole.audience;
+
+    test("Should call functionsProvider.call()", () async {
+      when(
+        functionsProvider.call(
+          functionsName: _getRTCCredential,
+          parameters: {
+            "channel_name": channelName,
+            "uid": uid,
+            "role": role.name,
+          },
+        ),
+      ).thenAnswer((_) => Future.value({}));
+
+      await callingProvider.getRTCCredential(
+        channelName: channelName,
+        role: role,
+        uid: uid,
+      );
+
+      verify(functionsProvider.call(
+        functionsName: _getRTCCredential,
+        parameters: {
+          "channel_name": channelName,
+          "uid": uid,
+          "role": role.name,
+        },
+      ));
+    });
+
+    test("Should thrown Exception when getting error", () async {
+      Exception exception = Exception("unknown");
+
+      when(
+        functionsProvider.call(
+          functionsName: _getRTCCredential,
+          parameters: {
+            "channel_name": channelName,
+            "uid": uid,
+            "role": role.name,
+          },
+        ),
+      ).thenThrow(exception);
+
+      expect(
+        () => callingProvider.getRTCCredential(
+          channelName: channelName,
+          role: role,
+          uid: uid,
+        ),
         throwsA(exception),
       );
     });

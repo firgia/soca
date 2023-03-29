@@ -15,6 +15,7 @@ export 'device_platform.dart';
 export 'call_state.dart';
 export 'environtment_type.dart';
 export 'gender.dart';
+export 'rtc_role.dart';
 export 'sign_up_step.dart';
 export 'snackbar_style.dart';
 export 'user_type.dart';

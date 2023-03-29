@@ -38,4 +38,26 @@ class CallingProvider {
       parameters: {"id": callID},
     );
   }
+
+  /// {@template get_rtc_credential}
+  ///
+  /// Get RTC credential to start calling
+  ///
+  /// {@endtemplate}
+  ///
+  /// {@macro firebase_functions_exception}
+  Future<dynamic> getRTCCredential({
+    required String channelName,
+    required RTCRole role,
+    required int uid,
+  }) async {
+    return _functionsProvider.call(
+      functionsName: FunctionName.getRTCCredential,
+      parameters: {
+        "channel_name": channelName,
+        "uid": uid,
+        "role": role.name,
+      },
+    );
+  }
 }
