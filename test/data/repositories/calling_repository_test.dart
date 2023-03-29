@@ -285,4 +285,201 @@ void main() {
       }
     });
   });
+
+  group(".getRTCCredential()", () {
+    String channelName = "sample";
+    int uid = 2;
+    RTCRole role = RTCRole.audience;
+
+    test("Should return the RTCCredential data", () async {
+      when(authRepository.uid).thenReturn("1234");
+
+      when(
+        callingProvider.getRTCCredential(
+          channelName: channelName,
+          role: role,
+          uid: uid,
+        ),
+      ).thenAnswer(
+        (_) => Future.value({
+          "token": "1234",
+          "privilege_expired_time_seconds": 90,
+          "channel_name": "sample-channel",
+          "uid": 1,
+        }),
+      );
+
+      RTCCredential call = await callingRepository.getRTCCredential(
+        channelName: channelName,
+        role: role,
+        uid: uid,
+      );
+
+      expect(
+        call,
+        const RTCCredential(
+          token: "1234",
+          privilegeExpiredTimeSeconds: 90,
+          channelName: "sample-channel",
+          uid: 1,
+        ),
+      );
+
+      verify(authRepository.uid);
+      verify(
+        callingProvider.getRTCCredential(
+          channelName: channelName,
+          role: role,
+          uid: uid,
+        ),
+      );
+    });
+
+    test("Should throw CallingFailureCode.unauthenticated when not signed in",
+        () async {
+      when(authRepository.uid).thenReturn(null);
+      expect(
+          () => callingRepository.getRTCCredential(
+                channelName: channelName,
+                role: role,
+                uid: uid,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getRTCCredential(
+          channelName: channelName,
+          role: role,
+          uid: uid,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unauthenticated);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.invalidArgument when get '
+        'invalid-argument error from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(
+        callingProvider.getRTCCredential(
+          channelName: channelName,
+          role: role,
+          uid: uid,
+        ),
+      ).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "invalid-argument"),
+      );
+      expect(
+          () => callingRepository.getRTCCredential(
+                channelName: channelName,
+                role: role,
+                uid: uid,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getRTCCredential(
+          channelName: channelName,
+          role: role,
+          uid: uid,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.invalidArgument);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.notFound when get not-found error '
+        'from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(
+        callingProvider.getRTCCredential(
+          channelName: channelName,
+          role: role,
+          uid: uid,
+        ),
+      ).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "not-found"),
+      );
+      expect(
+          () => callingRepository.getRTCCredential(
+                channelName: channelName,
+                role: role,
+                uid: uid,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getRTCCredential(
+          channelName: channelName,
+          role: role,
+          uid: uid,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.notFound);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.permissionDenied when get '
+        'permission-denied error from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(
+        callingProvider.getRTCCredential(
+          channelName: channelName,
+          role: role,
+          uid: uid,
+        ),
+      ).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "permission-denied"),
+      );
+      expect(
+          () => callingRepository.getRTCCredential(
+                channelName: channelName,
+                role: role,
+                uid: uid,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getRTCCredential(
+          channelName: channelName,
+          role: role,
+          uid: uid,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.permissionDenied);
+      }
+    });
+
+    test("Should throw CallingFailureCode.unknown when get unknown exception",
+        () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(
+        callingProvider.getRTCCredential(
+          channelName: channelName,
+          role: role,
+          uid: uid,
+        ),
+      ).thenThrow(Exception());
+      expect(
+          () => callingRepository.getRTCCredential(
+                channelName: channelName,
+                role: role,
+                uid: uid,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getRTCCredential(
+          channelName: channelName,
+          role: role,
+          uid: uid,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unknown);
+      }
+    });
+  });
 }

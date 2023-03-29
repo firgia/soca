@@ -101,4 +101,54 @@ class CallingRepository {
       throw const CallingFailure();
     }
   }
+
+  /// {@macro get_rtc_credential}
+  ///
+  /// `Exception`
+  ///
+  /// A [CallingFailure] maybe thrown when a failure occurs.
+  Future<RTCCredential> getRTCCredential({
+    required String channelName,
+    required RTCRole role,
+    required int uid,
+  }) async {
+    String? authUID = _authRepository.uid;
+
+    if (authUID == null) {
+      _logger.severe(
+          "Failed to get RTC Credential data, please sign in to continue");
+
+      throw const CallingFailure(
+        code: CallingFailureCode.unauthenticated,
+        message:
+            'The request does not have valid authentication credentials for '
+            'the operation.',
+      );
+    }
+
+    try {
+      _logger.info("Getting RTC Credential data...");
+      dynamic response = await _callingProvider.getRTCCredential(
+        channelName: channelName,
+        role: role,
+        uid: uid,
+      );
+
+      if (response != null) {
+        _logger.fine("Successfully to get RTC Credential data");
+        return RTCCredential.fromMap(response);
+      } else {
+        throw const CallingFailure(
+          code: CallingFailureCode.notFound,
+          message: "Some requested document was not found.",
+        );
+      }
+    } on CallingFailure catch (_) {
+      rethrow;
+    } on Exception catch (e) {
+      throw CallingFailure.fromException(e);
+    } catch (e) {
+      throw const CallingFailure();
+    }
+  }
 }

@@ -1117,6 +1117,25 @@ class MockCallingProvider extends _i1.Mock implements _i23.CallingProvider {
         returnValue: _i32.Future<dynamic>.value(),
         returnValueForMissingStub: _i32.Future<dynamic>.value(),
       ) as _i32.Future<dynamic>);
+  @override
+  _i32.Future<dynamic> getRTCCredential({
+    required String? channelName,
+    required _i31.RTCRole? role,
+    required int? uid,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getRTCCredential,
+          [],
+          {
+            #channelName: channelName,
+            #role: role,
+            #uid: uid,
+          },
+        ),
+        returnValue: _i32.Future<dynamic>.value(),
+        returnValueForMissingStub: _i32.Future<dynamic>.value(),
+      ) as _i32.Future<dynamic>);
 }
 
 /// A class which mocks [DatabaseProvider].
