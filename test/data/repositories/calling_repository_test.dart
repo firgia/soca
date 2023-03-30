@@ -7,6 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:convert';
+
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -25,7 +27,7 @@ void main() {
     registerLocator();
     callingProvider = getMockCallingProvider();
     authRepository = getMockAuthRepository();
-    callingRepository = CallingRepository();
+    callingRepository = CallingRepositoryImpl();
   });
 
   tearDown(() => unregisterLocator());
@@ -36,7 +38,7 @@ void main() {
       when(authRepository.onSignOut)
           .thenAnswer((_) => Stream.value(DateTime.now()));
 
-      CallingRepository();
+      CallingRepositoryImpl();
       verify(authRepository.onSignOut);
       await Future.delayed(const Duration(milliseconds: 500));
       verify(callingProvider.cancelOnCallStateUpdated());
@@ -164,6 +166,371 @@ void main() {
 
       try {
         await callingRepository.createCall();
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unknown);
+      }
+    });
+  });
+
+  group(".declineCall()", () {
+    String callID = "123";
+    String blindID = "12345";
+
+    test("Should return the call data", () async {
+      when(authRepository.uid).thenReturn("1234");
+
+      when(
+        callingProvider.declineCall(
+          callID: callID,
+          blindID: blindID,
+        ),
+      ).thenAnswer(
+        (_) => Future.value({
+          "id": "123456",
+          "target_volunteer_ids": [
+            "ab",
+            "cd",
+          ],
+          "rtc_channel_id": "abcd",
+          "settings": {
+            "enable_flashlight": false,
+            "enable_flip": false,
+          },
+          "users": {
+            "blind_id": "456",
+            "volunteer_id": "123",
+          },
+          "role": "caller",
+          "state": "waiting",
+        }),
+      );
+
+      Call? call = await callingRepository.declineCall(
+        callID: callID,
+        blindID: blindID,
+      );
+
+      expect(
+        call,
+        const Call(
+          id: "123456",
+          rtcChannelID: "abcd",
+          settings: CallSetting(
+            enableFlashlight: false,
+            enableFlip: false,
+          ),
+          users: UserCall(
+            blindID: "456",
+            volunteerID: "123",
+          ),
+          state: CallState.waiting,
+        ),
+      );
+
+      verify(authRepository.uid);
+      verify(callingProvider.getDeclinedCallID());
+      verify(callingProvider.declineCall(
+        callID: callID,
+        blindID: blindID,
+      ));
+      verify(callingProvider.setDeclinedCallID(jsonEncode([callID])));
+    });
+
+    test("Should return null when call ID has been declined", () async {
+      when(authRepository.uid).thenReturn("1234");
+
+      when(callingProvider.getDeclinedCallID()).thenAnswer(
+        (_) => Future.value(jsonEncode([callID])),
+      );
+
+      Call? call = await callingRepository.declineCall(
+        callID: callID,
+        blindID: blindID,
+      );
+
+      expect(call, isNull);
+
+      verify(authRepository.uid);
+      verify(callingProvider.getDeclinedCallID());
+      verifyNever(callingProvider.declineCall(
+        callID: callID,
+        blindID: blindID,
+      ));
+      verifyNever(callingProvider.setDeclinedCallID(any));
+    });
+
+    test("Should throw CallingFailureCode.unauthenticated when not signed in",
+        () async {
+      when(authRepository.uid).thenReturn(null);
+      expect(
+          () => callingRepository.declineCall(
+                callID: callID,
+                blindID: blindID,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.declineCall(
+          callID: callID,
+          blindID: blindID,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unauthenticated);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.invalidArgument when get '
+        'invalid-argument error from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.declineCall(
+        callID: callID,
+        blindID: blindID,
+      )).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "invalid-argument"),
+      );
+
+      expect(
+          () => callingRepository.declineCall(
+                callID: callID,
+                blindID: blindID,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.declineCall(
+          callID: callID,
+          blindID: blindID,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.invalidArgument);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.notFound when get not-found error '
+        'from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.declineCall(
+        callID: callID,
+        blindID: blindID,
+      )).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "not-found"),
+      );
+
+      expect(
+          () => callingRepository.declineCall(
+                callID: callID,
+                blindID: blindID,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.declineCall(
+          callID: callID,
+          blindID: blindID,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.notFound);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.permissionDenied when get '
+        'permission-denied error from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.declineCall(
+        callID: callID,
+        blindID: blindID,
+      )).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "permission-denied"),
+      );
+
+      expect(
+          () => callingRepository.declineCall(
+                callID: callID,
+                blindID: blindID,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.declineCall(
+          callID: callID,
+          blindID: blindID,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.permissionDenied);
+      }
+    });
+
+    test("Should throw CallingFailureCode.unknown when get unknown exception",
+        () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.declineCall(
+        callID: callID,
+        blindID: blindID,
+      )).thenThrow(Exception());
+
+      expect(
+          () => callingRepository.declineCall(
+                callID: callID,
+                blindID: blindID,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.declineCall(
+          callID: callID,
+          blindID: blindID,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unknown);
+      }
+    });
+  });
+
+  group(".endCall()", () {
+    String callID = "123";
+
+    test("Should return the call data", () async {
+      when(authRepository.uid).thenReturn("1234");
+
+      when(callingProvider.endCall(callID)).thenAnswer(
+        (_) => Future.value({
+          "id": "123456",
+          "target_volunteer_ids": [
+            "ab",
+            "cd",
+          ],
+          "rtc_channel_id": "abcd",
+          "settings": {
+            "enable_flashlight": false,
+            "enable_flip": false,
+          },
+          "users": {
+            "blind_id": "456",
+            "volunteer_id": "123",
+          },
+          "role": "caller",
+          "state": "waiting",
+        }),
+      );
+
+      Call? call = await callingRepository.endCall(callID);
+
+      expect(
+        call,
+        const Call(
+          id: "123456",
+          rtcChannelID: "abcd",
+          settings: CallSetting(
+            enableFlashlight: false,
+            enableFlip: false,
+          ),
+          users: UserCall(
+            blindID: "456",
+            volunteerID: "123",
+          ),
+          state: CallState.waiting,
+        ),
+      );
+
+      verify(authRepository.uid);
+      verify(callingProvider.getEndedCallID());
+      verify(callingProvider.endCall(callID));
+      verify(callingProvider.setEndedCallID(jsonEncode([callID])));
+    });
+
+    test("Should return null when call ID has been ended", () async {
+      when(authRepository.uid).thenReturn("1234");
+
+      when(callingProvider.getEndedCallID()).thenAnswer(
+        (_) => Future.value(jsonEncode([callID])),
+      );
+
+      Call? call = await callingRepository.endCall(callID);
+
+      expect(call, isNull);
+
+      verify(authRepository.uid);
+      verify(callingProvider.getEndedCallID());
+      verifyNever(callingProvider.endCall(callID));
+      verifyNever(callingProvider.setEndedCallID(any));
+    });
+
+    test("Should throw CallingFailureCode.unauthenticated when not signed in",
+        () async {
+      when(authRepository.uid).thenReturn(null);
+      expect(() => callingRepository.endCall(callID),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.endCall(callID);
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unauthenticated);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.invalidArgument when get '
+        'invalid-argument error from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.endCall(callID)).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "invalid-argument"),
+      );
+      expect(() => callingRepository.endCall(callID),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.endCall(callID);
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.invalidArgument);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.notFound when get not-found error '
+        'from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.endCall(callID)).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "not-found"),
+      );
+      expect(() => callingRepository.endCall(callID),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.endCall(callID);
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.notFound);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.permissionDenied when get '
+        'permission-denied error from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.endCall(callID)).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "permission-denied"),
+      );
+      expect(() => callingRepository.endCall(callID),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.endCall(callID);
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.permissionDenied);
+      }
+    });
+
+    test("Should throw CallingFailureCode.unknown when get unknown exception",
+        () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.endCall(callID)).thenThrow(Exception());
+      expect(() => callingRepository.endCall(callID),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.endCall(callID);
       } on CallingFailure catch (e) {
         expect(e.code, CallingFailureCode.unknown);
       }

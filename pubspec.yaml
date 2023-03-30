@@ -64,6 +64,7 @@ dependencies:
   onesignal_flutter: ^3.5.0
   permission_handler: ^10.2.0
   responsive_framework: ^0.2.0
+  shared_preferences: ^2.0.17
   shimmer: ^2.0.0
   sign_in_with_apple: ^4.3.0
   swipe_refresh: ^1.0.2

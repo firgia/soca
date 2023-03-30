@@ -1117,6 +1117,32 @@ class MockCallingProvider extends _i1.Mock implements _i23.CallingProvider {
         returnValueForMissingStub: _i32.Future<dynamic>.value(),
       ) as _i32.Future<dynamic>);
   @override
+  _i32.Future<dynamic> declineCall({
+    required String? callID,
+    required String? blindID,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #declineCall,
+          [],
+          {
+            #callID: callID,
+            #blindID: blindID,
+          },
+        ),
+        returnValue: _i32.Future<dynamic>.value(),
+        returnValueForMissingStub: _i32.Future<dynamic>.value(),
+      ) as _i32.Future<dynamic>);
+  @override
+  _i32.Future<dynamic> endCall(String? callID) => (super.noSuchMethod(
+        Invocation.method(
+          #endCall,
+          [callID],
+        ),
+        returnValue: _i32.Future<dynamic>.value(),
+        returnValueForMissingStub: _i32.Future<dynamic>.value(),
+      ) as _i32.Future<dynamic>);
+  @override
   _i32.Future<dynamic> getCall(String? callID) => (super.noSuchMethod(
         Invocation.method(
           #getCall,
@@ -1125,6 +1151,24 @@ class MockCallingProvider extends _i1.Mock implements _i23.CallingProvider {
         returnValue: _i32.Future<dynamic>.value(),
         returnValueForMissingStub: _i32.Future<dynamic>.value(),
       ) as _i32.Future<dynamic>);
+  @override
+  _i32.Future<String?> getDeclinedCallID() => (super.noSuchMethod(
+        Invocation.method(
+          #getDeclinedCallID,
+          [],
+        ),
+        returnValue: _i32.Future<String?>.value(),
+        returnValueForMissingStub: _i32.Future<String?>.value(),
+      ) as _i32.Future<String?>);
+  @override
+  _i32.Future<String?> getEndedCallID() => (super.noSuchMethod(
+        Invocation.method(
+          #getEndedCallID,
+          [],
+        ),
+        returnValue: _i32.Future<String?>.value(),
+        returnValueForMissingStub: _i32.Future<String?>.value(),
+      ) as _i32.Future<String?>);
   @override
   _i32.Future<dynamic> getRTCCredential({
     required String? channelName,
@@ -1154,6 +1198,24 @@ class MockCallingProvider extends _i1.Mock implements _i23.CallingProvider {
         returnValue: _i32.Stream<dynamic>.empty(),
         returnValueForMissingStub: _i32.Stream<dynamic>.empty(),
       ) as _i32.Stream<dynamic>);
+  @override
+  _i32.Future<void> setDeclinedCallID(String? value) => (super.noSuchMethod(
+        Invocation.method(
+          #setDeclinedCallID,
+          [value],
+        ),
+        returnValue: _i32.Future<void>.value(),
+        returnValueForMissingStub: _i32.Future<void>.value(),
+      ) as _i32.Future<void>);
+  @override
+  _i32.Future<void> setEndedCallID(String? value) => (super.noSuchMethod(
+        Invocation.method(
+          #setEndedCallID,
+          [value],
+        ),
+        returnValue: _i32.Future<void>.value(),
+        returnValueForMissingStub: _i32.Future<void>.value(),
+      ) as _i32.Future<void>);
 }
 
 /// A class which mocks [DatabaseProvider].
