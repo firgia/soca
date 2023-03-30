@@ -72,6 +72,13 @@ abstract class CallingRepository {
     required int uid,
   });
 
+  /// Fires when the call setting data is updated.
+  ///
+  /// `Exception`
+  ///
+  /// A [CallingFailure] maybe thrown when a failure occurs.
+  Stream<CallSetting?> onCallSettingUpdated(String callID);
+
   /// Fires when the call state data is updated.
   ///
   /// `Exception`
@@ -83,6 +90,7 @@ abstract class CallingRepository {
 class CallingRepositoryImpl implements CallingRepository {
   CallingRepositoryImpl() {
     _authRepository.onSignOut.listen((event) {
+      _callingProvider.cancelOnCallSettingUpdated();
       _callingProvider.cancelOnCallStateUpdated();
     });
   }
@@ -357,6 +365,34 @@ class CallingRepositoryImpl implements CallingRepository {
   }
 
   @override
+  Stream<CallSetting?> onCallSettingUpdated(String callID) {
+    String? authUID = _authRepository.uid;
+
+    if (authUID == null) {
+      _logger.severe("Failed to get call setting, please sign in to continue");
+
+      throw const CallingFailure(
+        code: CallingFailureCode.unauthenticated,
+        message:
+            'The request does not have valid authentication credentials for '
+            'the operation.',
+      );
+    } else {
+      final controller = StreamController<CallSetting?>();
+      _callingProvider.onCallSettingUpdated(callID).listen((response) {
+        if (response != null) {
+          controller.sink.add(CallSetting.fromMap(response));
+        } else {
+          controller.sink.add(null);
+        }
+      });
+
+      _logger.fine("Subscribe call setting data on Realtime Database");
+      return controller.stream;
+    }
+  }
+
+  @override
   Stream<CallState?> onCallStateUpdated(String callID) {
     String? authUID = _authRepository.uid;
 
@@ -379,7 +415,7 @@ class CallingRepositoryImpl implements CallingRepository {
         }
       });
 
-      _logger.fine("Subscribe Call State data on Realtime Database");
+      _logger.fine("Subscribe call state data on Realtime Database");
       return controller.stream;
     }
   }

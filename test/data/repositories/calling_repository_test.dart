@@ -33,14 +33,14 @@ void main() {
   tearDown(() => unregisterLocator());
 
   group(".()", () {
-    test("Should call callingProvider.cancelOnCallStateUpdated() when sign out",
-        () async {
+    test("Should cancel all stream when sign out", () async {
       when(authRepository.onSignOut)
           .thenAnswer((_) => Stream.value(DateTime.now()));
 
       CallingRepositoryImpl();
       verify(authRepository.onSignOut);
       await Future.delayed(const Duration(milliseconds: 500));
+      verify(callingProvider.cancelOnCallSettingUpdated());
       verify(callingProvider.cancelOnCallStateUpdated());
     });
   });
@@ -1052,6 +1052,69 @@ void main() {
       } on CallingFailure catch (e) {
         expect(e.code, CallingFailureCode.unknown);
       }
+    });
+  });
+
+  group(".onCallSettingUpdated()", () {
+    String callID = "12345";
+
+    test("Should emits call state data", () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.onCallSettingUpdated(any)).thenAnswer(
+        (_) => Stream.value(
+          {
+            "enable_flashlight": true,
+            "enable_flip": false,
+          },
+        ),
+      );
+
+      Stream<CallSetting?> onCallSettingUpdated =
+          callingRepository.onCallSettingUpdated(callID);
+
+      expect(
+        onCallSettingUpdated,
+        emits(
+          const CallSetting(
+            enableFlashlight: true,
+            enableFlip: false,
+          ),
+        ),
+      );
+
+      verify(callingProvider.onCallSettingUpdated(any));
+    });
+
+    test("Should emits null when data is null", () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.onCallSettingUpdated(any)).thenAnswer(
+        (_) => Stream.value(null),
+      );
+
+      Stream<CallSetting?> onCallSettingUpdated =
+          callingRepository.onCallSettingUpdated(callID);
+
+      expect(
+        onCallSettingUpdated,
+        emits(null),
+      );
+
+      verify(callingProvider.onCallSettingUpdated(any));
+    });
+
+    test("Should throw CallingFailureCode.unauthenticated when not signed in",
+        () async {
+      when(authRepository.uid).thenReturn(null);
+      expect(() => callingRepository.onCallStateUpdated(callID),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        callingRepository.onCallStateUpdated(callID);
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unauthenticated);
+      }
+
+      verifyNever(callingProvider.onCallStateUpdated(any));
     });
   });
 

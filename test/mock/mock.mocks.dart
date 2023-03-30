@@ -1117,6 +1117,14 @@ class MockCallingProvider extends _i1.Mock implements _i23.CallingProvider {
         returnValueForMissingStub: _i32.Future<dynamic>.value(),
       ) as _i32.Future<dynamic>);
   @override
+  void cancelOnCallSettingUpdated() => super.noSuchMethod(
+        Invocation.method(
+          #cancelOnCallSettingUpdated,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
   void cancelOnCallStateUpdated() => super.noSuchMethod(
         Invocation.method(
           #cancelOnCallStateUpdated,
@@ -1205,6 +1213,16 @@ class MockCallingProvider extends _i1.Mock implements _i23.CallingProvider {
         returnValue: _i32.Future<dynamic>.value(),
         returnValueForMissingStub: _i32.Future<dynamic>.value(),
       ) as _i32.Future<dynamic>);
+  @override
+  _i32.Stream<dynamic> onCallSettingUpdated(String? callID) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #onCallSettingUpdated,
+          [callID],
+        ),
+        returnValue: _i32.Stream<dynamic>.empty(),
+        returnValueForMissingStub: _i32.Stream<dynamic>.empty(),
+      ) as _i32.Stream<dynamic>);
   @override
   _i32.Stream<dynamic> onCallStateUpdated(String? callID) =>
       (super.noSuchMethod(
