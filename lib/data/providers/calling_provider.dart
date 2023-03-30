@@ -32,6 +32,9 @@ abstract class CallingProvider {
     required String blindID,
   });
 
+  /// Cancel subscribtion call setting data
+  void cancelOnCallSettingUpdated();
+
   /// Cancel subscribtion call state data
   void cancelOnCallStateUpdated();
 
@@ -95,6 +98,9 @@ abstract class CallingProvider {
     required int uid,
   });
 
+  /// Fires when the call setting data from [callID] is updated
+  Stream<dynamic> onCallSettingUpdated(String callID);
+
   /// Fires when the call state data from [callID] is updated
   Stream<dynamic> onCallStateUpdated(String callID);
 
@@ -109,6 +115,7 @@ class CallingProviderImpl implements CallingProvider {
   final DatabaseProvider _databaseProvider = sl<DatabaseProvider>();
   final FunctionsProvider _functionsProvider = sl<FunctionsProvider>();
   final FlutterSecureStorage _secureStorage = sl<FlutterSecureStorage>();
+  StreamDatabase? _streamCallSetting;
   StreamDatabase? _streamCallState;
 
   String get _declinedCallIDKey => "declined_call_id";
@@ -126,6 +133,11 @@ class CallingProviderImpl implements CallingProvider {
         "blind_id": blindID,
       },
     );
+  }
+
+  @override
+  void cancelOnCallSettingUpdated() {
+    _streamCallSetting?.dispose();
   }
 
   @override
@@ -192,6 +204,15 @@ class CallingProviderImpl implements CallingProvider {
         "role": role.name,
       },
     );
+  }
+
+  @override
+  Stream<dynamic> onCallSettingUpdated(String callID) {
+    StreamDatabase streamDatabase =
+        _databaseProvider.onValue("calls/$callID/settings");
+
+    _streamCallSetting = streamDatabase;
+    return streamDatabase.streamController.stream;
   }
 
   @override

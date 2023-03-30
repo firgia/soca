@@ -95,6 +95,32 @@ void main() {
     });
   });
 
+  group(".cancelOnCallSettingUpdated", () {
+    test("Should dispose the [StreamDatabase]", () {
+      final StreamController<int> streamController = StreamController();
+      final MockDatabaseReference databaseReference = MockDatabaseReference();
+      final StreamSubscription subscription = streamController.stream.listen(
+        (event) {},
+      );
+
+      StreamDatabase streamDatabase = StreamDatabase(
+        databaseReference: databaseReference,
+        streamController: streamController,
+        streamSubscription: subscription,
+      );
+
+      when(
+        databaseProvider.onValue("calls/1234/settings"),
+      ).thenReturn(streamDatabase);
+
+      callingProvider.onCallSettingUpdated("1234");
+      expect(streamDatabase.isDisposed, false);
+
+      callingProvider.cancelOnCallSettingUpdated();
+      expect(streamDatabase.isDisposed, true);
+    });
+  });
+
   group(".cancelOnCallStateUpdated", () {
     test("Should dispose the [StreamDatabase]", () {
       final StreamController<int> streamController = StreamController();
@@ -357,6 +383,42 @@ void main() {
         ),
         throwsA(exception),
       );
+    });
+  });
+
+  group(".onCallSettingUpdated()", () {
+    String callID = "1234";
+
+    test("Should call databaseProvider.onValue()", () async {
+      when(
+        databaseProvider.onValue("calls/$callID/settings"),
+      ).thenReturn(
+        StreamDatabase(
+          databaseReference: MockDatabaseReference(),
+          streamController: StreamController(),
+          streamSubscription: StreamController().stream.listen((event) {}),
+        ),
+      );
+
+      callingProvider.onCallSettingUpdated(callID);
+      verify(databaseProvider.onValue("calls/$callID/settings"));
+    });
+
+    test("Should return Stream from databaseProvider.onValue()", () async {
+      final StreamController<int> streamController = StreamController();
+
+      when(
+        databaseProvider.onValue("calls/$callID/settings"),
+      ).thenReturn(
+        StreamDatabase(
+          databaseReference: MockDatabaseReference(),
+          streamController: streamController,
+          streamSubscription: streamController.stream.listen((event) {}),
+        ),
+      );
+
+      Stream stream = callingProvider.onCallSettingUpdated(callID);
+      expect(stream, streamController.stream);
     });
   });
 
