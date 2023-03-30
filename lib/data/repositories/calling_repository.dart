@@ -46,8 +46,7 @@ abstract class CallingRepository {
     required String blindID,
   });
 
-  /// {@template end_call}
-  /// End a call based on [callID]
+  /// {@macro end_call}
   ///
   /// `Exception`
   ///

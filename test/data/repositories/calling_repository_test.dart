@@ -1058,7 +1058,7 @@ void main() {
   group(".onCallSettingUpdated()", () {
     String callID = "12345";
 
-    test("Should emits call state data", () async {
+    test("Should emits call setting data", () async {
       when(authRepository.uid).thenReturn("1234");
       when(callingProvider.onCallSettingUpdated(any)).thenAnswer(
         (_) => Stream.value(
