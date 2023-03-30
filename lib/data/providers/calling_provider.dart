@@ -38,6 +38,9 @@ abstract class CallingProvider {
   /// Cancel subscribtion call state data
   void cancelOnCallStateUpdated();
 
+  /// Cancel subscribtion user call data
+  void cancelOnUserCallUpdated();
+
   /// {@template create_call}
   /// Create a call
   ///
@@ -104,6 +107,9 @@ abstract class CallingProvider {
   /// Fires when the call state data from [callID] is updated
   Stream<dynamic> onCallStateUpdated(String callID);
 
+  /// Fires when the user call data from [callID] is updated
+  Stream<dynamic> onUserCallUpdated(String callID);
+
   /// Add call ID are declined to local storage.
   Future<void> setDeclinedCallID(String value);
 
@@ -117,6 +123,7 @@ class CallingProviderImpl implements CallingProvider {
   final FlutterSecureStorage _secureStorage = sl<FlutterSecureStorage>();
   StreamDatabase? _streamCallSetting;
   StreamDatabase? _streamCallState;
+  StreamDatabase? _streamUserCall;
 
   String get _declinedCallIDKey => "declined_call_id";
   String get _endedCallIDKey => "ended_call_id";
@@ -143,6 +150,11 @@ class CallingProviderImpl implements CallingProvider {
   @override
   void cancelOnCallStateUpdated() {
     _streamCallState?.dispose();
+  }
+
+  @override
+  void cancelOnUserCallUpdated() {
+    _streamUserCall?.dispose();
   }
 
   @override
@@ -221,6 +233,15 @@ class CallingProviderImpl implements CallingProvider {
         _databaseProvider.onValue("calls/$callID/state");
 
     _streamCallState = streamDatabase;
+    return streamDatabase.streamController.stream;
+  }
+
+  @override
+  Stream<dynamic> onUserCallUpdated(String callID) {
+    StreamDatabase streamDatabase =
+        _databaseProvider.onValue("calls/$callID/users");
+
+    _streamUserCall = streamDatabase;
     return streamDatabase.streamController.stream;
   }
 
