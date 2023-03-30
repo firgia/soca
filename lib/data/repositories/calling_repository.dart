@@ -85,6 +85,13 @@ abstract class CallingRepository {
   ///
   /// A [CallingFailure] maybe thrown when a failure occurs.
   Stream<CallState?> onCallStateUpdated(String callID);
+
+  /// Fires when the user call data is updated.
+  ///
+  /// `Exception`
+  ///
+  /// A [CallingFailure] maybe thrown when a failure occurs.
+  Stream<UserCall?> onUserCallUpdated(String callID);
 }
 
 class CallingRepositoryImpl implements CallingRepository {
@@ -92,6 +99,7 @@ class CallingRepositoryImpl implements CallingRepository {
     _authRepository.onSignOut.listen((event) {
       _callingProvider.cancelOnCallSettingUpdated();
       _callingProvider.cancelOnCallStateUpdated();
+      _callingProvider.cancelOnUserCallUpdated();
     });
   }
 
@@ -416,6 +424,35 @@ class CallingRepositoryImpl implements CallingRepository {
       });
 
       _logger.fine("Subscribe call state data on Realtime Database");
+      return controller.stream;
+    }
+  }
+
+  @override
+  Stream<UserCall?> onUserCallUpdated(String callID) {
+    String? authUID = _authRepository.uid;
+
+    if (authUID == null) {
+      _logger
+          .severe("Failed to get user call data, please sign in to continue");
+
+      throw const CallingFailure(
+        code: CallingFailureCode.unauthenticated,
+        message:
+            'The request does not have valid authentication credentials for '
+            'the operation.',
+      );
+    } else {
+      final controller = StreamController<UserCall?>();
+      _callingProvider.onUserCallUpdated(callID).listen((response) {
+        if (response != null) {
+          controller.sink.add(UserCall.fromMap(response));
+        } else {
+          controller.sink.add(null);
+        }
+      });
+
+      _logger.fine("Subscribe user call data on Realtime Database");
       return controller.stream;
     }
   }

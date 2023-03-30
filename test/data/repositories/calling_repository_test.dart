@@ -1168,4 +1168,65 @@ void main() {
       verifyNever(callingProvider.onCallStateUpdated(any));
     });
   });
+
+  group(".onUserCallUpdated()", () {
+    String callID = "12345";
+
+    test("Should emits user call data", () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.onUserCallUpdated(any)).thenAnswer(
+        (_) => Stream.value({
+          "blind_id": "123",
+          "volunteer_id": "456",
+        }),
+      );
+
+      Stream<UserCall?> onUserCallUpdated =
+          callingRepository.onUserCallUpdated(callID);
+
+      expect(
+        onUserCallUpdated,
+        emits(
+          const UserCall(
+            blindID: "123",
+            volunteerID: "456",
+          ),
+        ),
+      );
+
+      verify(callingProvider.onUserCallUpdated(any));
+    });
+
+    test("Should emits null when data is null", () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.onUserCallUpdated(any)).thenAnswer(
+        (_) => Stream.value(null),
+      );
+
+      Stream<UserCall?> onUserCallUpdated =
+          callingRepository.onUserCallUpdated(callID);
+
+      expect(
+        onUserCallUpdated,
+        emits(null),
+      );
+
+      verify(callingProvider.onUserCallUpdated(any));
+    });
+
+    test("Should throw CallingFailureCode.unauthenticated when not signed in",
+        () async {
+      when(authRepository.uid).thenReturn(null);
+      expect(() => callingRepository.onUserCallUpdated(callID),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        callingRepository.onUserCallUpdated(callID);
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unauthenticated);
+      }
+
+      verifyNever(callingProvider.onUserCallUpdated(any));
+    });
+  });
 }
