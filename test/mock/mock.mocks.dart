@@ -1100,6 +1100,23 @@ class MockAuthProvider extends _i1.Mock implements _i23.AuthProvider {
 /// See the documentation for Mockito's code generation for more information.
 class MockCallingProvider extends _i1.Mock implements _i23.CallingProvider {
   @override
+  _i32.Future<dynamic> answerCall({
+    required String? callID,
+    required String? blindID,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #answerCall,
+          [],
+          {
+            #callID: callID,
+            #blindID: blindID,
+          },
+        ),
+        returnValue: _i32.Future<dynamic>.value(),
+        returnValueForMissingStub: _i32.Future<dynamic>.value(),
+      ) as _i32.Future<dynamic>);
+  @override
   void cancelOnCallStateUpdated() => super.noSuchMethod(
         Invocation.method(
           #cancelOnCallStateUpdated,

@@ -19,6 +19,16 @@ import '../providers/providers.dart';
 import 'auth_repository.dart';
 
 abstract class CallingRepository {
+  /// {@macro answer_call}
+  ///
+  /// `Exception`
+  ///
+  /// A [CallingFailure] maybe thrown when a failure occurs.
+  Future<Call> answerCall({
+    required String callID,
+    required String blindID,
+  });
+
   /// {@macro create_call}
   ///
   /// `Exception`
@@ -80,6 +90,49 @@ class CallingRepositoryImpl implements CallingRepository {
   final AuthRepository _authRepository = sl<AuthRepository>();
   final CallingProvider _callingProvider = sl<CallingProvider>();
   final Logger _logger = Logger("Calling Repository");
+
+  @override
+  Future<Call> answerCall({
+    required String callID,
+    required String blindID,
+  }) async {
+    String? authUID = _authRepository.uid;
+
+    if (authUID == null) {
+      _logger.severe("Failed to answer call, please sign in to continue");
+
+      throw const CallingFailure(
+        code: CallingFailureCode.unauthenticated,
+        message:
+            'The request does not have valid authentication credentials for '
+            'the operation.',
+      );
+    }
+
+    try {
+      _logger.info("Answering call...");
+      dynamic response = await _callingProvider.answerCall(
+        blindID: blindID,
+        callID: callID,
+      );
+
+      if (response != null) {
+        _logger.fine("Successfully to answer call");
+        return Call.fromMap(response);
+      } else {
+        throw const CallingFailure(
+          code: CallingFailureCode.notFound,
+          message: "Some requested document was not found.",
+        );
+      }
+    } on CallingFailure catch (_) {
+      rethrow;
+    } on Exception catch (e) {
+      throw CallingFailure.fromException(e);
+    } catch (e) {
+      throw const CallingFailure();
+    }
+  }
 
   @override
   Future<Call> createCall() async {
