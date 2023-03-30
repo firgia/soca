@@ -17,6 +17,7 @@ import 'package:soca/data/data.dart';
 import '../../helper/helper.dart';
 import '../../mock/mock.mocks.dart';
 
+String get _answerCall => "answerCall";
 String get _createCall => "createCall";
 String get _endCall => "endCall";
 String get _declineCall => "declineCall";
@@ -41,6 +42,58 @@ void main() {
   });
 
   tearDown(() => unregisterLocator());
+
+  group(".answerCall()", () {
+    String callID = "123";
+    String blindID = "12345";
+
+    test("Should call functionsProvider.call()", () async {
+      when(
+        functionsProvider.call(
+          functionsName: _answerCall,
+          parameters: {
+            "id": callID,
+            "blind_id": blindID,
+          },
+        ),
+      ).thenAnswer((_) => Future.value({}));
+
+      await callingProvider.answerCall(
+        callID: callID,
+        blindID: blindID,
+      );
+
+      verify(functionsProvider.call(
+        functionsName: _answerCall,
+        parameters: {
+          "id": callID,
+          "blind_id": blindID,
+        },
+      ));
+    });
+
+    test("Should thrown Exception when getting error", () async {
+      Exception exception = Exception("unknown");
+
+      when(
+        functionsProvider.call(
+          functionsName: _answerCall,
+          parameters: {
+            "id": callID,
+            "blind_id": blindID,
+          },
+        ),
+      ).thenThrow(exception);
+
+      expect(
+        () => callingProvider.answerCall(
+          callID: callID,
+          blindID: blindID,
+        ),
+        throwsA(exception),
+      );
+    });
+  });
 
   group(".cancelOnCallStateUpdated", () {
     test("Should dispose the [StreamDatabase]", () {

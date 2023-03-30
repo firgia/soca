@@ -18,6 +18,20 @@ import 'database_provider.dart';
 import 'functions_provider.dart';
 
 abstract class CallingProvider {
+  /// {@template answer_call}
+  /// Answer call
+  ///
+  /// `Note`
+  /// This function is only allowed if the user type is a volunteer user,
+  ///
+  /// {@endtemplate}
+  ///
+  /// {@macro firebase_functions_exception}
+  Future<dynamic> answerCall({
+    required String callID,
+    required String blindID,
+  });
+
   /// Cancel subscribtion call state data
   void cancelOnCallStateUpdated();
 
@@ -99,6 +113,20 @@ class CallingProviderImpl implements CallingProvider {
 
   String get _declinedCallIDKey => "declined_call_id";
   String get _endedCallIDKey => "ended_call_id";
+
+  @override
+  Future answerCall({
+    required String callID,
+    required String blindID,
+  }) {
+    return _functionsProvider.call(
+      functionsName: FunctionName.answerCall,
+      parameters: {
+        "id": callID,
+        "blind_id": blindID,
+      },
+    );
+  }
 
   @override
   void cancelOnCallStateUpdated() {
