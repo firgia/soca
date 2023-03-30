@@ -8,6 +8,7 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -21,16 +22,21 @@ String get _createCall => "createCall";
 String get _getCall => "getCall";
 String get _getRTCCredential => "getRTCCredential";
 
+String get _declinedCallIDKey => "declined_call_id";
+String get _endedCallIDKey => "ended_call_id";
+
 void main() {
   late CallingProvider callingProvider;
   late MockDatabaseProvider databaseProvider;
+  late MockFlutterSecureStorage secureStorage;
   late MockFunctionsProvider functionsProvider;
 
   setUp(() {
     registerLocator();
+    secureStorage = getMockFlutterSecureStorage();
     databaseProvider = getMockDatabaseProvider();
     functionsProvider = getMockFunctionsProvider();
-    callingProvider = CallingProvider();
+    callingProvider = CallingProviderImpl();
   });
 
   tearDown(() => unregisterLocator());
@@ -117,6 +123,42 @@ void main() {
         () => callingProvider.getCall(callID),
         throwsA(exception),
       );
+    });
+  });
+
+  group(".getDeclinedCallID()", () {
+    test("Should return data based on storage data", () async {
+      when(secureStorage.read(key: _declinedCallIDKey))
+          .thenAnswer((_) => Future.value("id"));
+      final result = await callingProvider.getDeclinedCallID();
+      expect(result, "id");
+      verify(secureStorage.read(key: _declinedCallIDKey));
+    });
+
+    test("Should return null when data is not found", () async {
+      when(secureStorage.read(key: _declinedCallIDKey))
+          .thenAnswer((_) => Future.value(null));
+      final result = await callingProvider.getDeclinedCallID();
+      expect(result, null);
+      verify(secureStorage.read(key: _declinedCallIDKey));
+    });
+  });
+
+  group(".getEndedCallID()", () {
+    test("Should return data based on storage data", () async {
+      when(secureStorage.read(key: _endedCallIDKey))
+          .thenAnswer((_) => Future.value("id"));
+      final result = await callingProvider.getEndedCallID();
+      expect(result, "id");
+      verify(secureStorage.read(key: _endedCallIDKey));
+    });
+
+    test("Should return null when data is not found", () async {
+      when(secureStorage.read(key: _endedCallIDKey))
+          .thenAnswer((_) => Future.value(null));
+      final result = await callingProvider.getEndedCallID();
+      expect(result, null);
+      verify(secureStorage.read(key: _endedCallIDKey));
     });
   });
 
@@ -211,6 +253,20 @@ void main() {
 
       Stream stream = callingProvider.onCallStateUpdated(callID);
       expect(stream, streamController.stream);
+    });
+  });
+
+  group(".setDeclinedCallID()", () {
+    test("Should save data to storage", () async {
+      await callingProvider.setDeclinedCallID("test");
+      verify(secureStorage.write(key: _declinedCallIDKey, value: "test"));
+    });
+  });
+
+  group(".setEndedCallID()", () {
+    test("Should save data to storage", () async {
+      await callingProvider.setEndedCallID("test");
+      verify(secureStorage.write(key: _endedCallIDKey, value: "test"));
     });
   });
 }
