@@ -31,6 +31,29 @@ abstract class CallingProvider {
   /// {@macro firebase_functions_exception}
   Future<dynamic> createCall();
 
+  /// {@template decline_call}
+  /// Decline a call
+  ///
+  /// `Note`
+  /// This function is only allowed if the user type is a volunteer user,
+  /// this functions will ignored if call id has been declined
+  ///
+  /// {@endtemplate}
+  ///
+  /// {@macro firebase_functions_exception}
+  Future<dynamic> declineCall({
+    required String callID,
+    required String blindID,
+  });
+
+  /// {@template end_call}
+  /// End a call based on [callID]
+  ///
+  /// {@endtemplate}
+  ///
+  /// {@macro firebase_functions_exception}
+  Future<dynamic> endCall(String callID);
+
   /// {@template get_call}
   /// Get a call based on [callID]
   ///
@@ -85,6 +108,28 @@ class CallingProviderImpl implements CallingProvider {
   @override
   Future<dynamic> createCall() async {
     return _functionsProvider.call(functionsName: FunctionName.createCall);
+  }
+
+  @override
+  Future declineCall({
+    required String callID,
+    required String blindID,
+  }) {
+    return _functionsProvider.call(
+      functionsName: FunctionName.declineCall,
+      parameters: {
+        "id": callID,
+        "blind_id": blindID,
+      },
+    );
+  }
+
+  @override
+  Future endCall(String callID) {
+    return _functionsProvider.call(
+      functionsName: FunctionName.endCall,
+      parameters: {"id": callID},
+    );
   }
 
   @override

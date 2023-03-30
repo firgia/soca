@@ -8,7 +8,6 @@
  */
 
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -19,6 +18,8 @@ import '../../helper/helper.dart';
 import '../../mock/mock.mocks.dart';
 
 String get _createCall => "createCall";
+String get _endCall => "endCall";
+String get _declineCall => "declineCall";
 String get _getCall => "getCall";
 String get _getRTCCredential => "getRTCCredential";
 
@@ -86,6 +87,92 @@ void main() {
 
       expect(
         () => callingProvider.createCall(),
+        throwsA(exception),
+      );
+    });
+  });
+
+  group(".declineCall()", () {
+    String callID = "123";
+    String blindID = "12345";
+
+    test("Should call functionsProvider.call()", () async {
+      when(
+        functionsProvider.call(
+          functionsName: _declineCall,
+          parameters: {
+            "id": callID,
+            "blind_id": blindID,
+          },
+        ),
+      ).thenAnswer((_) => Future.value({}));
+
+      await callingProvider.declineCall(
+        callID: callID,
+        blindID: blindID,
+      );
+      verify(functionsProvider.call(
+        functionsName: _declineCall,
+        parameters: {
+          "id": callID,
+          "blind_id": blindID,
+        },
+      ));
+    });
+
+    test("Should thrown Exception when getting error", () async {
+      Exception exception = Exception("unknown");
+
+      when(
+        functionsProvider.call(
+          functionsName: _declineCall,
+          parameters: {
+            "id": callID,
+            "blind_id": blindID,
+          },
+        ),
+      ).thenThrow(exception);
+
+      expect(
+        () => callingProvider.declineCall(
+          callID: callID,
+          blindID: blindID,
+        ),
+        throwsA(exception),
+      );
+    });
+  });
+
+  group(".endCall()", () {
+    String callID = "123";
+
+    test("Should call functionsProvider.call()", () async {
+      when(
+        functionsProvider.call(
+          functionsName: _endCall,
+          parameters: {"id": callID},
+        ),
+      ).thenAnswer((_) => Future.value({}));
+
+      await callingProvider.endCall(callID);
+      verify(functionsProvider.call(
+        functionsName: _endCall,
+        parameters: {"id": callID},
+      ));
+    });
+
+    test("Should thrown Exception when getting error", () async {
+      Exception exception = Exception("unknown");
+
+      when(
+        functionsProvider.call(
+          functionsName: _endCall,
+          parameters: {"id": callID},
+        ),
+      ).thenThrow(exception);
+
+      expect(
+        () => callingProvider.endCall(callID),
         throwsA(exception),
       );
     });
