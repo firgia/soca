@@ -1229,4 +1229,169 @@ void main() {
       verifyNever(callingProvider.onUserCallUpdated(any));
     });
   });
+
+  group(".updateCallSettings()", () {
+    String callID = "123";
+    bool? enableFlashlight = false;
+    bool? enableFlip = false;
+
+    test("Should return normally", () async {
+      when(authRepository.uid).thenReturn("1234");
+
+      await callingRepository.updateCallSettings(
+        callID: callID,
+        enableFlashlight: enableFlashlight,
+        enableFlip: enableFlip,
+      );
+
+      verify(authRepository.uid);
+      verify(callingProvider.updateCallSettings(
+        callID: callID,
+        enableFlashlight: enableFlashlight,
+        enableFlip: enableFlip,
+      ));
+    });
+
+    test("Should throw CallingFailureCode.unauthenticated when not signed in",
+        () async {
+      when(authRepository.uid).thenReturn(null);
+      expect(
+          () => callingRepository.updateCallSettings(
+                callID: callID,
+                enableFlashlight: enableFlashlight,
+                enableFlip: enableFlip,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.updateCallSettings(
+          callID: callID,
+          enableFlashlight: enableFlashlight,
+          enableFlip: enableFlip,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unauthenticated);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.invalidArgument when get '
+        'invalid-argument error from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.updateCallSettings(
+        callID: callID,
+        enableFlashlight: enableFlashlight,
+        enableFlip: enableFlip,
+      )).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "invalid-argument"),
+      );
+      expect(
+          () => callingRepository.updateCallSettings(
+                callID: callID,
+                enableFlashlight: enableFlashlight,
+                enableFlip: enableFlip,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.updateCallSettings(
+          callID: callID,
+          enableFlashlight: enableFlashlight,
+          enableFlip: enableFlip,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.invalidArgument);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.notFound when get not-found error '
+        'from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.updateCallSettings(
+        callID: callID,
+        enableFlashlight: enableFlashlight,
+        enableFlip: enableFlip,
+      )).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "not-found"),
+      );
+
+      expect(
+          () => callingRepository.updateCallSettings(
+                callID: callID,
+                enableFlashlight: enableFlashlight,
+                enableFlip: enableFlip,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.updateCallSettings(
+          callID: callID,
+          enableFlashlight: enableFlashlight,
+          enableFlip: enableFlip,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.notFound);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.permissionDenied when get '
+        'permission-denied error from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.updateCallSettings(
+        callID: callID,
+        enableFlashlight: enableFlashlight,
+        enableFlip: enableFlip,
+      )).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "permission-denied"),
+      );
+
+      expect(
+          () => callingRepository.updateCallSettings(
+                callID: callID,
+                enableFlashlight: enableFlashlight,
+                enableFlip: enableFlip,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.updateCallSettings(
+          callID: callID,
+          enableFlashlight: enableFlashlight,
+          enableFlip: enableFlip,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.permissionDenied);
+      }
+    });
+
+    test("Should throw CallingFailureCode.unknown when get unknown exception",
+        () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.updateCallSettings(
+        callID: callID,
+        enableFlashlight: enableFlashlight,
+        enableFlip: enableFlip,
+      )).thenThrow(Exception());
+
+      expect(
+          () => callingRepository.updateCallSettings(
+                callID: callID,
+                enableFlashlight: enableFlashlight,
+                enableFlip: enableFlip,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.updateCallSettings(
+          callID: callID,
+          enableFlashlight: enableFlashlight,
+          enableFlip: enableFlip,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unknown);
+      }
+    });
+  });
 }

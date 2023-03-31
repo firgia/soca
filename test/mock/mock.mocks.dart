@@ -1268,6 +1268,25 @@ class MockCallingProvider extends _i1.Mock implements _i23.CallingProvider {
         returnValue: _i32.Future<void>.value(),
         returnValueForMissingStub: _i32.Future<void>.value(),
       ) as _i32.Future<void>);
+  @override
+  _i32.Future<void> updateCallSettings({
+    required String? callID,
+    required bool? enableFlashlight,
+    required bool? enableFlip,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateCallSettings,
+          [],
+          {
+            #callID: callID,
+            #enableFlashlight: enableFlashlight,
+            #enableFlip: enableFlip,
+          },
+        ),
+        returnValue: _i32.Future<void>.value(),
+        returnValueForMissingStub: _i32.Future<void>.value(),
+      ) as _i32.Future<void>);
 }
 
 /// A class which mocks [DatabaseProvider].

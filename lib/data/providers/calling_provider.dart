@@ -120,7 +120,7 @@ abstract class CallingProvider {
   /// Update call settings
   ///
   /// `Note`
-  /// this functions will ignored if call id has been declined
+  /// this functions will ignored if [callID] has been declined
   ///
   /// {@endtemplate}
   ///

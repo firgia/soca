@@ -91,6 +91,17 @@ abstract class CallingRepository {
   ///
   /// A [CallingFailure] maybe thrown when a failure occurs.
   Stream<UserCall?> onUserCallUpdated(String callID);
+
+  /// {@macro update_call_setting}
+  ///
+  /// `Exception`
+  ///
+  /// A [CallingFailure] maybe thrown when a failure occurs.
+  Future<void> updateCallSettings({
+    required String callID,
+    required bool? enableFlashlight,
+    required bool? enableFlip,
+  });
 }
 
 class CallingRepositoryImpl implements CallingRepository {
@@ -505,6 +516,44 @@ class CallingRepositoryImpl implements CallingRepository {
       return Parser.getListString(jsonDecode(data));
     } else {
       return null;
+    }
+  }
+
+  @override
+  Future<void> updateCallSettings({
+    required String callID,
+    required bool? enableFlashlight,
+    required bool? enableFlip,
+  }) async {
+    String? authUID = _authRepository.uid;
+
+    if (authUID == null) {
+      _logger
+          .severe("Failed to update call settings, please sign in to continue");
+
+      throw const CallingFailure(
+        code: CallingFailureCode.unauthenticated,
+        message:
+            'The request does not have valid authentication credentials for '
+            'the operation.',
+      );
+    }
+
+    try {
+      _logger.info("Updating call settings...");
+      await _callingProvider.updateCallSettings(
+        callID: callID,
+        enableFlashlight: enableFlashlight,
+        enableFlip: enableFlip,
+      );
+
+      _logger.fine("Successfully to update call settings");
+    } on CallingFailure catch (_) {
+      rethrow;
+    } on Exception catch (e) {
+      throw CallingFailure.fromException(e);
+    } catch (e) {
+      throw const CallingFailure();
     }
   }
 }
