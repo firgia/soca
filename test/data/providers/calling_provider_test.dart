@@ -23,6 +23,7 @@ String get _endCall => "endCall";
 String get _declineCall => "declineCall";
 String get _getCall => "getCall";
 String get _getRTCCredential => "getRTCCredential";
+String get _updateCallSettings => "updateCallSettings";
 
 String get _declinedCallIDKey => "declined_call_id";
 String get _endedCallIDKey => "ended_call_id";
@@ -531,6 +532,64 @@ void main() {
     test("Should save data to storage", () async {
       await callingProvider.setEndedCallID("test");
       verify(secureStorage.write(key: _endedCallIDKey, value: "test"));
+    });
+  });
+
+  group(".updateCallSettings()", () {
+    String callID = "123";
+    bool? enableFlashlight = false;
+    bool? enableFlip = false;
+
+    test("Should call functionsProvider.call()", () async {
+      when(
+        functionsProvider.call(
+          functionsName: _updateCallSettings,
+          parameters: {
+            "id": callID,
+            "enable_flashlight": enableFlashlight,
+            "enable_flip": enableFlip,
+          },
+        ),
+      ).thenAnswer((_) => Future.value({}));
+
+      await callingProvider.updateCallSettings(
+        callID: callID,
+        enableFlashlight: enableFlashlight,
+        enableFlip: enableFlip,
+      );
+
+      verify(functionsProvider.call(
+        functionsName: _updateCallSettings,
+        parameters: {
+          "id": callID,
+          "enable_flashlight": enableFlashlight,
+          "enable_flip": enableFlip,
+        },
+      ));
+    });
+
+    test("Should thrown Exception when getting error", () async {
+      Exception exception = Exception("unknown");
+
+      when(
+        functionsProvider.call(
+          functionsName: _updateCallSettings,
+          parameters: {
+            "id": callID,
+            "enable_flashlight": enableFlashlight,
+            "enable_flip": enableFlip,
+          },
+        ),
+      ).thenThrow(exception);
+
+      expect(
+        () => callingProvider.updateCallSettings(
+          callID: callID,
+          enableFlashlight: enableFlashlight,
+          enableFlip: enableFlip,
+        ),
+        throwsA(exception),
+      );
     });
   });
 }

@@ -115,6 +115,21 @@ abstract class CallingProvider {
 
   /// Add call ID are ended to local storage.
   Future<void> setEndedCallID(String value);
+
+  /// {@template update_call_setting}
+  /// Update call settings
+  ///
+  /// `Note`
+  /// this functions will ignored if call id has been declined
+  ///
+  /// {@endtemplate}
+  ///
+  /// {@macro firebase_functions_exception}
+  Future<void> updateCallSettings({
+    required String callID,
+    required bool? enableFlashlight,
+    required bool? enableFlip,
+  });
 }
 
 class CallingProviderImpl implements CallingProvider {
@@ -258,6 +273,22 @@ class CallingProviderImpl implements CallingProvider {
     await _secureStorage.write(
       key: _endedCallIDKey,
       value: value,
+    );
+  }
+
+  @override
+  Future<void> updateCallSettings({
+    required String callID,
+    required bool? enableFlashlight,
+    required bool? enableFlip,
+  }) async {
+    await _functionsProvider.call(
+      functionsName: FunctionName.updateCallSettings,
+      parameters: {
+        "id": callID,
+        if (enableFlashlight != null) "enable_flashlight": enableFlashlight,
+        if (enableFlip != null) "enable_flip": enableFlip,
+      },
     );
   }
 }
