@@ -35,8 +35,8 @@ void setupInjection() {
   sl.registerLazySingleton<AppNavigator>(() => AppNavigator());
 
   /* ---------------------------------> CORE <------------------------------- */
-  sl.registerLazySingleton<DeviceFeedback>(() => DeviceFeedback());
-  sl.registerLazySingleton<DeviceInfo>(() => DeviceInfo());
+  sl.registerLazySingleton<DeviceFeedback>(() => DeviceFeedbackImpl());
+  sl.registerLazySingleton<DeviceInfo>(() => DeviceInfoImpl());
 
   /* ---------------------------------> DATA <------------------------------- */
   sl.registerLazySingleton<AuthProvider>(() => AuthProvider());
