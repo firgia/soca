@@ -82,6 +82,14 @@ abstract class CallingProvider {
   /// {@macro firebase_functions_exception}
   Future<dynamic> getCall(String callID);
 
+  /// {@template get_call_history}
+  /// Get call history
+  ///
+  /// {@endtemplate}
+  ///
+  /// {@macro firebase_functions_exception}
+  Future<dynamic> getCallHistory();
+
   /// {@template get_call_statistic}
   /// Get call statistic
   ///
@@ -216,6 +224,11 @@ class CallingProviderImpl implements CallingProvider {
       functionsName: FunctionName.getCall,
       parameters: {"id": callID},
     );
+  }
+
+  @override
+  Future<dynamic> getCallHistory() async {
+    return _functionsProvider.call(functionsName: FunctionName.getCallHistory);
   }
 
   @override

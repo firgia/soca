@@ -23,6 +23,7 @@ String get _createCall => "createCall";
 String get _endCall => "endCall";
 String get _declineCall => "declineCall";
 String get _getCall => "getCall";
+String get _getCallHistory => "getCallHistory";
 String get _getRTCCredential => "getRTCCredential";
 String get _updateCallSettings => "updateCallSettings";
 
@@ -315,6 +316,30 @@ void main() {
 
       expect(
         () => callingProvider.getCall(callID),
+        throwsA(exception),
+      );
+    });
+  });
+
+  group(".getCallHistory()", () {
+    test("Should call functionsProvider.call()", () async {
+      when(
+        functionsProvider.call(functionsName: _getCallHistory),
+      ).thenAnswer((_) => Future.value({}));
+
+      await callingProvider.getCallHistory();
+      verify(functionsProvider.call(functionsName: _getCallHistory));
+    });
+
+    test("Should thrown Exception when getting error", () async {
+      Exception exception = Exception("unknown");
+
+      when(
+        functionsProvider.call(functionsName: _getCallHistory),
+      ).thenThrow(exception);
+
+      expect(
+        () => callingProvider.getCallHistory(),
         throwsA(exception),
       );
     });
