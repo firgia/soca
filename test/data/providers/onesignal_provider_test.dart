@@ -26,7 +26,7 @@ void main() {
   setUp(() {
     registerLocator();
     secureStorage = getMockFlutterSecureStorage();
-    oneSignalProvider = OneSignalProvider();
+    oneSignalProvider = OneSignalProviderImpl();
     TestWidgetsFlutterBinding.ensureInitialized();
   });
 

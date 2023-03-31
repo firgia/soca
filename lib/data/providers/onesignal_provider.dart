@@ -14,16 +14,31 @@ import 'package:logging/logging.dart';
 
 import '../../injection.dart';
 
-class OneSignalProvider {
-  OneSignalProvider();
+abstract class OneSignalProvider {
+  /// Update the last saved changed UID.
+  Future<void> deleteLastUpdateUID();
 
+  /// Get the last saved changed OneSignal Tag.
+  Future<Map<String, dynamic>?> getLastUpdateTag();
+
+  /// Get the last saved changed OneSignal UID.
+  Future<String?> getLastUpdateUID();
+
+  /// Update the last saved changed Tag.
+  Future<void> setLastUpdateTag(Map<String, dynamic> value);
+
+  /// Update the last saved changed UID.
+  Future<void> setLastUpdateUID(String? value);
+}
+
+class OneSignalProviderImpl implements OneSignalProvider {
   String get lastUpdateTag => "onesignal_last_tag";
   String get lastUpdateUID => "onesignal_last_uid";
 
   final FlutterSecureStorage _secureStorage = sl<FlutterSecureStorage>();
   final Logger _logger = Logger("OneSignal Provider");
 
-  /// Update the last saved changed UID.
+  @override
   Future<void> deleteLastUpdateUID() async {
     _logger.info("Delete $lastUpdateUID data..");
 
@@ -32,7 +47,7 @@ class OneSignalProvider {
     _logger.fine("Successfully to delete $lastUpdateUID data");
   }
 
-  /// Get the last saved changed OneSignal Tag.
+  @override
   Future<Map<String, dynamic>?> getLastUpdateTag() async {
     _logger.info("Getting $lastUpdateTag data...");
 
@@ -46,7 +61,7 @@ class OneSignalProvider {
     }
   }
 
-  /// Get the last saved changed OneSignal UID.
+  @override
   Future<String?> getLastUpdateUID() async {
     _logger.info("Getting $lastUpdateUID data...");
     final value = await _secureStorage.read(key: lastUpdateUID);
@@ -55,7 +70,7 @@ class OneSignalProvider {
     return value;
   }
 
-  /// Update the last saved changed Tag.
+  @override
   Future<void> setLastUpdateTag(Map<String, dynamic> value) async {
     _logger.info("Saving $lastUpdateTag data..");
 
@@ -79,7 +94,7 @@ class OneSignalProvider {
     _logger.fine("Successfully to save $lastUpdateTag data");
   }
 
-  /// Update the last saved changed UID.
+  @override
   Future<void> setLastUpdateUID(String? value) async {
     _logger.info("Saving $lastUpdateUID data..");
 

@@ -39,15 +39,15 @@ void setupInjection() {
   sl.registerLazySingleton<DeviceInfo>(() => DeviceInfoImpl());
 
   /* ---------------------------------> DATA <------------------------------- */
-  sl.registerLazySingleton<AuthProvider>(() => AuthProvider());
+  sl.registerLazySingleton<AuthProvider>(() => AuthProviderImpl());
   sl.registerLazySingleton<CallingProvider>(() => CallingProviderImpl());
-  sl.registerLazySingleton<DatabaseProvider>(() => DatabaseProvider());
-  sl.registerLazySingleton<DeviceProvider>(() => DeviceProvider());
-  sl.registerLazySingleton<FunctionsProvider>(() => FunctionsProvider());
+  sl.registerLazySingleton<DatabaseProvider>(() => DatabaseProviderImpl());
+  sl.registerLazySingleton<DeviceProvider>(() => DeviceProviderImpl());
+  sl.registerLazySingleton<FunctionsProvider>(() => FunctionsProviderImpl());
   sl.registerLazySingleton<LocalLanguageProvider>(
-      () => LocalLanguageProvider());
-  sl.registerLazySingleton<OneSignalProvider>(() => OneSignalProvider());
-  sl.registerLazySingleton<UserProvider>(() => UserProvider());
+      () => LocalLanguageProviderImpl());
+  sl.registerLazySingleton<OneSignalProvider>(() => OneSignalProviderImpl());
+  sl.registerLazySingleton<UserProvider>(() => UserProviderImpl());
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepository());
   sl.registerLazySingleton<FileRepository>(() => FileRepository());

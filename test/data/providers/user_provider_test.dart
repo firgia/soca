@@ -31,7 +31,7 @@ void main() {
     registerLocator();
     databaseProvider = getMockDatabaseProvider();
     functionsProvider = getMockFunctionsProvider();
-    userProvider = UserProvider();
+    userProvider = UserProviderImpl();
   });
 
   tearDown(() => unregisterLocator());

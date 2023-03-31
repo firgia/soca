@@ -11,12 +11,20 @@ import 'dart:convert';
 import 'package:cloud_functions/cloud_functions.dart';
 import '../../injection.dart';
 
-class FunctionsProvider {
-  final FirebaseFunctions _functions = sl<FirebaseFunctions>();
-
+abstract class FunctionsProvider {
   /// Call the firebase functons
   ///
   /// {@macro firebase_functions_exception}
+  Future<dynamic> call({
+    required String functionsName,
+    dynamic parameters,
+  });
+}
+
+class FunctionsProviderImpl implements FunctionsProvider {
+  final FirebaseFunctions _functions = sl<FirebaseFunctions>();
+
+  @override
   Future<dynamic> call({
     required String functionsName,
     dynamic parameters,
