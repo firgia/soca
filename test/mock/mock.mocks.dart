@@ -1185,6 +1185,15 @@ class MockCallingProvider extends _i1.Mock implements _i23.CallingProvider {
         returnValueForMissingStub: _i32.Future<dynamic>.value(),
       ) as _i32.Future<dynamic>);
   @override
+  _i32.Future<dynamic> getCallHistory() => (super.noSuchMethod(
+        Invocation.method(
+          #getCallHistory,
+          [],
+        ),
+        returnValue: _i32.Future<dynamic>.value(),
+        returnValueForMissingStub: _i32.Future<dynamic>.value(),
+      ) as _i32.Future<dynamic>);
+  @override
   _i32.Future<dynamic> getCallStatistic({
     required String? year,
     String? locale,

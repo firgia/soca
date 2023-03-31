@@ -858,6 +858,177 @@ void main() {
     });
   });
 
+  group(".getCallHistory()", () {
+    test("Should return the call history data", () async {
+      when(authRepository.uid).thenReturn("1234");
+
+      when(callingProvider.getCallHistory()).thenAnswer(
+        (_) => Future.value([
+          {
+            "id": "1234",
+            "created_at": "2023-02-11T14:12:06.182067",
+            "ended_at": "2023-02-11T14:12:06.182067",
+            "state": "waiting",
+            "role": "caller",
+            "remote_user": {
+              "id": "123",
+              "avatar": {
+                "url": {
+                  "small": "small.png",
+                  "medium": "medium.png",
+                  "large": "large.png",
+                  "original": "original.png",
+                }
+              },
+              "activity": {
+                "online": true,
+                "last_seen": "2023-02-11T14:12:06.182067",
+              },
+              "date_of_birth": "2023-02-11T14:12:06.182067",
+              "gender": "male",
+              "language": ["id", "en"],
+              "name": "Firgia",
+              "info": {
+                "date_joined": "2023-02-11T14:12:06.182067",
+                "list_of_call_years": ["2022", "2023"],
+                "total_calls": 12,
+                "total_friends": 13,
+                "total_visitors": 14,
+              },
+              "type": "volunteer",
+            },
+          }
+        ]),
+      );
+
+      List<CallHistory> call = await callingRepository.getCallHistory();
+
+      expect(
+        call,
+        [
+          CallHistory(
+            id: "1234",
+            createdAt: DateTime.tryParse("2023-02-11T14:12:06.182067"),
+            endedAt: DateTime.tryParse("2023-02-11T14:12:06.182067"),
+            state: CallState.waiting,
+            role: CallRole.caller,
+            remoteUser: User(
+              id: "123",
+              avatar: const URLImage(
+                small: "small.png",
+                medium: "medium.png",
+                large: "large.png",
+                original: "original.png",
+              ),
+              activity: UserActivity(
+                online: true,
+                lastSeen: DateTime.tryParse("2023-02-11T14:12:06.182067"),
+              ),
+              dateOfBirth: DateTime.tryParse("2023-02-11T14:12:06.182067"),
+              gender: Gender.male,
+              language: const ["id", "en"],
+              name: "Firgia",
+              info: UserInfo(
+                dateJoined: DateTime.tryParse("2023-02-11T14:12:06.182067"),
+                listOfCallYears: const ["2022", "2023"],
+                totalCalls: 12,
+                totalFriends: 13,
+                totalVisitors: 14,
+              ),
+              type: UserType.volunteer,
+            ),
+          )
+        ],
+      );
+
+      verify(authRepository.uid);
+      verify(callingProvider.getCallHistory());
+    });
+
+    test("Should throw CallingFailureCode.unauthenticated when not signed in",
+        () async {
+      when(authRepository.uid).thenReturn(null);
+
+      expect(() => callingRepository.getCallHistory(),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getCallHistory();
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unauthenticated);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.invalidArgument when get '
+        'invalid-argument error from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.getCallHistory()).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "invalid-argument"),
+      );
+
+      expect(() => callingRepository.getCallHistory(),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getCallHistory();
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.invalidArgument);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.notFound when get not-found error '
+        'from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.getCallHistory()).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "not-found"),
+      );
+
+      expect(() => callingRepository.getCallHistory(),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getCallHistory();
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.notFound);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.permissionDenied when get '
+        'permission-denied error from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.getCallHistory()).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "permission-denied"),
+      );
+
+      expect(() => callingRepository.getCallHistory(),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getCallHistory();
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.permissionDenied);
+      }
+    });
+
+    test("Should throw CallingFailureCode.unknown when get unknown exception",
+        () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.getCallHistory()).thenThrow(Exception());
+
+      expect(() => callingRepository.getCallHistory(),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getCallHistory();
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unknown);
+      }
+    });
+  });
+
   group(".getCallStatistic()", () {
     String year = "2003";
     String locale = "ar";

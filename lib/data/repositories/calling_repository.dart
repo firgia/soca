@@ -60,6 +60,13 @@ abstract class CallingRepository {
   /// A [CallingFailure] maybe thrown when a failure occurs.
   Future<Call> getCall(String callID);
 
+  /// {@macro get_call_history}
+  ///
+  /// `Exception`
+  ///
+  /// A [CallingFailure] maybe thrown when a failure occurs.
+  Future<List<CallHistory>> getCallHistory();
+
   /// {@macro get_call_statistic}
   ///
   /// `Exception`
@@ -331,6 +338,56 @@ class CallingRepositoryImpl implements CallingRepository {
       if (response != null) {
         _logger.fine("Successfully to get call data");
         return Call.fromMap(response);
+      } else {
+        throw const CallingFailure(
+          code: CallingFailureCode.notFound,
+          message: "Some requested document was not found.",
+        );
+      }
+    } on CallingFailure catch (_) {
+      rethrow;
+    } on Exception catch (e) {
+      throw CallingFailure.fromException(e);
+    } catch (e) {
+      throw const CallingFailure();
+    }
+  }
+
+  @override
+  Future<List<CallHistory>> getCallHistory() async {
+    String? authUID = _authRepository.uid;
+
+    if (authUID == null) {
+      _logger.severe("Failed to get call history, please sign in to continue");
+
+      throw const CallingFailure(
+        code: CallingFailureCode.unauthenticated,
+        message:
+            'The request does not have valid authentication credentials for '
+            'the operation.',
+      );
+    }
+
+    try {
+      _logger.info("Get call history...");
+      dynamic response = await _callingProvider.getCallHistory();
+
+      if (response != null) {
+        List<dynamic>? jsonObject = Parser.getListDynamic(response);
+        List<CallHistory> result = [];
+
+        if (jsonObject != null) {
+          for (var item in jsonObject) {
+            final map = Parser.getMap(item);
+
+            if (map != null) {
+              result.add(CallHistory.fromMap(map));
+            }
+          }
+        }
+
+        _logger.fine("Successfully to get call history");
+        return result;
       } else {
         throw const CallingFailure(
           code: CallingFailureCode.notFound,
