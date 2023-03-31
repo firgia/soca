@@ -8,6 +8,7 @@
  */
 
 export 'call_data_mounthly.dart';
+export 'call_history.dart';
 export 'call_setting.dart';
 export 'call_statistic.dart';
 export 'call.dart';
