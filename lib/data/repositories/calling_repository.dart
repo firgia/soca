@@ -60,6 +60,16 @@ abstract class CallingRepository {
   /// A [CallingFailure] maybe thrown when a failure occurs.
   Future<Call> getCall(String callID);
 
+  /// {@macro get_call_statistic}
+  ///
+  /// `Exception`
+  ///
+  /// A [CallingFailure] maybe thrown when a failure occurs.
+  Future<CallStatistic> getCallStatistic({
+    required String year,
+    String? locale,
+  });
+
   /// {@macro get_rtc_credential}
   ///
   /// `Exception`
@@ -321,6 +331,50 @@ class CallingRepositoryImpl implements CallingRepository {
       if (response != null) {
         _logger.fine("Successfully to get call data");
         return Call.fromMap(response);
+      } else {
+        throw const CallingFailure(
+          code: CallingFailureCode.notFound,
+          message: "Some requested document was not found.",
+        );
+      }
+    } on CallingFailure catch (_) {
+      rethrow;
+    } on Exception catch (e) {
+      throw CallingFailure.fromException(e);
+    } catch (e) {
+      throw const CallingFailure();
+    }
+  }
+
+  @override
+  Future<CallStatistic> getCallStatistic({
+    required String year,
+    String? locale,
+  }) async {
+    String? authUID = _authRepository.uid;
+
+    if (authUID == null) {
+      _logger.severe(
+          "Failed to get call statistic data, please sign in to continue");
+
+      throw const CallingFailure(
+        code: CallingFailureCode.unauthenticated,
+        message:
+            'The request does not have valid authentication credentials for '
+            'the operation.',
+      );
+    }
+
+    try {
+      _logger.info("Getting call statistic data...");
+      dynamic response = await _callingProvider.getCallStatistic(
+        year: year,
+        locale: locale,
+      );
+
+      if (response != null) {
+        _logger.fine("Successfully to get call statistic data");
+        return CallStatistic.fromMap(response);
       } else {
         throw const CallingFailure(
           code: CallingFailureCode.notFound,

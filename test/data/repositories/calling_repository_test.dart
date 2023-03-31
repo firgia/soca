@@ -858,6 +858,185 @@ void main() {
     });
   });
 
+  group(".getCallStatistic()", () {
+    String year = "2003";
+    String locale = "ar";
+
+    test("Should return the call statistic data", () async {
+      when(authRepository.uid).thenReturn("1234");
+
+      when(callingProvider.getCallStatistic(
+        year: year,
+        locale: locale,
+      )).thenAnswer(
+        (_) => Future.value({
+          "total": 12,
+          "monthly_statistics": [
+            {
+              "month": "april",
+              "total": 12,
+            },
+          ],
+        }),
+      );
+
+      CallStatistic call = await callingRepository.getCallStatistic(
+        year: year,
+        locale: locale,
+      );
+
+      expect(
+        call,
+        const CallStatistic(
+          total: 12,
+          monthlyStatistics: [
+            CallDataMounthly(
+              month: "april",
+              total: 12,
+            ),
+          ],
+        ),
+      );
+
+      verify(authRepository.uid);
+      verify(
+        callingProvider.getCallStatistic(
+          year: year,
+          locale: locale,
+        ),
+      );
+    });
+
+    test("Should throw CallingFailureCode.unauthenticated when not signed in",
+        () async {
+      when(authRepository.uid).thenReturn(null);
+      expect(
+          () => callingRepository.getCallStatistic(
+                year: year,
+                locale: locale,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getCallStatistic(
+          year: year,
+          locale: locale,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unauthenticated);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.invalidArgument when get '
+        'invalid-argument error from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.getCallStatistic(
+        year: year,
+        locale: locale,
+      )).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "invalid-argument"),
+      );
+
+      expect(
+          () => callingRepository.getCallStatistic(
+                year: year,
+                locale: locale,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getCallStatistic(
+          year: year,
+          locale: locale,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.invalidArgument);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.notFound when get not-found error '
+        'from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.getCallStatistic(
+        year: year,
+        locale: locale,
+      )).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "not-found"),
+      );
+
+      expect(
+          () => callingRepository.getCallStatistic(
+                year: year,
+                locale: locale,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getCallStatistic(
+          year: year,
+          locale: locale,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.notFound);
+      }
+    });
+
+    test(
+        'Should throw CallingFailureCode.permissionDenied when get '
+        'permission-denied error from FirebaseFunctionsExceptions', () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.getCallStatistic(
+        year: year,
+        locale: locale,
+      )).thenThrow(
+        FirebaseFunctionsException(message: "error", code: "permission-denied"),
+      );
+
+      expect(
+          () => callingRepository.getCallStatistic(
+                year: year,
+                locale: locale,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getCallStatistic(
+          year: year,
+          locale: locale,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.permissionDenied);
+      }
+    });
+
+    test("Should throw CallingFailureCode.unknown when get unknown exception",
+        () async {
+      when(authRepository.uid).thenReturn("1234");
+      when(callingProvider.getCallStatistic(
+        year: year,
+        locale: locale,
+      )).thenThrow(Exception());
+
+      expect(
+          () => callingRepository.getCallStatistic(
+                year: year,
+                locale: locale,
+              ),
+          throwsA(isA<CallingFailure>()));
+
+      try {
+        await callingRepository.getCallStatistic(
+          year: year,
+          locale: locale,
+        );
+      } on CallingFailure catch (e) {
+        expect(e.code, CallingFailureCode.unknown);
+      }
+    });
+  });
+
   group(".getRTCCredential()", () {
     String channelName = "sample";
     int uid = 2;
