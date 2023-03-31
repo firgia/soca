@@ -1356,12 +1356,6 @@ class MockDatabaseProvider extends _i1.Mock implements _i33.DatabaseProvider {
 /// See the documentation for Mockito's code generation for more information.
 class MockDeviceProvider extends _i1.Mock implements _i23.DeviceProvider {
   @override
-  String get deviceIDKey => (super.noSuchMethod(
-        Invocation.getter(#deviceIDKey),
-        returnValue: '',
-        returnValueForMissingStub: '',
-      ) as String);
-  @override
   _i32.Future<String> getDeviceID() => (super.noSuchMethod(
         Invocation.method(
           #getDeviceID,
@@ -1419,18 +1413,6 @@ class MockFunctionsProvider extends _i1.Mock implements _i34.FunctionsProvider {
 class MockLocalLanguageProvider extends _i1.Mock
     implements _i23.LocalLanguageProvider {
   @override
-  String get lastChangedKey => (super.noSuchMethod(
-        Invocation.getter(#lastChangedKey),
-        returnValue: '',
-        returnValueForMissingStub: '',
-      ) as String);
-  @override
-  String get lastChangedOnesignalKey => (super.noSuchMethod(
-        Invocation.getter(#lastChangedOnesignalKey),
-        returnValue: '',
-        returnValueForMissingStub: '',
-      ) as String);
-  @override
   _i32.Future<dynamic> getLanguages() => (super.noSuchMethod(
         Invocation.method(
           #getLanguages,
@@ -1482,18 +1464,6 @@ class MockLocalLanguageProvider extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockOneSignalProvider extends _i1.Mock implements _i23.OneSignalProvider {
-  @override
-  String get lastUpdateTag => (super.noSuchMethod(
-        Invocation.getter(#lastUpdateTag),
-        returnValue: '',
-        returnValueForMissingStub: '',
-      ) as String);
-  @override
-  String get lastUpdateUID => (super.noSuchMethod(
-        Invocation.getter(#lastUpdateUID),
-        returnValue: '',
-        returnValueForMissingStub: '',
-      ) as String);
   @override
   _i32.Future<void> deleteLastUpdateUID() => (super.noSuchMethod(
         Invocation.method(
@@ -1751,41 +1721,9 @@ class MockAuthRepository extends _i1.Mock implements _i23.AuthRepository {
         returnValueForMissingStub: _i32.Future<void>.value(),
       ) as _i32.Future<void>);
   @override
-  void onInternetConnected() => super.noSuchMethod(
-        Invocation.method(
-          #onInternetConnected,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
-  @override
   void dispose() => super.noSuchMethod(
         Invocation.method(
           #dispose,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
-  @override
-  void listenInternetConnection() => super.noSuchMethod(
-        Invocation.method(
-          #listenInternetConnection,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
-  @override
-  void onInternetDisconnected() => super.noSuchMethod(
-        Invocation.method(
-          #onInternetDisconnected,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
-  @override
-  void cancelInternetConnectionListener() => super.noSuchMethod(
-        Invocation.method(
-          #cancelInternetConnectionListener,
           [],
         ),
         returnValueForMissingStub: null,

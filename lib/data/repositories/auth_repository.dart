@@ -17,8 +17,72 @@ import '../../core/core.dart';
 import '../../data/data.dart';
 import '../../injection.dart';
 
-class AuthRepository with InternetConnectionHandlerMixin {
-  AuthRepository() {
+abstract class AuthRepository {
+  /// The users email address.
+  String? get email;
+
+  /// The user's unique ID.
+  String? get uid;
+
+  /// {@macro get_sign_in_method}
+  Future<AuthMethod?> getSignInMethod();
+
+  Stream<DateTime> get onSignOut;
+
+  /// Check current user is signed in
+  ///
+  /// Return `true` if user is signed in
+  Future<bool> isSignedIn();
+
+  /// Sign in with Apple Account
+  ///
+  /// `Exception`
+  ///
+  /// A [SignInWithAppleFailure] maybe thrown when a failure occurs.
+  ///
+  ///
+  /// Return `true` if sign in is successfully
+  Future<bool> signInWithApple();
+
+  /// Sign in with Google Account
+  ///
+  /// `Exception`
+  ///
+  /// A [SignInWithGoogleFailure] maybe thrown when a failure occurs.
+  ///
+  ///
+  /// Return `true` if sign in is successfully
+  Future<bool> signInWithGoogle();
+
+  /// Sign out from current account
+  Future<void> signOut();
+
+  /// Sign up
+  ///
+  /// `Exception`
+  ///
+  /// A [SignUpFailure] maybe thrown when a failure occurs.
+  Future<void> signUp({
+    required UserType type,
+    required String name,
+    required File profileImage,
+    required DateTime dateOfBirth,
+    required Gender gender,
+    required DeviceLanguage? deviceLanguage,
+    required List<Language> languages,
+  });
+
+  /// Update the OneSignal Notification tags to sync with the current user
+  /// auth status.
+  Future<void> syncOneSignalTags();
+
+  void dispose();
+}
+
+class AuthRepositoryImpl
+    with InternetConnectionHandlerMixin
+    implements AuthRepository {
+  AuthRepositoryImpl() {
     listenInternetConnection();
   }
 
@@ -35,23 +99,22 @@ class AuthRepository with InternetConnectionHandlerMixin {
   bool _failedToSetOneSignalSignedOutTag = false;
 
   final Logger _logger = Logger("Auth Repository");
-
-  /// The users email address.
-  String? get email => _firebaseAuth.currentUser?.email;
-
-  /// The user's unique ID.
-  String? get uid => _firebaseAuth.currentUser?.uid;
-
-  /// {@macro get_sign_in_method}
-  Future<AuthMethod?> getSignInMethod() => _authProvider.getSignInMethod();
-
   final StreamController<DateTime> _signOut =
       StreamController<DateTime>.broadcast();
+
+  @override
+  String? get email => _firebaseAuth.currentUser?.email;
+
+  @override
+  String? get uid => _firebaseAuth.currentUser?.uid;
+
+  @override
+  Future<AuthMethod?> getSignInMethod() => _authProvider.getSignInMethod();
+
+  @override
   Stream<DateTime> get onSignOut => _signOut.stream;
 
-  /// Check current user is signed in
-  ///
-  /// Return `true` if user is signed in
+  @override
   Future<bool> isSignedIn() async {
     _logger.info("Checking is signed in...");
     final signInOnProcess = await _signInProvider.isSignInOnProcess();
@@ -73,14 +136,7 @@ class AuthRepository with InternetConnectionHandlerMixin {
     }
   }
 
-  /// Sign in with Apple Account
-  ///
-  /// `Exception`
-  ///
-  /// A [SignInWithAppleFailure] maybe thrown when a failure occurs.
-  ///
-  ///
-  /// Return `true` if sign in is successfully
+  @override
   Future<bool> signInWithApple() async {
     try {
       if (await isSignedIn()) {
@@ -122,14 +178,7 @@ class AuthRepository with InternetConnectionHandlerMixin {
     }
   }
 
-  /// Sign in with Google Account
-  ///
-  /// `Exception`
-  ///
-  /// A [SignInWithGoogleFailure] maybe thrown when a failure occurs.
-  ///
-  ///
-  /// Return `true` if sign in is successfully
+  @override
   Future<bool> signInWithGoogle() async {
     try {
       if (await _googleSignIn.isSignedIn() && await isSignedIn()) {
@@ -185,7 +234,7 @@ class AuthRepository with InternetConnectionHandlerMixin {
     }
   }
 
-  /// Sign out from current account
+  @override
   Future<void> signOut() async {
     final bool isGoogleSignIn = await _googleSignIn.isSignedIn();
 
@@ -208,11 +257,7 @@ class AuthRepository with InternetConnectionHandlerMixin {
     _logger.fine("All sign out process 100% successfully");
   }
 
-  /// Sign up
-  ///
-  /// `Exception`
-  ///
-  /// A [SignUpFailure] maybe thrown when a failure occurs.
+  @override
   Future<void> signUp({
     required UserType type,
     required String name,
@@ -290,8 +335,7 @@ class AuthRepository with InternetConnectionHandlerMixin {
     );
   }
 
-  /// Update the OneSignal Notification tags to sync with the current user
-  /// auth status.
+  @override
   Future<void> syncOneSignalTags() async {
     bool isSignedIn = await this.isSignedIn();
 
@@ -392,6 +436,7 @@ class AuthRepository with InternetConnectionHandlerMixin {
     }
   }
 
+  @override
   void dispose() {
     cancelInternetConnectionListener();
   }

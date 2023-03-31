@@ -16,14 +16,14 @@ import '../../mock/mock.mocks.dart';
 
 void main() {
   late MockLanguageRepository languageRepository;
-  late OnesignalRepository onesignalRepository;
+  late OnesignalRepositoryImpl onesignalRepository;
   late MockOneSignal onesignal;
 
   setUp(() {
     registerLocator();
     languageRepository = getMockLanguageRepository();
     onesignal = getMockOneSignal();
-    onesignalRepository = OnesignalRepository();
+    onesignalRepository = OnesignalRepositoryImpl();
   });
 
   tearDown(() => unregisterLocator());

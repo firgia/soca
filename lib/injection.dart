@@ -49,11 +49,12 @@ void setupInjection() {
   sl.registerLazySingleton<OneSignalProvider>(() => OneSignalProviderImpl());
   sl.registerLazySingleton<UserProvider>(() => UserProviderImpl());
 
-  sl.registerLazySingleton<AuthRepository>(() => AuthRepository());
-  sl.registerLazySingleton<FileRepository>(() => FileRepository());
-  sl.registerLazySingleton<LanguageRepository>(() => LanguageRepository());
-  sl.registerLazySingleton<OnesignalRepository>(() => OnesignalRepository());
-  sl.registerLazySingleton<UserRepository>(() => UserRepository());
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
+  sl.registerLazySingleton<FileRepository>(() => FileRepositoryImpl());
+  sl.registerLazySingleton<LanguageRepository>(() => LanguageRepositoryImpl());
+  sl.registerLazySingleton<OnesignalRepository>(
+      () => OnesignalRepositoryImpl());
+  sl.registerLazySingleton<UserRepository>(() => UserRepositoryImpl());
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   sl.registerFactory<Completer>(() => Completer());

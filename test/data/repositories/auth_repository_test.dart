@@ -28,7 +28,7 @@ void main() {
   late MockOneSignal oneSignal;
   late MockOneSignalProvider oneSignalProvider;
   late MockUserProvider userProvider;
-  late AuthRepository authRepository;
+  late AuthRepositoryImpl authRepository;
 
   setUp(() {
     registerLocator();
@@ -38,7 +38,7 @@ void main() {
     oneSignal = getMockOneSignal();
     oneSignalProvider = getMockOneSignalProvider();
     userProvider = getMockUserProvider();
-    authRepository = AuthRepository();
+    authRepository = AuthRepositoryImpl();
   });
 
   tearDown(() => unregisterLocator());

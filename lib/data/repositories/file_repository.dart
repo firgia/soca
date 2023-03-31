@@ -15,15 +15,20 @@ import 'package:image_picker/image_picker.dart';
 import '../../core/core.dart';
 import '../../injection.dart';
 
-class FileRepository {
-  final ImageCropper _imageCropper = sl<ImageCropper>();
-  final ImagePicker _imagePicker = sl<ImagePicker>();
-
+abstract class FileRepository {
   /// Get profile image
   ///
   /// `Exception`
   ///
   /// A [FileFailure] maybe thrown when a failure occurs.
+  Future<File?> getProfileImage(ImageSource source);
+}
+
+class FileRepositoryImpl implements FileRepository {
+  final ImageCropper _imageCropper = sl<ImageCropper>();
+  final ImagePicker _imagePicker = sl<ImagePicker>();
+
+  @override
   Future<File?> getProfileImage(ImageSource source) async {
     try {
       final pickedFile = await _imagePicker.pickImage(source: source);

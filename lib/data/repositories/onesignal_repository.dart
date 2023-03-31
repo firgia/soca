@@ -13,8 +13,19 @@ import 'language_repository.dart';
 import '../../injection.dart';
 import '../../core/core.dart';
 
-class OnesignalRepository with InternetConnectionHandlerMixin {
-  OnesignalRepository() {
+abstract class OnesignalRepository {
+  /// Update oneSignal language based on last language selected by user
+  ///
+  /// Return true if successfully to update language
+  Future<bool> updateLanguage();
+
+  void dispose();
+}
+
+class OnesignalRepositoryImpl
+    with InternetConnectionHandlerMixin
+    implements OnesignalRepository {
+  OnesignalRepositoryImpl() {
     listenInternetConnection();
   }
 
@@ -24,9 +35,7 @@ class OnesignalRepository with InternetConnectionHandlerMixin {
   bool _failedToUpdateLanguage = false;
   final Logger _logger = Logger("Onesignal Repository");
 
-  /// Update oneSignal language based on last language selected by user
-  ///
-  /// Return true if successfully to update language
+  @override
   Future<bool> updateLanguage() async {
     _logger.info("Updating the Language...");
     bool isFailedToUpdate = false;
@@ -73,6 +82,7 @@ class OnesignalRepository with InternetConnectionHandlerMixin {
     }
   }
 
+  @override
   void dispose() {
     cancelInternetConnectionListener();
   }
