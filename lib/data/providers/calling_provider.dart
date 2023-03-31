@@ -82,6 +82,17 @@ abstract class CallingProvider {
   /// {@macro firebase_functions_exception}
   Future<dynamic> getCall(String callID);
 
+  /// {@template get_call_statistic}
+  /// Get call statistic
+  ///
+  /// {@endtemplate}
+  ///
+  /// {@macro firebase_functions_exception}
+  Future<dynamic> getCallStatistic({
+    required String year,
+    String? locale,
+  });
+
   /// Get list of declined Call ID
   Future<String?> getDeclinedCallID();
 
@@ -204,6 +215,20 @@ class CallingProviderImpl implements CallingProvider {
     return _functionsProvider.call(
       functionsName: FunctionName.getCall,
       parameters: {"id": callID},
+    );
+  }
+
+  @override
+  Future<dynamic> getCallStatistic({
+    required String year,
+    String? locale,
+  }) {
+    return _functionsProvider.call(
+      functionsName: FunctionName.getCallStatistic,
+      parameters: {
+        "year": year,
+        "locale": locale,
+      },
     );
   }
 

@@ -18,6 +18,7 @@ import '../../helper/helper.dart';
 import '../../mock/mock.mocks.dart';
 
 String get _answerCall => "answerCall";
+String get _getCallStatistic => "getCallStatistic";
 String get _createCall => "createCall";
 String get _endCall => "endCall";
 String get _declineCall => "declineCall";
@@ -314,6 +315,58 @@ void main() {
 
       expect(
         () => callingProvider.getCall(callID),
+        throwsA(exception),
+      );
+    });
+  });
+
+  group(".getCallStatistic()", () {
+    String year = "2003";
+    String locale = "en";
+
+    test("Should call functionsProvider.call()", () async {
+      when(
+        functionsProvider.call(
+          functionsName: _getCallStatistic,
+          parameters: {
+            "year": year,
+            "locale": locale,
+          },
+        ),
+      ).thenAnswer((_) => Future.value({}));
+
+      await callingProvider.getCallStatistic(
+        year: year,
+        locale: locale,
+      );
+
+      verify(functionsProvider.call(
+        functionsName: _getCallStatistic,
+        parameters: {
+          "year": year,
+          "locale": locale,
+        },
+      ));
+    });
+
+    test("Should thrown Exception when getting error", () async {
+      Exception exception = Exception("unknown");
+
+      when(
+        functionsProvider.call(
+          functionsName: _getCallStatistic,
+          parameters: {
+            "year": year,
+            "locale": locale,
+          },
+        ),
+      ).thenThrow(exception);
+
+      expect(
+        () => callingProvider.getCallStatistic(
+          year: year,
+          locale: locale,
+        ),
         throwsA(exception),
       );
     });
