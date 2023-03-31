@@ -37,6 +37,7 @@ import 'package:soca/logic/logic.dart';
 
   /* ---------------------------------> DATA <------------------------------- */
   MockSpec<AuthProvider>(),
+  MockSpec<CallingProvider>(),
   MockSpec<DatabaseProvider>(),
   MockSpec<DeviceProvider>(),
   MockSpec<FunctionsProvider>(),

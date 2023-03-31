@@ -18,6 +18,12 @@
 /// - **not-found**:
 /// Thrown if the data is not available.
 ///
+/// - **permission-denied**:
+/// Thrown if does not have permission to execute the specified operation.
+///
+/// - **unavailable**:
+/// Thrown if the service is currently unavailable.
+///
 /// [Explore more FirebaseFunctionsException code](https://firebase.google.com/docs/reference/android/com/google/firebase/functions/FirebaseFunctionsException.Code)
 ///
 ///
@@ -25,6 +31,7 @@
 /// {@endtemplate}
 
 export 'auth_provider.dart';
+export 'calling_provider.dart';
 export 'database_provider.dart';
 export 'device_provider.dart';
 export 'functions_provider.dart';

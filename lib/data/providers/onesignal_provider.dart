@@ -32,7 +32,7 @@ class OneSignalProvider {
     _logger.fine("Successfully to delete $lastUpdateUID data");
   }
 
-  /// Get the last saved changed OneSignal Tage.
+  /// Get the last saved changed OneSignal Tag.
   Future<Map<String, dynamic>?> getLastUpdateTag() async {
     _logger.info("Getting $lastUpdateTag data...");
 

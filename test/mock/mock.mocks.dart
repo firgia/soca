@@ -1095,6 +1095,226 @@ class MockAuthProvider extends _i1.Mock implements _i23.AuthProvider {
       ) as _i32.Future<void>);
 }
 
+/// A class which mocks [CallingProvider].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCallingProvider extends _i1.Mock implements _i23.CallingProvider {
+  @override
+  _i32.Future<dynamic> answerCall({
+    required String? callID,
+    required String? blindID,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #answerCall,
+          [],
+          {
+            #callID: callID,
+            #blindID: blindID,
+          },
+        ),
+        returnValue: _i32.Future<dynamic>.value(),
+        returnValueForMissingStub: _i32.Future<dynamic>.value(),
+      ) as _i32.Future<dynamic>);
+  @override
+  void cancelOnCallSettingUpdated() => super.noSuchMethod(
+        Invocation.method(
+          #cancelOnCallSettingUpdated,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void cancelOnCallStateUpdated() => super.noSuchMethod(
+        Invocation.method(
+          #cancelOnCallStateUpdated,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void cancelOnUserCallUpdated() => super.noSuchMethod(
+        Invocation.method(
+          #cancelOnUserCallUpdated,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i32.Future<dynamic> createCall() => (super.noSuchMethod(
+        Invocation.method(
+          #createCall,
+          [],
+        ),
+        returnValue: _i32.Future<dynamic>.value(),
+        returnValueForMissingStub: _i32.Future<dynamic>.value(),
+      ) as _i32.Future<dynamic>);
+  @override
+  _i32.Future<dynamic> declineCall({
+    required String? callID,
+    required String? blindID,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #declineCall,
+          [],
+          {
+            #callID: callID,
+            #blindID: blindID,
+          },
+        ),
+        returnValue: _i32.Future<dynamic>.value(),
+        returnValueForMissingStub: _i32.Future<dynamic>.value(),
+      ) as _i32.Future<dynamic>);
+  @override
+  _i32.Future<dynamic> endCall(String? callID) => (super.noSuchMethod(
+        Invocation.method(
+          #endCall,
+          [callID],
+        ),
+        returnValue: _i32.Future<dynamic>.value(),
+        returnValueForMissingStub: _i32.Future<dynamic>.value(),
+      ) as _i32.Future<dynamic>);
+  @override
+  _i32.Future<dynamic> getCall(String? callID) => (super.noSuchMethod(
+        Invocation.method(
+          #getCall,
+          [callID],
+        ),
+        returnValue: _i32.Future<dynamic>.value(),
+        returnValueForMissingStub: _i32.Future<dynamic>.value(),
+      ) as _i32.Future<dynamic>);
+  @override
+  _i32.Future<dynamic> getCallHistory() => (super.noSuchMethod(
+        Invocation.method(
+          #getCallHistory,
+          [],
+        ),
+        returnValue: _i32.Future<dynamic>.value(),
+        returnValueForMissingStub: _i32.Future<dynamic>.value(),
+      ) as _i32.Future<dynamic>);
+  @override
+  _i32.Future<dynamic> getCallStatistic({
+    required String? year,
+    String? locale,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getCallStatistic,
+          [],
+          {
+            #year: year,
+            #locale: locale,
+          },
+        ),
+        returnValue: _i32.Future<dynamic>.value(),
+        returnValueForMissingStub: _i32.Future<dynamic>.value(),
+      ) as _i32.Future<dynamic>);
+  @override
+  _i32.Future<String?> getDeclinedCallID() => (super.noSuchMethod(
+        Invocation.method(
+          #getDeclinedCallID,
+          [],
+        ),
+        returnValue: _i32.Future<String?>.value(),
+        returnValueForMissingStub: _i32.Future<String?>.value(),
+      ) as _i32.Future<String?>);
+  @override
+  _i32.Future<String?> getEndedCallID() => (super.noSuchMethod(
+        Invocation.method(
+          #getEndedCallID,
+          [],
+        ),
+        returnValue: _i32.Future<String?>.value(),
+        returnValueForMissingStub: _i32.Future<String?>.value(),
+      ) as _i32.Future<String?>);
+  @override
+  _i32.Future<dynamic> getRTCCredential({
+    required String? channelName,
+    required _i31.RTCRole? role,
+    required int? uid,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getRTCCredential,
+          [],
+          {
+            #channelName: channelName,
+            #role: role,
+            #uid: uid,
+          },
+        ),
+        returnValue: _i32.Future<dynamic>.value(),
+        returnValueForMissingStub: _i32.Future<dynamic>.value(),
+      ) as _i32.Future<dynamic>);
+  @override
+  _i32.Stream<dynamic> onCallSettingUpdated(String? callID) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #onCallSettingUpdated,
+          [callID],
+        ),
+        returnValue: _i32.Stream<dynamic>.empty(),
+        returnValueForMissingStub: _i32.Stream<dynamic>.empty(),
+      ) as _i32.Stream<dynamic>);
+  @override
+  _i32.Stream<dynamic> onCallStateUpdated(String? callID) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #onCallStateUpdated,
+          [callID],
+        ),
+        returnValue: _i32.Stream<dynamic>.empty(),
+        returnValueForMissingStub: _i32.Stream<dynamic>.empty(),
+      ) as _i32.Stream<dynamic>);
+  @override
+  _i32.Stream<dynamic> onUserCallUpdated(String? callID) => (super.noSuchMethod(
+        Invocation.method(
+          #onUserCallUpdated,
+          [callID],
+        ),
+        returnValue: _i32.Stream<dynamic>.empty(),
+        returnValueForMissingStub: _i32.Stream<dynamic>.empty(),
+      ) as _i32.Stream<dynamic>);
+  @override
+  _i32.Future<void> setDeclinedCallID(String? value) => (super.noSuchMethod(
+        Invocation.method(
+          #setDeclinedCallID,
+          [value],
+        ),
+        returnValue: _i32.Future<void>.value(),
+        returnValueForMissingStub: _i32.Future<void>.value(),
+      ) as _i32.Future<void>);
+  @override
+  _i32.Future<void> setEndedCallID(String? value) => (super.noSuchMethod(
+        Invocation.method(
+          #setEndedCallID,
+          [value],
+        ),
+        returnValue: _i32.Future<void>.value(),
+        returnValueForMissingStub: _i32.Future<void>.value(),
+      ) as _i32.Future<void>);
+  @override
+  _i32.Future<void> updateCallSettings({
+    required String? callID,
+    required bool? enableFlashlight,
+    required bool? enableFlip,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateCallSettings,
+          [],
+          {
+            #callID: callID,
+            #enableFlashlight: enableFlashlight,
+            #enableFlip: enableFlip,
+          },
+        ),
+        returnValue: _i32.Future<void>.value(),
+        returnValueForMissingStub: _i32.Future<void>.value(),
+      ) as _i32.Future<void>);
+}
+
 /// A class which mocks [DatabaseProvider].
 ///
 /// See the documentation for Mockito's code generation for more information.

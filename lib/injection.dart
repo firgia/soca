@@ -40,6 +40,7 @@ void setupInjection() {
 
   /* ---------------------------------> DATA <------------------------------- */
   sl.registerLazySingleton<AuthProvider>(() => AuthProvider());
+  sl.registerLazySingleton<CallingProvider>(() => CallingProviderImpl());
   sl.registerLazySingleton<DatabaseProvider>(() => DatabaseProvider());
   sl.registerLazySingleton<DeviceProvider>(() => DeviceProvider());
   sl.registerLazySingleton<FunctionsProvider>(() => FunctionsProvider());
@@ -57,7 +58,9 @@ void setupInjection() {
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   sl.registerFactory<Completer>(() => Completer());
   sl.registerSingleton<DotEnv>(dotenv);
-  sl.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage());
+  sl.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+  ));
   sl.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
   sl.registerSingleton<FirebaseDatabase>(FirebaseDatabase.instance);
   sl.registerSingleton<FirebaseFunctions>(FirebaseFunctions.instance);

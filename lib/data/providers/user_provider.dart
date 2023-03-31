@@ -9,7 +9,6 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:logging/logging.dart';
 // ignore: depend_on_referenced_packages
@@ -27,15 +26,11 @@ class UserProvider {
   final FunctionsProvider _functionsProvider = sl<FunctionsProvider>();
   final Logger _logger = Logger("User Provider");
 
-  StreamController<dynamic>? _onUserDeviceStreamController;
-  StreamSubscription? _onUserDeviceSubscription;
-  DatabaseReference? _onUserDeviceDatabaseReference;
+  StreamDatabase? _streamUserDevice;
 
   /// Cancel subscribtion to user device data
   void cancelOnUserDeviceUpdated() {
-    _onUserDeviceSubscription?.cancel();
-    _onUserDeviceStreamController?.close();
-    _onUserDeviceDatabaseReference?.keepSynced(false);
+    _streamUserDevice?.dispose();
   }
 
   /// Create new User data
@@ -110,10 +105,7 @@ class UserProvider {
     StreamDatabase streamDatabase =
         _databaseProvider.onValue("users/$uid/device");
 
-    _onUserDeviceSubscription = streamDatabase.streamSubscription;
-    _onUserDeviceStreamController = streamDatabase.streamController;
-    _onUserDeviceDatabaseReference = streamDatabase.databaseReference;
-
+    _streamUserDevice = streamDatabase;
     return streamDatabase.streamController.stream;
   }
 
