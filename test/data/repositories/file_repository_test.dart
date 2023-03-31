@@ -28,7 +28,7 @@ void main() {
     registerLocator();
     imageCropper = getMockImageCropper();
     imagePicker = getMockImagePicker();
-    fileRepository = FileRepository();
+    fileRepository = FileRepositoryImpl();
   });
 
   tearDown(() => unregisterLocator());

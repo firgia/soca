@@ -13,10 +13,18 @@ import 'package:firebase_database/firebase_database.dart';
 import '../models/models.dart';
 import '../../injection.dart';
 
-class DatabaseProvider {
+abstract class DatabaseProvider {
+  /// Gets the most up-to-date result for this query.
+  Future<dynamic> get(String path);
+
+  /// Fires when the data at this path is updated.
+  StreamDatabase<dynamic> onValue(String path);
+}
+
+class DatabaseProviderImpl implements DatabaseProvider {
   final FirebaseDatabase _database = sl<FirebaseDatabase>();
 
-  /// Gets the most up-to-date result for this query.
+  @override
   Future<dynamic> get(String path) async {
     DatabaseReference ref = _database.ref(path);
     DataSnapshot snapshot =
@@ -29,7 +37,7 @@ class DatabaseProvider {
     }
   }
 
-  /// Fires when the data at this path is updated.
+  @override
   StreamDatabase<dynamic> onValue(String path) {
     StreamController<dynamic> controller =
         StreamController<dynamic>.broadcast();

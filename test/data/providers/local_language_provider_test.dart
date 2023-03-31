@@ -26,7 +26,7 @@ void main() {
   setUp(() {
     registerLocator();
     secureStorage = getMockFlutterSecureStorage();
-    languageProvider = LocalLanguageProvider();
+    languageProvider = LocalLanguageProviderImpl();
     TestWidgetsFlutterBinding.ensureInitialized();
   });
 

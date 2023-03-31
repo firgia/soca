@@ -20,7 +20,49 @@ import '../models/models.dart';
 import 'database_provider.dart';
 import 'functions_provider.dart';
 
-class UserProvider {
+abstract class UserProvider {
+  /// Cancel subscribtion to user device data
+  void cancelOnUserDeviceUpdated();
+
+  /// Create new User data
+  ///
+  /// {@macro firebase_functions_exception}
+  Future<void> createUser({
+    required UserType type,
+    required String name,
+    required DateTime dateOfBirth,
+    required Gender gender,
+    required DeviceLanguage deviceLanguage,
+    required List<Language> languages,
+    required String deviceID,
+    required String oneSignalPlayerID,
+    required String? voipToken,
+    required DevicePlatform devicePlatform,
+  });
+
+  /// {@template get_profile_user}
+  /// Get profile user
+  ///
+  /// If uid is null, the profile will return based on signed-in user
+  /// {@endtemplate}
+  ///
+  /// {@macro firebase_functions_exception}
+  Future<dynamic> getProfile({String? uid});
+
+  /// Get user device data based on [uid]
+  Future<dynamic> getUserDevice({required String uid});
+
+  /// Fires when the [uid] device data is updated.
+  Stream<dynamic> onUserDeviceUpdated({required String uid});
+
+  /// Uploading new avatar image
+  Future<TaskSnapshot> uploadAvatar({
+    required File file,
+    required String uid,
+  });
+}
+
+class UserProviderImpl implements UserProvider {
   final FirebaseStorage _firebaseStorage = sl<FirebaseStorage>();
   final DatabaseProvider _databaseProvider = sl<DatabaseProvider>();
   final FunctionsProvider _functionsProvider = sl<FunctionsProvider>();
@@ -28,14 +70,12 @@ class UserProvider {
 
   StreamDatabase? _streamUserDevice;
 
-  /// Cancel subscribtion to user device data
+  @override
   void cancelOnUserDeviceUpdated() {
     _streamUserDevice?.dispose();
   }
 
-  /// Create new User data
-  ///
-  /// {@macro firebase_functions_exception}
+  @override
   Future<void> createUser({
     required UserType type,
     required String name,
@@ -81,13 +121,7 @@ class UserProvider {
     _logger.fine("Successfully to create new user");
   }
 
-  /// {@template get_profile_user}
-  /// Get profile user
-  ///
-  /// If uid is null, the profile will return based on signed-in user
-  /// {@endtemplate}
-  ///
-  /// {@macro firebase_functions_exception}
+  @override
   Future<dynamic> getProfile({String? uid}) async {
     return _functionsProvider.call(
       functionsName: FunctionName.getProfileUser,
@@ -95,12 +129,12 @@ class UserProvider {
     );
   }
 
-  /// Get user device data based on [uid]
+  @override
   Future<dynamic> getUserDevice({required String uid}) async {
     return await _databaseProvider.get("users/$uid/device");
   }
 
-  /// Fires when the [uid] device data is updated.
+  @override
   Stream<dynamic> onUserDeviceUpdated({required String uid}) {
     StreamDatabase streamDatabase =
         _databaseProvider.onValue("users/$uid/device");
@@ -109,7 +143,7 @@ class UserProvider {
     return streamDatabase.streamController.stream;
   }
 
-  /// Uploading new avatar image
+  @override
   Future<TaskSnapshot> uploadAvatar({
     required File file,
     required String uid,

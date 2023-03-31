@@ -21,7 +21,7 @@ void main() {
   setUp(() {
     registerLocator();
     firebaseDatabase = getMockFirebaseDatabase();
-    databaseProvider = DatabaseProvider();
+    databaseProvider = DatabaseProviderImpl();
   });
 
   tearDown(() => unregisterLocator());

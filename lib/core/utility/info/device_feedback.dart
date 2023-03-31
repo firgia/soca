@@ -11,26 +11,40 @@ import 'package:flutter/services.dart';
 
 /// [DeviceFeedback] is useful for a blind user to recognize process when
 /// interact with an App
-class DeviceFeedback {
+abstract class DeviceFeedback {
+  void vibrate();
+
+  /// Playing voice assistant based on [message]
+  void playVoiceAssistant(String message);
+
+  /// Set enable feedback
+  ///
+  /// The default of [enableHaptick] and [enableVoiceAssistant] is true
+  void enableFeedback({
+    bool? enableHaptick,
+    bool? enableVoiceAssistant,
+  });
+}
+
+class DeviceFeedbackImpl implements DeviceFeedback {
   bool _enableHaptick = true;
   bool _enableVoiceAssistant = true;
 
+  @override
   void vibrate() {
     if (_enableHaptick) {
       HapticFeedback.vibrate();
     }
   }
 
-  /// Playing voice assistant based on [message]
+  @override
   void playVoiceAssistant(String message) {
     if (_enableVoiceAssistant) {
       // TODO: Implement this
     }
   }
 
-  /// Set enable feedback
-  ///
-  /// The default of [enableHaptick] and [enableVoiceAssistant] is true
+  @override
   void enableFeedback({
     bool? enableHaptick,
     bool? enableVoiceAssistant,

@@ -33,7 +33,7 @@ void main() {
   setUp(() {
     registerLocator();
     firebaseFunctions = getMockFirebaseFunctions();
-    functionsProvider = FunctionsProvider();
+    functionsProvider = FunctionsProviderImpl();
   });
 
   tearDown(() => unregisterLocator());

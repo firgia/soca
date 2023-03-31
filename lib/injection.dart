@@ -35,25 +35,26 @@ void setupInjection() {
   sl.registerLazySingleton<AppNavigator>(() => AppNavigator());
 
   /* ---------------------------------> CORE <------------------------------- */
-  sl.registerLazySingleton<DeviceFeedback>(() => DeviceFeedback());
-  sl.registerLazySingleton<DeviceInfo>(() => DeviceInfo());
+  sl.registerLazySingleton<DeviceFeedback>(() => DeviceFeedbackImpl());
+  sl.registerLazySingleton<DeviceInfo>(() => DeviceInfoImpl());
 
   /* ---------------------------------> DATA <------------------------------- */
-  sl.registerLazySingleton<AuthProvider>(() => AuthProvider());
+  sl.registerLazySingleton<AuthProvider>(() => AuthProviderImpl());
   sl.registerLazySingleton<CallingProvider>(() => CallingProviderImpl());
-  sl.registerLazySingleton<DatabaseProvider>(() => DatabaseProvider());
-  sl.registerLazySingleton<DeviceProvider>(() => DeviceProvider());
-  sl.registerLazySingleton<FunctionsProvider>(() => FunctionsProvider());
+  sl.registerLazySingleton<DatabaseProvider>(() => DatabaseProviderImpl());
+  sl.registerLazySingleton<DeviceProvider>(() => DeviceProviderImpl());
+  sl.registerLazySingleton<FunctionsProvider>(() => FunctionsProviderImpl());
   sl.registerLazySingleton<LocalLanguageProvider>(
-      () => LocalLanguageProvider());
-  sl.registerLazySingleton<OneSignalProvider>(() => OneSignalProvider());
-  sl.registerLazySingleton<UserProvider>(() => UserProvider());
+      () => LocalLanguageProviderImpl());
+  sl.registerLazySingleton<OneSignalProvider>(() => OneSignalProviderImpl());
+  sl.registerLazySingleton<UserProvider>(() => UserProviderImpl());
 
-  sl.registerLazySingleton<AuthRepository>(() => AuthRepository());
-  sl.registerLazySingleton<FileRepository>(() => FileRepository());
-  sl.registerLazySingleton<LanguageRepository>(() => LanguageRepository());
-  sl.registerLazySingleton<OnesignalRepository>(() => OnesignalRepository());
-  sl.registerLazySingleton<UserRepository>(() => UserRepository());
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
+  sl.registerLazySingleton<FileRepository>(() => FileRepositoryImpl());
+  sl.registerLazySingleton<LanguageRepository>(() => LanguageRepositoryImpl());
+  sl.registerLazySingleton<OnesignalRepository>(
+      () => OnesignalRepositoryImpl());
+  sl.registerLazySingleton<UserRepository>(() => UserRepositoryImpl());
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   sl.registerFactory<Completer>(() => Completer());

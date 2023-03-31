@@ -13,18 +13,14 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:soca/core/core.dart';
 
 // We have to convert all static Fields and Functions to make it testable
-class DeviceInfo {
+abstract class DeviceInfo {
   /// Whether the operating system is a version of iOS.
-  bool isIOS() => Platform.isIOS;
+  bool isIOS();
 
   /// Whether the operating system is a version of Android.
-  bool isAndroid() => Platform.isAndroid;
+  bool isAndroid();
 
-  DevicePlatform? get platform {
-    if (isIOS()) return DevicePlatform.ios;
-    if (isAndroid()) return DevicePlatform.android;
-    return null;
-  }
+  DevicePlatform? get platform;
 
   /// {@template get_apple_id_credential}
   /// Requests an Apple ID credential.
@@ -55,6 +51,36 @@ class DeviceInfo {
     WebAuthenticationOptions? webAuthenticationOptions,
     String? nonce,
     String? state,
+  });
+
+  /// {@template get_device_push_token_voip}
+  /// Get device push token VoIP.
+  /// On iOS: return deviceToken for VoIP.
+  /// On Android: return Empty
+  /// {@endtemplate}
+  Future<String?> getDevicePushTokenVoIP();
+}
+
+class DeviceInfoImpl implements DeviceInfo {
+  @override
+  bool isIOS() => Platform.isIOS;
+
+  @override
+  bool isAndroid() => Platform.isAndroid;
+
+  @override
+  DevicePlatform? get platform {
+    if (isIOS()) return DevicePlatform.ios;
+    if (isAndroid()) return DevicePlatform.android;
+    return null;
+  }
+
+  @override
+  Future<AuthorizationCredentialAppleID> getAppleIDCredential({
+    required List<AppleIDAuthorizationScopes> scopes,
+    WebAuthenticationOptions? webAuthenticationOptions,
+    String? nonce,
+    String? state,
   }) {
     return SignInWithApple.getAppleIDCredential(
       scopes: scopes,
@@ -64,11 +90,7 @@ class DeviceInfo {
     );
   }
 
-  /// {@template get_device_push_token_voip}
-  /// Get device push token VoIP.
-  /// On iOS: return deviceToken for VoIP.
-  /// On Android: return Empty
-  /// {@endtemplate}
+  @override
   Future<String?> getDevicePushTokenVoIP() async {
     return await FlutterCallkitIncoming.getDevicePushTokenVoIP();
   }

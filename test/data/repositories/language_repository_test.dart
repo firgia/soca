@@ -23,7 +23,7 @@ void main() {
   setUp(() {
     registerLocator();
     localLanguageProvider = getMockLocalLanguageProvider();
-    languageProvider = LanguageRepository();
+    languageProvider = LanguageRepositoryImpl();
   });
 
   tearDown(() => unregisterLocator());
