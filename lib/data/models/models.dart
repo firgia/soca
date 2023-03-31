@@ -9,6 +9,7 @@
 
 export 'call_data_mounthly.dart';
 export 'call_setting.dart';
+export 'call_statistic.dart';
 export 'call.dart';
 export 'language.dart';
 export 'rtc_credential.dart';
