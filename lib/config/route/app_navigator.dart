@@ -20,6 +20,9 @@ class AppNavigator {
 
   bool canPop(BuildContext context) => Navigator.of(context).canPop();
 
+  void goToCreateCall(BuildContext context) =>
+      context.pushNamed(AppPages.createCall);
+
   void goToHome(BuildContext context) =>
       context.pushReplacementNamed(AppPages.home);
 

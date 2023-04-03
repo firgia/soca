@@ -8,8 +8,9 @@
  */
 
 import 'package:go_router/go_router.dart';
-import 'app_pages.dart';
+import '../../observer.dart';
 import '../../presentation/presentation.dart';
+import 'app_pages.dart';
 
 abstract class AppRoutes {
   static GoRouter get router => GoRouter(
@@ -24,6 +25,13 @@ abstract class AppRoutes {
             path: "/${AppPages.home}",
             name: AppPages.home,
             builder: (context, state) => const HomeScreen(),
+            routes: [
+              GoRoute(
+                path: AppPages.createCall,
+                name: AppPages.createCall,
+                builder: (context, state) => const CreateCallScreen(),
+              ),
+            ],
           ),
           GoRoute(
             path: "/${AppPages.signIn}",
@@ -45,6 +53,9 @@ abstract class AppRoutes {
             name: AppPages.unknownDevice,
             builder: (context, state) => const UnknownDeviceScreen(),
           ),
+        ],
+        observers: [
+          AppNavigatorObserver(),
         ],
       );
 }

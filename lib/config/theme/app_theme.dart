@@ -8,7 +8,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'app_colors.dart';
 import 'app_font.dart';
@@ -58,50 +57,6 @@ abstract class AppTheme with WidgetsBindingObserver {
         primaryColorLight: AppColors.lightBlue,
         textTheme: _getTextTheme(Brightness.light),
       );
-
-  /// if [brightness] null, is set by platform Brightness
-  static void setSystemUIOverlayStyle([Brightness? brightness]) {
-    final darkMode =
-        (brightness == null) ? isDarkMode : brightness == Brightness.dark;
-
-    if (darkMode) {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarBrightness: Brightness.dark,
-        statusBarColor: Colors.black.withOpacity(.2),
-        systemNavigationBarIconBrightness: Brightness.light,
-        systemNavigationBarColor: Colors.black,
-        statusBarIconBrightness: Brightness.light,
-      ));
-    } else {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarBrightness: Brightness.light,
-        statusBarColor: Colors.black.withOpacity(.2),
-        systemNavigationBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: const Color.fromRGBO(242, 242, 246, 1),
-        statusBarIconBrightness: Brightness.dark,
-      ));
-    }
-  }
-
-  static void setSystemUIOverlayStyleForSplash() {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarBrightness: Brightness.dark,
-      statusBarColor: Colors.black.withOpacity(.1),
-      systemNavigationBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: AppColors.blue,
-      statusBarIconBrightness: Brightness.light,
-    ));
-  }
-
-  static void setSystemUIOverlayStyleForCall() {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarBrightness: Brightness.dark,
-      statusBarColor: Colors.black.withOpacity(.1),
-      systemNavigationBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Colors.black,
-      statusBarIconBrightness: Brightness.light,
-    ));
-  }
 }
 
 ElevatedButtonThemeData _getElevatedButtonThemeData() {

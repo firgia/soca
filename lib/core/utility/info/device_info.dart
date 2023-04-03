@@ -8,6 +8,7 @@
  */
 
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:soca/core/core.dart';
@@ -19,6 +20,9 @@ abstract class DeviceInfo {
 
   /// Whether the operating system is a version of Android.
   bool isAndroid();
+
+  /// Whether the device is using dark mode.
+  bool isDarkMode();
 
   DevicePlatform? get platform;
 
@@ -67,6 +71,12 @@ class DeviceInfoImpl implements DeviceInfo {
 
   @override
   bool isAndroid() => Platform.isAndroid;
+
+  @override
+  bool isDarkMode() {
+    final window = WidgetsBinding.instance.window;
+    return window.platformBrightness == Brightness.dark;
+  }
 
   @override
   DevicePlatform? get platform {

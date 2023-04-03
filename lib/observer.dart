@@ -7,8 +7,10 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
+import 'package:soca/config/config.dart';
 import 'data/repositories/onesignal_repository.dart';
 import 'injection.dart';
 import 'logic/logic.dart';
@@ -27,7 +29,6 @@ class AppBlocObserver extends BlocObserver {
 
   @override
   void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
-    log('onError(${bloc.runtimeType}, $error, $stackTrace)');
     super.onError(bloc, error, stackTrace);
   }
 
@@ -35,5 +36,60 @@ class AppBlocObserver extends BlocObserver {
     if (change.nextState is LanguageSelected) {
       sl<OnesignalRepository>().updateLanguage();
     }
+  }
+}
+
+class AppNavigatorObserver extends NavigatorObserver {
+  final AppSystemOverlay _appSystemOverlay = sl<AppSystemOverlay>();
+  final Logger _logger = Logger("App Navigator Observer");
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    String? routeName = route.settings.name;
+    String? prevRouteName = previousRoute?.settings.name;
+
+    _logger
+        .info("didPush() {routeName:$routeName, prevRouteName:$prevRouteName}");
+
+    if (routeName == AppPages.createCall) {
+      _appSystemOverlay.setSystemUIOverlayStyleForCall();
+    } else if (routeName == AppPages.splash) {
+      _appSystemOverlay.setSystemUIOverlayStyleForSplash();
+    }
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    String? routeName = route.settings.name;
+    String? prevRouteName = previousRoute?.settings.name;
+
+    _logger
+        .info("didPop() {routeName:$routeName, prevRouteName:$prevRouteName}");
+
+    if (routeName == AppPages.createCall) {
+      _appSystemOverlay.setSystemUIOverlayStyle();
+    }
+  }
+
+  @override
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    String? routeName = route.settings.name;
+    String? prevRouteName = previousRoute?.settings.name;
+
+    _logger.info(
+        "didRemove() {routeName:$routeName, prevRouteName:$prevRouteName}");
+
+    if (routeName == AppPages.splash) {
+      _appSystemOverlay.setSystemUIOverlayStyle();
+    }
+  }
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    String? newRouteName = newRoute?.settings.name;
+    String? oldRouteName = oldRoute?.settings.name;
+
+    _logger.info(
+        "didReplace() {newRouteName:$newRouteName, oldRouteName:$oldRouteName}");
   }
 }
