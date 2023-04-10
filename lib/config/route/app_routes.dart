@@ -8,6 +8,7 @@
  */
 
 import 'package:go_router/go_router.dart';
+import '../../data/data.dart';
 import '../../observer.dart';
 import '../../presentation/presentation.dart';
 import 'app_pages.dart';
@@ -29,7 +30,9 @@ abstract class AppRoutes {
               GoRoute(
                 path: AppPages.createCall,
                 name: AppPages.createCall,
-                builder: (context, state) => const CreateCallScreen(),
+                builder: (context, state) => CreateCallScreen(
+                  user: state.extra as User,
+                ),
               ),
             ],
           ),
