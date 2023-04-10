@@ -69,6 +69,7 @@ dependencies:
   sign_in_with_apple: ^4.3.0
   swipe_refresh: ^1.0.2
   uuid: ^3.0.7
+  wakelock: ^0.6.2
 
 dev_dependencies:
   bloc_test: ^9.1.1

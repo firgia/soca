@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:soca/config/config.dart';
+import 'package:wakelock/wakelock.dart';
 import 'data/repositories/onesignal_repository.dart';
 import 'injection.dart';
 import 'logic/logic.dart';
@@ -52,6 +53,7 @@ class AppNavigatorObserver extends NavigatorObserver {
         .info("didPush() {routeName:$routeName, prevRouteName:$prevRouteName}");
 
     if (routeName == AppPages.createCall) {
+      Wakelock.enable();
       _appSystemOverlay.setSystemUIOverlayStyleForCall();
     } else if (routeName == AppPages.splash) {
       _appSystemOverlay.setSystemUIOverlayStyleForSplash();
@@ -67,6 +69,7 @@ class AppNavigatorObserver extends NavigatorObserver {
         .info("didPop() {routeName:$routeName, prevRouteName:$prevRouteName}");
 
     if (routeName == AppPages.createCall) {
+      Wakelock.disable();
       _appSystemOverlay.setSystemUIOverlayStyle();
     }
   }
