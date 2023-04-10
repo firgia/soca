@@ -1210,7 +1210,7 @@ void main() {
 
   group(".getRTCCredential()", () {
     String channelName = "sample";
-    int uid = 2;
+    UserType userType = UserType.blind;
     RTCRole role = RTCRole.audience;
 
     test("Should return the RTCCredential data", () async {
@@ -1220,7 +1220,7 @@ void main() {
         callingProvider.getRTCCredential(
           channelName: channelName,
           role: role,
-          uid: uid,
+          uid: anyNamed("uid"),
         ),
       ).thenAnswer(
         (_) => Future.value({
@@ -1234,7 +1234,7 @@ void main() {
       RTCCredential call = await callingRepository.getRTCCredential(
         channelName: channelName,
         role: role,
-        uid: uid,
+        userType: userType,
       );
 
       expect(
@@ -1252,7 +1252,7 @@ void main() {
         callingProvider.getRTCCredential(
           channelName: channelName,
           role: role,
-          uid: uid,
+          uid: anyNamed("uid"),
         ),
       );
     });
@@ -1264,7 +1264,7 @@ void main() {
           () => callingRepository.getRTCCredential(
                 channelName: channelName,
                 role: role,
-                uid: uid,
+                userType: userType,
               ),
           throwsA(isA<CallingFailure>()));
 
@@ -1272,7 +1272,7 @@ void main() {
         await callingRepository.getRTCCredential(
           channelName: channelName,
           role: role,
-          uid: uid,
+          userType: userType,
         );
       } on CallingFailure catch (e) {
         expect(e.code, CallingFailureCode.unauthenticated);
@@ -1287,7 +1287,7 @@ void main() {
         callingProvider.getRTCCredential(
           channelName: channelName,
           role: role,
-          uid: uid,
+          uid: anyNamed("uid"),
         ),
       ).thenThrow(
         FirebaseFunctionsException(message: "error", code: "invalid-argument"),
@@ -1296,7 +1296,7 @@ void main() {
           () => callingRepository.getRTCCredential(
                 channelName: channelName,
                 role: role,
-                uid: uid,
+                userType: userType,
               ),
           throwsA(isA<CallingFailure>()));
 
@@ -1304,7 +1304,7 @@ void main() {
         await callingRepository.getRTCCredential(
           channelName: channelName,
           role: role,
-          uid: uid,
+          userType: userType,
         );
       } on CallingFailure catch (e) {
         expect(e.code, CallingFailureCode.invalidArgument);
@@ -1319,7 +1319,7 @@ void main() {
         callingProvider.getRTCCredential(
           channelName: channelName,
           role: role,
-          uid: uid,
+          uid: anyNamed("uid"),
         ),
       ).thenThrow(
         FirebaseFunctionsException(message: "error", code: "not-found"),
@@ -1328,7 +1328,7 @@ void main() {
           () => callingRepository.getRTCCredential(
                 channelName: channelName,
                 role: role,
-                uid: uid,
+                userType: userType,
               ),
           throwsA(isA<CallingFailure>()));
 
@@ -1336,7 +1336,7 @@ void main() {
         await callingRepository.getRTCCredential(
           channelName: channelName,
           role: role,
-          uid: uid,
+          userType: userType,
         );
       } on CallingFailure catch (e) {
         expect(e.code, CallingFailureCode.notFound);
@@ -1351,7 +1351,7 @@ void main() {
         callingProvider.getRTCCredential(
           channelName: channelName,
           role: role,
-          uid: uid,
+          uid: anyNamed("uid"),
         ),
       ).thenThrow(
         FirebaseFunctionsException(message: "error", code: "permission-denied"),
@@ -1360,7 +1360,7 @@ void main() {
           () => callingRepository.getRTCCredential(
                 channelName: channelName,
                 role: role,
-                uid: uid,
+                userType: userType,
               ),
           throwsA(isA<CallingFailure>()));
 
@@ -1368,7 +1368,7 @@ void main() {
         await callingRepository.getRTCCredential(
           channelName: channelName,
           role: role,
-          uid: uid,
+          userType: userType,
         );
       } on CallingFailure catch (e) {
         expect(e.code, CallingFailureCode.permissionDenied);
@@ -1382,14 +1382,14 @@ void main() {
         callingProvider.getRTCCredential(
           channelName: channelName,
           role: role,
-          uid: uid,
+          uid: anyNamed("uid"),
         ),
       ).thenThrow(Exception());
       expect(
           () => callingRepository.getRTCCredential(
                 channelName: channelName,
                 role: role,
-                uid: uid,
+                userType: userType,
               ),
           throwsA(isA<CallingFailure>()));
 
@@ -1397,7 +1397,7 @@ void main() {
         await callingRepository.getRTCCredential(
           channelName: channelName,
           role: role,
-          uid: uid,
+          userType: userType,
         );
       } on CallingFailure catch (e) {
         expect(e.code, CallingFailureCode.unknown);
