@@ -10,6 +10,7 @@
 export 'adaptive_platform.dart';
 export 'auth_method.dart';
 export 'button_size.dart';
+export 'call_action_type.dart';
 export 'call_role.dart';
 export 'device_language.dart';
 export 'device_platform.dart';
