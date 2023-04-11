@@ -81,6 +81,7 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   mockito: ^5.3.2
+  mocktail_image_network: ^0.3.1
 
 flutter:
   uses-material-design: true

@@ -52,6 +52,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<UserRepository>(),
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
+
   MockSpec<Completer>(),
   MockSpec<DatabaseEvent>(),
   MockSpec<DatabaseReference>(),
@@ -75,6 +76,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<WidgetsBinding>(),
 
   /* --------------------------------> LOGIC <------------------------------- */
+  MockSpec<CallActionBloc>(),
   MockSpec<FileBloc>(),
   MockSpec<LanguageBloc>(),
   MockSpec<SignInBloc>(),

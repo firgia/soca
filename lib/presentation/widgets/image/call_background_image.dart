@@ -7,7 +7,6 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CallBackgroundImage extends StatelessWidget {
@@ -22,14 +21,11 @@ class CallBackgroundImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Opacity(
       opacity: .2,
-      child: CachedNetworkImage(
-        imageUrl: url,
+      child: Image.network(
+        url,
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         fit: BoxFit.cover,
-        errorWidget: (context, url, error) {
-          return const SizedBox();
-        },
       ),
     );
   }

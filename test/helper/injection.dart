@@ -258,6 +258,14 @@ MockWidgetsBinding getMockWidgetsBinding() {
 
 /* ---------------------------------> LOGIC <-------------------------------- */
 
+MockCallActionBloc getMockCallActionBloc() {
+  MockCallActionBloc mock = MockCallActionBloc();
+  _removeRegistrationIfExists<CallActionBloc>();
+  locator.registerSingleton<CallActionBloc>(mock);
+
+  return mock;
+}
+
 MockFileBloc getMockFileBloc() {
   MockFileBloc mock = MockFileBloc();
   _removeRegistrationIfExists<FileBloc>();
@@ -370,6 +378,7 @@ void registerLocator() {
   getMockWidgetsBinding();
 
   /* --------------------------------> LOGIC <------------------------------- */
+  getMockCallActionBloc();
   getMockFileBloc();
   getMockLanguageBloc();
   getMockSignInBloc();
@@ -421,6 +430,7 @@ void unregisterLocator() {
   locator.unregister<WidgetsBinding>();
 
   /* --------------------------------> LOGIC <------------------------------- */
+  locator.unregister<CallActionBloc>();
   locator.unregister<FileBloc>();
   locator.unregister<LanguageBloc>();
   locator.unregister<SignInBloc>();
