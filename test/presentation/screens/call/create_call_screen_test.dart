@@ -147,21 +147,34 @@ void main() {
       });
     });
 
-    // testWidgets("Should call [CallActionEnded()] when cancel button is tapped",
-    //     (tester) async {
-    //   await mockNetworkImages(() async {
-    //     await tester.runAsync(() async {
-    //       await tester.pumpApp(
-    //         child: CreateCallScreen(user: user),
-    //       );
+    testWidgets("Should call [CallActionEnded()] when cancel button is tapped",
+        (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          Call call = const Call(id: "123");
 
-    //       await tester.tap(findCancelButton());
-    //       await tester.pumpAndSettle();
+          when(callActionBloc.stream).thenAnswer((_) => Stream.fromIterable([
+                const CallActionLoading(CallActionType.created),
+                CallActionCreatedSuccessfullyWithWaitingAnswer(call),
+              ]));
 
-    //        verify(callActionBloc.add(CallActionEnded(-)))
-    //     });
-    //   });
-    // });
+          await tester.pumpApp(
+            child: CreateCallScreen(user: user),
+          );
+
+          // Request to end call when Create call not completed yet
+          await tester.tap(findCancelButton());
+          await tester.pump();
+          expect(find.byType(AdaptiveLoading), findsOneWidget);
+
+          // Execute request end call when Create call is completed but waiting
+          // the answer
+          await Future.delayed(const Duration(milliseconds: 200));
+          await tester.pump();
+          verify(callActionBloc.add(CallActionEnded(call.id!))).called(1);
+        });
+      });
+    });
   });
 
   group("Text", () {
