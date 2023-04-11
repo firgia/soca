@@ -31,12 +31,14 @@ import 'logic/logic.dart';
 final sl = GetIt.instance;
 
 void setupInjection() {
-  /* --------------------------------> CONFIG <------------------------------ */
-  sl.registerLazySingleton<AppNavigator>(() => AppNavigator());
-
   /* ---------------------------------> CORE <------------------------------- */
-  sl.registerLazySingleton<DeviceFeedback>(() => DeviceFeedbackImpl());
-  sl.registerLazySingleton<DeviceInfo>(() => DeviceInfoImpl());
+  sl.registerSingleton<CallKit>(CallKit());
+  sl.registerSingleton<DeviceFeedback>(DeviceFeedbackImpl());
+  sl.registerSingleton<DeviceInfo>(DeviceInfoImpl());
+
+  /* --------------------------------> CONFIG <------------------------------ */
+  sl.registerSingleton<AppNavigator>(AppNavigator());
+  sl.registerSingleton<AppSystemOverlay>(AppSystemOverlayImpl());
 
   /* ---------------------------------> DATA <------------------------------- */
   sl.registerLazySingleton<AuthProvider>(() => AuthProviderImpl());
@@ -50,6 +52,7 @@ void setupInjection() {
   sl.registerLazySingleton<UserProvider>(() => UserProviderImpl());
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
+  sl.registerLazySingleton<CallingRepository>(() => CallingRepositoryImpl());
   sl.registerLazySingleton<FileRepository>(() => FileRepositoryImpl());
   sl.registerLazySingleton<LanguageRepository>(() => LanguageRepositoryImpl());
   sl.registerLazySingleton<OnesignalRepository>(
@@ -79,6 +82,7 @@ void setupInjection() {
   sl.registerSingleton<WidgetsBinding>(WidgetsBinding.instance);
 
   /* --------------------------------> LOGIC <------------------------------- */
+  sl.registerFactory<CallActionBloc>(() => CallActionBloc());
   sl.registerFactory<FileBloc>(() => FileBloc());
   sl.registerFactory<LanguageBloc>(() => LanguageBloc());
   sl.registerFactory<SignInBloc>(() => SignInBloc());

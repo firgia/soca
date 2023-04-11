@@ -22,6 +22,14 @@ MockAppNavigator getMockAppNavigator() {
 
 /* ----------------------------------> CORE <-------------------------------- */
 
+MockCallKit getMockCallKit() {
+  MockCallKit mock = MockCallKit();
+  _removeRegistrationIfExists<CallKit>();
+  locator.registerSingleton<CallKit>(mock);
+
+  return mock;
+}
+
 MockDeviceFeedback getMockDeviceFeedback() {
   MockDeviceFeedback mock = MockDeviceFeedback();
   _removeRegistrationIfExists<DeviceFeedback>();
@@ -107,6 +115,14 @@ MockAuthRepository getMockAuthRepository() {
   MockAuthRepository mock = MockAuthRepository();
   _removeRegistrationIfExists<AuthRepository>();
   locator.registerSingleton<AuthRepository>(mock);
+
+  return mock;
+}
+
+MockCallingRepository getMockCallingRepository() {
+  MockCallingRepository mock = MockCallingRepository();
+  _removeRegistrationIfExists<CallingRepository>();
+  locator.registerSingleton<CallingRepository>(mock);
 
   return mock;
 }
@@ -242,6 +258,14 @@ MockWidgetsBinding getMockWidgetsBinding() {
 
 /* ---------------------------------> LOGIC <-------------------------------- */
 
+MockCallActionBloc getMockCallActionBloc() {
+  MockCallActionBloc mock = MockCallActionBloc();
+  _removeRegistrationIfExists<CallActionBloc>();
+  locator.registerSingleton<CallActionBloc>(mock);
+
+  return mock;
+}
+
 MockFileBloc getMockFileBloc() {
   MockFileBloc mock = MockFileBloc();
   _removeRegistrationIfExists<FileBloc>();
@@ -319,6 +343,7 @@ void registerLocator() {
   getMockAppNavigator();
 
   /* ---------------------------------> CORE <------------------------------- */
+  getMockCallKit();
   getMockDeviceFeedback();
   getMockDeviceInfo();
 
@@ -332,6 +357,7 @@ void registerLocator() {
   getMockOneSignalProvider();
   getMockUserProvider();
   getMockAuthRepository();
+  getMockCallingRepository();
   getMockFileRepository();
   getMockLanguageRepository();
   getMockUserRepository();
@@ -352,6 +378,7 @@ void registerLocator() {
   getMockWidgetsBinding();
 
   /* --------------------------------> LOGIC <------------------------------- */
+  getMockCallActionBloc();
   getMockFileBloc();
   getMockLanguageBloc();
   getMockSignInBloc();
@@ -368,6 +395,7 @@ void unregisterLocator() {
   locator.unregister<AppNavigator>();
 
   /* ---------------------------------> CORE <------------------------------- */
+  locator.unregister<CallKit>();
   locator.unregister<DeviceFeedback>();
   locator.unregister<DeviceInfo>();
 
@@ -381,6 +409,7 @@ void unregisterLocator() {
   locator.unregister<OneSignalProvider>();
   locator.unregister<UserProvider>();
   locator.unregister<AuthRepository>();
+  locator.unregister<CallingRepository>();
   locator.unregister<FileRepository>();
   locator.unregister<LanguageRepository>();
   locator.unregister<UserRepository>();
@@ -401,6 +430,7 @@ void unregisterLocator() {
   locator.unregister<WidgetsBinding>();
 
   /* --------------------------------> LOGIC <------------------------------- */
+  locator.unregister<CallActionBloc>();
   locator.unregister<FileBloc>();
   locator.unregister<LanguageBloc>();
   locator.unregister<SignInBloc>();

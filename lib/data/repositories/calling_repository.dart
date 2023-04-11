@@ -85,7 +85,7 @@ abstract class CallingRepository {
   Future<RTCCredential> getRTCCredential({
     required String channelName,
     required RTCRole role,
-    required int uid,
+    required UserType userType,
   });
 
   /// Fires when the call setting data is updated.
@@ -133,6 +133,14 @@ class CallingRepositoryImpl implements CallingRepository {
   final AuthRepository _authRepository = sl<AuthRepository>();
   final CallingProvider _callingProvider = sl<CallingProvider>();
   final Logger _logger = Logger("Calling Repository");
+
+  int _getRtcUID(UserType type) {
+    if (type == UserType.blind) {
+      return 1;
+    } else {
+      return 2;
+    }
+  }
 
   @override
   Future<Call> answerCall({
@@ -451,7 +459,7 @@ class CallingRepositoryImpl implements CallingRepository {
   Future<RTCCredential> getRTCCredential({
     required String channelName,
     required RTCRole role,
-    required int uid,
+    required UserType userType,
   }) async {
     String? authUID = _authRepository.uid;
 
@@ -472,7 +480,7 @@ class CallingRepositoryImpl implements CallingRepository {
       dynamic response = await _callingProvider.getRTCCredential(
         channelName: channelName,
         role: role,
-        uid: uid,
+        uid: _getRtcUID(userType),
       );
 
       if (response != null) {

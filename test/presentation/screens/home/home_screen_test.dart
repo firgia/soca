@@ -236,6 +236,28 @@ void main() {
     });
 
     testWidgets(
+        'Should navigate to create call page when CallVolunteerButton '
+        'button is pressed', (tester) async {
+      User user = const User(
+        id: "1234",
+        name: "Mochamad Firgia",
+        type: UserType.blind,
+      );
+
+      await tester.runAsync(() async {
+        when(userBloc.stream).thenAnswer((_) => Stream.value(UserLoaded(user)));
+
+        await tester.pumpApp(child: const HomeScreen());
+        await tester.pump();
+
+        await tester.tap(findCallVolunteerButton());
+        await tester.pumpAndSettle();
+
+        verify(appNavigator.goToCreateCall(any, user: user));
+      });
+    });
+
+    testWidgets(
         'Should hide CallVolunteerButton and VolunteerInfoCard when '
         'user type is empty', (tester) async {
       User user = const User(

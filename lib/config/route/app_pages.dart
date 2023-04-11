@@ -8,6 +8,7 @@
  */
 
 abstract class AppPages {
+  static String get createCall => "create_call";
   static String get language => "language";
   static String get home => "home";
   static String get signIn => "sign_in";

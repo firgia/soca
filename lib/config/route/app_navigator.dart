@@ -9,7 +9,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:soca/config/config.dart';
+
+import '../../data/data.dart';
+import '../config.dart';
 
 class AppNavigator {
   void back<T>(BuildContext context, {T? result}) {
@@ -19,6 +21,9 @@ class AppNavigator {
   }
 
   bool canPop(BuildContext context) => Navigator.of(context).canPop();
+
+  void goToCreateCall(BuildContext context, {required User user}) =>
+      context.pushNamed(AppPages.createCall, extra: user);
 
   void goToHome(BuildContext context) =>
       context.pushReplacementNamed(AppPages.home);

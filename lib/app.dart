@@ -129,6 +129,15 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   }
 
   @override
+  void didChangePlatformBrightness() {
+    super.didChangePlatformBrightness();
+
+    if (context.mounted) {
+      sl<AppSystemOverlay>().setSystemUIOverlayStyle();
+    }
+  }
+
+  @override
   void dispose() {
     super.dispose();
 

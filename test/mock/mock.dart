@@ -32,6 +32,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<AppNavigator>(),
 
   /* ---------------------------------> CORE <------------------------------- */
+  MockSpec<CallKit>(),
   MockSpec<DeviceFeedback>(),
   MockSpec<DeviceInfo>(),
 
@@ -45,11 +46,13 @@ import 'package:soca/logic/logic.dart';
   MockSpec<OneSignalProvider>(),
   MockSpec<UserProvider>(),
   MockSpec<AuthRepository>(),
+  MockSpec<CallingRepository>(),
   MockSpec<FileRepository>(),
   MockSpec<LanguageRepository>(),
   MockSpec<UserRepository>(),
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
+
   MockSpec<Completer>(),
   MockSpec<DatabaseEvent>(),
   MockSpec<DatabaseReference>(),
@@ -73,6 +76,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<WidgetsBinding>(),
 
   /* --------------------------------> LOGIC <------------------------------- */
+  MockSpec<CallActionBloc>(),
   MockSpec<FileBloc>(),
   MockSpec<LanguageBloc>(),
   MockSpec<SignInBloc>(),
