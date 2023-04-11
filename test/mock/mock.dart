@@ -32,6 +32,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<AppNavigator>(),
 
   /* ---------------------------------> CORE <------------------------------- */
+  MockSpec<CallKit>(),
   MockSpec<DeviceFeedback>(),
   MockSpec<DeviceInfo>(),
 
@@ -45,6 +46,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<OneSignalProvider>(),
   MockSpec<UserProvider>(),
   MockSpec<AuthRepository>(),
+  MockSpec<CallingRepository>(),
   MockSpec<FileRepository>(),
   MockSpec<LanguageRepository>(),
   MockSpec<UserRepository>(),

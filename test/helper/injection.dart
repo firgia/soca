@@ -22,6 +22,14 @@ MockAppNavigator getMockAppNavigator() {
 
 /* ----------------------------------> CORE <-------------------------------- */
 
+MockCallKit getMockCallKit() {
+  MockCallKit mock = MockCallKit();
+  _removeRegistrationIfExists<CallKit>();
+  locator.registerSingleton<CallKit>(mock);
+
+  return mock;
+}
+
 MockDeviceFeedback getMockDeviceFeedback() {
   MockDeviceFeedback mock = MockDeviceFeedback();
   _removeRegistrationIfExists<DeviceFeedback>();
@@ -107,6 +115,14 @@ MockAuthRepository getMockAuthRepository() {
   MockAuthRepository mock = MockAuthRepository();
   _removeRegistrationIfExists<AuthRepository>();
   locator.registerSingleton<AuthRepository>(mock);
+
+  return mock;
+}
+
+MockCallingRepository getMockCallingRepository() {
+  MockCallingRepository mock = MockCallingRepository();
+  _removeRegistrationIfExists<CallingRepository>();
+  locator.registerSingleton<CallingRepository>(mock);
 
   return mock;
 }
@@ -319,6 +335,7 @@ void registerLocator() {
   getMockAppNavigator();
 
   /* ---------------------------------> CORE <------------------------------- */
+  getMockCallKit();
   getMockDeviceFeedback();
   getMockDeviceInfo();
 
@@ -332,6 +349,7 @@ void registerLocator() {
   getMockOneSignalProvider();
   getMockUserProvider();
   getMockAuthRepository();
+  getMockCallingRepository();
   getMockFileRepository();
   getMockLanguageRepository();
   getMockUserRepository();
@@ -368,6 +386,7 @@ void unregisterLocator() {
   locator.unregister<AppNavigator>();
 
   /* ---------------------------------> CORE <------------------------------- */
+  locator.unregister<CallKit>();
   locator.unregister<DeviceFeedback>();
   locator.unregister<DeviceInfo>();
 
@@ -381,6 +400,7 @@ void unregisterLocator() {
   locator.unregister<OneSignalProvider>();
   locator.unregister<UserProvider>();
   locator.unregister<AuthRepository>();
+  locator.unregister<CallingRepository>();
   locator.unregister<FileRepository>();
   locator.unregister<LanguageRepository>();
   locator.unregister<UserRepository>();

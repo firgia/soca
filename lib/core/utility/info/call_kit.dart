@@ -7,10 +7,50 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter_callkit_incoming/entities/entities.dart';
 import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
 
 export 'package:flutter_callkit_incoming/entities/entities.dart';
+
+class CallKitArgument extends CallKitParams with EquatableMixin {
+  const CallKitArgument({
+    super.id,
+    super.nameCaller,
+    super.appName,
+    super.avatar,
+    super.handle,
+    super.type,
+    super.duration,
+    super.textAccept,
+    super.textDecline,
+    super.textMissedCall,
+    super.textCallback,
+    super.extra,
+    super.headers,
+    super.android,
+    super.ios,
+  });
+
+  @override
+  List<Object?> get props => [
+        id,
+        nameCaller,
+        appName,
+        avatar,
+        handle,
+        type,
+        duration,
+        textAccept,
+        textDecline,
+        textMissedCall,
+        textCallback,
+        extra,
+        headers,
+        android,
+        ios,
+      ];
+}
 
 class CallKit {
   /// Show Callkit Incoming.

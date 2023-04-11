@@ -28,7 +28,6 @@ class CallActionBloc extends Bloc<CallActionEvent, CallActionState> {
   final UserRepository _userRepository = sl<UserRepository>();
   final Logger _logger = Logger("Call Bloc");
 
-  bool _isOnProcessEndCallDB = false;
   StreamSubscription? _stateSub;
 
   CallActionBloc() : super(const CallActionInitial()) {
@@ -89,22 +88,18 @@ class CallActionBloc extends Bloc<CallActionEvent, CallActionState> {
     emit(const CallActionLoading(CallActionType.ended));
     _logger.info("End call...");
 
-    if (!_isOnProcessEndCallDB) {
-      try {
-        _isOnProcessEndCallDB = true;
-        await _callingRepository.endCall(callID);
+    try {
+      await _callingRepository.endCall(callID);
 
-        emit(const CallActionEndedSuccessfully());
-      } on CallingFailure catch (e) {
-        _logger.shout("Error to end call");
-        emit(CallActionError(CallActionType.ended, e));
-      } catch (e) {
-        _logger.shout("Error to end call");
-        emit(const CallActionError(CallActionType.ended));
-      } finally {
-        _isOnProcessEndCallDB = false;
-        _callKit.endAllCalls();
-      }
+      emit(const CallActionEndedSuccessfully());
+    } on CallingFailure catch (e) {
+      _logger.shout("Error to end call");
+      emit(CallActionError(CallActionType.ended, e));
+    } catch (e) {
+      _logger.shout("Error to end call");
+      emit(const CallActionError(CallActionType.ended));
+    } finally {
+      _callKit.endAllCalls();
     }
   }
 
@@ -140,7 +135,7 @@ class CallActionBloc extends Bloc<CallActionEvent, CallActionState> {
         _logger.finest("Successfully to get data, starting video calling..");
 
         await _callKit.startCall(
-          CallKitParams(
+          CallKitArgument(
             id: callID,
             nameCaller: volunteerUser.name,
             handle: LocaleKeys.volunteer.tr(),
