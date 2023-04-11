@@ -32,6 +32,7 @@ final sl = GetIt.instance;
 
 void setupInjection() {
   /* ---------------------------------> CORE <------------------------------- */
+  sl.registerSingleton<CallKit>(CallKit());
   sl.registerSingleton<DeviceFeedback>(DeviceFeedbackImpl());
   sl.registerSingleton<DeviceInfo>(DeviceInfoImpl());
 
@@ -81,6 +82,7 @@ void setupInjection() {
   sl.registerSingleton<WidgetsBinding>(WidgetsBinding.instance);
 
   /* --------------------------------> LOGIC <------------------------------- */
+  sl.registerFactory<CallActionBloc>(() => CallActionBloc());
   sl.registerFactory<FileBloc>(() => FileBloc());
   sl.registerFactory<LanguageBloc>(() => LanguageBloc());
   sl.registerFactory<SignInBloc>(() => SignInBloc());
