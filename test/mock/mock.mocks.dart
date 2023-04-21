@@ -938,6 +938,19 @@ class MockAppNavigator extends _i1.Mock implements _i30.AppNavigator {
         ),
         returnValueForMissingStub: null,
       );
+  @override
+  void goToVideoCall(
+    _i16.BuildContext? context, {
+    required _i3.CallingSetup? setup,
+  }) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #goToVideoCall,
+          [context],
+          {#setup: setup},
+        ),
+        returnValueForMissingStub: null,
+      );
 }
 
 /// A class which mocks [CallKit].

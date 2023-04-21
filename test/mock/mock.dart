@@ -26,6 +26,7 @@ import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
 import 'package:soca/logic/logic.dart';
+export 'mock.mocks.dart';
 
 @GenerateNiceMocks([
   /* --------------------------------> CONFIG <------------------------------ */

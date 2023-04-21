@@ -24,6 +24,7 @@ class FlipWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (flip) {
       return Transform(
+        key: const Key("flip_widget_transform"),
         alignment: Alignment.center,
         transform: Matrix4.rotationY(math.pi),
         child: child,
