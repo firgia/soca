@@ -185,6 +185,7 @@ class _ShadowGradient extends StatelessWidget {
 class _VideoViewBlindUser extends StatelessWidget {
   const _VideoViewBlindUser({
     required this.rtcEngine,
+    super.key,
   });
 
   final agora.RtcEngine rtcEngine;
@@ -219,6 +220,7 @@ class _VideoViewVolunteerUser extends StatelessWidget {
   const _VideoViewVolunteerUser({
     required this.rtcEngine,
     required this.callingSetup,
+    super.key,
   });
 
   final agora.RtcEngine rtcEngine;

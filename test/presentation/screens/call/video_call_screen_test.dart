@@ -7,6 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -67,6 +68,8 @@ void main() {
     ),
   );
 
+  Finder findAgoraView() => find.byType(AgoraVideoView);
+
   Finder findFlashlightOnMessage() =>
       find.text(LocaleKeys.turn_on_flashlight.tr());
 
@@ -78,6 +81,12 @@ void main() {
 
   Finder findFlipModeOffMessage() =>
       find.text(LocaleKeys.turn_off_reverse_screen.tr());
+
+  Finder findVideoViewBlind() =>
+      find.byKey(const Key("video_call_screen_video_view_blind_user"));
+
+  Finder findVideoViewVolunteer() =>
+      find.byKey(const Key("video_call_screen_video_view_volunteer_user"));
 
   group("Bloc Listener", () {
     testWidgets(
@@ -378,6 +387,99 @@ void main() {
               options: anyNamed('options'),
             )
           ]);
+        });
+      });
+    });
+  });
+
+  group("Video View", () {
+    CallingSetup blindUser = const CallingSetup(
+      id: "1",
+      rtc: RTCIdentity(token: "abc", channelName: "a", uid: 1),
+      localUser: UserCallIdentity(
+        name: "name",
+        uid: "uid",
+        avatar: "avatar",
+        type: UserType.blind,
+      ),
+      remoteUser: UserCallIdentity(
+        name: "name",
+        uid: "uid",
+        avatar: "avatar",
+        type: UserType.volunteer,
+      ),
+    );
+
+    CallingSetup volunteerUser = const CallingSetup(
+      id: "1",
+      rtc: RTCIdentity(token: "abc", channelName: "a", uid: 1),
+      localUser: UserCallIdentity(
+        name: "name",
+        uid: "uid",
+        avatar: "avatar",
+        type: UserType.volunteer,
+      ),
+      remoteUser: UserCallIdentity(
+        name: "name",
+        uid: "uid",
+        avatar: "avatar",
+        type: UserType.blind,
+      ),
+    );
+
+    testWidgets("Should show video view for blind user", (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: true,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: 123,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: blindUser));
+
+          AgoraVideoView agoraVideoView =
+              findAgoraView().getWidget() as AgoraVideoView;
+          VideoViewControllerBase agoraController = agoraVideoView.controller;
+
+          expect(findVideoViewBlind(), findsOneWidget);
+          expect(findVideoViewVolunteer(), findsNothing);
+          expect(agoraController.rtcEngine, rtcEngine);
+          expect(agoraController.canvas.uid, 0);
+          expect(agoraController.connection?.channelId, null);
+        });
+      });
+    });
+
+    testWidgets("Should show video view for volunteer user", (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: true,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: 123,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: volunteerUser));
+
+          AgoraVideoView agoraVideoView =
+              findAgoraView().getWidget() as AgoraVideoView;
+          VideoViewControllerBase agoraController = agoraVideoView.controller;
+
+          expect(findVideoViewBlind(), findsNothing);
+          expect(findVideoViewVolunteer(), findsOneWidget);
+          expect(agoraController.rtcEngine, rtcEngine);
+          expect(agoraController.canvas.uid, 123);
+          expect(agoraController.connection?.channelId,
+              volunteerUser.rtc.channelName);
         });
       });
     });

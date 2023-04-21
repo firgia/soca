@@ -135,10 +135,14 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                   child: callingSetup.localUser.type == UserType.blind
                       ? _VideoViewBlindUser(
                           rtcEngine: rtcEngine,
+                          key: const Key(
+                              "video_call_screen_video_view_blind_user"),
                         )
                       : _VideoViewVolunteerUser(
                           rtcEngine: rtcEngine,
                           callingSetup: callingSetup,
+                          key: const Key(
+                              "video_call_screen_video_view_volunteer_user"),
                         ),
                 ),
                 const Align(
