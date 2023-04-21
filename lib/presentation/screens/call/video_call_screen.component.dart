@@ -187,7 +187,7 @@ class _VideoViewBlindUser extends StatelessWidget {
     required this.rtcEngine,
   });
 
-  final RtcEngine rtcEngine;
+  final agora.RtcEngine rtcEngine;
 
   @override
   Widget build(BuildContext context) {
@@ -199,10 +199,10 @@ class _VideoViewBlindUser extends StatelessWidget {
         return isLocalJoined
             ? FlipWidget(
                 flip: enableFlip,
-                child: AgoraVideoView(
-                  controller: VideoViewController(
+                child: agora.AgoraVideoView(
+                  controller: agora.VideoViewController(
                     rtcEngine: rtcEngine,
-                    canvas: const VideoCanvas(uid: 0),
+                    canvas: const agora.VideoCanvas(uid: 0),
                   ),
                 ),
               )
@@ -221,7 +221,7 @@ class _VideoViewVolunteerUser extends StatelessWidget {
     required this.callingSetup,
   });
 
-  final RtcEngine rtcEngine;
+  final agora.RtcEngine rtcEngine;
   final CallingSetup callingSetup;
 
   @override
@@ -234,12 +234,12 @@ class _VideoViewVolunteerUser extends StatelessWidget {
       if (remoteUID != null) {
         return FlipWidget(
           flip: enableFlip,
-          child: AgoraVideoView(
-            controller: VideoViewController.remote(
+          child: agora.AgoraVideoView(
+            controller: agora.VideoViewController.remote(
               rtcEngine: rtcEngine,
-              canvas: VideoCanvas(uid: remoteUID),
+              canvas: agora.VideoCanvas(uid: remoteUID),
               connection:
-                  RtcConnection(channelId: callingSetup.rtc.channelName),
+                  agora.RtcConnection(channelId: callingSetup.rtc.channelName),
             ),
           ),
         );

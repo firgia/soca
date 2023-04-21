@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
@@ -24,21 +25,25 @@ import '../../../mock/mock.dart';
 void main() {
   late MockAppNavigator appNavigator;
   late MockCallActionBloc callActionBloc;
+  late MockDeviceInfo deviceInfo;
+  late MockDotEnv dotEnv;
   late MockRtcEngine rtcEngine;
   late MockVideoCallBloc videoCallBloc;
-
   late MockWidgetsBinding widgetBinding;
 
   setUp(() {
     registerLocator();
     appNavigator = getMockAppNavigator();
     callActionBloc = getMockCallActionBloc();
+    deviceInfo = getMockDeviceInfo();
+    dotEnv = getMockDotEnv();
     rtcEngine = getMockRtcEngine();
     videoCallBloc = getMockVideoCallBloc();
 
     widgetBinding = getMockWidgetsBinding();
     MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
 
+    when(dotEnv.env).thenReturn({"AGORA_APP_ID": "abc"});
     when(window.platformBrightness).thenReturn(Brightness.dark);
     when(widgetBinding.window).thenReturn(window);
   });
@@ -304,6 +309,75 @@ void main() {
           verify(rtcEngine.setCameraTorchOn(false));
           expect(findFlashlightOnMessage(), findsNothing);
           expect(findFlashlightOffMessage(), findsOneWidget);
+        });
+      });
+    });
+  });
+
+  group("Initial", () {
+    testWidgets("Should call VideoCallBloc.add(VideoCallStarted)",
+        (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: false,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: null,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
+
+          verify(
+              videoCallBloc.add(VideoCallStarted(callingSetup: callingSetup)));
+        });
+      });
+    });
+
+    testWidgets("Should initialize [RtcEngine]", (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: false,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: null,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
+          await Future.delayed(const Duration(seconds: 1));
+
+          verifyInOrder([
+            deviceInfo.requestPermissions([
+              Permission.microphone,
+              Permission.camera,
+            ]),
+            rtcEngine.initialize(any),
+            rtcEngine.registerEventHandler(any),
+            rtcEngine.setClientRole(role: anyNamed('role')),
+            rtcEngine.enableVideo(),
+            rtcEngine.enableAudio(),
+            rtcEngine.enableLocalAudio(any),
+            rtcEngine.setVideoEncoderConfiguration(any),
+            if (callingSetup.localUser.type == UserType.volunteer) ...[
+              rtcEngine.enableLocalVideo(false),
+              rtcEngine.muteLocalVideoStream(true),
+            ],
+            rtcEngine.startPreview(),
+            rtcEngine.setCameraTorchOn(false),
+            rtcEngine.joinChannel(
+              token: callingSetup.rtc.token,
+              channelId: callingSetup.rtc.channelName,
+              uid: callingSetup.rtc.uid,
+              options: anyNamed('options'),
+            )
+          ]);
         });
       });
     });

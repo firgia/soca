@@ -7,7 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart' as agora;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -38,8 +38,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   late AppNavigator appNavigator;
   late CallActionBloc callActionBloc;
   late CallingSetup callingSetup;
-  late RtcEngineEventHandler eventHandler;
-  late RtcEngine rtcEngine;
+  late DeviceInfo deviceInfo;
+  late agora.RtcEngineEventHandler eventHandler;
+  late agora.RtcEngine rtcEngine;
   late VideoCallBloc videoCallBloc;
 
   final Logger _logger = Logger("Video Call Screen");
@@ -56,8 +57,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     appNavigator = sl<AppNavigator>();
     callingSetup = widget.setup;
     callActionBloc = sl<CallActionBloc>();
+    deviceInfo = sl<DeviceInfo>();
     eventHandler = createHandler();
-    rtcEngine = sl<RtcEngine>();
+    rtcEngine = sl<agora.RtcEngine>();
     videoCallBloc = sl<VideoCallBloc>();
 
     videoCallBloc.add(
@@ -174,14 +176,18 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     }
 
     _logger.info("Request microphone & camera permission...");
-    await [Permission.microphone, Permission.camera].request();
+
+    await deviceInfo.requestPermissions([
+      Permission.microphone,
+      Permission.camera,
+    ]);
 
     _logger.info("Initialize RTC Engine...");
     await rtcEngine.initialize(
-      RtcEngineContext(
+      agora.RtcEngineContext(
         appId: agoraAppID,
-        channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
-        audioScenario: AudioScenarioType.audioScenarioMeeting,
+        channelProfile: agora.ChannelProfileType.channelProfileLiveBroadcasting,
+        audioScenario: agora.AudioScenarioType.audioScenarioMeeting,
       ),
     );
 
@@ -189,7 +195,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     rtcEngine.registerEventHandler(eventHandler);
 
     _logger.info("Set client role...");
-    await rtcEngine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+    await rtcEngine.setClientRole(
+        role: agora.ClientRoleType.clientRoleBroadcaster);
 
     _logger.info("Enable video...");
     await rtcEngine.enableVideo();
@@ -202,8 +209,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     _logger.info("Set video encoder with 720p resolution...");
     await rtcEngine.setVideoEncoderConfiguration(
-      const VideoEncoderConfiguration(
-        dimensions: VideoDimensions(width: 720, height: 1280),
+      const agora.VideoEncoderConfiguration(
+        dimensions: agora.VideoDimensions(width: 720, height: 1280),
       ),
     );
 
@@ -226,14 +233,14 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       token: callingSetup.rtc.token,
       channelId: callingSetup.rtc.channelName,
       uid: callingSetup.rtc.uid,
-      options: const ChannelMediaOptions(),
+      options: const agora.ChannelMediaOptions(),
     );
 
     _logger.fine("All configuration RTC Engine has been done.");
   }
 
-  RtcEngineEventHandler createHandler() {
-    return RtcEngineEventHandler(
+  agora.RtcEngineEventHandler createHandler() {
+    return agora.RtcEngineEventHandler(
       onJoinChannelSuccess: (connection, elapsed) {
         _logger.info("local user ${connection.localUid} joined");
 
@@ -280,7 +287,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     rtcEngine
         .leaveChannel(
-          options: const LeaveChannelOptions(
+          options: const agora.LeaveChannelOptions(
             stopAllEffect: true,
             stopAudioMixing: true,
             stopMicrophoneRecording: true,

@@ -10,6 +10,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:soca/core/core.dart';
 
@@ -63,6 +64,15 @@ abstract class DeviceInfo {
   /// On Android: return Empty
   /// {@endtemplate}
   Future<String?> getDevicePushTokenVoIP();
+
+  /// Requests the user for access to the supplied list of [Permission]s, if
+  /// they have not already been granted before.
+  ///
+  /// Returns a [Map] containing the status per requested [Permission].
+  Future<Map<Permission, PermissionStatus>> requestPermissions(
+      List<Permission> permissions) {
+    throw UnimplementedError('requestPermissions() has not been implemented.');
+  }
 }
 
 class DeviceInfoImpl implements DeviceInfo {
@@ -103,5 +113,11 @@ class DeviceInfoImpl implements DeviceInfo {
   @override
   Future<String?> getDevicePushTokenVoIP() async {
     return await FlutterCallkitIncoming.getDevicePushTokenVoIP();
+  }
+
+  @override
+  Future<Map<Permission, PermissionStatus>> requestPermissions(
+      List<Permission> permissions) {
+    return permissions.request();
   }
 }
