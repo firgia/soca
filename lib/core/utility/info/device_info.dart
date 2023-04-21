@@ -70,9 +70,7 @@ abstract class DeviceInfo {
   ///
   /// Returns a [Map] containing the status per requested [Permission].
   Future<Map<Permission, PermissionStatus>> requestPermissions(
-      List<Permission> permissions) {
-    throw UnimplementedError('requestPermissions() has not been implemented.');
-  }
+      List<Permission> permissions);
 }
 
 class DeviceInfoImpl implements DeviceInfo {
