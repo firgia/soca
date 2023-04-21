@@ -248,6 +248,14 @@ MockOneSignal getMockOneSignal() {
   return mock;
 }
 
+MockRtcEngine getMockRtcEngine() {
+  MockRtcEngine mock = MockRtcEngine();
+  _removeRegistrationIfExists<agora.RtcEngine>();
+  locator.registerSingleton<agora.RtcEngine>(mock);
+
+  return mock;
+}
+
 MockWidgetsBinding getMockWidgetsBinding() {
   MockWidgetsBinding mock = MockWidgetsBinding();
   _removeRegistrationIfExists<WidgetsBinding>();
@@ -314,6 +322,14 @@ MockUserBloc getMockUserBloc() {
   return mock;
 }
 
+MockVideoCallBloc getMockVideoCallBloc() {
+  MockVideoCallBloc mock = MockVideoCallBloc();
+  _removeRegistrationIfExists<VideoCallBloc>();
+  locator.registerSingleton<VideoCallBloc>(mock);
+
+  return mock;
+}
+
 MockAccountCubit getMockAccountCubit() {
   MockAccountCubit mock = MockAccountCubit();
   _removeRegistrationIfExists<AccountCubit>();
@@ -375,6 +391,7 @@ void registerLocator() {
   getMockImagePicker();
   getMockInternetConnectionChecker();
   getMockOneSignal();
+  getMockRtcEngine();
   getMockWidgetsBinding();
 
   /* --------------------------------> LOGIC <------------------------------- */
@@ -385,6 +402,7 @@ void registerLocator() {
   getMockSignUpBloc();
   getMockSignUpFormBloc();
   getMockUserBloc();
+  getMockVideoCallBloc();
   getMockAccountCubit();
   getMockRouteCubit();
   getMockSignOutCubit();
@@ -427,6 +445,7 @@ void unregisterLocator() {
   locator.unregister<ImagePicker>();
   locator.unregister<InternetConnectionChecker>();
   locator.unregister<OneSignal>();
+  locator.unregister<agora.RtcEngine>();
   locator.unregister<WidgetsBinding>();
 
   /* --------------------------------> LOGIC <------------------------------- */
@@ -437,6 +456,7 @@ void unregisterLocator() {
   locator.unregister<SignUpBloc>();
   locator.unregister<SignUpFormBloc>();
   locator.unregister<UserBloc>();
+  locator.unregister<VideoCallBloc>();
   locator.unregister<AccountCubit>();
   locator.unregister<RouteCubit>();
   locator.unregister<SignOutCubit>();

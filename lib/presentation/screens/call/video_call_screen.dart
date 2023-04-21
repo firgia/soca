@@ -44,8 +44,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   final Logger _logger = Logger("Video Call Screen");
   bool hasBeenSwitchCamera = false;
-  bool lastEnableFlashlight = false;
-  bool lastEnableFlip = false;
+  bool? lastEnableFlashlight;
+  bool? lastEnableFlip;
   bool isOnProcessEndCall = false;
 
   @override
@@ -113,7 +113,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             },
           ),
           BlocListener<CallActionBloc, CallActionState>(
-            listener: (context, state) async {
+            listener: (context, state) {
               if ((state is CallActionEndedSuccessfully) ||
                   (state is CallActionError &&
                       state.type == CallActionType.ended)) {

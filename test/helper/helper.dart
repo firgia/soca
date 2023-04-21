@@ -9,6 +9,7 @@
 
 import 'dart:async';
 
+import 'package:agora_rtc_engine/agora_rtc_engine.dart' as agora;
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';

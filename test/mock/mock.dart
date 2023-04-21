@@ -9,6 +9,7 @@
 
 import 'dart:async';
 
+import 'package:agora_rtc_engine/agora_rtc_engine.dart' as agora;
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_database/firebase_database.dart';
@@ -73,6 +74,7 @@ export 'mock.mocks.dart';
   MockSpec<ImagePicker>(),
   MockSpec<InternetConnectionChecker>(),
   MockSpec<OneSignal>(),
+  MockSpec<agora.RtcEngine>(),
   MockSpec<SingletonFlutterWindow>(),
   MockSpec<WidgetsBinding>(),
 
@@ -84,6 +86,7 @@ export 'mock.mocks.dart';
   MockSpec<SignUpBloc>(),
   MockSpec<SignUpFormBloc>(),
   MockSpec<UserBloc>(),
+  MockSpec<VideoCallBloc>(),
   MockSpec<AccountCubit>(),
   MockSpec<RouteCubit>(),
   MockSpec<SignOutCubit>(),
