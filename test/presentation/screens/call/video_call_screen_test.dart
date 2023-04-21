@@ -68,6 +68,7 @@ void main() {
     ),
   );
 
+  Finder findAdaptiveLoading() => find.byType(AdaptiveLoading);
   Finder findAgoraView() => find.byType(AgoraVideoView);
 
   Finder findFlashlightOnMessage() =>
@@ -448,6 +449,7 @@ void main() {
 
           expect(findVideoViewBlind(), findsOneWidget);
           expect(findVideoViewVolunteer(), findsNothing);
+          expect(findAgoraView(), findsOneWidget);
           expect(agoraController.rtcEngine, rtcEngine);
           expect(agoraController.canvas.uid, 0);
           expect(agoraController.connection?.channelId, null);
@@ -476,10 +478,57 @@ void main() {
 
           expect(findVideoViewBlind(), findsNothing);
           expect(findVideoViewVolunteer(), findsOneWidget);
+          expect(findAgoraView(), findsOneWidget);
           expect(agoraController.rtcEngine, rtcEngine);
           expect(agoraController.canvas.uid, 123);
           expect(agoraController.connection?.channelId,
               volunteerUser.rtc.channelName);
+        });
+      });
+    });
+
+    testWidgets(
+        'Should show AdaptiveLoading when [isLocalJoined] is false && [userType]'
+        ' is blind', (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: false,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: null,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: blindUser));
+
+          expect(findAgoraView(), findsNothing);
+          expect(findAdaptiveLoading(), findsOneWidget);
+        });
+      });
+    });
+
+    testWidgets(
+        'Should show AdaptiveLoading when [remoteUID] is null && [userType]'
+        ' is volunteer', (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: false,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: null,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: volunteerUser));
+
+          expect(findAgoraView(), findsNothing);
+          expect(findAdaptiveLoading(), findsOneWidget);
         });
       });
     });
