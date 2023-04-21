@@ -40,6 +40,7 @@ dependencies:
     path: packages/custom_icons
   easy_localization: ^3.0.1
   equatable: ^2.0.5
+  eva_icons_flutter: ^3.1.0
   firebase_auth: ^4.2.5
   firebase_core: ^2.4.1
   firebase_database: ^10.0.9

@@ -19,6 +19,12 @@
 		C3AB040229801A630078C921 /* LaunchScreenProduction.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3AB03FC29801A620078C921 /* LaunchScreenProduction.storyboard */; };
 		C3AB040329801A630078C921 /* LaunchScreenStaging.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3AB03FE29801A620078C921 /* LaunchScreenStaging.storyboard */; };
 		C3AB040429801A630078C921 /* LaunchScreenDevelopment.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3AB040029801A630078C921 /* LaunchScreenDevelopment.storyboard */; };
+		C3ADA87A29F1748500F65CC4 /* Debug-Staging.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C3ADA87429F1748400F65CC4 /* Debug-Staging.xcconfig */; };
+		C3ADA87B29F1748500F65CC4 /* Release-Development.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C3ADA87529F1748500F65CC4 /* Release-Development.xcconfig */; };
+		C3ADA87C29F1748500F65CC4 /* Release-Production.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C3ADA87629F1748500F65CC4 /* Release-Production.xcconfig */; };
+		C3ADA87D29F1748500F65CC4 /* Debug-Production.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C3ADA87729F1748500F65CC4 /* Debug-Production.xcconfig */; };
+		C3ADA87E29F1748500F65CC4 /* Debug-Development.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C3ADA87829F1748500F65CC4 /* Debug-Development.xcconfig */; };
+		C3ADA87F29F1748500F65CC4 /* Release-Staging.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C3ADA87929F1748500F65CC4 /* Release-Staging.xcconfig */; };
 		C3B0DBFF2980DB5100718340 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B0DBFE2980DB5100718340 /* NotificationService.swift */; };
 		C3B0DC032980DB5100718340 /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C3B0DBFC2980DB4F00718340 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -89,6 +95,12 @@
 		C3AB03FD29801A620078C921 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreenProduction.storyboard; sourceTree = "<group>"; };
 		C3AB03FF29801A620078C921 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreenStaging.storyboard; sourceTree = "<group>"; };
 		C3AB040129801A630078C921 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreenDevelopment.storyboard; sourceTree = "<group>"; };
+		C3ADA87429F1748400F65CC4 /* Debug-Staging.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Debug-Staging.xcconfig"; sourceTree = "<group>"; };
+		C3ADA87529F1748500F65CC4 /* Release-Development.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Release-Development.xcconfig"; sourceTree = "<group>"; };
+		C3ADA87629F1748500F65CC4 /* Release-Production.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Release-Production.xcconfig"; sourceTree = "<group>"; };
+		C3ADA87729F1748500F65CC4 /* Debug-Production.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Debug-Production.xcconfig"; sourceTree = "<group>"; };
+		C3ADA87829F1748500F65CC4 /* Debug-Development.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Debug-Development.xcconfig"; sourceTree = "<group>"; };
+		C3ADA87929F1748500F65CC4 /* Release-Staging.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Release-Staging.xcconfig"; sourceTree = "<group>"; };
 		C3B0DBFC2980DB4F00718340 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3B0DBFE2980DB5100718340 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		C3B0DC002980DB5100718340 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -158,6 +170,12 @@
 		9740EEB11CF90186004384FC /* Flutter */ = {
 			isa = PBXGroup;
 			children = (
+				C3ADA87829F1748500F65CC4 /* Debug-Development.xcconfig */,
+				C3ADA87729F1748500F65CC4 /* Debug-Production.xcconfig */,
+				C3ADA87429F1748400F65CC4 /* Debug-Staging.xcconfig */,
+				C3ADA87529F1748500F65CC4 /* Release-Development.xcconfig */,
+				C3ADA87629F1748500F65CC4 /* Release-Production.xcconfig */,
+				C3ADA87929F1748500F65CC4 /* Release-Staging.xcconfig */,
 				3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */,
 				9740EEB21CF90195004384FC /* Debug.xcconfig */,
 				7AFA3C8E1D35360C0083082E /* Release.xcconfig */,
@@ -309,7 +327,13 @@
 				C3AB03FA298011B10078C921 /* config in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				C3AB040429801A630078C921 /* LaunchScreenDevelopment.storyboard in Resources */,
+				C3ADA87B29F1748500F65CC4 /* Release-Development.xcconfig in Resources */,
+				C3ADA87C29F1748500F65CC4 /* Release-Production.xcconfig in Resources */,
+				C3ADA87F29F1748500F65CC4 /* Release-Staging.xcconfig in Resources */,
+				C3ADA87E29F1748500F65CC4 /* Debug-Development.xcconfig in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
+				C3ADA87D29F1748500F65CC4 /* Debug-Production.xcconfig in Resources */,
+				C3ADA87A29F1748500F65CC4 /* Debug-Staging.xcconfig in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				C3AB040229801A630078C921 /* LaunchScreenProduction.storyboard in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
@@ -561,7 +585,7 @@
 		};
 		249021D4217E4FDB00AE95B9 /* Profile-Production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			baseConfigurationReference = C3ADA87629F1748500F65CC4 /* Release-Production.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				APP_DISPLAY_NAME = Soca;
@@ -696,7 +720,7 @@
 		};
 		97C147061CF9000F007C117D /* Debug-Production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
+			baseConfigurationReference = C3ADA87729F1748500F65CC4 /* Debug-Production.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				APP_DISPLAY_NAME = Soca;
@@ -725,7 +749,7 @@
 		};
 		97C147071CF9000F007C117D /* Release-Production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			baseConfigurationReference = C3ADA87629F1748500F65CC4 /* Release-Production.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				APP_DISPLAY_NAME = Soca;
@@ -808,7 +832,7 @@
 		};
 		C3AB03EE297FF60B0078C921 /* Debug-Development */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
+			baseConfigurationReference = C3ADA87829F1748500F65CC4 /* Debug-Development.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				APP_DISPLAY_NAME = "Soca - Dev";
@@ -892,7 +916,7 @@
 		};
 		C3AB03F0297FF6180078C921 /* Debug-Staging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
+			baseConfigurationReference = C3ADA87429F1748400F65CC4 /* Debug-Staging.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				APP_DISPLAY_NAME = "Soca - Stg";
@@ -973,7 +997,7 @@
 		};
 		C3AB03F2297FF6200078C921 /* Release-Staging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			baseConfigurationReference = C3ADA87929F1748500F65CC4 /* Release-Staging.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				APP_DISPLAY_NAME = "Soca - Stg";
@@ -1053,7 +1077,7 @@
 		};
 		C3AB03F4297FF6280078C921 /* Release-Development */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			baseConfigurationReference = C3ADA87529F1748500F65CC4 /* Release-Development.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				APP_DISPLAY_NAME = "Soca - Dev";
@@ -1131,7 +1155,7 @@
 		};
 		C3AB03F6297FF62F0078C921 /* Profile-Staging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			baseConfigurationReference = C3ADA87929F1748500F65CC4 /* Release-Staging.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				APP_DISPLAY_NAME = "Soca - Stg";
@@ -1209,7 +1233,7 @@
 		};
 		C3AB03F8297FF6380078C921 /* Profile-Development */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			baseConfigurationReference = C3ADA87529F1748500F65CC4 /* Release-Development.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				APP_DISPLAY_NAME = "Soca - Dev";
