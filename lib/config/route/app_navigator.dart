@@ -42,4 +42,7 @@ class AppNavigator {
 
   void goToUnknownDevice(BuildContext context) =>
       context.pushReplacementNamed(AppPages.unknownDevice);
+
+  void goToVideoCall(BuildContext context, {required CallingSetup setup}) =>
+      context.pushReplacementNamed(AppPages.videoCall, extra: setup);
 }

@@ -15,4 +15,5 @@ abstract class AppPages {
   static String get signUp => "sign_up";
   static String get splash => "splash";
   static String get unknownDevice => "unknown_device";
+  static String get videoCall => "video_call";
 }

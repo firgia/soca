@@ -9,6 +9,7 @@
 
 import 'dart:async';
 
+import 'package:agora_rtc_engine/agora_rtc_engine.dart' as agora;
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -79,6 +80,7 @@ void setupInjection() {
     ),
   );
   sl.registerSingleton<OneSignal>(OneSignal.shared);
+  sl.registerFactory<agora.RtcEngine>(() => agora.createAgoraRtcEngine());
   sl.registerSingleton<WidgetsBinding>(WidgetsBinding.instance);
 
   /* --------------------------------> LOGIC <------------------------------- */
@@ -89,6 +91,7 @@ void setupInjection() {
   sl.registerFactory<SignUpFormBloc>(() => SignUpFormBloc());
   sl.registerFactory<SignUpBloc>(() => SignUpBloc());
   sl.registerFactory<UserBloc>(() => UserBloc());
+  sl.registerFactory<VideoCallBloc>(() => VideoCallBloc());
   sl.registerFactory<AccountCubit>(() => AccountCubit());
   sl.registerFactory<RouteCubit>(() => RouteCubit());
   sl.registerFactory<SignOutCubit>(() => SignOutCubit());

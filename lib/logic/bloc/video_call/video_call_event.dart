@@ -18,17 +18,14 @@ abstract class VideoCallEvent extends Equatable {
 
 class VideoCallStarted extends VideoCallEvent {
   final CallingSetup callingSetup;
-  final RtcEngine rtcEngine;
 
   const VideoCallStarted({
     required this.callingSetup,
-    required this.rtcEngine,
   });
 
   @override
   List<Object?> get props => [
         callingSetup,
-        rtcEngine,
       ];
 }
 
@@ -50,11 +47,29 @@ class VideoCallSettingFlashlightUpdated extends VideoCallEvent {
   List<Object?> get props => [value];
 }
 
-/// This event is only called on the VideoCallStarted process
-class _VideoCallForceUpdated extends VideoCallEvent {
-  final VideoCallState state;
-  const _VideoCallForceUpdated(this.state);
+class VideoCallIsLocalJoinedChanged extends VideoCallEvent {
+  final bool value;
+
+  const VideoCallIsLocalJoinedChanged(this.value);
 
   @override
-  List<Object?> get props => [state];
+  List<Object?> get props => [value];
+}
+
+class VideoCallIsUserOfflineChanged extends VideoCallEvent {
+  final bool value;
+
+  const VideoCallIsUserOfflineChanged(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class VideoCallRemoteUIDChanged extends VideoCallEvent {
+  final int? value;
+
+  const VideoCallRemoteUIDChanged(this.value);
+
+  @override
+  List<Object?> get props => [value];
 }

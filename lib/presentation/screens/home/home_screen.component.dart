@@ -46,7 +46,7 @@ class _UserAction extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.all(kDefaultSpacing),
               child: CallVolunteerButton(
-                onPressed: () {
+                onPressed: () async {
                   sl<AppNavigator>().goToCreateCall(context, user: state.data);
                 },
               ),

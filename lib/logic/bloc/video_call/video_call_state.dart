@@ -41,7 +41,13 @@ class VideoCallState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [setting, isLocalJoined];
+  List<Object?> get props => [
+        setting,
+        isLocalJoined,
+        isCallEnded,
+        isUserOffline,
+        remoteUID,
+      ];
 }
 
 class VideoCallSettingFlipLoading extends VideoCallState {
@@ -52,9 +58,6 @@ class VideoCallSettingFlipLoading extends VideoCallState {
     required super.isUserOffline,
     required super.remoteUID,
   });
-
-  @override
-  List<Object?> get props => [setting, isLocalJoined];
 }
 
 class VideoCallSettingFlashlightLoading extends VideoCallState {
@@ -65,9 +68,6 @@ class VideoCallSettingFlashlightLoading extends VideoCallState {
     required super.isUserOffline,
     required super.remoteUID,
   });
-
-  @override
-  List<Object?> get props => [setting, isLocalJoined];
 }
 
 class VideoCallError extends VideoCallState {
@@ -78,7 +78,4 @@ class VideoCallError extends VideoCallState {
     required super.isUserOffline,
     required super.remoteUID,
   });
-
-  @override
-  List<Object?> get props => [setting, isLocalJoined];
 }

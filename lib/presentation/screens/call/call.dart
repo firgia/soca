@@ -8,3 +8,4 @@
  */
 
 export 'create_call_screen.dart';
+export 'video_call_screen.dart';
