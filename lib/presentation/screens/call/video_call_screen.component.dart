@@ -217,6 +217,7 @@ class _VideoViewBlindUser extends StatelessWidget {
 
         return isLocalJoined
             ? FlipWidget(
+                key: const Key("video_call_screen_video_view_blind_user_flip"),
                 flip: enableFlip,
                 child: agora.AgoraVideoView(
                   controller: agora.VideoViewController(
@@ -253,6 +254,7 @@ class _VideoViewVolunteerUser extends StatelessWidget {
 
       if (remoteUID != null) {
         return FlipWidget(
+          key: const Key("video_call_screen_video_view_volunteer_user_flip"),
           flip: enableFlip,
           child: agora.AgoraVideoView(
             controller: agora.VideoViewController.remote(

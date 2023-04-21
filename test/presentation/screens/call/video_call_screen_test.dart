@@ -110,6 +110,12 @@ void main() {
   Finder findFlipModeOffMessage() =>
       find.text(LocaleKeys.turn_off_reverse_screen.tr());
 
+  Finder findFlipWidgetBlind() =>
+      find.byKey(const Key("video_call_screen_video_view_blind_user_flip"));
+
+  Finder findFlipWidgetVolunteer() =>
+      find.byKey(const Key("video_call_screen_video_view_volunteer_user_flip"));
+
   Finder findVideoViewBlind() =>
       find.byKey(const Key("video_call_screen_video_view_blind_user"));
 
@@ -693,6 +699,109 @@ void main() {
           expect(agoraController.canvas.uid, 123);
           expect(agoraController.connection?.channelId,
               volunteerUser.rtc.channelName);
+        });
+      });
+    });
+
+    testWidgets("Should flip video view for blind user when enableFlip is true",
+        (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: CallSetting(enableFlip: true),
+              isLocalJoined: true,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: 123,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: blindUser));
+
+          FlipWidget flipWidget =
+              findFlipWidgetBlind().getWidget() as FlipWidget;
+
+          expect(findFlipWidgetBlind(), findsOneWidget);
+          expect(flipWidget.flip, true);
+        });
+      });
+    });
+
+    testWidgets(
+        "Should not flip video view for blind user when enableFlip is false or null",
+        (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: CallSetting(enableFlip: false),
+              isLocalJoined: true,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: 123,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: blindUser));
+
+          FlipWidget flipWidget =
+              findFlipWidgetBlind().getWidget() as FlipWidget;
+
+          expect(findFlipWidgetBlind(), findsOneWidget);
+          expect(flipWidget.flip, false);
+        });
+      });
+    });
+
+    testWidgets(
+        "Should flip video view for volunteer user when enableFlip is true",
+        (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: CallSetting(enableFlip: true),
+              isLocalJoined: true,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: 123,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: volunteerUser));
+
+          FlipWidget flipWidget =
+              findFlipWidgetVolunteer().getWidget() as FlipWidget;
+
+          expect(findFlipWidgetVolunteer(), findsOneWidget);
+          expect(flipWidget.flip, true);
+        });
+      });
+    });
+
+    testWidgets(
+        'Should not flip video view for volunteer user when enableFlip is false'
+        ' or null', (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: CallSetting(enableFlip: false),
+              isLocalJoined: true,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: 123,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: volunteerUser));
+
+          FlipWidget flipWidget =
+              findFlipWidgetVolunteer().getWidget() as FlipWidget;
+
+          expect(findFlipWidgetVolunteer(), findsOneWidget);
+          expect(flipWidget.flip, false);
         });
       });
     });
