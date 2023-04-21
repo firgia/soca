@@ -71,11 +71,38 @@ void main() {
   Finder findAdaptiveLoading() => find.byType(AdaptiveLoading);
   Finder findAgoraView() => find.byType(AgoraVideoView);
 
+  Finder findEndCallButton() =>
+      find.byKey(const Key("video_call_screen_end_call_button"));
+
+  Finder findEndCallButtonIcon() =>
+      find.byKey(const Key("video_call_screen_end_call_button_icon"));
+
+  Finder findEndCallButtonLoading() =>
+      find.byKey(const Key("video_call_screen_end_call_button_loading"));
+
+  Finder findFlashlightButton() =>
+      find.byKey(const Key("video_call_screen_flashlight_button"));
+
+  Finder findFlashlightButtonIcon() =>
+      find.byKey(const Key("video_call_screen_flashlight_button_icon"));
+
+  Finder findFlashlightButtonLoading() =>
+      find.byKey(const Key("video_call_screen_flashlight_button_loading"));
+
   Finder findFlashlightOnMessage() =>
       find.text(LocaleKeys.turn_on_flashlight.tr());
 
   Finder findFlashlightOffMessage() =>
       find.text(LocaleKeys.turn_off_flashlight.tr());
+
+  Finder findFlipButton() =>
+      find.byKey(const Key("video_call_screen_flip_button"));
+
+  Finder findFlipButtonIcon() =>
+      find.byKey(const Key("video_call_screen_flip_button_icon"));
+
+  Finder findFlipButtonLoading() =>
+      find.byKey(const Key("video_call_screen_flip_button_loading"));
 
   Finder findFlipModeOnMessage() =>
       find.text(LocaleKeys.turn_on_reverse_screen.tr());
@@ -88,6 +115,189 @@ void main() {
 
   Finder findVideoViewVolunteer() =>
       find.byKey(const Key("video_call_screen_video_view_volunteer_user"));
+
+  group("End Call Button", () {
+    testWidgets(
+        "Should call [CallActionEnded()] when end call button is tapped",
+        (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: false,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: null,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
+          await tester.tap(findEndCallButton());
+          await tester.pump();
+
+          verify(callActionBloc.add(CallActionEnded(callingSetup.id)));
+          expect(findEndCallButtonIcon(), findsOneWidget);
+          expect(findEndCallButtonLoading(), findsNothing);
+        });
+      });
+    });
+
+    testWidgets("Should show loading indicator when [CallActionLoading]",
+        (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: false,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: null,
+            ),
+          );
+
+          when(callActionBloc.stream).thenAnswer((_) =>
+              Stream.value(const CallActionLoading(CallActionType.ended)));
+
+          await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
+          await tester.pump();
+
+          expect(findEndCallButtonIcon(), findsNothing);
+          expect(findEndCallButtonLoading(), findsOneWidget);
+        });
+      });
+    });
+  });
+
+  group("Flashlight Button", () {
+    testWidgets(
+        'Should call [VideoCallSettingFlashlightUpdated()] when flashlight '
+        'button is tapped', (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: false,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: null,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
+          await tester.tap(findFlashlightButton());
+          await tester.pump();
+
+          verify(
+              videoCallBloc.add(const VideoCallSettingFlashlightUpdated(true)));
+          expect(findFlashlightButtonIcon(), findsOneWidget);
+          expect(findFlashlightButtonLoading(), findsNothing);
+        });
+      });
+    });
+
+    testWidgets(
+        "Should show loading indicator when [VideoCallSettingFlashlightLoading]",
+        (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: false,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: null,
+            ),
+          );
+
+          when(videoCallBloc.stream).thenAnswer(
+            (_) => Stream.value(
+              const VideoCallSettingFlashlightLoading(
+                setting: null,
+                isLocalJoined: false,
+                isCallEnded: false,
+                isUserOffline: false,
+                remoteUID: null,
+              ),
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
+          await tester.pump();
+
+          expect(findFlashlightButtonIcon(), findsNothing);
+          expect(findFlashlightButtonLoading(), findsOneWidget);
+        });
+      });
+    });
+  });
+
+  group("Flip Button", () {
+    testWidgets(
+        "Should call [VideoCallSettingFlipUpdated()] when flip button is tapped",
+        (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: false,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: null,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
+          await tester.tap(findFlipButton());
+          await tester.pump();
+
+          verify(videoCallBloc.add(const VideoCallSettingFlipUpdated(true)));
+          expect(findFlipButtonIcon(), findsOneWidget);
+          expect(findFlipButtonLoading(), findsNothing);
+        });
+      });
+    });
+
+    testWidgets(
+        "Should show loading indicator when [VideoCallSettingFlipLoading]",
+        (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: false,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: null,
+            ),
+          );
+
+          when(videoCallBloc.stream).thenAnswer(
+            (_) => Stream.value(
+              const VideoCallSettingFlipLoading(
+                setting: null,
+                isLocalJoined: false,
+                isCallEnded: false,
+                isUserOffline: false,
+                remoteUID: null,
+              ),
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
+          await tester.pump();
+
+          expect(findFlipButtonIcon(), findsNothing);
+          expect(findFlipButtonLoading(), findsOneWidget);
+        });
+      });
+    });
+  });
 
   group("Bloc Listener", () {
     testWidgets(

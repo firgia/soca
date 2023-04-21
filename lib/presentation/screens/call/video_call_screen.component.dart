@@ -50,15 +50,20 @@ class _ActionButton extends StatelessWidget {
         return Transform.scale(
           scale: 1.1,
           child: FloatingActionButton(
+            key: const Key("video_call_screen_end_call_button"),
             onPressed: isLoading
                 ? null
                 : () => callActionBloc.add(CallActionEnded(callingSetup.id)),
             heroTag: null,
             backgroundColor: Colors.red,
             child: isLoading
-                ? const AdaptiveLoading(color: Colors.white)
+                ? const AdaptiveLoading(
+                    key: Key("video_call_screen_end_call_button_loading"),
+                    color: Colors.white,
+                  )
                 : const Icon(
                     Icons.call_end_rounded,
+                    key: Key("video_call_screen_end_call_button_icon"),
                     color: Colors.white,
                     size: 26,
                   ),
@@ -77,6 +82,9 @@ class _ActionButton extends StatelessWidget {
         final isLoading = state is VideoCallSettingFlashlightLoading;
 
         return _IconButton(
+          buttonKey: const Key("video_call_screen_flashlight_button"),
+          iconKey: const Key("video_call_screen_flashlight_button_icon"),
+          loadingKey: const Key("video_call_screen_flashlight_button_loading"),
           enabled: enableFlashlight,
           isLoading: isLoading,
           onPressed: () {
@@ -99,6 +107,9 @@ class _ActionButton extends StatelessWidget {
         final isLoading = state is VideoCallSettingFlipLoading;
 
         return _IconButton(
+          buttonKey: const Key("video_call_screen_flip_button"),
+          iconKey: const Key("video_call_screen_flip_button_icon"),
+          loadingKey: const Key("video_call_screen_flip_button_loading"),
           enabled: enableFlip,
           isLoading: isLoading,
           onPressed: () {
@@ -115,14 +126,16 @@ class _ActionButton extends StatelessWidget {
 
 class _IconButton extends StatelessWidget {
   const _IconButton({
+    required this.buttonKey,
+    required this.loadingKey,
+    required this.iconKey,
     required this.enabled,
     required this.isLoading,
     required this.onPressed,
     required this.icon,
     this.disableIcon,
     this.flip = false,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final VoidCallback onPressed;
   final bool isLoading;
@@ -130,6 +143,9 @@ class _IconButton extends StatelessWidget {
   final IconData icon;
   final IconData? disableIcon;
   final bool flip;
+  final Key buttonKey;
+  final Key loadingKey;
+  final Key iconKey;
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +154,7 @@ class _IconButton extends StatelessWidget {
       child: Opacity(
         opacity: isLoading ? .6 : 1,
         child: FloatingActionButton(
+          key: buttonKey,
           onPressed: isLoading ? null : onPressed,
           heroTag: null,
           elevation: 0,
@@ -145,11 +162,12 @@ class _IconButton extends StatelessWidget {
               ? Colors.white.withOpacity(.6)
               : Colors.black.withOpacity(.6),
           child: isLoading
-              ? const AdaptiveLoading(color: Colors.white)
+              ? AdaptiveLoading(key: loadingKey, color: Colors.white)
               : FlipWidget(
                   flip: flip,
                   child: Icon(
                     enabled ? icon : (disableIcon ?? icon),
+                    key: iconKey,
                     color: enabled ? Colors.black : Colors.white,
                   ),
                 ),
