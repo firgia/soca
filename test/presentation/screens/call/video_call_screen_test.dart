@@ -497,7 +497,12 @@ void main() {
           );
 
           when(videoCallBloc.state).thenReturn(state);
-          when(videoCallBloc.stream).thenAnswer((_) => Stream.value(state));
+          when(videoCallBloc.stream).thenAnswer((_) => Stream.fromIterable(
+                [
+                  state.copyWith(setting: const CallSetting(enableFlip: true)),
+                  state
+                ],
+              ));
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
           await tester.pump();
 
@@ -548,7 +553,15 @@ void main() {
           );
 
           when(videoCallBloc.state).thenReturn(state);
-          when(videoCallBloc.stream).thenAnswer((_) => Stream.value(state));
+          when(videoCallBloc.stream).thenAnswer(
+            (_) => Stream.fromIterable(
+              [
+                state.copyWith(
+                    setting: const CallSetting(enableFlashlight: true)),
+                state
+              ],
+            ),
+          );
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
           await tester.pump();
 
