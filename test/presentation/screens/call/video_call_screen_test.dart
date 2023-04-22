@@ -662,11 +662,7 @@ void main() {
             ),
           );
 
-          await tester.pumpApp(
-              child: VideoCallScreen(
-            setup: blindUser,
-            key: UniqueKey(),
-          ));
+          await tester.pumpApp(child: VideoCallScreen(setup: blindUser));
 
           AgoraVideoView agoraVideoView =
               findAgoraView().getWidget() as AgoraVideoView;
@@ -695,11 +691,7 @@ void main() {
             ),
           );
 
-          await tester.pumpApp(
-              child: VideoCallScreen(
-            setup: volunteerUser,
-            key: UniqueKey(),
-          ));
+          await tester.pumpApp(child: VideoCallScreen(setup: volunteerUser));
 
           AgoraVideoView agoraVideoView =
               findAgoraView().getWidget() as AgoraVideoView;
