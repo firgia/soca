@@ -45,8 +45,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   final Logger _logger = Logger("Video Call Screen");
   bool hasBeenSwitchCamera = false;
-  bool? lastEnableFlashlight;
-  bool? lastEnableFlip;
+  bool lastEnableFlashlight = false;
+  bool lastEnableFlip = false;
   bool isOnProcessEndCall = false;
 
   @override
