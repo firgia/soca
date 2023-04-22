@@ -204,7 +204,13 @@ void main() {
           await tester.pump();
 
           verify(
-              videoCallBloc.add(const VideoCallSettingFlashlightUpdated(true)));
+            videoCallBloc.add(
+              VideoCallSettingFlashlightUpdated(
+                callID: callingSetup.id,
+                value: true,
+              ),
+            ),
+          );
           expect(findFlashlightButtonIcon(), findsOneWidget);
           expect(findFlashlightButtonLoading(), findsNothing);
         });
@@ -268,7 +274,14 @@ void main() {
           await tester.tap(findFlipButton());
           await tester.pump();
 
-          verify(videoCallBloc.add(const VideoCallSettingFlipUpdated(true)));
+          verify(
+            videoCallBloc.add(
+              VideoCallSettingFlipUpdated(
+                callID: callingSetup.id,
+                value: true,
+              ),
+            ),
+          );
           expect(findFlipButtonIcon(), findsOneWidget);
           expect(findFlipButtonLoading(), findsNothing);
         });

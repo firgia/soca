@@ -250,5 +250,185 @@ void main() {
         ],
       );
     });
+
+    group("VideoCallSettingFlashlightUpdated()", () {
+      blocTest<VideoCallBloc, VideoCallState>(
+        'Should emits [VideoCallSettingFlashlightLoading, VideoCallState] when '
+        'successfully to updated.',
+        build: () => VideoCallBloc(),
+        act: (videoCall) {
+          videoCall.add(
+            const VideoCallSettingFlashlightUpdated(
+              callID: "123",
+              value: true,
+            ),
+          );
+        },
+        expect: () => <VideoCallState>[
+          const VideoCallSettingFlashlightLoading(
+            isLocalJoined: false,
+            isCallEnded: false,
+            isUserOffline: false,
+            remoteUID: null,
+            setting: null,
+          ),
+          const VideoCallState(
+            isLocalJoined: false,
+            isCallEnded: false,
+            isUserOffline: false,
+            remoteUID: null,
+            setting: null,
+          ),
+        ],
+        verify: (bloc) {
+          verify(
+            callingRepository.updateCallSettings(
+              callID: "123",
+              enableFlashlight: true,
+              enableFlip: null,
+            ),
+          );
+        },
+      );
+
+      blocTest<VideoCallBloc, VideoCallState>(
+        'Should emits [VideoCallSettingFlashlightLoading, VideoCallError] when '
+        'error to update.',
+        build: () => VideoCallBloc(),
+        setUp: () {
+          when(
+            callingRepository.updateCallSettings(
+              callID: "123",
+              enableFlashlight: true,
+              enableFlip: null,
+            ),
+          ).thenThrow(const CallingFailure());
+        },
+        act: (videoCall) {
+          videoCall.add(
+            const VideoCallSettingFlashlightUpdated(
+              callID: "123",
+              value: true,
+            ),
+          );
+        },
+        expect: () => <VideoCallState>[
+          const VideoCallSettingFlashlightLoading(
+            isLocalJoined: false,
+            isCallEnded: false,
+            isUserOffline: false,
+            remoteUID: null,
+            setting: null,
+          ),
+          const VideoCallError(
+            isLocalJoined: false,
+            isCallEnded: false,
+            isUserOffline: false,
+            remoteUID: null,
+            setting: null,
+            failure: CallingFailure(),
+          ),
+        ],
+        verify: (bloc) {
+          verify(
+            callingRepository.updateCallSettings(
+              callID: "123",
+              enableFlashlight: true,
+              enableFlip: null,
+            ),
+          );
+        },
+      );
+    });
+
+    group("VideoCallSettingFlipUpdated()", () {
+      blocTest<VideoCallBloc, VideoCallState>(
+        'Should emits [VideoCallSettingFlipLoading, VideoCallState] when '
+        'successfully to updated.',
+        build: () => VideoCallBloc(),
+        act: (videoCall) {
+          videoCall.add(
+            const VideoCallSettingFlipUpdated(
+              callID: "123",
+              value: true,
+            ),
+          );
+        },
+        expect: () => <VideoCallState>[
+          const VideoCallSettingFlipLoading(
+            isLocalJoined: false,
+            isCallEnded: false,
+            isUserOffline: false,
+            remoteUID: null,
+            setting: null,
+          ),
+          const VideoCallState(
+            isLocalJoined: false,
+            isCallEnded: false,
+            isUserOffline: false,
+            remoteUID: null,
+            setting: null,
+          ),
+        ],
+        verify: (bloc) {
+          verify(
+            callingRepository.updateCallSettings(
+              callID: "123",
+              enableFlashlight: null,
+              enableFlip: true,
+            ),
+          );
+        },
+      );
+
+      blocTest<VideoCallBloc, VideoCallState>(
+        'Should emits [VideoCallSettingFlipLoading, VideoCallError] when '
+        'error to update.',
+        build: () => VideoCallBloc(),
+        setUp: () {
+          when(
+            callingRepository.updateCallSettings(
+              callID: "123",
+              enableFlashlight: null,
+              enableFlip: true,
+            ),
+          ).thenThrow(const CallingFailure());
+        },
+        act: (videoCall) {
+          videoCall.add(
+            const VideoCallSettingFlipUpdated(
+              callID: "123",
+              value: true,
+            ),
+          );
+        },
+        expect: () => <VideoCallState>[
+          const VideoCallSettingFlipLoading(
+            isLocalJoined: false,
+            isCallEnded: false,
+            isUserOffline: false,
+            remoteUID: null,
+            setting: null,
+          ),
+          const VideoCallError(
+            isLocalJoined: false,
+            isCallEnded: false,
+            isUserOffline: false,
+            remoteUID: null,
+            setting: null,
+            failure: CallingFailure(),
+          ),
+        ],
+        verify: (bloc) {
+          verify(
+            callingRepository.updateCallSettings(
+              callID: "123",
+              enableFlashlight: null,
+              enableFlip: true,
+            ),
+          );
+        },
+      );
+    });
   });
 }

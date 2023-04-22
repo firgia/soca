@@ -9,6 +9,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 
 import '../../../core/core.dart';
 import '../../../data/data.dart';
@@ -19,6 +20,7 @@ part 'video_call_state.dart';
 
 class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
   final CallingRepository _callingRepository = sl<CallingRepository>();
+  final Logger _logger = Logger("Video Call Bloc");
 
   VideoCallBloc()
       : super(
@@ -34,6 +36,8 @@ class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
     on<VideoCallIsLocalJoinedChanged>(_onIsLocalJoinedChanged);
     on<VideoCallIsUserOfflineChanged>(_onIsUserOfflineChanged);
     on<VideoCallRemoteUIDChanged>(_onRemoteUIDChanged);
+    on<VideoCallSettingFlashlightUpdated>(_onSettingFlashlightUpdated);
+    on<VideoCallSettingFlipUpdated>(_onSettingFlipUpdated);
   }
 
   void _onStarted(
@@ -52,12 +56,9 @@ class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
                   data == CallState.endedWithDeclined ||
                   data == CallState.endedWithUnanswered);
         },
-        onError: (error, stackTrace) => VideoCallError(
-          setting: state.setting,
-          isLocalJoined: state.isLocalJoined,
-          isCallEnded: state.isCallEnded,
-          isUserOffline: state.isUserOffline,
-          remoteUID: state.remoteUID,
+        onError: (error, stackTrace) => VideoCallError.fromState(
+          state,
+          error is CallingFailure ? error : null,
         ),
       ),
       emit.forEach(
@@ -65,12 +66,9 @@ class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
         onData: (data) {
           return state.copyWith(setting: data);
         },
-        onError: (error, stackTrace) => VideoCallError(
-          setting: state.setting,
-          isLocalJoined: state.isLocalJoined,
-          isCallEnded: state.isCallEnded,
-          isUserOffline: state.isUserOffline,
-          remoteUID: state.remoteUID,
+        onError: (error, stackTrace) => VideoCallError.fromState(
+          state,
+          error is CallingFailure ? error : null,
         ),
       )
     ]);
@@ -95,5 +93,73 @@ class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
     Emitter<VideoCallState> emit,
   ) {
     emit(state.copyWith(remoteUID: event.value));
+  }
+
+  void _onSettingFlashlightUpdated(
+    VideoCallSettingFlashlightUpdated event,
+    Emitter<VideoCallState> emit,
+  ) async {
+    String callID = event.callID;
+
+    emit(VideoCallSettingFlashlightLoading.fromState(state));
+    _logger.info("Updating flashlight data...");
+
+    try {
+      await _callingRepository.updateCallSettings(
+        callID: callID,
+        enableFlashlight: event.value,
+        enableFlip: null,
+      );
+
+      emit(
+        VideoCallState(
+          isCallEnded: state.isCallEnded,
+          isLocalJoined: state.isLocalJoined,
+          isUserOffline: state.isUserOffline,
+          remoteUID: state.remoteUID,
+          setting: state.setting,
+        ),
+      );
+    } on CallingFailure catch (e) {
+      _logger.shout("Error to update flashlight data");
+      emit(VideoCallError.fromState(state, e));
+    } catch (e) {
+      _logger.shout("Error to update flashlight data");
+      emit(VideoCallError.fromState(state));
+    }
+  }
+
+  void _onSettingFlipUpdated(
+    VideoCallSettingFlipUpdated event,
+    Emitter<VideoCallState> emit,
+  ) async {
+    String callID = event.callID;
+
+    emit(VideoCallSettingFlipLoading.fromState(state));
+    _logger.info("Updating flip data...");
+
+    try {
+      await _callingRepository.updateCallSettings(
+        callID: callID,
+        enableFlashlight: null,
+        enableFlip: event.value,
+      );
+
+      emit(
+        VideoCallState(
+          isCallEnded: state.isCallEnded,
+          isLocalJoined: state.isLocalJoined,
+          isUserOffline: state.isUserOffline,
+          remoteUID: state.remoteUID,
+          setting: state.setting,
+        ),
+      );
+    } on CallingFailure catch (e) {
+      _logger.shout("Error to update flip data");
+      emit(VideoCallError.fromState(state, e));
+    } catch (e) {
+      _logger.shout("Error to update flip data");
+      emit(VideoCallError.fromState(state));
+    }
   }
 }

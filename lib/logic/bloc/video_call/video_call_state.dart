@@ -58,6 +58,15 @@ class VideoCallSettingFlipLoading extends VideoCallState {
     required super.isUserOffline,
     required super.remoteUID,
   });
+
+  factory VideoCallSettingFlipLoading.fromState(VideoCallState state) =>
+      VideoCallSettingFlipLoading(
+        isCallEnded: state.isCallEnded,
+        isLocalJoined: state.isLocalJoined,
+        isUserOffline: state.isUserOffline,
+        remoteUID: state.remoteUID,
+        setting: state.setting,
+      );
 }
 
 class VideoCallSettingFlashlightLoading extends VideoCallState {
@@ -68,14 +77,40 @@ class VideoCallSettingFlashlightLoading extends VideoCallState {
     required super.isUserOffline,
     required super.remoteUID,
   });
+
+  factory VideoCallSettingFlashlightLoading.fromState(VideoCallState state) =>
+      VideoCallSettingFlashlightLoading(
+        isCallEnded: state.isCallEnded,
+        isLocalJoined: state.isLocalJoined,
+        isUserOffline: state.isUserOffline,
+        remoteUID: state.remoteUID,
+        setting: state.setting,
+      );
 }
 
 class VideoCallError extends VideoCallState {
+  final CallingFailure? failure;
+
   const VideoCallError({
     required super.setting,
     required super.isLocalJoined,
     required super.isCallEnded,
     required super.isUserOffline,
     required super.remoteUID,
+    this.failure,
   });
+
+  factory VideoCallError.fromState(VideoCallState state,
+          [CallingFailure? failure]) =>
+      VideoCallError(
+        isCallEnded: state.isCallEnded,
+        isLocalJoined: state.isLocalJoined,
+        isUserOffline: state.isUserOffline,
+        remoteUID: state.remoteUID,
+        setting: state.setting,
+        failure: failure,
+      );
+
+  @override
+  List<Object?> get props => super.props + [failure];
 }

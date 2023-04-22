@@ -88,8 +88,12 @@ class _ActionButton extends StatelessWidget {
           enabled: enableFlashlight,
           isLoading: isLoading,
           onPressed: () {
-            videoCallBloc
-                .add(VideoCallSettingFlashlightUpdated(!enableFlashlight));
+            videoCallBloc.add(
+              VideoCallSettingFlashlightUpdated(
+                callID: callingSetup.id,
+                value: !enableFlashlight,
+              ),
+            );
           },
           icon: Icons.flashlight_on_rounded,
           disableIcon: Icons.flashlight_off_rounded,
@@ -113,7 +117,12 @@ class _ActionButton extends StatelessWidget {
           enabled: enableFlip,
           isLoading: isLoading,
           onPressed: () {
-            videoCallBloc.add(VideoCallSettingFlipUpdated(!enableFlip));
+            videoCallBloc.add(
+              VideoCallSettingFlipUpdated(
+                callID: callingSetup.id,
+                value: !enableFlip,
+              ),
+            );
           },
           icon: Icons.flip,
           disableIcon: Icons.flip,

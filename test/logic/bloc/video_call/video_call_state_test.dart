@@ -8,12 +8,21 @@
  */
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
 import 'package:soca/logic/logic.dart';
 
 void main() {
+  VideoCallState defaultState = const VideoCallState(
+    setting: CallSetting(enableFlip: false, enableFlashlight: true),
+    isLocalJoined: true,
+    isCallEnded: false,
+    isUserOffline: false,
+    remoteUID: 1,
+  );
+
   group("VideoCallState", () {
-    group("()", () {
+    group(".()", () {
       test("Should fill up the fields based on the constructor parameter", () {
         const VideoCallState state = VideoCallState(
           setting: CallSetting(enableFlip: false, enableFlashlight: true),
@@ -102,6 +111,123 @@ void main() {
         expect(state.isCallEnded, false);
         expect(state.isUserOffline, false);
         expect(state.remoteUID, 2);
+      });
+    });
+  });
+
+  group("VideoCallSettingFlashlightLoading", () {
+    group(".()", () {
+      test("Should fill up the fields based on the constructor parameter", () {
+        const VideoCallSettingFlashlightLoading state =
+            VideoCallSettingFlashlightLoading(
+          setting: CallSetting(enableFlip: false, enableFlashlight: true),
+          isLocalJoined: true,
+          isCallEnded: false,
+          isUserOffline: false,
+          remoteUID: 1,
+        );
+
+        expect(state.setting,
+            const CallSetting(enableFlip: false, enableFlashlight: true));
+        expect(state.isLocalJoined, true);
+        expect(state.isCallEnded, false);
+        expect(state.isUserOffline, false);
+        expect(state.remoteUID, 1);
+      });
+    });
+
+    group(".fromState()", () {
+      test("Should copy from state", () {
+        VideoCallSettingFlashlightLoading state =
+            VideoCallSettingFlashlightLoading.fromState(defaultState);
+
+        expect(
+          state.setting,
+          const CallSetting(enableFlip: false, enableFlashlight: true),
+        );
+        expect(state.isLocalJoined, true);
+        expect(state.isCallEnded, false);
+        expect(state.isUserOffline, false);
+        expect(state.remoteUID, 1);
+      });
+    });
+  });
+
+  group("VideoCallSettingFlipLoading", () {
+    group(".()", () {
+      test("Should fill up the fields based on the constructor parameter", () {
+        const VideoCallSettingFlipLoading state = VideoCallSettingFlipLoading(
+          setting: CallSetting(enableFlip: false, enableFlashlight: true),
+          isLocalJoined: true,
+          isCallEnded: false,
+          isUserOffline: false,
+          remoteUID: 1,
+        );
+
+        expect(state.setting,
+            const CallSetting(enableFlip: false, enableFlashlight: true));
+        expect(state.isLocalJoined, true);
+        expect(state.isCallEnded, false);
+        expect(state.isUserOffline, false);
+        expect(state.remoteUID, 1);
+      });
+    });
+
+    group(".fromState()", () {
+      test("Should copy from state", () {
+        VideoCallSettingFlipLoading state =
+            VideoCallSettingFlipLoading.fromState(defaultState);
+
+        expect(
+          state.setting,
+          const CallSetting(enableFlip: false, enableFlashlight: true),
+        );
+        expect(state.isLocalJoined, true);
+        expect(state.isCallEnded, false);
+        expect(state.isUserOffline, false);
+        expect(state.remoteUID, 1);
+      });
+    });
+  });
+
+  group("VideoCallSettingFlipLoading", () {
+    group(".()", () {
+      test("Should fill up the fields based on the constructor parameter", () {
+        const VideoCallError state = VideoCallError(
+          setting: CallSetting(enableFlip: false, enableFlashlight: true),
+          isLocalJoined: true,
+          isCallEnded: false,
+          isUserOffline: false,
+          remoteUID: 1,
+          failure: CallingFailure(code: CallingFailureCode.notFound),
+        );
+
+        expect(state.setting,
+            const CallSetting(enableFlip: false, enableFlashlight: true));
+        expect(state.isLocalJoined, true);
+        expect(state.isCallEnded, false);
+        expect(state.isUserOffline, false);
+        expect(state.remoteUID, 1);
+        expect(state.failure,
+            const CallingFailure(code: CallingFailureCode.notFound));
+      });
+    });
+
+    group(".fromState()", () {
+      test("Should copy from state", () {
+        VideoCallError state = VideoCallError.fromState(defaultState,
+            const CallingFailure(code: CallingFailureCode.notFound));
+
+        expect(
+          state.setting,
+          const CallSetting(enableFlip: false, enableFlashlight: true),
+        );
+        expect(state.isLocalJoined, true);
+        expect(state.isCallEnded, false);
+        expect(state.isUserOffline, false);
+        expect(state.remoteUID, 1);
+        expect(state.failure,
+            const CallingFailure(code: CallingFailureCode.notFound));
       });
     });
   });

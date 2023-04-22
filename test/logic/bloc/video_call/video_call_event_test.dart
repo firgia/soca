@@ -43,10 +43,13 @@ void main() {
   group("VideoCallSettingFlipUpdated", () {
     group("()", () {
       test("Should fill up the fields based on the constructor parameter", () {
-        const event = VideoCallSettingFlipUpdated(false);
-        const event2 = VideoCallSettingFlipUpdated(true);
+        const event = VideoCallSettingFlipUpdated(callID: "123", value: false);
+        const event2 = VideoCallSettingFlipUpdated(callID: "456", value: true);
 
+        expect(event.callID, "123");
         expect(event.value, false);
+
+        expect(event2.callID, "456");
         expect(event2.value, true);
       });
     });
@@ -55,10 +58,15 @@ void main() {
   group("VideoCallSettingFlashlightUpdated", () {
     group("()", () {
       test("Should fill up the fields based on the constructor parameter", () {
-        const event = VideoCallSettingFlashlightUpdated(false);
-        const event2 = VideoCallSettingFlashlightUpdated(true);
+        const event =
+            VideoCallSettingFlashlightUpdated(callID: "123", value: false);
+        const event2 =
+            VideoCallSettingFlashlightUpdated(callID: "456", value: true);
 
+        expect(event.callID, "123");
         expect(event.value, false);
+
+        expect(event2.callID, "456");
         expect(event2.value, true);
       });
     });

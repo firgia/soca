@@ -30,18 +30,26 @@ class VideoCallStarted extends VideoCallEvent {
 }
 
 class VideoCallSettingFlipUpdated extends VideoCallEvent {
+  final String callID;
   final bool value;
 
-  const VideoCallSettingFlipUpdated(this.value);
+  const VideoCallSettingFlipUpdated({
+    required this.callID,
+    required this.value,
+  });
 
   @override
   List<Object?> get props => [value];
 }
 
 class VideoCallSettingFlashlightUpdated extends VideoCallEvent {
+  final String callID;
   final bool value;
 
-  const VideoCallSettingFlashlightUpdated(this.value);
+  const VideoCallSettingFlashlightUpdated({
+    required this.callID,
+    required this.value,
+  });
 
   @override
   List<Object?> get props => [value];
