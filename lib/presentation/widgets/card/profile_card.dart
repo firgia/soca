@@ -11,10 +11,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_icons/custom_icons.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import '../../../config/config.dart';
 import '../../../core/core.dart';
 import '../../../data/data.dart';
+import '../../../injection.dart';
 import '../chip/chip.dart';
 import '../image/image.dart';
 import '../loading/loading.dart';
@@ -154,7 +156,10 @@ class _Item extends StatelessWidget with UIMixin {
               isLTR(context) ? Alignment.bottomLeft : Alignment.bottomRight,
           children: [
             ProfileImage(
-              CachedNetworkImageProvider(avatar),
+              CachedNetworkImageProvider(
+                avatar,
+                cacheManager: sl<DefaultCacheManager>(),
+              ),
               radius: 60,
             ),
             if (isOnline != null)

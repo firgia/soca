@@ -15,6 +15,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -62,6 +63,7 @@ void setupInjection() {
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   sl.registerFactory<Completer>(() => Completer());
+  sl.registerFactory<DefaultCacheManager>(() => DefaultCacheManager());
   sl.registerSingleton<DotEnv>(dotenv);
   sl.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage(
     aOptions: AndroidOptions(encryptedSharedPreferences: true),

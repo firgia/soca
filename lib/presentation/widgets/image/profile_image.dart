@@ -11,8 +11,10 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import '../../../core/core.dart';
+import '../../../injection.dart';
 import '../loading/loading.dart';
 
 class _Data {
@@ -200,6 +202,7 @@ class _Item extends StatelessWidget {
       imageUrl: src,
       width: config.radius,
       height: config.radius,
+      cacheManager: sl<DefaultCacheManager>(),
       fit: BoxFit.cover,
       placeholder: (context, url) => _ItemLoading(radius: config.radius),
       errorWidget: (context, url, error) => _buildError(),

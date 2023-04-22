@@ -41,6 +41,7 @@ dependencies:
   easy_localization: ^3.0.1
   equatable: ^2.0.5
   eva_icons_flutter: ^3.1.0
+  file: ^6.1.4
   firebase_auth: ^4.2.5
   firebase_core: ^2.4.1
   firebase_database: ^10.0.9
@@ -48,6 +49,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.2
+  flutter_cache_manager: ^3.3.0
   flutter_callkit_incoming: ^1.0.3+3
   flutter_dotenv: ^5.0.2
   flutter_native_splash: ^2.2.17
@@ -83,6 +85,7 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   mockito: ^5.3.2
+  mocktail: ^0.3.0
   mocktail_image_network: ^0.3.1
 
 flutter:

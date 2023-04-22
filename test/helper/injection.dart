@@ -160,6 +160,14 @@ MockCompleter getMockCompleter() {
   return mock;
 }
 
+FakeDefaultCacheManager getFakeDefaultCacheManager() {
+  FakeDefaultCacheManager mock = FakeDefaultCacheManager();
+  _removeRegistrationIfExists<DefaultCacheManager>();
+  locator.registerSingleton<DefaultCacheManager>(mock);
+
+  return mock;
+}
+
 MockDotEnv getMockDotEnv() {
   MockDotEnv mock = MockDotEnv();
   _removeRegistrationIfExists<DotEnv>();
@@ -380,6 +388,7 @@ void registerLocator() {
 
   /* ------------------------------> DEPENDENCIES <-------------------------- */
   getMockCompleter();
+  getFakeDefaultCacheManager();
   getMockDotEnv();
   getMockFlutterSecureStorage();
   getMockFirebaseAuth();
@@ -434,6 +443,7 @@ void unregisterLocator() {
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   locator.unregister<Completer>();
+  locator.unregister<DefaultCacheManager>();
   locator.unregister<DotEnv>();
   locator.unregister<FlutterSecureStorage>();
   locator.unregister<FirebaseAuth>();

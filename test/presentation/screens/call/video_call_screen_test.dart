@@ -20,10 +20,12 @@ import 'package:soca/data/data.dart';
 import 'package:soca/logic/logic.dart';
 import 'package:soca/presentation/presentation.dart';
 
+import '../../../fake/fake.dart';
 import '../../../helper/helper.dart';
 import '../../../mock/mock.dart';
 
 void main() {
+  late FakeDefaultCacheManager imageCacheManager;
   late MockAppNavigator appNavigator;
   late MockCallActionBloc callActionBloc;
   late MockDeviceInfo deviceInfo;
@@ -34,6 +36,7 @@ void main() {
 
   setUp(() {
     registerLocator();
+    imageCacheManager = getFakeDefaultCacheManager();
     appNavigator = getMockAppNavigator();
     callActionBloc = getMockCallActionBloc();
     deviceInfo = getMockDeviceInfo();
@@ -47,6 +50,8 @@ void main() {
     when(dotEnv.env).thenReturn({"AGORA_APP_ID": "abc"});
     when(window.platformBrightness).thenReturn(Brightness.dark);
     when(widgetBinding.window).thenReturn(window);
+
+    imageCacheManager.returns("avatar", kTransparentImage);
   });
 
   tearDown(() => unregisterLocator());
@@ -657,7 +662,11 @@ void main() {
             ),
           );
 
-          await tester.pumpApp(child: VideoCallScreen(setup: blindUser));
+          await tester.pumpApp(
+              child: VideoCallScreen(
+            setup: blindUser,
+            key: UniqueKey(),
+          ));
 
           AgoraVideoView agoraVideoView =
               findAgoraView().getWidget() as AgoraVideoView;
@@ -686,7 +695,11 @@ void main() {
             ),
           );
 
-          await tester.pumpApp(child: VideoCallScreen(setup: volunteerUser));
+          await tester.pumpApp(
+              child: VideoCallScreen(
+            setup: volunteerUser,
+            key: UniqueKey(),
+          ));
 
           AgoraVideoView agoraVideoView =
               findAgoraView().getWidget() as AgoraVideoView;
