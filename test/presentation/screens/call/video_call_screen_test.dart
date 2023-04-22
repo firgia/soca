@@ -121,6 +121,8 @@ void main() {
   Finder findFlipWidgetVolunteer() =>
       find.byKey(const Key("video_call_screen_video_view_volunteer_user_flip"));
 
+  Finder findProfileImage() => find.byType(ProfileImage);
+
   Finder findVideoViewBlind() =>
       find.byKey(const Key("video_call_screen_video_view_blind_user"));
 
@@ -853,6 +855,52 @@ void main() {
 
           expect(findAgoraView(), findsNothing);
           expect(findAdaptiveLoading(), findsOneWidget);
+        });
+      });
+    });
+  });
+
+  group("Profile", () {
+    testWidgets("Should show profile image", (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: false,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: null,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
+
+          ProfileImage profileImage =
+              findProfileImage().getWidget() as ProfileImage;
+
+          expect(findProfileImage(), findsOneWidget);
+          expect(profileImage.data?.src, callingSetup.remoteUser.avatar);
+        });
+      });
+    });
+
+    testWidgets("Should show user name text", (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: false,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: null,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
+
+          expect(find.text(callingSetup.remoteUser.name), findsOneWidget);
         });
       });
     });
