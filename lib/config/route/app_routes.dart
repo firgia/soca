@@ -56,6 +56,13 @@ abstract class AppRoutes {
             name: AppPages.unknownDevice,
             builder: (context, state) => const UnknownDeviceScreen(),
           ),
+          GoRoute(
+            path: "/${AppPages.videoCall}",
+            name: AppPages.videoCall,
+            builder: (context, state) => VideoCallScreen(
+              setup: state.extra as CallingSetup,
+            ),
+          ),
         ],
         observers: [
           AppNavigatorObserver(),

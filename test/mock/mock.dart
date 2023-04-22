@@ -9,6 +9,7 @@
 
 import 'dart:async';
 
+import 'package:agora_rtc_engine/agora_rtc_engine.dart' as agora;
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_database/firebase_database.dart';
@@ -26,6 +27,7 @@ import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
 import 'package:soca/logic/logic.dart';
+export 'mock.mocks.dart';
 
 @GenerateNiceMocks([
   /* --------------------------------> CONFIG <------------------------------ */
@@ -72,6 +74,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<ImagePicker>(),
   MockSpec<InternetConnectionChecker>(),
   MockSpec<OneSignal>(),
+  MockSpec<agora.RtcEngine>(),
   MockSpec<SingletonFlutterWindow>(),
   MockSpec<WidgetsBinding>(),
 
@@ -83,6 +86,7 @@ import 'package:soca/logic/logic.dart';
   MockSpec<SignUpBloc>(),
   MockSpec<SignUpFormBloc>(),
   MockSpec<UserBloc>(),
+  MockSpec<VideoCallBloc>(),
   MockSpec<AccountCubit>(),
   MockSpec<RouteCubit>(),
   MockSpec<SignOutCubit>(),

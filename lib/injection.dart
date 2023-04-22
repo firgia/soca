@@ -9,11 +9,13 @@
 
 import 'dart:async';
 
+import 'package:agora_rtc_engine/agora_rtc_engine.dart' as agora;
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -61,6 +63,7 @@ void setupInjection() {
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   sl.registerFactory<Completer>(() => Completer());
+  sl.registerFactory<DefaultCacheManager>(() => DefaultCacheManager());
   sl.registerSingleton<DotEnv>(dotenv);
   sl.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage(
     aOptions: AndroidOptions(encryptedSharedPreferences: true),
@@ -79,6 +82,7 @@ void setupInjection() {
     ),
   );
   sl.registerSingleton<OneSignal>(OneSignal.shared);
+  sl.registerFactory<agora.RtcEngine>(() => agora.createAgoraRtcEngine());
   sl.registerSingleton<WidgetsBinding>(WidgetsBinding.instance);
 
   /* --------------------------------> LOGIC <------------------------------- */
@@ -89,6 +93,7 @@ void setupInjection() {
   sl.registerFactory<SignUpFormBloc>(() => SignUpFormBloc());
   sl.registerFactory<SignUpBloc>(() => SignUpBloc());
   sl.registerFactory<UserBloc>(() => UserBloc());
+  sl.registerFactory<VideoCallBloc>(() => VideoCallBloc());
   sl.registerFactory<AccountCubit>(() => AccountCubit());
   sl.registerFactory<RouteCubit>(() => RouteCubit());
   sl.registerFactory<SignOutCubit>(() => SignOutCubit());

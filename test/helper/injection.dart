@@ -160,6 +160,14 @@ MockCompleter getMockCompleter() {
   return mock;
 }
 
+FakeDefaultCacheManager getFakeDefaultCacheManager() {
+  FakeDefaultCacheManager mock = FakeDefaultCacheManager();
+  _removeRegistrationIfExists<DefaultCacheManager>();
+  locator.registerSingleton<DefaultCacheManager>(mock);
+
+  return mock;
+}
+
 MockDotEnv getMockDotEnv() {
   MockDotEnv mock = MockDotEnv();
   _removeRegistrationIfExists<DotEnv>();
@@ -248,6 +256,14 @@ MockOneSignal getMockOneSignal() {
   return mock;
 }
 
+MockRtcEngine getMockRtcEngine() {
+  MockRtcEngine mock = MockRtcEngine();
+  _removeRegistrationIfExists<agora.RtcEngine>();
+  locator.registerSingleton<agora.RtcEngine>(mock);
+
+  return mock;
+}
+
 MockWidgetsBinding getMockWidgetsBinding() {
   MockWidgetsBinding mock = MockWidgetsBinding();
   _removeRegistrationIfExists<WidgetsBinding>();
@@ -314,6 +330,14 @@ MockUserBloc getMockUserBloc() {
   return mock;
 }
 
+MockVideoCallBloc getMockVideoCallBloc() {
+  MockVideoCallBloc mock = MockVideoCallBloc();
+  _removeRegistrationIfExists<VideoCallBloc>();
+  locator.registerSingleton<VideoCallBloc>(mock);
+
+  return mock;
+}
+
 MockAccountCubit getMockAccountCubit() {
   MockAccountCubit mock = MockAccountCubit();
   _removeRegistrationIfExists<AccountCubit>();
@@ -364,6 +388,7 @@ void registerLocator() {
 
   /* ------------------------------> DEPENDENCIES <-------------------------- */
   getMockCompleter();
+  getFakeDefaultCacheManager();
   getMockDotEnv();
   getMockFlutterSecureStorage();
   getMockFirebaseAuth();
@@ -375,6 +400,7 @@ void registerLocator() {
   getMockImagePicker();
   getMockInternetConnectionChecker();
   getMockOneSignal();
+  getMockRtcEngine();
   getMockWidgetsBinding();
 
   /* --------------------------------> LOGIC <------------------------------- */
@@ -385,6 +411,7 @@ void registerLocator() {
   getMockSignUpBloc();
   getMockSignUpFormBloc();
   getMockUserBloc();
+  getMockVideoCallBloc();
   getMockAccountCubit();
   getMockRouteCubit();
   getMockSignOutCubit();
@@ -416,6 +443,7 @@ void unregisterLocator() {
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
   locator.unregister<Completer>();
+  locator.unregister<DefaultCacheManager>();
   locator.unregister<DotEnv>();
   locator.unregister<FlutterSecureStorage>();
   locator.unregister<FirebaseAuth>();
@@ -427,6 +455,7 @@ void unregisterLocator() {
   locator.unregister<ImagePicker>();
   locator.unregister<InternetConnectionChecker>();
   locator.unregister<OneSignal>();
+  locator.unregister<agora.RtcEngine>();
   locator.unregister<WidgetsBinding>();
 
   /* --------------------------------> LOGIC <------------------------------- */
@@ -437,6 +466,7 @@ void unregisterLocator() {
   locator.unregister<SignUpBloc>();
   locator.unregister<SignUpFormBloc>();
   locator.unregister<UserBloc>();
+  locator.unregister<VideoCallBloc>();
   locator.unregister<AccountCubit>();
   locator.unregister<RouteCubit>();
   locator.unregister<SignOutCubit>();

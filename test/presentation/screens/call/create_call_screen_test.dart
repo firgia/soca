@@ -103,6 +103,39 @@ void main() {
         });
       });
     });
+
+    testWidgets(
+        'Should go to Video call page when '
+        '[CallActionCreatedSuccessfully]', (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          CallingSetup callingSetup = const CallingSetup(
+            id: "1",
+            rtc: RTCIdentity(token: "abc", channelName: "a", uid: 1),
+            localUser: UserCallIdentity(
+              name: "name",
+              uid: "uid",
+              avatar: "avatar",
+              type: UserType.blind,
+            ),
+            remoteUser: UserCallIdentity(
+              name: "name",
+              uid: "uid",
+              avatar: "avatar",
+              type: UserType.volunteer,
+            ),
+          );
+
+          when(callActionBloc.stream).thenAnswer(
+              (_) => Stream.value(CallActionCreatedSuccessfully(callingSetup)));
+
+          await tester.pumpApp(child: CreateCallScreen(user: user));
+          await tester.pump();
+
+          verify(appNavigator.goToVideoCall(any, setup: callingSetup));
+        });
+      });
+    });
   });
 
   group("Initial", () {

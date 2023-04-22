@@ -23,14 +23,14 @@ class Alert with UIMixin {
     _bottomSheet = AppBottomSheet(context);
   }
 
-  void showSomethingErrorMessage({
+  Future<void> showSomethingErrorMessage({
     String? title,
     String? body,
     String? errorCode,
     VoidCallback? onActionPressed,
-  }) {
+  }) async {
     if (isTablet(context)) {
-      _dialog.show(
+      return _dialog.show(
         childBuilder: (context, brightness) {
           return Container(
             constraints: const BoxConstraints(maxWidth: 400, maxHeight: 600),
@@ -47,7 +47,7 @@ class Alert with UIMixin {
         },
       );
     } else {
-      _bottomSheet.show(
+      return _bottomSheet.show(
         height: ErrorMessage.height + MediaQuery.of(context).padding.bottom,
         childBuilder: (context, brightness) {
           return SafeArea(

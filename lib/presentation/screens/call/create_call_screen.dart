@@ -52,7 +52,7 @@ class _CreateCallScreenState extends State<CreateCallScreen> {
       child: BlocListener<CallActionBloc, CallActionState>(
         listener: (context, state) {
           if (state is CallActionCreatedSuccessfully) {
-            // TODO: Go to video calling
+            appNavigator.goToVideoCall(context, setup: state.data);
           } else if (state is CallActionEndedSuccessfully) {
             appNavigator.back(context);
           } else if (state is CallActionCreatedUnanswered) {
