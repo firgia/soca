@@ -23,6 +23,7 @@ part 'call_action_event.dart';
 part 'call_action_state.dart';
 
 class CallActionBloc extends Bloc<CallActionEvent, CallActionState> {
+  final List answeredCallID = [];
   final CallKit _callKit = sl<CallKit>();
   final CallingRepository _callingRepository = sl<CallingRepository>();
   final UserRepository _userRepository = sl<UserRepository>();
@@ -33,8 +34,93 @@ class CallActionBloc extends Bloc<CallActionEvent, CallActionState> {
   CallActionBloc() : super(const CallActionInitial()) {
     on<_CallActionSetupFetched>(_onSetupFetched);
     on<_CallActionUnanswered>(_onUnanswered);
+    on<CallActionAnswered>(_onAnswered);
     on<CallActionCreated>(_onCreated);
     on<CallActionEnded>(_onEnded);
+  }
+
+  void _onAnswered(
+    CallActionAnswered event,
+    Emitter<CallActionState> emit,
+  ) async {
+    emit(const CallActionLoading(CallActionType.answered));
+    _logger.info("Answer call...");
+
+    try {
+      late Call call;
+
+      if (answeredCallID.contains(event.callID)) {
+        call = await _callingRepository.getCall(event.callID);
+      } else {
+        call = await _callingRepository.answerCall(
+          blindID: event.blindID,
+          callID: event.callID,
+        );
+
+        answeredCallID.add(event.callID);
+      }
+
+      emit(CallActionAnsweredSuccessfullyWithWaitingCaller(call));
+      _logger.info("Successfully to answer call, waiting the caller...");
+
+      String? rtcChannelID = call.rtcChannelID;
+      String? blindID = call.users?.blindID;
+      String? volunteerID = call.users?.volunteerID;
+
+      if (blindID != null && volunteerID != null && rtcChannelID != null) {
+        _logger.info("Getting blind user data..");
+
+        final blindUser = await _userRepository.getProfile(uid: blindID);
+
+        _logger.info("Getting volunteer user data..");
+        final volunteerUser =
+            await _userRepository.getProfile(uid: volunteerID);
+
+        _logger.info("Getting RTC Credential data..");
+        final credential = await _callingRepository.getRTCCredential(
+          channelName: rtcChannelID,
+          role: RTCRole.publisher,
+          userType: UserType.volunteer,
+        );
+
+        if (state is CallActionAnsweredSuccessfullyWithWaitingCaller) {
+          _logger.finest("Successfully to get data, starting video calling..");
+
+          CallingSetup callingSetup = CallingSetup(
+            rtc: RTCIdentity(
+              token: credential.token ?? "",
+              channelName: credential.channelName ?? "",
+              uid: credential.uid ?? 0,
+            ),
+            localUser: UserCallIdentity(
+              name: volunteerUser.name ?? "",
+              uid: volunteerUser.id ?? "",
+              avatar: volunteerUser.avatar?.small ?? "",
+              type: UserType.volunteer,
+            ),
+            remoteUser: UserCallIdentity(
+              name: blindUser.name ?? "",
+              uid: blindUser.id ?? "",
+              avatar: blindUser.avatar?.small ?? "",
+              type: UserType.blind,
+            ),
+            id: event.callID,
+          );
+
+          emit(CallActionAnsweredSuccessfully(callingSetup));
+        } else {
+          _logger.finest("Ignoring to emit CallActionAnsweredSuccessfully");
+        }
+      } else {
+        emit(const CallActionError(CallActionType.answered));
+      }
+    } on CallingFailure catch (e) {
+      _logger.shout("Error to answer call");
+      emit(CallActionError(CallActionType.answered, e));
+    } catch (e) {
+      _logger.shout("Error to answer call");
+      emit(const CallActionError(CallActionType.answered));
+    }
   }
 
   void _onCreated(

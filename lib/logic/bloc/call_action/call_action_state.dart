@@ -37,6 +37,22 @@ class CallActionError extends CallActionState {
   List<Object?> get props => [type, failure];
 }
 
+class CallActionAnsweredSuccessfullyWithWaitingCaller extends CallActionState {
+  final Call data;
+  const CallActionAnsweredSuccessfullyWithWaitingCaller(this.data);
+
+  @override
+  List<Object?> get props => [data];
+}
+
+class CallActionAnsweredSuccessfully extends CallActionState {
+  final CallingSetup data;
+  const CallActionAnsweredSuccessfully(this.data);
+
+  @override
+  List<Object?> get props => [data];
+}
+
 /* -------------------------> STATE FOR CREATED <---------------------------- */
 
 class CallActionCreatedSuccessfullyWithWaitingAnswer extends CallActionState {

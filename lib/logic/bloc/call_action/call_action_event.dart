@@ -17,7 +17,16 @@ abstract class CallActionEvent extends Equatable {
 }
 
 class CallActionAnswered extends CallActionEvent {
-  const CallActionAnswered();
+  final String blindID;
+  final String callID;
+
+  const CallActionAnswered({
+    required this.blindID,
+    required this.callID,
+  });
+
+  @override
+  List<Object> get props => [blindID, callID];
 }
 
 class CallActionCreated extends CallActionEvent {

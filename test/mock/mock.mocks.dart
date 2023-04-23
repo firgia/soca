@@ -997,6 +997,27 @@ class MockAppNavigator extends _i1.Mock implements _i32.AppNavigator {
         returnValueForMissingStub: false,
       ) as bool);
   @override
+  void goToAnswerCall(
+    _i17.BuildContext? context, {
+    required String? callID,
+    required String? blindID,
+    required String? name,
+    required String? urlImage,
+  }) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #goToAnswerCall,
+          [context],
+          {
+            #callID: callID,
+            #blindID: blindID,
+            #name: name,
+            #urlImage: urlImage,
+          },
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
   void goToCreateCall(
     _i17.BuildContext? context, {
     required _i3.User? user,
