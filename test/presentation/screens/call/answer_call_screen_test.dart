@@ -43,34 +43,6 @@ void main() {
   Finder findCallBackgroundImage() => find.byType(CallBackgroundImage);
   Finder findCancelButton() => find.byType(CancelCallButton);
   Finder findErrorMessage() => find.byType(ErrorMessage);
-  Finder findNoVolunteerText() =>
-      find.text(LocaleKeys.fail_to_call_no_volunteers.tr());
-
-  User user = User(
-    id: "123",
-    avatar: const URLImage(
-      small: "https://www.w3schools.com/w3images/avatar2.png",
-      medium: "https://www.w3schools.com/w3images/avatar2.png",
-      large: "https://www.w3schools.com/w3images/avatar2.png",
-      original: "https://www.w3schools.com/w3images/avatar2.png",
-    ),
-    activity: UserActivity(
-      online: true,
-      lastSeen: DateTime.tryParse("2023-02-11T14:12:06.182067"),
-    ),
-    dateOfBirth: DateTime.tryParse("2023-02-11T14:12:06.182067"),
-    gender: Gender.male,
-    language: const ["id", "en"],
-    name: "Firgia",
-    info: UserInfo(
-      dateJoined: DateTime.tryParse("2023-02-11T14:12:06.182067"),
-      listOfCallYears: const ["2022", "2023"],
-      totalCalls: 12,
-      totalFriends: 13,
-      totalVisitors: 14,
-    ),
-    type: UserType.volunteer,
-  );
 
   String callID = "456";
   String blindID = "123";
@@ -119,7 +91,7 @@ void main() {
 
     testWidgets(
         'Should go to Video call page when '
-        '[CallActionCreatedSuccessfully]', (tester) async {
+        '[CallActionAnsweredSuccessfully]', (tester) async {
       await mockNetworkImages(() async {
         await tester.runAsync(() async {
           CallingSetup callingSetup = const CallingSetup(
@@ -220,7 +192,7 @@ void main() {
           Call call = const Call(id: "123");
 
           when(callActionBloc.stream).thenAnswer((_) => Stream.fromIterable([
-                const CallActionLoading(CallActionType.created),
+                const CallActionLoading(CallActionType.answered),
                 CallActionAnsweredSuccessfullyWithWaitingCaller(call),
               ]));
 
@@ -232,12 +204,12 @@ void main() {
                 urlImage: urlImage),
           );
 
-          // Request to end call when Create call not completed yet
+          // Request to end call when Answer call not completed yet
           await tester.tap(findCancelButton());
           await tester.pump();
           expect(find.byType(AdaptiveLoading), findsOneWidget);
 
-          // Execute request end call when Create call is completed but waiting
+          // Execute request end call when Answer call is completed but waiting
           // the answer
           await Future.delayed(const Duration(milliseconds: 200));
           await tester.pump();
