@@ -28,6 +28,20 @@ abstract class AppRoutes {
             builder: (context, state) => const HomeScreen(),
             routes: [
               GoRoute(
+                  path: AppPages.answerCall,
+                  name: AppPages.answerCall,
+                  builder: (context, state) {
+                    Map<String, dynamic> extra =
+                        state.extra as Map<String, dynamic>;
+
+                    return AnswerCallScreen(
+                      callID: extra["call_id"],
+                      blindID: extra["blind_id"],
+                      name: extra["name"],
+                      urlImage: extra["url_image"],
+                    );
+                  }),
+              GoRoute(
                 path: AppPages.createCall,
                 name: AppPages.createCall,
                 builder: (context, state) => CreateCallScreen(
