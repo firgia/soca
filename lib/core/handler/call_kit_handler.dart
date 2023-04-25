@@ -7,7 +7,6 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
 
@@ -29,7 +28,7 @@ class CallKitHandler {
 }
 
 @pragma('vm:entry-point')
-void _onEvent(CallEvent? callEvent) async {
+void _onEvent(CallEvent? callEvent) {
   if (!sl.isRegistered<IncomingCallBloc>()) {
     sl.registerSingleton<IncomingCallBloc>(IncomingCallBloc());
   }
@@ -51,7 +50,7 @@ void _onEvent(CallEvent? callEvent) async {
       final blindID = data?.userCaller?.uid;
 
       if (callID != null && blindID != null) {
-        await _declineCall(callID: callID, blindID: blindID);
+        _declineCall(callID: callID, blindID: blindID);
       }
       break;
     case Event.ACTION_CALL_ENDED:
@@ -59,7 +58,7 @@ void _onEvent(CallEvent? callEvent) async {
       final callID = data?.uuid;
 
       if (callID != null) {
-        await _endCall(callID: callID);
+        _endCall(callID: callID);
       }
       break;
     case Event.ACTION_CALL_TIMEOUT:
@@ -68,7 +67,7 @@ void _onEvent(CallEvent? callEvent) async {
       final blindID = data?.userCaller?.uid;
 
       if (callID != null && blindID != null) {
-        await _declineCall(callID: callID, blindID: blindID);
+        _declineCall(callID: callID, blindID: blindID);
       }
       break;
     default:
@@ -77,12 +76,10 @@ void _onEvent(CallEvent? callEvent) async {
 }
 
 @pragma('vm:entry-point')
-Future<void> _declineCall({
+void _declineCall({
   required String callID,
   required String blindID,
 }) async {
-  await Firebase.initializeApp();
-
   if (!sl.isRegistered<CallActionBloc>()) {
     sl.registerFactory<CallActionBloc>(() => CallActionBloc());
   }
@@ -97,9 +94,7 @@ Future<void> _declineCall({
 }
 
 @pragma('vm:entry-point')
-Future<void> _endCall({required String callID}) async {
-  await Firebase.initializeApp();
-
+void _endCall({required String callID}) {
   if (!sl.isRegistered<CallActionBloc>()) {
     sl.registerFactory<CallActionBloc>(() => CallActionBloc());
   }
