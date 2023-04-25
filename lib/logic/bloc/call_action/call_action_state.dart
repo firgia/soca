@@ -77,6 +77,10 @@ class CallActionCreatedUnanswered extends CallActionState {
 
 /* --------------------------> STATE FOR ENDED <----------------------------- */
 
+class CallActionDeclinedSuccessfully extends CallActionState {
+  const CallActionDeclinedSuccessfully();
+}
+
 class CallActionEndedSuccessfully extends CallActionState {
   const CallActionEndedSuccessfully();
 }

@@ -25,6 +25,20 @@ void main() {
     });
   });
 
+  group("CallActionDeclined", () {
+    group("()", () {
+      test("Should fill up the fields based on the constructor parameter", () {
+        CallActionDeclined callAction = const CallActionDeclined(
+          callID: "123",
+          blindID: "456",
+        );
+
+        expect(callAction.callID, "123");
+        expect(callAction.blindID, "456");
+      });
+    });
+  });
+
   group("CallActionEnded", () {
     group("()", () {
       test("Should fill up the fields based on the constructor parameter", () {

@@ -401,6 +401,44 @@ void main() {
       );
     });
 
+    group("CallActionDeclined()", () {
+      blocTest<CallActionBloc, CallActionState>(
+        'Should emits [CallActionLoading, CallActionDeclinedSuccessfully] when '
+        'successfully to decline call',
+        build: () => CallActionBloc(),
+        act: (bloc) => bloc.add(
+          const CallActionDeclined(callID: "123", blindID: "456"),
+        ),
+        expect: () => <CallActionState>[
+          const CallActionLoading(CallActionType.declined),
+          const CallActionDeclinedSuccessfully(),
+        ],
+        verify: (bloc) {
+          verify(callingRepository.declineCall(callID: "123", blindID: "456"));
+        },
+      );
+
+      blocTest<CallActionBloc, CallActionState>(
+        'Should emits [CallActionLoading, CallActionError] when error to '
+        'decline the call',
+        build: () => CallActionBloc(),
+        act: (bloc) => bloc.add(
+          const CallActionDeclined(callID: "123", blindID: "456"),
+        ),
+        setUp: () {
+          when(callingRepository.declineCall(callID: "123", blindID: "456"))
+              .thenThrow(const CallingFailure());
+        },
+        expect: () => <CallActionState>[
+          const CallActionLoading(CallActionType.declined),
+          const CallActionError(CallActionType.declined, CallingFailure()),
+        ],
+        verify: (bloc) {
+          verify(callingRepository.declineCall(callID: "123", blindID: "456"));
+        },
+      );
+    });
+
     group("CallActionEnded()", () {
       blocTest<CallActionBloc, CallActionState>(
         'Should emits [CallActionLoading, CallActionEndedSuccessfully] when '
@@ -411,6 +449,9 @@ void main() {
           const CallActionLoading(CallActionType.ended),
           const CallActionEndedSuccessfully(),
         ],
+        verify: (bloc) {
+          verify(callingRepository.endCall("123"));
+        },
       );
 
       blocTest<CallActionBloc, CallActionState>(
@@ -426,6 +467,9 @@ void main() {
           const CallActionLoading(CallActionType.ended),
           const CallActionError(CallActionType.ended, CallingFailure()),
         ],
+        verify: (bloc) {
+          verify(callingRepository.endCall("123"));
+        },
       );
     });
   });

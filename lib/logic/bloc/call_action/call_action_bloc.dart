@@ -13,8 +13,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'package:soca/config/config.dart';
 
+import '../../../config/config.dart';
 import '../../../core/core.dart';
 import '../../../data/data.dart';
 import '../../../injection.dart';
@@ -36,6 +36,7 @@ class CallActionBloc extends Bloc<CallActionEvent, CallActionState> {
     on<_CallActionUnanswered>(_onUnanswered);
     on<CallActionAnswered>(_onAnswered);
     on<CallActionCreated>(_onCreated);
+    on<CallActionDeclined>(_onDeclined);
     on<CallActionEnded>(_onEnded);
   }
 
@@ -161,6 +162,32 @@ class CallActionBloc extends Bloc<CallActionEvent, CallActionState> {
     } catch (e) {
       _logger.shout("Error to create call");
       emit(const CallActionError(CallActionType.created));
+    }
+  }
+
+  void _onDeclined(
+    CallActionDeclined event,
+    Emitter<CallActionState> emit,
+  ) async {
+    String blindID = event.blindID;
+    String callID = event.callID;
+
+    emit(const CallActionLoading(CallActionType.declined));
+    _logger.info("Decline call...");
+
+    try {
+      await _callingRepository.declineCall(
+        blindID: blindID,
+        callID: callID,
+      );
+
+      emit(const CallActionDeclinedSuccessfully());
+    } on CallingFailure catch (e) {
+      _logger.shout("Error to decline call");
+      emit(CallActionError(CallActionType.declined, e));
+    } catch (e) {
+      _logger.shout("Error to decline call");
+      emit(const CallActionError(CallActionType.declined));
     }
   }
 
