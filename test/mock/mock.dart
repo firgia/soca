@@ -81,6 +81,7 @@ export 'mock.mocks.dart';
   /* --------------------------------> LOGIC <------------------------------- */
   MockSpec<CallActionBloc>(),
   MockSpec<FileBloc>(),
+  MockSpec<IncomingCallBloc>(),
   MockSpec<LanguageBloc>(),
   MockSpec<SignInBloc>(),
   MockSpec<SignUpBloc>(),

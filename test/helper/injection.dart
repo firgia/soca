@@ -290,6 +290,14 @@ MockFileBloc getMockFileBloc() {
   return mock;
 }
 
+MockIncomingCallBloc getMockIncomingCallBloc() {
+  MockIncomingCallBloc mock = MockIncomingCallBloc();
+  _removeRegistrationIfExists<IncomingCallBloc>();
+  locator.registerSingleton<IncomingCallBloc>(mock);
+
+  return mock;
+}
+
 MockLanguageBloc getMockLanguageBloc() {
   MockLanguageBloc mock = MockLanguageBloc();
   _removeRegistrationIfExists<LanguageBloc>();
@@ -406,6 +414,7 @@ void registerLocator() {
   /* --------------------------------> LOGIC <------------------------------- */
   getMockCallActionBloc();
   getMockFileBloc();
+  getMockIncomingCallBloc();
   getMockLanguageBloc();
   getMockSignInBloc();
   getMockSignUpBloc();
@@ -461,6 +470,7 @@ void unregisterLocator() {
   /* --------------------------------> LOGIC <------------------------------- */
   locator.unregister<CallActionBloc>();
   locator.unregister<FileBloc>();
+  locator.unregister<IncomingCallBloc>();
   locator.unregister<LanguageBloc>();
   locator.unregister<SignInBloc>();
   locator.unregister<SignUpBloc>();

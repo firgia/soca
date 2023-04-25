@@ -26,6 +26,7 @@ void main() {
   late MockAppNavigator appNavigator;
   late MockCompleter completer;
   late MockDeviceInfo deviceInfo;
+  late MockIncomingCallBloc incomingCallBloc;
   late MockRouteCubit routeCubit;
   late MockUserBloc userBloc;
   late MockUserRepository userRepository;
@@ -37,6 +38,7 @@ void main() {
     appNavigator = getMockAppNavigator();
     completer = getMockCompleter();
     deviceInfo = getMockDeviceInfo();
+    incomingCallBloc = getMockIncomingCallBloc();
     routeCubit = getMockRouteCubit();
     userBloc = getMockUserBloc();
     userRepository = getMockUserRepository();
@@ -64,6 +66,15 @@ void main() {
         await tester.pumpApp(child: const HomeScreen());
 
         verify(userBloc.add(const UserFetched()));
+      });
+    });
+
+    testWidgets("Should call incomingCallBloc.add(IncomingCallFetched)",
+        (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(child: const HomeScreen());
+
+        verify(incomingCallBloc.add(const IncomingCallFetched()));
       });
     });
 
@@ -169,7 +180,37 @@ void main() {
     });
   });
 
-  group("Routing", () {
+  group("Bloc Listener", () {
+    testWidgets('Should navigate to answer call page when [IncomingCallLoaded]',
+        (tester) async {
+      await tester.runAsync(() async {
+        when(incomingCallBloc.stream).thenAnswer(
+          (_) => Stream.value(
+            const IncomingCallLoaded(
+              blindID: "123",
+              id: "456",
+              name: "test",
+              urlImage: "avatar.jpg",
+            ),
+          ),
+        );
+
+        await tester.pumpApp(child: const HomeScreen());
+
+        verify(
+          appNavigator.goToAnswerCall(
+            any,
+            callID: "456",
+            blindID: "123",
+            name: "test",
+            urlImage: "avatar.jpg",
+          ),
+        );
+
+        verify(incomingCallBloc.add(const IncomingCallEventRemoved()));
+      });
+    });
+
     testWidgets(
         'Should navigate to Unknown Device page when [RouteTarget] is '
         '[AppPages.unknownDevice]', (tester) async {
