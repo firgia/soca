@@ -7,6 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+export 'app_state.dart';
 export 'calculator.dart';
 export 'custom_platform_wrapper.dart';
 export 'parser.dart';
