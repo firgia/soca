@@ -57,13 +57,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => incomingCallBloc),
         BlocProvider(create: (context) => routeCubit),
         BlocProvider(create: (context) => userBloc),
       ],
       child: MultiBlocListener(
         listeners: [
           BlocListener<IncomingCallBloc, IncomingCallState>(
+            bloc: incomingCallBloc,
             listener: (context, state) {
               if (state is IncomingCallLoaded) {
                 appNavigator.goToAnswerCall(
