@@ -35,6 +35,10 @@ void main() {
       find.byKey(const Key("error_message_internet_error"));
   Finder findErrorMessageSomethingError() =>
       find.byKey(const Key("error_message_something_error"));
+  Finder findPermanentlyDenied() =>
+      find.byKey(const Key("permission_message_permanently_denied"));
+  Finder findRestricted() =>
+      find.byKey(const Key("permission_message_restricted"));
 
   testWidgets("Should show authentication error message", (tester) async {
     await tester.runAsync(() async {
@@ -120,6 +124,65 @@ void main() {
       );
 
       expect(find.byType(ErrorMessage), findsOneWidget);
+    });
+  });
+
+  testWidgets("Should show permission permanently denied message",
+      (tester) async {
+    await tester.runAsync(() async {
+      await tester.pumpApp(
+        child: Scaffold(
+          body: Builder(
+            builder: (context) {
+              return ElevatedButton(
+                onPressed: () {
+                  Alert(context).showPermissionPermanentlyDeniedMessage();
+                },
+                child: const Text("show alert"),
+              );
+            },
+          ),
+        ),
+      );
+
+      await tester.tap(find.text("show alert"));
+      await tester.pump();
+
+      expect(
+        findPermanentlyDenied(),
+        findsOneWidget,
+      );
+
+      expect(find.byType(PermissionMessage), findsOneWidget);
+    });
+  });
+
+  testWidgets("Should show permission restricted message", (tester) async {
+    await tester.runAsync(() async {
+      await tester.pumpApp(
+        child: Scaffold(
+          body: Builder(
+            builder: (context) {
+              return ElevatedButton(
+                onPressed: () {
+                  Alert(context).showPermissionRestrictedMessage();
+                },
+                child: const Text("show alert"),
+              );
+            },
+          ),
+        ),
+      );
+
+      await tester.tap(find.text("show alert"));
+      await tester.pump();
+
+      expect(
+        findRestricted(),
+        findsOneWidget,
+      );
+
+      expect(find.byType(PermissionMessage), findsOneWidget);
     });
   });
 }
