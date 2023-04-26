@@ -627,6 +627,8 @@ PODS:
   - AgoraRtcEngine_iOS/SuperResolution (4.1.0)
   - AgoraRtcEngine_iOS/VirtualBackground (4.1.0)
   - AgoraRtcEngine_iOS/VQA (4.1.0)
+  - "app_settings (3.0.0+1)":
+    - Flutter
   - AppAuth (1.6.1):
     - AppAuth/Core (= 1.6.1)
     - AppAuth/ExternalUserAgent (= 1.6.1)
@@ -898,6 +900,7 @@ PODS:
 
 DEPENDENCIES:
   - agora_rtc_engine (from `.symlinks/plugins/agora_rtc_engine/ios`)
+  - app_settings (from `.symlinks/plugins/app_settings/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
@@ -965,6 +968,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   agora_rtc_engine:
     :path: ".symlinks/plugins/agora_rtc_engine/ios"
+  app_settings:
+    :path: ".symlinks/plugins/app_settings/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   cloud_functions:
@@ -1018,6 +1023,7 @@ SPEC CHECKSUMS:
   AgoraIrisEventFlutter_iOS: d7ee4acb57d9042dbe9d64229bfe9bf8e32b6f2f
   AgoraIrisRTC_iOS: 820fbab2d78d870a1bad4b1a02f950a390c73b48
   AgoraRtcEngine_iOS: 33f0136ad4196b2a31c8470e6b536fe77fb25f8b
+  app_settings: d103828c9f5d515c4df9ee754dabd443f7cedcf3
   AppAuth: e48b432bb4ba88b10cb2bcc50d7f3af21e78b9c2
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   cloud_firestore: fd24cb3eee2949049f63a4f23b678f5c871a5dba

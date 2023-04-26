@@ -65,6 +65,15 @@ abstract class DeviceInfo {
   /// {@endtemplate}
   Future<String?> getDevicePushTokenVoIP();
 
+  /// The current status of this permission.
+  Future<PermissionStatus> getPermissionStatus(Permission permission);
+
+  /// Request the user for access to this [Permission], if access hasn't already
+  /// been grant access before.
+  ///
+  /// Returns the new [PermissionStatus].
+  Future<PermissionStatus> requestPermission(Permission permission);
+
   /// Requests the user for access to the supplied list of [Permission]s, if
   /// they have not already been granted before.
   ///
@@ -111,6 +120,16 @@ class DeviceInfoImpl implements DeviceInfo {
   @override
   Future<String?> getDevicePushTokenVoIP() async {
     return await FlutterCallkitIncoming.getDevicePushTokenVoIP();
+  }
+
+  @override
+  Future<PermissionStatus> getPermissionStatus(Permission permission) {
+    return permission.status;
+  }
+
+  @override
+  Future<PermissionStatus> requestPermission(Permission permission) {
+    return permission.request();
   }
 
   @override

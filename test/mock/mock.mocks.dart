@@ -1304,6 +1304,32 @@ class MockDeviceInfo extends _i1.Mock implements _i34.DeviceInfo {
         returnValueForMissingStub: _i35.Future<String?>.value(),
       ) as _i35.Future<String?>);
   @override
+  _i35.Future<_i37.PermissionStatus> getPermissionStatus(
+          _i37.Permission? permission) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getPermissionStatus,
+          [permission],
+        ),
+        returnValue: _i35.Future<_i37.PermissionStatus>.value(
+            _i37.PermissionStatus.denied),
+        returnValueForMissingStub: _i35.Future<_i37.PermissionStatus>.value(
+            _i37.PermissionStatus.denied),
+      ) as _i35.Future<_i37.PermissionStatus>);
+  @override
+  _i35.Future<_i37.PermissionStatus> requestPermission(
+          _i37.Permission? permission) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #requestPermission,
+          [permission],
+        ),
+        returnValue: _i35.Future<_i37.PermissionStatus>.value(
+            _i37.PermissionStatus.denied),
+        returnValueForMissingStub: _i35.Future<_i37.PermissionStatus>.value(
+            _i37.PermissionStatus.denied),
+      ) as _i35.Future<_i37.PermissionStatus>);
+  @override
   _i35.Future<Map<_i37.Permission, _i37.PermissionStatus>> requestPermissions(
           List<_i37.Permission>? permissions) =>
       (super.noSuchMethod(
@@ -1318,6 +1344,46 @@ class MockDeviceInfo extends _i1.Mock implements _i34.DeviceInfo {
             _i35.Future<Map<_i37.Permission, _i37.PermissionStatus>>.value(
                 <_i37.Permission, _i37.PermissionStatus>{}),
       ) as _i35.Future<Map<_i37.Permission, _i37.PermissionStatus>>);
+}
+
+/// A class which mocks [DeviceSettings].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockDeviceSettings extends _i1.Mock implements _i34.DeviceSettings {
+  @override
+  _i35.Future<void> openAppSettings({
+    bool? asAnotherTask = false,
+    Function? callback,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #openAppSettings,
+          [],
+          {
+            #asAnotherTask: asAnotherTask,
+            #callback: callback,
+          },
+        ),
+        returnValue: _i35.Future<void>.value(),
+        returnValueForMissingStub: _i35.Future<void>.value(),
+      ) as _i35.Future<void>);
+  @override
+  _i35.Future<void> openNotificationSettings({
+    bool? asAnotherTask = false,
+    Function? callback,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #openNotificationSettings,
+          [],
+          {
+            #asAnotherTask: asAnotherTask,
+            #callback: callback,
+          },
+        ),
+        returnValue: _i35.Future<void>.value(),
+        returnValueForMissingStub: _i35.Future<void>.value(),
+      ) as _i35.Future<void>);
 }
 
 /// A class which mocks [AuthProvider].

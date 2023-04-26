@@ -12,6 +12,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
@@ -26,6 +27,7 @@ void main() {
   late MockAppNavigator appNavigator;
   late MockCompleter completer;
   late MockDeviceInfo deviceInfo;
+  late MockDeviceSettings deviceSettings;
   late MockIncomingCallBloc incomingCallBloc;
   late MockRouteCubit routeCubit;
   late MockUserBloc userBloc;
@@ -38,6 +40,7 @@ void main() {
     appNavigator = getMockAppNavigator();
     completer = getMockCompleter();
     deviceInfo = getMockDeviceInfo();
+    deviceSettings = getMockDeviceSettings();
     incomingCallBloc = getMockIncomingCallBloc();
     routeCubit = getMockRouteCubit();
     userBloc = getMockUserBloc();
@@ -54,11 +57,31 @@ void main() {
   tearDown(() => unregisterLocator());
 
   Finder findLoadingPanel() => find.byType(LoadingPanel);
+  Finder findPermissionCamera() =>
+      find.byKey(const Key("home_screen_permission_camera_card"));
+  Finder findPermissionCardContent() =>
+      find.byKey(const Key("home_screen_permission_card_content"));
+  Finder findPermissionCameraAllowButton() =>
+      find.byKey(const Key("home_screen_permission_camera_card_allow_button"));
+  Finder findPermissionMicrophone() =>
+      find.byKey(const Key("home_screen_permission_microphone_card"));
+  Finder findPermissionMicrophoneAllowButton() => find
+      .byKey(const Key("home_screen_permission_microphone_card_allow_button"));
+  Finder findPermissionNotification() =>
+      find.byKey(const Key("home_screen_permission_notification_card"));
+  Finder findPermissionNotificationAllowButton() => find.byKey(
+      const Key("home_screen_permission_notification_card_allow_button"));
   Finder findProfileCard() => find.byKey(const Key("home_screen_profile_card"));
   Finder findProfileCardLoading() =>
       find.byKey(const Key("home_screen_profile_card_loading"));
   Finder findVolunteerInfoCard() => find.byType(VolunteerInfoCard);
   Finder findCallVolunteerButton() => find.byType(CallVolunteerButton);
+  Finder findPermanentlyDenied() =>
+      find.byKey(const Key("permission_message_permanently_denied"));
+  Finder findRestricted() =>
+      find.byKey(const Key("permission_message_restricted"));
+  Finder findSettingsButton() =>
+      find.byKey(const Key("permission_message_settings_button"));
 
   group("Initial", () {
     testWidgets("Should call userBloc.add(UserFetched)", (tester) async {
@@ -94,7 +117,7 @@ void main() {
 
       await tester.runAsync(() async {
         when(userRepository.onUserDeviceUpdated).thenAnswer(
-          (realInvocation) => Stream.value(userDevice),
+          (_) => Stream.value(userDevice),
         );
 
         await tester.pumpApp(child: const HomeScreen());
@@ -218,7 +241,7 @@ void main() {
 
       await tester.runAsync(() async {
         when(userRepository.onUserDeviceUpdated).thenAnswer(
-          (realInvocation) => Stream.value(userDevice),
+          (_) => Stream.value(userDevice),
         );
 
         when(routeCubit.stream).thenAnswer(
@@ -314,6 +337,390 @@ void main() {
 
         expect(findVolunteerInfoCard(), findsNothing);
         expect(findCallVolunteerButton(), findsNothing);
+      });
+    });
+  });
+
+  group("Permission handler", () {
+    group("Content", () {
+      testWidgets(
+          'Should show permission card content when permission '
+          'camera, microphone, or notification is not granted', (tester) async {
+        await tester.runAsync(() async {
+          when(deviceInfo.getPermissionStatus(Permission.camera)).thenAnswer(
+            (_) => Future.value(PermissionStatus.denied),
+          );
+
+          await tester.pumpApp(child: const HomeScreen());
+          await tester.pump();
+
+          expect(findPermissionCardContent(), findsOneWidget);
+        });
+      });
+
+      testWidgets(
+          'Should hide permission card content when permission '
+          'camera, microphone, and notification is granted', (tester) async {
+        await tester.runAsync(() async {
+          when(deviceInfo.getPermissionStatus(Permission.camera)).thenAnswer(
+            (_) => Future.value(PermissionStatus.granted),
+          );
+          when(deviceInfo.getPermissionStatus(Permission.microphone))
+              .thenAnswer(
+            (_) => Future.value(PermissionStatus.granted),
+          );
+          when(deviceInfo.getPermissionStatus(Permission.notification))
+              .thenAnswer(
+            (_) => Future.value(PermissionStatus.granted),
+          );
+
+          await tester.pumpApp(child: const HomeScreen());
+          await tester.pump();
+
+          expect(findPermissionCardContent(), findsNothing);
+        });
+      });
+    });
+
+    group("Camera card", () {
+      testWidgets(
+          'Should show camera permission card when permission camera'
+          ' is not granted', (tester) async {
+        await tester.runAsync(() async {
+          when(deviceInfo.getPermissionStatus(Permission.camera)).thenAnswer(
+            (_) => Future.value(PermissionStatus.denied),
+          );
+
+          await tester.pumpApp(child: const HomeScreen());
+          await tester.pump();
+
+          expect(findPermissionCamera(), findsOneWidget);
+        });
+      });
+
+      testWidgets(
+          'Should hide camera permission card when permission camera'
+          ' is granted', (tester) async {
+        await tester.runAsync(() async {
+          when(deviceInfo.getPermissionStatus(Permission.camera)).thenAnswer(
+            (_) => Future.value(PermissionStatus.granted),
+          );
+
+          await tester.pumpApp(child: const HomeScreen());
+          await tester.pump();
+
+          expect(findPermissionCamera(), findsNothing);
+        });
+      });
+
+      group("Allow button pressed", () {
+        testWidgets(
+            'Should request permission when current permission status is denied',
+            (tester) async {
+          await tester.runAsync(() async {
+            when(deviceInfo.getPermissionStatus(Permission.camera)).thenAnswer(
+              (_) => Future.value(PermissionStatus.denied),
+            );
+
+            await tester.pumpApp(child: const HomeScreen());
+            await tester.tap(findPermissionCameraAllowButton());
+            await tester.pump();
+
+            verify(deviceInfo.requestPermission(Permission.camera));
+          });
+        });
+
+        testWidgets(
+            'Should open settings when user not allow request permission',
+            (tester) async {
+          await tester.runAsync(() async {
+            when(deviceInfo.requestPermission(Permission.camera)).thenAnswer(
+              (_) => Future.value(PermissionStatus.denied),
+            );
+            when(deviceInfo.getPermissionStatus(Permission.camera)).thenAnswer(
+              (_) => Future.value(PermissionStatus.denied),
+            );
+
+            await tester.pumpApp(child: const HomeScreen());
+            await tester.tap(findPermissionCameraAllowButton());
+            await tester.pump();
+
+            verify(deviceInfo.requestPermission(Permission.camera));
+            verify(deviceSettings.openAppSettings());
+          });
+        });
+
+        testWidgets(
+            'Should show Permission Permanently Denied Message when current '
+            'permission status is PermissionStatus.permanentlyDenied',
+            (tester) async {
+          await tester.runAsync(() async {
+            when(deviceInfo.getPermissionStatus(Permission.camera)).thenAnswer(
+              (_) => Future.value(PermissionStatus.permanentlyDenied),
+            );
+
+            await tester.setScreenSize(ipad12Pro);
+            await tester.pumpApp(child: const HomeScreen());
+            await tester.tap(findPermissionCameraAllowButton());
+            await tester.pump();
+
+            // Show permanently denied message
+            expect(findPermanentlyDenied(), findsOneWidget);
+
+            // tapped settings button on alert message
+            await tester.tap(findSettingsButton());
+            await tester.pump();
+            verify(deviceSettings.openAppSettings());
+          });
+        });
+
+        testWidgets(
+            'Should show Permission Restricted Message when current '
+            'permission status is PermissionStatus.restricted', (tester) async {
+          await tester.runAsync(() async {
+            when(deviceInfo.getPermissionStatus(Permission.camera)).thenAnswer(
+              (_) => Future.value(PermissionStatus.restricted),
+            );
+
+            await tester.pumpApp(child: const HomeScreen());
+            await tester.tap(findPermissionCameraAllowButton());
+            await tester.pump();
+
+            expect(findRestricted(), findsOneWidget);
+          });
+        });
+      });
+    });
+
+    group("Microphone card", () {
+      testWidgets(
+          'Should show microphone permission card when permission microphone'
+          ' is not granted', (tester) async {
+        await tester.runAsync(() async {
+          when(deviceInfo.getPermissionStatus(Permission.microphone))
+              .thenAnswer(
+            (_) => Future.value(PermissionStatus.denied),
+          );
+
+          await tester.pumpApp(child: const HomeScreen());
+          await tester.pump();
+
+          expect(findPermissionMicrophone(), findsOneWidget);
+        });
+      });
+
+      testWidgets(
+          'Should hide microphone permission card when permission microphone'
+          ' is granted', (tester) async {
+        await tester.runAsync(() async {
+          when(deviceInfo.getPermissionStatus(Permission.microphone))
+              .thenAnswer(
+            (_) => Future.value(PermissionStatus.granted),
+          );
+
+          await tester.pumpApp(child: const HomeScreen());
+          await tester.pump();
+
+          expect(findPermissionMicrophone(), findsNothing);
+        });
+      });
+
+      group("Allow button pressed", () {
+        testWidgets(
+            'Should request permission when current permission status is denied',
+            (tester) async {
+          await tester.runAsync(() async {
+            when(deviceInfo.getPermissionStatus(Permission.microphone))
+                .thenAnswer(
+              (_) => Future.value(PermissionStatus.denied),
+            );
+
+            await tester.pumpApp(child: const HomeScreen());
+            await tester.tap(findPermissionMicrophoneAllowButton());
+            await tester.pump();
+
+            verify(deviceInfo.requestPermission(Permission.microphone));
+          });
+        });
+
+        testWidgets(
+            'Should open settings when user not allow request permission',
+            (tester) async {
+          await tester.runAsync(() async {
+            when(deviceInfo.requestPermission(Permission.microphone))
+                .thenAnswer(
+              (_) => Future.value(PermissionStatus.denied),
+            );
+            when(deviceInfo.getPermissionStatus(Permission.microphone))
+                .thenAnswer(
+              (_) => Future.value(PermissionStatus.denied),
+            );
+
+            await tester.pumpApp(child: const HomeScreen());
+            await tester.tap(findPermissionMicrophoneAllowButton());
+            await tester.pump();
+
+            verify(deviceInfo.requestPermission(Permission.microphone));
+            verify(deviceSettings.openAppSettings());
+          });
+        });
+
+        testWidgets(
+            'Should show Permission Permanently Denied Message when current '
+            'permission status is PermissionStatus.permanentlyDenied',
+            (tester) async {
+          await tester.runAsync(() async {
+            when(deviceInfo.getPermissionStatus(Permission.microphone))
+                .thenAnswer(
+              (_) => Future.value(PermissionStatus.permanentlyDenied),
+            );
+
+            await tester.pumpApp(child: const HomeScreen());
+            await tester.tap(findPermissionMicrophoneAllowButton());
+            await tester.pump();
+
+            // Show permanently denied message
+            expect(findPermanentlyDenied(), findsOneWidget);
+
+            // tapped settings button on alert message
+            await tester.tap(findSettingsButton());
+            await tester.pump();
+            verify(deviceSettings.openAppSettings());
+          });
+        });
+
+        testWidgets(
+            'Should show Permission Restricted Message when current '
+            'permission status is PermissionStatus.restricted', (tester) async {
+          await tester.runAsync(() async {
+            when(deviceInfo.getPermissionStatus(Permission.microphone))
+                .thenAnswer(
+              (_) => Future.value(PermissionStatus.restricted),
+            );
+
+            await tester.pumpApp(child: const HomeScreen());
+            await tester.tap(findPermissionMicrophoneAllowButton());
+            await tester.pump();
+
+            expect(findRestricted(), findsOneWidget);
+          });
+        });
+      });
+    });
+
+    group("Notification card", () {
+      testWidgets(
+          'Should show notification permission card when permission notification'
+          ' is not granted', (tester) async {
+        await tester.runAsync(() async {
+          when(deviceInfo.getPermissionStatus(Permission.notification))
+              .thenAnswer(
+            (_) => Future.value(PermissionStatus.denied),
+          );
+
+          await tester.pumpApp(child: const HomeScreen());
+          await tester.pump();
+
+          expect(findPermissionNotification(), findsOneWidget);
+        });
+      });
+
+      testWidgets(
+          'Should hide notification permission card when permission notification'
+          ' is granted', (tester) async {
+        await tester.runAsync(() async {
+          when(deviceInfo.getPermissionStatus(Permission.notification))
+              .thenAnswer(
+            (_) => Future.value(PermissionStatus.granted),
+          );
+
+          await tester.pumpApp(child: const HomeScreen());
+          await tester.pump();
+
+          expect(findPermissionNotification(), findsNothing);
+        });
+      });
+
+      group("Allow button pressed", () {
+        testWidgets(
+            'Should request permission when current permission status is denied',
+            (tester) async {
+          await tester.runAsync(() async {
+            when(deviceInfo.getPermissionStatus(Permission.notification))
+                .thenAnswer(
+              (_) => Future.value(PermissionStatus.denied),
+            );
+
+            await tester.pumpApp(child: const HomeScreen());
+            await tester.tap(findPermissionNotificationAllowButton());
+            await tester.pump();
+
+            verify(deviceInfo.requestPermission(Permission.notification));
+          });
+        });
+
+        testWidgets(
+            'Should open settings when user not allow request permission',
+            (tester) async {
+          await tester.runAsync(() async {
+            when(deviceInfo.requestPermission(Permission.notification))
+                .thenAnswer(
+              (_) => Future.value(PermissionStatus.denied),
+            );
+            when(deviceInfo.getPermissionStatus(Permission.notification))
+                .thenAnswer(
+              (_) => Future.value(PermissionStatus.denied),
+            );
+
+            await tester.pumpApp(child: const HomeScreen());
+            await tester.tap(findPermissionNotificationAllowButton());
+            await tester.pump();
+
+            verify(deviceInfo.requestPermission(Permission.notification));
+            verify(deviceSettings.openNotificationSettings());
+          });
+        });
+
+        testWidgets(
+            'Should show Permission Permanently Denied Message when current '
+            'permission status is PermissionStatus.permanentlyDenied',
+            (tester) async {
+          await tester.runAsync(() async {
+            when(deviceInfo.getPermissionStatus(Permission.notification))
+                .thenAnswer(
+              (_) => Future.value(PermissionStatus.permanentlyDenied),
+            );
+
+            await tester.pumpApp(child: const HomeScreen());
+            await tester.tap(findPermissionNotificationAllowButton());
+            await tester.pump();
+
+            // Show permanently denied message
+            expect(findPermanentlyDenied(), findsOneWidget);
+
+            // tapped settings button on alert message
+            await tester.tap(findSettingsButton());
+            await tester.pump();
+            verify(deviceSettings.openNotificationSettings());
+          });
+        });
+
+        testWidgets(
+            'Should show Permission Restricted Message when current '
+            'permission status is PermissionStatus.restricted', (tester) async {
+          await tester.runAsync(() async {
+            when(deviceInfo.getPermissionStatus(Permission.notification))
+                .thenAnswer(
+              (_) => Future.value(PermissionStatus.restricted),
+            );
+
+            await tester.pumpApp(child: const HomeScreen());
+            await tester.tap(findPermissionNotificationAllowButton());
+            await tester.pump();
+
+            expect(findRestricted(), findsOneWidget);
+          });
+        });
       });
     });
   });
