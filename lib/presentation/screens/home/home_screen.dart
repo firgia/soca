@@ -11,10 +11,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:soca/core/core.dart';
+import 'package:swipe_refresh/swipe_refresh.dart';
 import '../../../config/config.dart';
 import '../../../data/data.dart';
 import '../../../injection.dart';
 import '../../../logic/logic.dart';
+import '../../widgets/widgets.dart';
+
+part 'home_screen.component.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,40 +30,92 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final AppNavigator appNavigator = sl<AppNavigator>();
+  final IncomingCallBloc incomingCallBloc = sl<IncomingCallBloc>();
   final RouteCubit routeCubit = sl<RouteCubit>();
+  final UserBloc userBloc = sl<UserBloc>();
   final UserRepository userRepository = sl<UserRepository>();
-
-  late StreamSubscription subscription;
+  late final StreamController<SwipeRefreshState> swipeRefreshController;
+  late final StreamSubscription subscription;
 
   @override
   void initState() {
     super.initState();
 
+    swipeRefreshController = StreamController<SwipeRefreshState>.broadcast();
     subscription = userRepository.onUserDeviceUpdated.listen(
       (userDevice) => routeCubit.getTargetRoute(
         checkDifferentDevice: true,
         userDevice: userDevice,
       ),
     );
+
+    userBloc.add(const UserFetched());
+    incomingCallBloc.add(const IncomingCallFetched());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RouteCubit, RouteState>(
-      bloc: routeCubit,
-      listener: (context, state) {
-        if (state is RouteTarget) {
-          if (state.name == AppPages.unknownDevice) {
-            appNavigator.goToUnknownDevice(context);
-          }
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Home"),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => routeCubit),
+        BlocProvider(create: (context) => userBloc),
+      ],
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<IncomingCallBloc, IncomingCallState>(
+            bloc: incomingCallBloc,
+            listener: (context, state) {
+              if (state is IncomingCallLoaded) {
+                appNavigator.goToAnswerCall(
+                  context,
+                  callID: state.id,
+                  blindID: state.blindID,
+                  name: state.name,
+                  urlImage: state.urlImage,
+                );
+                incomingCallBloc.add(const IncomingCallEventRemoved());
+              }
+            },
+          ),
+          BlocListener<RouteCubit, RouteState>(
+            listener: (context, state) {
+              if (state is RouteTarget) {
+                if (state.name == AppPages.unknownDevice) {
+                  appNavigator.goToUnknownDevice(context);
+                }
+              }
+            },
+          ),
+        ],
+        child: Scaffold(
+          body: _LoadingWrapper(
+            child: SafeArea(
+              child: SwipeRefresh.adaptive(
+                stateStream: swipeRefreshController.stream,
+                onRefresh: onRefresh,
+                platform: CustomPlatformWrapper(),
+                children: const [
+                  SizedBox(height: kDefaultSpacing / 1.5),
+                  _UserProfile(),
+                  _UserAction(),
+                  SizedBox(height: kDefaultSpacing * 2),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
+  }
+
+  Future<void> onRefresh() async {
+    Completer completer = sl<Completer>();
+    userBloc.add(UserFetched(completer: completer));
+
+    await completer.future;
+    if (!swipeRefreshController.isClosed) {
+      swipeRefreshController.sink.add(SwipeRefreshState.hidden);
+    }
   }
 
   @override
@@ -66,5 +123,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
 
     subscription.cancel();
+    swipeRefreshController.close();
   }
 }

@@ -13,8 +13,19 @@ import 'language_repository.dart';
 import '../../injection.dart';
 import '../../core/core.dart';
 
-class OnesignalRepository with InternetConnectionHandlerMixin {
-  OnesignalRepository() {
+abstract class OnesignalRepository {
+  /// Update oneSignal language based on last language selected by user
+  ///
+  /// Return true if successfully to update language
+  Future<bool> updateLanguage();
+
+  void dispose();
+}
+
+class OnesignalRepositoryImpl
+    with InternetConnectionHandlerMixin
+    implements OnesignalRepository {
+  OnesignalRepositoryImpl() {
     listenInternetConnection();
   }
 
@@ -24,9 +35,7 @@ class OnesignalRepository with InternetConnectionHandlerMixin {
   bool _failedToUpdateLanguage = false;
   final Logger _logger = Logger("Onesignal Repository");
 
-  /// Update oneSignal language based on last language selected by user
-  ///
-  /// Return true if successfully to update language
+  @override
   Future<bool> updateLanguage() async {
     _logger.info("Updating the Language...");
     bool isFailedToUpdate = false;
@@ -49,14 +58,17 @@ class OnesignalRepository with InternetConnectionHandlerMixin {
       }
     }
 
+    _failedToUpdateLanguage = isFailedToUpdate;
+
     if (_failedToUpdateLanguage) {
       _logger.warning(
-          "Failed to update the language. The app will try to update the language automatically when the internet connection state has changed to connected.");
+          'Failed to update the language. The app will try to update the '
+          'language automatically when the internet connection state has '
+          'changed to connected.');
     } else {
       _logger.fine("Successfully to update the language");
     }
 
-    _failedToUpdateLanguage = isFailedToUpdate;
     return !isFailedToUpdate;
   }
 
@@ -70,6 +82,7 @@ class OnesignalRepository with InternetConnectionHandlerMixin {
     }
   }
 
+  @override
   void dispose() {
     cancelInternetConnectionListener();
   }

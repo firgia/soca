@@ -27,7 +27,7 @@ void main() {
     deviceProvider = getMockDeviceProvider();
     userProvider = getMockUserProvider();
     authRepository = getMockAuthRepository();
-    userRepository = UserRepository();
+    userRepository = UserRepositoryImpl();
   });
 
   tearDown(() => unregisterLocator());
@@ -38,7 +38,7 @@ void main() {
       when(authRepository.onSignOut)
           .thenAnswer((_) => Stream.value(DateTime.now()));
 
-      UserRepository();
+      UserRepositoryImpl();
       verify(authRepository.onSignOut);
       await Future.delayed(const Duration(milliseconds: 500));
       verify(userProvider.cancelOnUserDeviceUpdated());

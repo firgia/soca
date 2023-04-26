@@ -15,7 +15,23 @@ import 'package:uuid/uuid.dart';
 import '../../core/core.dart';
 import '../../injection.dart';
 
-class DeviceProvider {
+abstract class DeviceProvider {
+  /// Get device ID
+  ///
+  /// The device id is only generated once, so each device has a unique ID.
+  Future<String> getDeviceID();
+
+  /// Get onesignal Player ID
+  Future<String?> getOnesignalPlayerID();
+
+  /// {@macro get_device_push_token_voip}
+  Future<String?> getVoIP();
+
+  /// Get current device platform
+  DevicePlatform? getPlatform();
+}
+
+class DeviceProviderImpl implements DeviceProvider {
   String get deviceIDKey => "device_id_key";
 
   final DeviceInfo _deviceInfo = sl<DeviceInfo>();
@@ -23,9 +39,7 @@ class DeviceProvider {
   final OneSignal _oneSignal = sl<OneSignal>();
   final Logger _logger = Logger("Device Provider");
 
-  /// Get device ID
-  ///
-  /// The device id is only generated once, so each device has a unique ID.
+  @override
   Future<String> getDeviceID() async {
     _logger.info("Getting device ID...");
     String? deviceID = await _secureStorage.read(key: deviceIDKey);
@@ -43,7 +57,7 @@ class DeviceProvider {
     }
   }
 
-  /// Get onesignal Player ID
+  @override
   Future<String?> getOnesignalPlayerID() async {
     _logger.info("Getting onesignal player ID...");
     final deviceState = await _oneSignal.getDeviceState();
@@ -53,12 +67,12 @@ class DeviceProvider {
     return playerID;
   }
 
-  /// {@macro get_device_push_token_voip}
+  @override
   Future<String?> getVoIP() async {
     return _deviceInfo.getDevicePushTokenVoIP();
   }
 
-  /// Get current device platform
+  @override
   DevicePlatform? getPlatform() {
     return _deviceInfo.platform;
   }

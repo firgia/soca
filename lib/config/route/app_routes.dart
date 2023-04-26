@@ -8,8 +8,10 @@
  */
 
 import 'package:go_router/go_router.dart';
-import 'app_pages.dart';
+import '../../data/data.dart';
+import '../../observer.dart';
 import '../../presentation/presentation.dart';
+import 'app_pages.dart';
 
 abstract class AppRoutes {
   static GoRouter get router => GoRouter(
@@ -24,6 +26,29 @@ abstract class AppRoutes {
             path: "/${AppPages.home}",
             name: AppPages.home,
             builder: (context, state) => const HomeScreen(),
+            routes: [
+              GoRoute(
+                  path: AppPages.answerCall,
+                  name: AppPages.answerCall,
+                  builder: (context, state) {
+                    Map<String, dynamic> extra =
+                        state.extra as Map<String, dynamic>;
+
+                    return AnswerCallScreen(
+                      callID: extra["call_id"],
+                      blindID: extra["blind_id"],
+                      name: extra["name"],
+                      urlImage: extra["url_image"],
+                    );
+                  }),
+              GoRoute(
+                path: AppPages.createCall,
+                name: AppPages.createCall,
+                builder: (context, state) => CreateCallScreen(
+                  user: state.extra as User,
+                ),
+              ),
+            ],
           ),
           GoRoute(
             path: "/${AppPages.signIn}",
@@ -45,6 +70,16 @@ abstract class AppRoutes {
             name: AppPages.unknownDevice,
             builder: (context, state) => const UnknownDeviceScreen(),
           ),
+          GoRoute(
+            path: "/${AppPages.videoCall}",
+            name: AppPages.videoCall,
+            builder: (context, state) => VideoCallScreen(
+              setup: state.extra as CallingSetup,
+            ),
+          ),
+        ],
+        observers: [
+          AppNavigatorObserver(),
         ],
       );
 }

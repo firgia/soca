@@ -31,7 +31,7 @@ void main() {
     registerLocator();
     databaseProvider = getMockDatabaseProvider();
     functionsProvider = getMockFunctionsProvider();
-    userProvider = UserProvider();
+    userProvider = UserProviderImpl();
   });
 
   tearDown(() => unregisterLocator());
@@ -44,25 +44,21 @@ void main() {
         (event) {},
       );
 
-      when(
-        databaseProvider.onValue("users/1234/device"),
-      ).thenReturn(
-        StreamDatabase(
-          databaseReference: databaseReference,
-          streamController: streamController,
-          streamSubscription: subscription,
-        ),
+      StreamDatabase streamDatabase = StreamDatabase(
+        databaseReference: databaseReference,
+        streamController: streamController,
+        streamSubscription: subscription,
       );
 
+      when(
+        databaseProvider.onValue("users/1234/device"),
+      ).thenReturn(streamDatabase);
+
       userProvider.onUserDeviceUpdated(uid: "1234");
-      expect(streamController.isClosed, false);
-      expect(streamController.hasListener, true);
-      verifyNever(databaseReference.keepSynced(false));
+      expect(streamDatabase.isDisposed, false);
 
       userProvider.cancelOnUserDeviceUpdated();
-      expect(streamController.isClosed, true);
-      expect(streamController.hasListener, false);
-      verify(databaseReference.keepSynced(false));
+      expect(streamDatabase.isDisposed, true);
     });
   });
 

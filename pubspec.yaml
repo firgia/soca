@@ -29,7 +29,10 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  agora_rtc_engine: ^6.1.0
   auto_animated: ^3.1.0
+  avatar_glow: ^2.0.2
+  cached_network_image: ^3.2.3
   cloud_firestore: ^4.3.1
   cloud_functions: ^4.0.7
   cupertino_icons: ^1.0.2
@@ -37,13 +40,17 @@ dependencies:
     path: packages/custom_icons
   easy_localization: ^3.0.1
   equatable: ^2.0.5
+  eva_icons_flutter: ^3.1.0
+  file: ^6.1.4
   firebase_auth: ^4.2.5
   firebase_core: ^2.4.1
   firebase_database: ^10.0.9
+  firebase_messaging: ^14.4.1
   firebase_storage: ^11.0.10
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.1
+  flutter_bloc: ^8.1.2
+  flutter_cache_manager: ^3.3.0
   flutter_callkit_incoming: ^1.0.3+3
   flutter_dotenv: ^5.0.2
   flutter_native_splash: ^2.2.17
@@ -65,10 +72,12 @@ dependencies:
   shared_preferences: ^2.0.17
   shimmer: ^2.0.0
   sign_in_with_apple: ^4.3.0
+  swipe_refresh: ^1.0.2
   uuid: ^3.0.7
+  wakelock: ^0.6.2
 
 dev_dependencies:
-  bloc_test: ^9.1.0
+  bloc_test: ^9.1.1
   build_runner: ^2.3.3
   firebase_storage_mocks: ^0.6.0+1
   flutter_lints: ^2.0.0
@@ -77,6 +86,8 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   mockito: ^5.3.2
+  mocktail: ^0.3.0
+  mocktail_image_network: ^0.3.1
 
 flutter:
   uses-material-design: true

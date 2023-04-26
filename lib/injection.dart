@@ -7,11 +7,15 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
+
+import 'package:agora_rtc_engine/agora_rtc_engine.dart' as agora;
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -29,31 +33,41 @@ import 'logic/logic.dart';
 final sl = GetIt.instance;
 
 void setupInjection() {
-  /* --------------------------------> CONFIG <------------------------------ */
-  sl.registerLazySingleton<AppNavigator>(() => AppNavigator());
-
   /* ---------------------------------> CORE <------------------------------- */
-  sl.registerLazySingleton<DeviceFeedback>(() => DeviceFeedback());
-  sl.registerLazySingleton<DeviceInfo>(() => DeviceInfo());
+  sl.registerSingleton<CallKit>(CallKit());
+  sl.registerSingleton<DeviceFeedback>(DeviceFeedbackImpl());
+  sl.registerSingleton<DeviceInfo>(DeviceInfoImpl());
+
+  /* --------------------------------> CONFIG <------------------------------ */
+  sl.registerSingleton<AppNavigator>(AppNavigator());
+  sl.registerSingleton<AppSystemOverlay>(AppSystemOverlayImpl());
 
   /* ---------------------------------> DATA <------------------------------- */
-  sl.registerLazySingleton<AuthProvider>(() => AuthProvider());
-  sl.registerLazySingleton<DatabaseProvider>(() => DatabaseProvider());
-  sl.registerLazySingleton<DeviceProvider>(() => DeviceProvider());
-  sl.registerLazySingleton<FunctionsProvider>(() => FunctionsProvider());
+  sl.registerLazySingleton<AuthProvider>(() => AuthProviderImpl());
+  sl.registerLazySingleton<CallingProvider>(() => CallingProviderImpl());
+  sl.registerLazySingleton<DatabaseProvider>(() => DatabaseProviderImpl());
+  sl.registerLazySingleton<DeviceProvider>(() => DeviceProviderImpl());
+  sl.registerLazySingleton<FunctionsProvider>(() => FunctionsProviderImpl());
   sl.registerLazySingleton<LocalLanguageProvider>(
-      () => LocalLanguageProvider());
-  sl.registerLazySingleton<UserProvider>(() => UserProvider());
+      () => LocalLanguageProviderImpl());
+  sl.registerLazySingleton<OneSignalProvider>(() => OneSignalProviderImpl());
+  sl.registerLazySingleton<UserProvider>(() => UserProviderImpl());
 
-  sl.registerLazySingleton<AuthRepository>(() => AuthRepository());
-  sl.registerLazySingleton<FileRepository>(() => FileRepository());
-  sl.registerLazySingleton<LanguageRepository>(() => LanguageRepository());
-  sl.registerLazySingleton<OnesignalRepository>(() => OnesignalRepository());
-  sl.registerLazySingleton<UserRepository>(() => UserRepository());
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
+  sl.registerLazySingleton<CallingRepository>(() => CallingRepositoryImpl());
+  sl.registerLazySingleton<FileRepository>(() => FileRepositoryImpl());
+  sl.registerLazySingleton<LanguageRepository>(() => LanguageRepositoryImpl());
+  sl.registerLazySingleton<OnesignalRepository>(
+      () => OnesignalRepositoryImpl());
+  sl.registerLazySingleton<UserRepository>(() => UserRepositoryImpl());
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
+  sl.registerFactory<Completer>(() => Completer());
+  sl.registerFactory<DefaultCacheManager>(() => DefaultCacheManager());
   sl.registerSingleton<DotEnv>(dotenv);
-  sl.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage());
+  sl.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+  ));
   sl.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
   sl.registerSingleton<FirebaseDatabase>(FirebaseDatabase.instance);
   sl.registerSingleton<FirebaseFunctions>(FirebaseFunctions.instance);
@@ -68,14 +82,19 @@ void setupInjection() {
     ),
   );
   sl.registerSingleton<OneSignal>(OneSignal.shared);
+  sl.registerFactory<agora.RtcEngine>(() => agora.createAgoraRtcEngine());
   sl.registerSingleton<WidgetsBinding>(WidgetsBinding.instance);
 
   /* --------------------------------> LOGIC <------------------------------- */
+  sl.registerFactory<CallActionBloc>(() => CallActionBloc());
   sl.registerFactory<FileBloc>(() => FileBloc());
+  sl.registerSingleton<IncomingCallBloc>(IncomingCallBloc());
   sl.registerFactory<LanguageBloc>(() => LanguageBloc());
   sl.registerFactory<SignInBloc>(() => SignInBloc());
   sl.registerFactory<SignUpFormBloc>(() => SignUpFormBloc());
   sl.registerFactory<SignUpBloc>(() => SignUpBloc());
+  sl.registerFactory<UserBloc>(() => UserBloc());
+  sl.registerFactory<VideoCallBloc>(() => VideoCallBloc());
   sl.registerFactory<AccountCubit>(() => AccountCubit());
   sl.registerFactory<RouteCubit>(() => RouteCubit());
   sl.registerFactory<SignOutCubit>(() => SignOutCubit());

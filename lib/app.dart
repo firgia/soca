@@ -10,6 +10,7 @@
 import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +24,16 @@ import 'injection.dart';
 import 'config/config.dart';
 import 'core/core.dart';
 import 'observer.dart';
+
+Future<void> _firebaseMessagingForegroundHandler(RemoteMessage message) async {
+  CallKitHandler.showCallkitIncoming(message);
+}
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  CallKitHandler.showCallkitIncoming(message);
+}
 
 /// We need to initialize app before start to the main page
 ///
@@ -65,6 +76,14 @@ Future<void> initializeApp() async {
     _Logging.initialize(showLog: Environtment.isDevelopment()),
   ]);
 
+  FirebaseMessaging.instance.getToken().then((_) {
+    // We need start listen after token ready to use to avoid not executing
+    // foreground & background handler
+    FirebaseMessaging.onMessage.listen(_firebaseMessagingForegroundHandler);
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  });
+
+  CallKitHandler.initialize();
   OnesignalHandler.initialize();
   Bloc.observer = AppBlocObserver();
 }
@@ -78,7 +97,8 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> with WidgetsBindingObserver {
-  final onesignalRepository = sl<OnesignalRepository>();
+  final AuthRepository authRepository = sl<AuthRepository>();
+  final OnesignalRepository onesignalRepository = sl<OnesignalRepository>();
 
   @override
   void initState() {
@@ -90,6 +110,10 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     // We need to update the language to make sure the current onesignal
     // language are same as the last selected language
     onesignalRepository.updateLanguage();
+
+    // We need to syncronize OneSignal Tags to make sure the tags auth status
+    // are same with current auth status
+    authRepository.syncOneSignalTags();
   }
 
   @override
@@ -124,9 +148,19 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   }
 
   @override
+  void didChangePlatformBrightness() {
+    super.didChangePlatformBrightness();
+
+    if (context.mounted) {
+      sl<AppSystemOverlay>().setSystemUIOverlayStyle();
+    }
+  }
+
+  @override
   void dispose() {
     super.dispose();
 
+    authRepository.dispose();
     onesignalRepository.dispose();
   }
 }

@@ -9,7 +9,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:soca/config/config.dart';
+
+import '../../data/data.dart';
+import '../config.dart';
 
 class AppNavigator {
   void back<T>(BuildContext context, {T? result}) {
@@ -19,6 +21,23 @@ class AppNavigator {
   }
 
   bool canPop(BuildContext context) => Navigator.of(context).canPop();
+
+  void goToAnswerCall(
+    BuildContext context, {
+    required String callID,
+    required String blindID,
+    required String? name,
+    required String? urlImage,
+  }) =>
+      context.pushNamed(AppPages.answerCall, extra: {
+        "call_id": callID,
+        "blind_id": blindID,
+        "name": name,
+        "url_image": urlImage,
+      });
+
+  void goToCreateCall(BuildContext context, {required User user}) =>
+      context.pushNamed(AppPages.createCall, extra: user);
 
   void goToHome(BuildContext context) =>
       context.pushReplacementNamed(AppPages.home);
@@ -37,4 +56,7 @@ class AppNavigator {
 
   void goToUnknownDevice(BuildContext context) =>
       context.pushReplacementNamed(AppPages.unknownDevice);
+
+  void goToVideoCall(BuildContext context, {required CallingSetup setup}) =>
+      context.pushReplacementNamed(AppPages.videoCall, extra: setup);
 }

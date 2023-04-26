@@ -31,7 +31,7 @@ void main() {
     secureStorage = getMockFlutterSecureStorage();
     functionsProvider = getMockFunctionsProvider();
     deviceInfo = getMockDeviceInfo();
-    authProvider = AuthProvider();
+    authProvider = AuthProviderImpl();
   });
 
   tearDown(() => unregisterLocator());

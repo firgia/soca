@@ -16,21 +16,22 @@ import '../../mock/mock.mocks.dart';
 
 void main() {
   late MockLanguageRepository languageRepository;
-  late OnesignalRepository onesignalRepository;
+  late OnesignalRepositoryImpl onesignalRepository;
   late MockOneSignal onesignal;
 
   setUp(() {
     registerLocator();
     languageRepository = getMockLanguageRepository();
     onesignal = getMockOneSignal();
-    onesignalRepository = OnesignalRepository();
+    onesignalRepository = OnesignalRepositoryImpl();
   });
 
   tearDown(() => unregisterLocator());
 
   group(".updateLanguage()", () {
     test(
-      "Should update the onesignal language only when last selected language is different with onesignal language",
+      'Should update the onesignal language only when last selected language '
+      'is different with onesignal language',
       () async {
         const deviceLanguage = DeviceLanguage.indonesian;
         const onesignalLanguage = DeviceLanguage.english;
@@ -122,7 +123,8 @@ void main() {
     );
 
     test(
-      "Should try to re call when internet connection connected and failed to update",
+      'Should try to recall when internet connection connected and failed to '
+      'update',
       () async {
         const deviceLanguage = DeviceLanguage.indonesian;
         const onesignalLanguage = DeviceLanguage.english;
@@ -151,7 +153,8 @@ void main() {
     );
 
     test(
-      "Should not to re call when internet connection connected and update language has been successfully",
+      'Should not to recall when internet connection connected and update '
+      'language has been successfully',
       () async {
         const deviceLanguage = DeviceLanguage.indonesian;
         const onesignalLanguage = DeviceLanguage.english;

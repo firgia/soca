@@ -7,4 +7,6 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+export 'call_background_image.dart';
+export 'profile_image.dart';
 export 'soca_icon_image.dart';

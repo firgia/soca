@@ -14,8 +14,43 @@ import '../../core/core.dart';
 import '../../injection.dart';
 import '../data.dart';
 
-class UserRepository {
-  UserRepository() {
+abstract class UserRepository {
+  /// Fires when the user device data is updated.
+  ///
+  /// `Exception`
+  ///
+  /// A [UserFailure] maybe thrown when a failure occurs.
+  Stream<UserDevice?> get onUserDeviceUpdated;
+
+  /// {@macro get_profile_user}
+  ///
+  /// `Exception`
+  ///
+  /// A [UserFailure] maybe thrown when a failure occurs.
+  Future<User> getProfile({String? uid});
+
+  /// Get user device data from Realtime Database
+  ///
+  /// `Exception`
+  ///
+  /// A [UserFailure] maybe thrown when a failure occurs.
+  Future<UserDevice> getUserDevice();
+
+  /// Check [userDevice] ID difference with the current user device ID.
+  ///
+  /// Return true if different
+  Future<bool> isDifferentDeviceID(UserDevice userDevice);
+
+  /// Check user use different device
+  ///
+  /// `Exception`
+  ///
+  /// A [UserFailure] maybe thrown when a failure occurs.
+  Future<bool> useDifferentDevice();
+}
+
+class UserRepositoryImpl implements UserRepository {
+  UserRepositoryImpl() {
     _authRepository.onSignOut.listen((event) {
       _userProvider.cancelOnUserDeviceUpdated();
     });
@@ -26,11 +61,7 @@ class UserRepository {
   final DeviceProvider _deviceProvider = sl<DeviceProvider>();
   final Logger _logger = Logger("User Repository");
 
-  /// Fires when the user device data is updated.
-  ///
-  /// `Exception`
-  ///
-  /// A [UserFailure] maybe thrown when a failure occurs.
+  @override
   Stream<UserDevice?> get onUserDeviceUpdated {
     String? authUID = _authRepository.uid;
 
@@ -57,11 +88,7 @@ class UserRepository {
     }
   }
 
-  /// {@macro get_profile_user}
-  ///
-  /// `Exception`
-  ///
-  /// A [UserFailure] maybe thrown when a failure occurs.
+  @override
   Future<User> getProfile({String? uid}) async {
     String? authUID = _authRepository.uid;
 
@@ -92,11 +119,7 @@ class UserRepository {
     }
   }
 
-  /// Get user device data from Realtime Database
-  ///
-  /// `Exception`
-  ///
-  /// A [UserFailure] maybe thrown when a failure occurs.
+  @override
   Future<UserDevice> getUserDevice() async {
     String? authUID = _authRepository.uid;
 
@@ -133,19 +156,13 @@ class UserRepository {
     }
   }
 
-  /// Check [userDevice] ID difference with the current user device ID.
-  ///
-  /// Return true if different
+  @override
   Future<bool> isDifferentDeviceID(UserDevice userDevice) async {
     String deviceID = await _deviceProvider.getDeviceID();
     return deviceID != userDevice.id;
   }
 
-  /// Check user use different device
-  ///
-  /// `Exception`
-  ///
-  /// A [UserFailure] maybe thrown when a failure occurs.
+  @override
   Future<bool> useDifferentDevice() async {
     _logger.info("Check user use different device...");
 

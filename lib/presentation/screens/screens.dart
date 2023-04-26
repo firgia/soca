@@ -8,6 +8,7 @@
  */
 
 export 'auth/auth.dart';
+export 'call/call.dart';
 export 'unknown_device/unknown_device.dart';
 export 'home/home.dart';
 export 'settings/settings.dart';

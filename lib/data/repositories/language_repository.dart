@@ -13,15 +13,30 @@ import '../../core/core.dart';
 import '../models/models.dart';
 import '../providers/providers.dart';
 
-class LanguageRepository {
-  LanguageRepository();
+abstract class LanguageRepository {
+  /// Get list of language
+  Future<List<Language>> getLanguages();
 
+  /// Get the last saved changed language.
+  Future<DeviceLanguage?> getLastChanged();
+
+  /// Get the last saved changed Onesignal language.
+  Future<DeviceLanguage?> getLastChangedOnesignal();
+
+  /// Update the last saved changed language.
+  Future<void> updateLastChanged(DeviceLanguage? language);
+
+  /// Update the last saved changed Onesignal language.
+  Future<void> updateLastChangedOnesignal(DeviceLanguage? language);
+}
+
+class LanguageRepositoryImpl implements LanguageRepository {
   final LocalLanguageProvider _localLanguageProvider =
       sl<LocalLanguageProvider>();
 
   final Logger _logger = Logger("Language Repository");
 
-  /// Get list of language
+  @override
   Future<List<Language>> getLanguages() async {
     _logger.shout("Getting languages...");
 
@@ -40,7 +55,7 @@ class LanguageRepository {
     return languages;
   }
 
-  /// Get the last saved changed language.
+  @override
   Future<DeviceLanguage?> getLastChanged() async {
     _logger.info("Getting last language changed data...");
     final data = await _localLanguageProvider.getLastChanged();
@@ -55,7 +70,7 @@ class LanguageRepository {
     }
   }
 
-  /// Get the last saved changed Onesignal language.
+  @override
   Future<DeviceLanguage?> getLastChangedOnesignal() async {
     _logger.info("Getting last onesignal language changed data...");
     final data = await _localLanguageProvider.getLastChangedOnesignal();
@@ -70,7 +85,7 @@ class LanguageRepository {
     }
   }
 
-  /// Update the last saved changed language.
+  @override
   Future<void> updateLastChanged(DeviceLanguage? language) async {
     _logger.info("Updating last language changed data...");
     final tempData = await _localLanguageProvider.getLastChangedOnesignal();
@@ -84,7 +99,7 @@ class LanguageRepository {
     }
   }
 
-  /// Update the last saved changed Onesignal language.
+  @override
   Future<void> updateLastChangedOnesignal(DeviceLanguage? language) async {
     _logger.info("Updating the last onesignal language changed data...");
     final tempData = await _localLanguageProvider.getLastChangedOnesignal();

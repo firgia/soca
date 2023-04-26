@@ -14,7 +14,40 @@ import '../../core/core.dart';
 import '../../injection.dart';
 import 'functions_provider.dart';
 
-class AuthProvider {
+abstract class AuthProvider {
+  /// {@macro get_apple_id_credential}
+  Future<AuthorizationCredentialAppleID> getAppleIDCredential();
+
+  /// Check is on process to sign in
+  ///
+  /// Do not try to sign in when this functions return `true`
+  Future<bool?> isSignInOnProcess();
+
+  /// Set sign in is on process
+  Future<void> setIsSignInOnProcess(bool value);
+
+  /// Set authentication provider to sign in
+  Future<void> setSignInMethod(AuthMethod? authMethod);
+
+  /// {@template get_sign_in_method}
+  /// Get authentication provider
+  ///
+  /// return `null` when user not signed in
+  /// {@endtemplate}
+  Future<AuthMethod?> getSignInMethod();
+
+  /// Notify to server when user has been sign in successfully
+  ///
+  /// {@macro firebase_functions_exception}
+  Future<void> notifyIsSignInSuccessfully({
+    required String deviceID,
+    required String oneSignalPlayerID,
+    required String? voipToken,
+    required DevicePlatform devicePlatform,
+  });
+}
+
+class AuthProviderImpl implements AuthProvider {
   String get _signInOnProcessKey => "sign_in_on_process";
   String get _signInMethodKey => "sign_in_method";
 
@@ -23,7 +56,7 @@ class AuthProvider {
   final FlutterSecureStorage _secureStorage = sl<FlutterSecureStorage>();
   final Logger _logger = Logger("Local Language Provider");
 
-  /// {@macro get_apple_id_credential}
+  @override
   Future<AuthorizationCredentialAppleID> getAppleIDCredential() {
     return _deviceInfo.getAppleIDCredential(scopes: [
       AppleIDAuthorizationScopes.email,
@@ -31,9 +64,7 @@ class AuthProvider {
     ]);
   }
 
-  /// Check is on process to sign in
-  ///
-  /// Do not try to sign in when this functions return `true`
+  @override
   Future<bool?> isSignInOnProcess() async {
     _logger.info("Getting $_signInOnProcessKey data...");
     final result = await _secureStorage.read(key: _signInOnProcessKey);
@@ -42,7 +73,7 @@ class AuthProvider {
     return (result == null) ? null : result == "true";
   }
 
-  /// Set sign in is on process
+  @override
   Future<void> setIsSignInOnProcess(bool value) async {
     _logger.info("Saving $_signInOnProcessKey data...");
     await _secureStorage.write(
@@ -53,7 +84,7 @@ class AuthProvider {
     _logger.fine("Successfully to save $_signInOnProcessKey data");
   }
 
-  /// Set authentication provider to sign in
+  @override
   Future<void> setSignInMethod(AuthMethod? authMethod) async {
     _logger.info("Saving $_signInMethodKey data...");
     if (authMethod == null) {
@@ -64,11 +95,7 @@ class AuthProvider {
     _logger.fine("Successfully to save $_signInMethodKey data");
   }
 
-  /// {@template get_sign_in_method}
-  /// Get authentication provider
-  ///
-  /// return `null` when user not signed in
-  /// {@endtemplate}
+  @override
   Future<AuthMethod?> getSignInMethod() async {
     _logger.info("Getting $_signInMethodKey data...");
     String? signInMethod = await _secureStorage.read(key: _signInMethodKey);
@@ -85,9 +112,7 @@ class AuthProvider {
     return null;
   }
 
-  /// Notify to server when user has been sign in successfully
-  ///
-  /// {@macro firebase_functions_exception}
+  @override
   Future<void> notifyIsSignInSuccessfully({
     required String deviceID,
     required String oneSignalPlayerID,
