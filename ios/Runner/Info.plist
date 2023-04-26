@@ -51,6 +51,8 @@
 	<string>This app requires access to microphone</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app requires access to photo library</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app requires access to your location</string>
 	<key>PermissionGroupNotification</key>
 	<string>We would send a notification message.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

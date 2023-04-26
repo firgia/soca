@@ -17,11 +17,33 @@ abstract class CallActionEvent extends Equatable {
 }
 
 class CallActionAnswered extends CallActionEvent {
-  const CallActionAnswered();
+  final String blindID;
+  final String callID;
+
+  const CallActionAnswered({
+    required this.blindID,
+    required this.callID,
+  });
+
+  @override
+  List<Object> get props => [blindID, callID];
 }
 
 class CallActionCreated extends CallActionEvent {
   const CallActionCreated();
+}
+
+class CallActionDeclined extends CallActionEvent {
+  final String blindID;
+  final String callID;
+
+  const CallActionDeclined({
+    required this.blindID,
+    required this.callID,
+  });
+
+  @override
+  List<Object> get props => [blindID, callID];
 }
 
 /// This event is only called on the CallActionCreated process
@@ -36,10 +58,6 @@ class _CallActionSetupFetched extends CallActionEvent {
 /// This event is only called on the CallActionCreated process
 class _CallActionUnanswered extends CallActionEvent {
   const _CallActionUnanswered();
-}
-
-class CallActionDeclined extends CallActionEvent {
-  const CallActionDeclined();
 }
 
 class CallActionEnded extends CallActionEvent {

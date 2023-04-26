@@ -22,6 +22,20 @@ class AppNavigator {
 
   bool canPop(BuildContext context) => Navigator.of(context).canPop();
 
+  void goToAnswerCall(
+    BuildContext context, {
+    required String callID,
+    required String blindID,
+    required String? name,
+    required String? urlImage,
+  }) =>
+      context.pushNamed(AppPages.answerCall, extra: {
+        "call_id": callID,
+        "blind_id": blindID,
+        "name": name,
+        "url_image": urlImage,
+      });
+
   void goToCreateCall(BuildContext context, {required User user}) =>
       context.pushNamed(AppPages.createCall, extra: user);
 

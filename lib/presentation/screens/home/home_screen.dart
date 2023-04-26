@@ -30,6 +30,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final AppNavigator appNavigator = sl<AppNavigator>();
+  final IncomingCallBloc incomingCallBloc = sl<IncomingCallBloc>();
   final RouteCubit routeCubit = sl<RouteCubit>();
   final UserBloc userBloc = sl<UserBloc>();
   final UserRepository userRepository = sl<UserRepository>();
@@ -49,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     userBloc.add(const UserFetched());
+    incomingCallBloc.add(const IncomingCallFetched());
   }
 
   @override
@@ -60,6 +62,21 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
       child: MultiBlocListener(
         listeners: [
+          BlocListener<IncomingCallBloc, IncomingCallState>(
+            bloc: incomingCallBloc,
+            listener: (context, state) {
+              if (state is IncomingCallLoaded) {
+                appNavigator.goToAnswerCall(
+                  context,
+                  callID: state.id,
+                  blindID: state.blindID,
+                  name: state.name,
+                  urlImage: state.urlImage,
+                );
+                incomingCallBloc.add(const IncomingCallEventRemoved());
+              }
+            },
+          ),
           BlocListener<RouteCubit, RouteState>(
             listener: (context, state) {
               if (state is RouteTarget) {

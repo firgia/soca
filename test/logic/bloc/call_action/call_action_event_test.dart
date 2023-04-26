@@ -11,7 +11,35 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:soca/logic/logic.dart';
 
 void main() {
-  group("CallActionLoading", () {
+  group("CallActionAnswered", () {
+    group("()", () {
+      test("Should fill up the fields based on the constructor parameter", () {
+        CallActionAnswered callAction = const CallActionAnswered(
+          blindID: "123",
+          callID: "456",
+        );
+
+        expect(callAction.blindID, "123");
+        expect(callAction.callID, "456");
+      });
+    });
+  });
+
+  group("CallActionDeclined", () {
+    group("()", () {
+      test("Should fill up the fields based on the constructor parameter", () {
+        CallActionDeclined callAction = const CallActionDeclined(
+          callID: "123",
+          blindID: "456",
+        );
+
+        expect(callAction.callID, "123");
+        expect(callAction.blindID, "456");
+      });
+    });
+  });
+
+  group("CallActionEnded", () {
     group("()", () {
       test("Should fill up the fields based on the constructor parameter", () {
         CallActionEnded callAction = const CallActionEnded("123");

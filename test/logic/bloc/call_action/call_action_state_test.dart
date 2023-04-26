@@ -36,6 +36,46 @@ void main() {
     });
   });
 
+  group("CallActionAnsweredSuccessfullyWithWaitingCaller", () {
+    group("()", () {
+      test("Should fill up the fields based on the constructor parameter", () {
+        Call callData = const Call(id: "123");
+        CallActionAnsweredSuccessfullyWithWaitingCaller callAction =
+            CallActionAnsweredSuccessfullyWithWaitingCaller(callData);
+
+        expect(callAction.data, callData);
+      });
+    });
+  });
+
+  group("CallActionAnsweredSuccessfully", () {
+    group("()", () {
+      test("Should fill up the fields based on the constructor parameter", () {
+        CallingSetup callingSetup = const CallingSetup(
+          id: "1",
+          rtc: RTCIdentity(token: "abc", channelName: "a", uid: 1),
+          localUser: UserCallIdentity(
+            name: "name",
+            uid: "uid",
+            avatar: "avatar",
+            type: UserType.blind,
+          ),
+          remoteUser: UserCallIdentity(
+            name: "name",
+            uid: "uid",
+            avatar: "avatar",
+            type: UserType.volunteer,
+          ),
+        );
+
+        CallActionAnsweredSuccessfully callAction =
+            CallActionAnsweredSuccessfully(callingSetup);
+
+        expect(callAction.data, callingSetup);
+      });
+    });
+  });
+
   group("CallActionCreatedSuccessfullyWithWaitingAnswer", () {
     group("()", () {
       test("Should fill up the fields based on the constructor parameter", () {

@@ -52,7 +52,9 @@ class AppNavigatorObserver extends NavigatorObserver {
     _logger
         .info("didPush() {routeName:$routeName, prevRouteName:$prevRouteName}");
 
-    if (routeName == AppPages.createCall || routeName == AppPages.videoCall) {
+    if (routeName == AppPages.createCall ||
+        routeName == AppPages.videoCall ||
+        routeName == AppPages.answerCall) {
       Wakelock.enable();
       _appSystemOverlay.setSystemUIOverlayStyleForCall();
     } else if (routeName == AppPages.splash) {
@@ -68,7 +70,9 @@ class AppNavigatorObserver extends NavigatorObserver {
     _logger
         .info("didPop() {routeName:$routeName, prevRouteName:$prevRouteName}");
 
-    if (routeName == AppPages.createCall || routeName == AppPages.videoCall) {
+    if (routeName == AppPages.createCall ||
+        routeName == AppPages.videoCall ||
+        routeName == AppPages.answerCall) {
       Wakelock.disable();
       _appSystemOverlay.setSystemUIOverlayStyle();
     }

@@ -247,6 +247,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     return agora.RtcEngineEventHandler(
       onJoinChannelSuccess: (connection, elapsed) {
         _logger.info("local user ${connection.localUid} joined");
+        if (!mounted) return;
 
         if (callingSetup.localUser.type == UserType.blind &&
             !hasBeenSwitchCamera) {
@@ -258,6 +259,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       },
       onRejoinChannelSuccess: (connection, elapsed) {
         _logger.info("local user ${connection.localUid} rejoined");
+        if (!mounted) return;
 
         if (callingSetup.localUser.type == UserType.blind &&
             !hasBeenSwitchCamera) {
@@ -269,11 +271,13 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       },
       onUserJoined: (connection, uid, elapsed) {
         _logger.info("remote user $uid joined");
+        if (!mounted) return;
 
         videoCallBloc.add(VideoCallRemoteUIDChanged(uid));
       },
       onUserOffline: (connection, remoteUid, reason) {
         _logger.info("remote user $remoteUid left channel");
+        if (!mounted) return;
 
         videoCallBloc.add(const VideoCallIsUserOfflineChanged(true));
         videoCallBloc.add(const VideoCallRemoteUIDChanged(null));
