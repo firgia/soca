@@ -459,6 +459,7 @@ void main() {
               (_) => Future.value(PermissionStatus.permanentlyDenied),
             );
 
+            await tester.setScreenSize(ipad12Pro);
             await tester.pumpApp(child: const HomeScreen());
             await tester.tap(findPermissionCameraAllowButton());
             await tester.pump();
