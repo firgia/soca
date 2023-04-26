@@ -46,6 +46,14 @@ MockDeviceInfo getMockDeviceInfo() {
   return mock;
 }
 
+MockDeviceSettings getMockDeviceSettings() {
+  MockDeviceSettings mock = MockDeviceSettings();
+  _removeRegistrationIfExists<DeviceSettings>();
+  locator.registerSingleton<DeviceSettings>(mock);
+
+  return mock;
+}
+
 /* ----------------------------------> DATA <-------------------------------- */
 MockAuthProvider getMockAuthProvider() {
   MockAuthProvider mock = MockAuthProvider();
@@ -378,6 +386,7 @@ void registerLocator() {
   getMockCallKit();
   getMockDeviceFeedback();
   getMockDeviceInfo();
+  getMockDeviceSettings();
 
   /* ---------------------------------> DATA <------------------------------- */
   getMockAuthProvider();
@@ -434,6 +443,7 @@ void unregisterLocator() {
   locator.unregister<CallKit>();
   locator.unregister<DeviceFeedback>();
   locator.unregister<DeviceInfo>();
+  locator.unregister<DeviceSettings>();
 
   /* ---------------------------------> DATA <------------------------------- */
   locator.unregister<AuthProvider>();

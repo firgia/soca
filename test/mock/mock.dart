@@ -37,6 +37,7 @@ export 'mock.mocks.dart';
   MockSpec<CallKit>(),
   MockSpec<DeviceFeedback>(),
   MockSpec<DeviceInfo>(),
+  MockSpec<DeviceSettings>(),
 
   /* ---------------------------------> DATA <------------------------------- */
   MockSpec<AuthProvider>(),

@@ -9,8 +9,11 @@
 
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:soca/core/core.dart';
 import 'package:swipe_refresh/swipe_refresh.dart';
 import '../../../config/config.dart';
@@ -98,6 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(height: kDefaultSpacing / 1.5),
                   _UserProfile(),
                   _UserAction(),
+                  _PermissionCard(),
                   SizedBox(height: kDefaultSpacing * 2),
                 ],
               ),

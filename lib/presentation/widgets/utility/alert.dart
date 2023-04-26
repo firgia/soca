@@ -140,4 +140,80 @@ class Alert with UIMixin {
       );
     }
   }
+
+  Future<void> showPermissionPermanentlyDeniedMessage({
+    String? captionText,
+    VoidCallback? onActionPressed,
+  }) async {
+    if (isTablet(context)) {
+      await _dialog.show(
+        childBuilder: (context, brightness) {
+          return Container(
+            constraints: const BoxConstraints(maxWidth: 400, maxHeight: 600),
+            child: PermissionMessage.permanentlyDenied(
+              onActionPressed: () {
+                _dialog.close();
+                if (onActionPressed != null) onActionPressed();
+              },
+              captiontext: captionText,
+            ),
+          );
+        },
+      );
+    } else {
+      await _bottomSheet.show(
+        height:
+            PermissionMessage.height + MediaQuery.of(context).padding.bottom,
+        childBuilder: (context, brightness) {
+          return SafeArea(
+            child: PermissionMessage.permanentlyDenied(
+              onActionPressed: () {
+                _bottomSheet.close();
+                if (onActionPressed != null) onActionPressed();
+              },
+              captiontext: captionText,
+            ),
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> showPermissionRestrictedMessage({
+    String? captionText,
+    VoidCallback? onActionPressed,
+  }) async {
+    if (isTablet(context)) {
+      await _dialog.show(
+        childBuilder: (context, brightness) {
+          return Container(
+            constraints: const BoxConstraints(maxWidth: 400, maxHeight: 600),
+            child: PermissionMessage.restricted(
+              onActionPressed: () {
+                _dialog.close();
+                if (onActionPressed != null) onActionPressed();
+              },
+              captiontext: captionText,
+            ),
+          );
+        },
+      );
+    } else {
+      await _bottomSheet.show(
+        height:
+            PermissionMessage.height + MediaQuery.of(context).padding.bottom,
+        childBuilder: (context, brightness) {
+          return SafeArea(
+            child: PermissionMessage.restricted(
+              onActionPressed: () {
+                _bottomSheet.close();
+                if (onActionPressed != null) onActionPressed();
+              },
+              captiontext: captionText,
+            ),
+          );
+        },
+      );
+    }
+  }
 }

@@ -10,5 +10,6 @@
 export 'account_card.dart';
 export 'language_card.dart';
 export 'language_selection_card.dart';
+export 'permission_card.dart';
 export 'profile_card.dart';
 export 'volunteer_info_card.dart';
