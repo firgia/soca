@@ -37,6 +37,8 @@ void main() {
   Finder findRestricted() =>
       find.byKey(const Key("permission_message_restricted"));
   Finder findLottieBuilder() => find.byType(LottieBuilder);
+  Finder findOkButton() =>
+      find.byKey(const Key("permission_message_ok_button"));
   Finder findSettingsButton() =>
       find.byKey(const Key("permission_message_settings_button"));
 
@@ -191,7 +193,7 @@ void main() {
       });
     });
 
-    testWidgets("Should call [onActionPressed] when settings button is tapped",
+    testWidgets("Should call [onActionPressed] when ok button is tapped",
         (tester) async {
       await tester.runAsync(() async {
         bool tapped = false;
@@ -202,9 +204,9 @@ void main() {
           ),
         );
 
-        expect(findSettingsButton(), findsOneWidget);
+        expect(findOkButton(), findsOneWidget);
 
-        await tester.tap(findSettingsButton());
+        await tester.tap(findOkButton());
         await tester.pumpAndSettle();
 
         expect(tapped, isTrue);

@@ -251,7 +251,7 @@ class _Restricted extends StatelessWidget {
 
   Widget _buildActionButton() {
     return ElevatedButton(
-      key: const Key("permission_message_settings_button"),
+      key: const Key("permission_message_ok_button"),
       onPressed: onActionPressed,
       style: FlatButtonStyle(expanded: true, primary: AppColors.red),
       child: const Text(LocaleKeys.ok).tr(),
