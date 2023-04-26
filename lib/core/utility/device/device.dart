@@ -10,3 +10,4 @@
 export 'call_kit.dart';
 export 'device_feedback.dart';
 export 'device_info.dart';
+export 'device_settings.dart';
