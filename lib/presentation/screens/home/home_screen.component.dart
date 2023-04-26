@@ -109,7 +109,9 @@ class _PermissionCardState extends State<_PermissionCard>
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
-    requestAllPermission();
+    checkAllPermission().then(
+      (value) => requestAllPermission(),
+    );
   }
 
   @override
@@ -127,6 +129,7 @@ class _PermissionCardState extends State<_PermissionCard>
       return const SizedBox();
     } else {
       return Column(
+        key: const Key("home_screen_permission_card_content"),
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: kDefaultSpacing * 1.5),
@@ -148,6 +151,9 @@ class _PermissionCardState extends State<_PermissionCard>
               children: [
                 if (!cameraAllowed)
                   PermissionCard(
+                    key: const Key("home_screen_permission_camera_card"),
+                    allowButtonKey: const Key(
+                        "home_screen_permission_camera_card_allow_button"),
                     icon: EvaIcons.camera,
                     title: LocaleKeys.camera.tr(),
                     subtitle: LocaleKeys.required_when_making_calls.tr(),
@@ -156,6 +162,9 @@ class _PermissionCardState extends State<_PermissionCard>
                   ),
                 if (!microphoneAllowed)
                   PermissionCard(
+                    key: const Key("home_screen_permission_microphone_card"),
+                    allowButtonKey: const Key(
+                        "home_screen_permission_microphone_card_allow_button"),
                     icon: EvaIcons.mic,
                     title: LocaleKeys.microphone.tr(),
                     subtitle: LocaleKeys.required_when_making_calls.tr(),
@@ -164,6 +173,9 @@ class _PermissionCardState extends State<_PermissionCard>
                   ),
                 if (!notificationAllowed)
                   PermissionCard(
+                    key: const Key("home_screen_permission_notification_card"),
+                    allowButtonKey: const Key(
+                        "home_screen_permission_notification_card_allow_button"),
                     icon: EvaIcons.bell,
                     title: LocaleKeys.notification.tr(),
                     subtitle: LocaleKeys.required_when_making_calls.tr(),
@@ -246,7 +258,8 @@ class _PermissionCardState extends State<_PermissionCard>
         await deviceInfo.getPermissionStatus(Permission.notification);
 
     if (notificationStatus == PermissionStatus.denied) {
-      final result = await Permission.notification.request();
+      final result =
+          await deviceInfo.requestPermission(Permission.notification);
 
       setState(() {
         notificationAllowed = (result == PermissionStatus.granted);

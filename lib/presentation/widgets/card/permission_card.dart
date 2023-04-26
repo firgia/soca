@@ -21,6 +21,7 @@ class PermissionCard extends StatelessWidget {
     required this.subtitle,
     required this.onPressedAllow,
     this.iconColor,
+    this.allowButtonKey,
     super.key,
   });
 
@@ -29,6 +30,7 @@ class PermissionCard extends StatelessWidget {
   final String subtitle;
   final Color? iconColor;
   final VoidCallback? onPressedAllow;
+  final Key? allowButtonKey;
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +84,7 @@ class PermissionCard extends StatelessWidget {
 
   Widget _buildAllowButton(BuildContext context) {
     return ElevatedButton(
+      key: allowButtonKey,
       onPressed: onPressedAllow,
       style: OutlinedButtonStyle(
         size: ButtonSize.small,
