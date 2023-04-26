@@ -7,6 +7,10 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
 
@@ -24,6 +28,87 @@ class CallKitHandler {
     }
 
     _isInitialized = true;
+  }
+
+  static Future<void> showCallkitIncoming(RemoteMessage message) async {
+    try {
+      final data = message.data;
+      final customData = jsonDecode(data["custom"]);
+
+      final contentData = customData["a"] as Map<String, dynamic>;
+      final type = contentData["type"] as String;
+      final uuid = contentData["uuid"] as String;
+
+      if (type == "missed_video_call") {
+        await FlutterCallkitIncoming.endCall(uuid);
+      } else if (type == "incoming_video_call") {
+        // Make sure incoming call kit
+        if (Platform.isAndroid) {
+          List<dynamic> calls = await FlutterCallkitIncoming.activeCalls();
+
+          // Check to make sure incoming call not called twice with same call ID
+          // (uuid is mean call id)
+          if (calls.isNotEmpty) {
+            final tempUuid = calls.where((element) {
+              final savedUuid = Parser.getString(element["extra"]["uuid"]);
+              return savedUuid == uuid;
+            }).toList();
+
+            // The incoming call for this [uuid] has been shown before, so we don't
+            // need to show the incoming call again
+            if (tempUuid.isNotEmpty) return;
+          }
+        }
+
+        final userCaller = contentData["user_caller"] as Map<String, dynamic>;
+        final avatar = userCaller["avatar"] as String;
+        final name = userCaller["name"] as String;
+
+        CallKitParams params = CallKitParams(
+          id: uuid,
+          nameCaller: name,
+          appName: 'Soca',
+          avatar: avatar,
+          handle: '',
+          type: 1,
+          duration: 30000,
+          textAccept: 'Accept',
+          textDecline: 'Decline',
+          textMissedCall: 'Missed call',
+          textCallback: 'Call back',
+          extra: contentData,
+          android: const AndroidParams(
+            isCustomNotification: true,
+            isShowLogo: false,
+            isShowCallback: false,
+            backgroundColor: '#3a82f7',
+            actionColor: '#4CAF50',
+            incomingCallNotificationChannelName: "Incoming Call",
+            missedCallNotificationChannelName: "Missed Call",
+          ),
+          ios: IOSParams(
+            iconName: 'AppIcon',
+            handleType: '',
+            supportsVideo: true,
+            maximumCallGroups: 1,
+            maximumCallsPerCallGroup: 1,
+            audioSessionMode: 'default',
+            audioSessionActive: true,
+            audioSessionPreferredSampleRate: 44100.0,
+            audioSessionPreferredIOBufferDuration: 0.005,
+            supportsDTMF: true,
+            supportsHolding: false,
+            supportsGrouping: false,
+            supportsUngrouping: false,
+          ),
+        );
+
+        await FlutterCallkitIncoming.showCallkitIncoming(params);
+      }
+    } catch (e, s) {
+      // ignore: avoid_print
+      print(s);
+    }
   }
 }
 
