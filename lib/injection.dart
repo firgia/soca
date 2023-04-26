@@ -37,6 +37,7 @@ void setupInjection() {
   sl.registerSingleton<CallKit>(CallKit());
   sl.registerSingleton<DeviceFeedback>(DeviceFeedbackImpl());
   sl.registerSingleton<DeviceInfo>(DeviceInfoImpl());
+  sl.registerSingleton<DeviceSettings>(DeviceSettingsImpl());
 
   /* --------------------------------> CONFIG <------------------------------ */
   sl.registerSingleton<AppNavigator>(AppNavigator());
