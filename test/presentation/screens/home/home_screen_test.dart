@@ -85,6 +85,15 @@ void main() {
       find.byKey(const Key("permission_message_restricted"));
   Finder findSettingsButton() =>
       find.byKey(const Key("permission_message_settings_button"));
+  Finder findCallStatisticCard() =>
+      find.byKey(const Key("call_statistics_card"));
+  Finder findCallStatisticCardAdaptiveLoading() =>
+      find.byKey(const Key("call_statistics_card_adaptive_loading"));
+  Finder findCallStatisticCardLoading() =>
+      find.byKey(const Key("call_statistics_card_loading"));
+  Finder findCallStatisticCardEmpty() =>
+      find.byKey(const Key("call_statistics_card_empty"));
+  Finder findYearDropdown() => find.byType(YearDropdown);
 
   group("Initial", () {
     setUp(() {
@@ -841,6 +850,254 @@ void main() {
 
             expect(findRestricted(), findsOneWidget);
           });
+        });
+      });
+    });
+  });
+
+  group("Call Statistic", () {
+    setUp(() {
+      when(callStatisticBloc.state).thenReturn(const CallStatisticState(
+        calls: [],
+        listOfYear: [],
+        selectedYear: null,
+        totalCall: null,
+        totalDayJoined: null,
+        userType: null,
+      ));
+    });
+
+    group("Year Dropdown", () {
+      testWidgets(
+          'Should show when [listOfYear] data on CallStatisticState is not empty ',
+          (tester) async {
+        await tester.runAsync(() async {
+          when(callStatisticBloc.stream).thenAnswer(
+            (_) => Stream.value(const CallStatisticState(
+              calls: [
+                CallDataMounthly(
+                  total: 20,
+                  month: "Apr",
+                ),
+              ],
+              listOfYear: ["2020"],
+              selectedYear: "2020",
+              totalCall: 20,
+              totalDayJoined: 10,
+              userType: null,
+            )),
+          );
+
+          await tester.pumpApp(child: const HomeScreen());
+          await tester.pump();
+
+          expect(findYearDropdown(), findsOneWidget);
+        });
+      });
+
+      testWidgets(
+          'Should hide when [listOfYear] data on CallStatisticState is empty ',
+          (tester) async {
+        await tester.runAsync(() async {
+          when(callStatisticBloc.stream).thenAnswer(
+            (_) => Stream.value(const CallStatisticState(
+              calls: [
+                CallDataMounthly(
+                  total: 20,
+                  month: "Apr",
+                ),
+              ],
+              listOfYear: [],
+              selectedYear: "2020",
+              totalCall: 20,
+              totalDayJoined: 10,
+              userType: null,
+            )),
+          );
+
+          await tester.pumpApp(child: const HomeScreen());
+          await tester.pump();
+
+          expect(findYearDropdown(), findsNothing);
+        });
+      });
+
+      testWidgets(
+          'Should call callStatisticBloc.add(CallStatisticYearChanged) when '
+          'year is selected', (tester) async {
+        await tester.runAsync(() async {
+          late BuildContext context;
+
+          when(callStatisticBloc.stream).thenAnswer(
+            (_) => Stream.value(const CallStatisticState(
+              calls: [
+                CallDataMounthly(
+                  total: 20,
+                  month: "Apr",
+                ),
+              ],
+              listOfYear: ["2020", "2021"],
+              selectedYear: "2020",
+              totalCall: 20,
+              totalDayJoined: 10,
+              userType: null,
+            )),
+          );
+
+          await tester.pumpApp(child: Builder(builder: (ctx) {
+            context = ctx;
+
+            return const HomeScreen();
+          }));
+
+          await tester.pump();
+
+          await tester.tap(find.text("2020"));
+          await tester.pump();
+
+          await tester.tap(find.text("2021").last);
+          await tester.pump();
+
+          verify(callStatisticBloc.add(CallStatisticYearChanged(
+            year: "2021",
+            locale: context.locale.languageCode,
+          )));
+        });
+      });
+    });
+
+    group("CallStatisticsCard", () {
+      testWidgets(
+          'Should show when [calls] data on CallStatisticState is not empty ',
+          (tester) async {
+        await tester.runAsync(() async {
+          when(callStatisticBloc.stream).thenAnswer(
+            (_) => Stream.value(const CallStatisticState(
+              calls: [
+                CallDataMounthly(
+                  total: 20,
+                  month: "Apr",
+                ),
+              ],
+              listOfYear: ["2020"],
+              selectedYear: "2020",
+              totalCall: 20,
+              totalDayJoined: 10,
+              userType: null,
+            )),
+          );
+
+          await tester.pumpApp(child: const HomeScreen());
+          await tester.pump();
+
+          expect(findCallStatisticCard(), findsOneWidget);
+          expect(findCallStatisticCardAdaptiveLoading(), findsNothing);
+          expect(findCallStatisticCardLoading(), findsNothing);
+          expect(findCallStatisticCardEmpty(), findsNothing);
+        });
+      });
+    });
+
+    group("CallStatisticCard.loading", () {
+      testWidgets('Should show when [CallStatisticLoading]', (tester) async {
+        await tester.runAsync(() async {
+          when(callStatisticBloc.stream).thenAnswer(
+            (_) => Stream.value(const CallStatisticLoading(
+              calls: [],
+              listOfYear: [],
+              selectedYear: null,
+              totalCall: null,
+              totalDayJoined: null,
+              userType: null,
+            )),
+          );
+          await tester.pumpApp(child: const HomeScreen());
+          await tester.pump();
+
+          expect(findCallStatisticCard(), findsNothing);
+          expect(findCallStatisticCardAdaptiveLoading(), findsNothing);
+          expect(findCallStatisticCardLoading(), findsOneWidget);
+          expect(findCallStatisticCardEmpty(), findsNothing);
+        });
+      });
+
+      testWidgets('Should show when [CallStatisticError]', (tester) async {
+        await tester.runAsync(() async {
+          when(callStatisticBloc.stream).thenAnswer(
+            (_) => Stream.value(
+              const CallStatisticError(
+                calls: [],
+                listOfYear: [],
+                selectedYear: null,
+                totalCall: null,
+                totalDayJoined: null,
+                userType: null,
+              ),
+            ),
+          );
+          await tester.pumpApp(child: const HomeScreen());
+          await tester.pump();
+
+          expect(findCallStatisticCard(), findsNothing);
+          expect(findCallStatisticCardAdaptiveLoading(), findsNothing);
+          expect(findCallStatisticCardLoading(), findsOneWidget);
+          expect(findCallStatisticCardEmpty(), findsNothing);
+        });
+      });
+    });
+
+    group("CallStatisticCard.empty", () {
+      testWidgets(
+          'Should show when CallStatisticError with CallingFailureCode '
+          'is not found', (tester) async {
+        await tester.runAsync(() async {
+          when(callStatisticBloc.stream).thenAnswer(
+            (_) => Stream.value(
+              const CallStatisticError(
+                calls: [],
+                listOfYear: [],
+                selectedYear: null,
+                totalCall: null,
+                totalDayJoined: null,
+                userType: null,
+                callingFailure:
+                    CallingFailure(code: CallingFailureCode.notFound),
+              ),
+            ),
+          );
+          await tester.pumpApp(child: const HomeScreen());
+          await tester.pump();
+
+          expect(findCallStatisticCard(), findsNothing);
+          expect(findCallStatisticCardAdaptiveLoading(), findsNothing);
+          expect(findCallStatisticCardLoading(), findsNothing);
+          expect(findCallStatisticCardEmpty(), findsOneWidget);
+        });
+      });
+
+      testWidgets(
+          'Should show when [calls] data on CallStatisticState is empty',
+          (tester) async {
+        await tester.runAsync(() async {
+          when(callStatisticBloc.stream).thenAnswer(
+            (_) => Stream.value(
+              const CallStatisticState(
+                calls: [],
+                listOfYear: [],
+                selectedYear: null,
+                totalCall: null,
+                totalDayJoined: null,
+                userType: null,
+              ),
+            ),
+          );
+          await tester.pumpApp(child: const HomeScreen());
+          await tester.pump();
+
+          expect(findCallStatisticCard(), findsNothing);
+          expect(findCallStatisticCardAdaptiveLoading(), findsNothing);
+          expect(findCallStatisticCardLoading(), findsNothing);
+          expect(findCallStatisticCardEmpty(), findsOneWidget);
         });
       });
     });
