@@ -141,6 +141,7 @@ class _CallStatisticsCard extends StatelessWidget {
           .tr(namedArgs: {"total": day.toString()}).split(" ");
 
       return Padding(
+        key: const Key("call_statistics_joined_days_text"),
         padding: const EdgeInsets.only(bottom: kDefaultSpacing),
         child: RichText(
           text: TextSpan(
