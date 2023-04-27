@@ -333,3 +333,90 @@ class _PermissionCardState extends State<_PermissionCard>
     WidgetsBinding.instance.removeObserver(this);
   }
 }
+
+class _CallStatistic extends StatelessWidget {
+  const _CallStatistic();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CallStatisticBloc, CallStatisticState>(
+      builder: (context, state) {
+        if (state is CallStatisticLoading) {
+          return const CallStatisticsCard.loading();
+        } else if (state is CallStatisticError) {
+          if (state.callingFailure?.code == CallingFailureCode.notFound) {
+            return CallStatisticsCard.empty(
+              userType: state.userType,
+              header: _buildYearDrowpdown(
+                context,
+                items: state.listOfYear,
+                value: state.selectedYear,
+              ),
+            );
+          } else {
+            return const CallStatisticsCard.loading();
+          }
+        } else {
+          if (state.calls.isEmpty) {
+            return CallStatisticsCard.empty(
+              userType: state.userType,
+              header: _buildYearDrowpdown(
+                context,
+                items: state.listOfYear,
+                value: state.selectedYear,
+              ),
+            );
+          } else {
+            return CallStatisticsCard(
+              dataSource: state.calls,
+              joinedDay: state.totalDayJoined,
+              header: _buildYearDrowpdown(
+                context,
+                items: state.listOfYear,
+                value: state.selectedYear,
+                totalCall: state.totalCall ?? 0,
+              ),
+            );
+          }
+        }
+      },
+    );
+  }
+
+  Widget _buildYearDrowpdown(
+    BuildContext context, {
+    required List<String> items,
+    required String? value,
+    int? totalCall,
+  }) {
+    if (items.isEmpty) {
+      return const SizedBox();
+    } else {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: kDefaultSpacing)
+            .copyWith(top: kDefaultSpacing / 2),
+        child: Row(
+          children: [
+            (totalCall != null)
+                ? Expanded(child: TotalCallText(totalCall))
+                : const Spacer(),
+            YearDropdown(
+              items: items,
+              value: value,
+              onChanged: (value) {
+                if (value != null) {
+                  context.read<CallStatisticBloc>().add(
+                        CallStatisticYearChanged(
+                          year: value,
+                          locale: context.locale.languageCode,
+                        ),
+                      );
+                }
+              },
+            ),
+          ],
+        ),
+      );
+    }
+  }
+}

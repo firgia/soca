@@ -8,6 +8,7 @@
  */
 
 export 'call_action/call_action_bloc.dart';
+export 'call_statistic/call_statistic_bloc.dart';
 export 'file/file_bloc.dart';
 export 'incoming_call/incoming_call_bloc.dart';
 export 'language/language_bloc.dart';
