@@ -76,8 +76,9 @@ class CallStatisticBloc extends Bloc<CallStatisticEvent, CallStatisticState> {
     } on CallingFailure catch (e) {
       _logger.shout("Error to load statistic call");
       emit(
-        CallStatisticError.fromState(state, callingFailure: e).copyWith(
-          selectedYear: event.year,
+        CallStatisticError.fromState(
+          state.copyWith(selectedYear: event.year),
+          callingFailure: e,
         ),
       );
     } catch (e) {
@@ -146,11 +147,14 @@ class CallStatisticBloc extends Bloc<CallStatisticEvent, CallStatisticState> {
     } on CallingFailure catch (e) {
       _logger.shout("Error to load statistic call");
       emit(
-        CallStatisticError.fromState(state, callingFailure: e).copyWith(
-          userType: userType,
-          totalDayJoined: totalDayJoined,
-          listOfYear: listOfCallYears,
-          selectedYear: selectedYear,
+        CallStatisticError.fromState(
+          state.copyWith(
+            userType: userType,
+            totalDayJoined: totalDayJoined,
+            listOfYear: listOfCallYears,
+            selectedYear: selectedYear,
+          ),
+          callingFailure: e,
         ),
       );
     } catch (e) {
