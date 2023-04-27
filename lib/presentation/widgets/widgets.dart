@@ -12,6 +12,7 @@ export 'button/button.dart';
 export 'card/card.dart';
 export 'chart/chart.dart';
 export 'chip/chip.dart';
+export 'dropdown/dropdown.dart';
 export 'image/image.dart';
 export 'loading/loading.dart';
 export 'message/message.dart';

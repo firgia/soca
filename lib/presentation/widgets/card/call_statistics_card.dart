@@ -45,10 +45,12 @@ class CallStatisticsCard extends _CallStatisticsWidget {
 
   const CallStatisticsCard.empty({
     required UserType? userType,
+    Widget? header,
     super.key,
   }) : super(
           type: _WidgetType.emptyCard,
           userType: userType,
+          header: header,
         );
 }
 
@@ -93,6 +95,7 @@ class _CallStatisticsWidget extends StatelessWidget {
       case _WidgetType.emptyCard:
         return _EmptyCard(
           userType: userType,
+          header: header,
           key: const Key("call_statistics_card_empty"),
         );
     }
@@ -190,9 +193,11 @@ class _AdaptiveLoadingCard extends StatelessWidget {
 class _EmptyCard extends StatelessWidget {
   const _EmptyCard({
     required this.userType,
+    this.header,
     super.key,
   });
 
+  final Widget? header;
   final UserType? userType;
 
   @override
@@ -203,6 +208,7 @@ class _EmptyCard extends StatelessWidget {
         width: double.maxFinite,
         child: Column(
           children: [
+            if (header != null) header!,
             const SizedBox(height: kDefaultSpacing),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: kDefaultSpacing),
@@ -220,7 +226,7 @@ class _EmptyCard extends StatelessWidget {
   Widget _buildAnimation() {
     return LottieBuilder.asset(
       ImageAnimation.comment,
-      height: 200,
+      height: 150,
     );
   }
 

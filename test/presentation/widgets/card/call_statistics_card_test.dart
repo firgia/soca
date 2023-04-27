@@ -111,7 +111,8 @@ void main() {
       });
     });
 
-    testWidgets("Should show header not null", (tester) async {
+    testWidgets("Should show header widget when [header] not null",
+        (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(
           child: const CallStatisticsCard(
@@ -268,6 +269,25 @@ void main() {
 
         expect(
           findNoCallDataYetVolunteerText(),
+          findsOneWidget,
+        );
+      });
+    });
+
+    testWidgets("Should show header widget when [header] not null",
+        (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(
+          child: const CallStatisticsCard.empty(
+            userType: null,
+            header: SizedBox(
+              key: Key("this_is_header_widget"),
+            ),
+          ),
+        );
+
+        expect(
+          find.byKey(const Key("this_is_header_widget")),
           findsOneWidget,
         );
       });
