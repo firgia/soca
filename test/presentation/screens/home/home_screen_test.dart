@@ -9,6 +9,7 @@
 
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -26,6 +27,7 @@ import '../../../mock/mock.mocks.dart';
 void main() {
   late MockAppNavigator appNavigator;
   late MockCompleter completer;
+  late MockCallStatisticBloc callStatisticBloc;
   late MockDeviceInfo deviceInfo;
   late MockDeviceSettings deviceSettings;
   late MockIncomingCallBloc incomingCallBloc;
@@ -39,6 +41,7 @@ void main() {
 
     appNavigator = getMockAppNavigator();
     completer = getMockCompleter();
+    callStatisticBloc = getMockCallStatisticBloc();
     deviceInfo = getMockDeviceInfo();
     deviceSettings = getMockDeviceSettings();
     incomingCallBloc = getMockIncomingCallBloc();
@@ -84,11 +87,41 @@ void main() {
       find.byKey(const Key("permission_message_settings_button"));
 
   group("Initial", () {
+    setUp(() {
+      when(callStatisticBloc.state).thenReturn(const CallStatisticState(
+        calls: [],
+        listOfYear: [],
+        selectedYear: null,
+        totalCall: null,
+        totalDayJoined: null,
+        userType: null,
+      ));
+    });
+
     testWidgets("Should call userBloc.add(UserFetched)", (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(child: const HomeScreen());
 
         verify(userBloc.add(const UserFetched()));
+      });
+    });
+
+    testWidgets("Should call callStatisticBloc.add(CallStatisticFetched)",
+        (tester) async {
+      await tester.runAsync(() async {
+        late BuildContext context;
+
+        await tester.pumpApp(
+          child: Builder(
+            builder: (ctx) {
+              context = ctx;
+              return const HomeScreen();
+            },
+          ),
+        );
+
+        verify(callStatisticBloc
+            .add(CallStatisticFetched(context.locale.languageCode)));
       });
     });
 
@@ -133,6 +166,17 @@ void main() {
   });
 
   group("Loading", () {
+    setUp(() {
+      when(callStatisticBloc.state).thenReturn(const CallStatisticState(
+        calls: [],
+        listOfYear: [],
+        selectedYear: null,
+        totalCall: null,
+        totalDayJoined: null,
+        userType: null,
+      ));
+    });
+
     testWidgets('Should hide [LoadingPanel] when state is not [RouteLoading] ',
         (tester) async {
       await tester.runAsync(() async {
@@ -155,6 +199,17 @@ void main() {
   });
 
   group("Refresh", () {
+    setUp(() {
+      when(callStatisticBloc.state).thenReturn(const CallStatisticState(
+        calls: [],
+        listOfYear: [],
+        selectedYear: null,
+        totalCall: null,
+        totalDayJoined: null,
+        userType: null,
+      ));
+    });
+
     testWidgets("Should fetched user data when refresh", (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(child: const HomeScreen());
@@ -166,9 +221,42 @@ void main() {
         verify(userBloc.add(UserFetched(completer: completer)));
       });
     });
+
+    testWidgets("Should fetched statistic data when refresh", (tester) async {
+      await tester.runAsync(() async {
+        late BuildContext context;
+
+        await tester.pumpApp(
+          child: Builder(
+            builder: (ctx) {
+              context = ctx;
+              return const HomeScreen();
+            },
+          ),
+        );
+        await tester.setScreenSize(iphone14);
+
+        verify(userBloc.add(const UserFetched()));
+        await tester.drag(find.byType(SwipeRefresh), const Offset(0, 400));
+        await tester.pump();
+        verify(callStatisticBloc
+            .add(CallStatisticFetched(context.locale.languageCode)));
+      });
+    });
   });
 
   group("Profile Card", () {
+    setUp(() {
+      when(callStatisticBloc.state).thenReturn(const CallStatisticState(
+        calls: [],
+        listOfYear: [],
+        selectedYear: null,
+        totalCall: null,
+        totalDayJoined: null,
+        userType: null,
+      ));
+    });
+
     testWidgets('Should show profile card when [UserState] is [UserLoaded]',
         (tester) async {
       User user = const User(id: "1234", name: "Mochamad Firgia");
@@ -204,6 +292,17 @@ void main() {
   });
 
   group("Bloc Listener", () {
+    setUp(() {
+      when(callStatisticBloc.state).thenReturn(const CallStatisticState(
+        calls: [],
+        listOfYear: [],
+        selectedYear: null,
+        totalCall: null,
+        totalDayJoined: null,
+        userType: null,
+      ));
+    });
+
     testWidgets('Should navigate to answer call page when [IncomingCallLoaded]',
         (tester) async {
       await tester.runAsync(() async {
@@ -261,6 +360,17 @@ void main() {
   });
 
   group("User Action", () {
+    setUp(() {
+      when(callStatisticBloc.state).thenReturn(const CallStatisticState(
+        calls: [],
+        listOfYear: [],
+        selectedYear: null,
+        totalCall: null,
+        totalDayJoined: null,
+        userType: null,
+      ));
+    });
+
     testWidgets('Should show VolunteerInfoCard when user type is volunteer',
         (tester) async {
       User user = const User(
@@ -315,7 +425,7 @@ void main() {
         await tester.pump();
 
         await tester.tap(findCallVolunteerButton());
-        await tester.pumpAndSettle();
+        await tester.pump();
 
         verify(appNavigator.goToCreateCall(any, user: user));
       });
@@ -342,6 +452,17 @@ void main() {
   });
 
   group("Permission handler", () {
+    setUp(() {
+      when(callStatisticBloc.state).thenReturn(const CallStatisticState(
+        calls: [],
+        listOfYear: [],
+        selectedYear: null,
+        totalCall: null,
+        totalDayJoined: null,
+        userType: null,
+      ));
+    });
+
     group("Content", () {
       testWidgets(
           'Should show permission card content when permission '

@@ -33,6 +33,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final AppNavigator appNavigator = sl<AppNavigator>();
+  final CallStatisticBloc callStatisticBloc = sl<CallStatisticBloc>();
   final IncomingCallBloc incomingCallBloc = sl<IncomingCallBloc>();
   final RouteCubit routeCubit = sl<RouteCubit>();
   final UserBloc userBloc = sl<UserBloc>();
@@ -57,9 +58,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    callStatisticBloc.add(CallStatisticFetched(context.locale.languageCode));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => callStatisticBloc),
         BlocProvider(create: (context) => routeCubit),
         BlocProvider(create: (context) => userBloc),
       ],
@@ -93,6 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           body: _LoadingWrapper(
             child: SafeArea(
+              bottom: false,
               child: SwipeRefresh.adaptive(
                 stateStream: swipeRefreshController.stream,
                 onRefresh: onRefresh,
@@ -102,6 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   _UserProfile(),
                   _UserAction(),
                   _PermissionCard(),
+                  SizedBox(height: kDefaultSpacing * 1.5),
+                  _CallStatistic(),
                   SizedBox(height: kDefaultSpacing * 2),
                 ],
               ),
@@ -114,9 +125,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> onRefresh() async {
     Completer completer = sl<Completer>();
-    userBloc.add(UserFetched(completer: completer));
+    Completer completerCall = sl<Completer>();
 
-    await completer.future;
+    userBloc.add(UserFetched(completer: completer));
+    callStatisticBloc.add(
+      CallStatisticFetched(
+        context.locale.languageCode,
+        completer: completerCall,
+      ),
+    );
+
+    await Future.wait([
+      completer.future,
+      completerCall.future,
+    ]);
+
     if (!swipeRefreshController.isClosed) {
       swipeRefreshController.sink.add(SwipeRefreshState.hidden);
     }
