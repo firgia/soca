@@ -113,6 +113,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   _PermissionCard(),
                   SizedBox(height: kDefaultSpacing * 1.5),
                   _CallStatistic(),
+                  SizedBox(height: kDefaultSpacing),
+                  _CallHistoryButton(),
                   SizedBox(height: kDefaultSpacing * 2),
                 ],
               ),
