@@ -30,6 +30,7 @@ class PageIconButton extends StatelessWidget with UIMixin {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.symmetric(horizontal: kDefaultSpacing),
       child: InkWell(
         borderRadius: BorderRadius.circular(kBorderRadius),
         onTap: onPressed,

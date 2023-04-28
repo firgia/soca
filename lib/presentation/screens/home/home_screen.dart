@@ -36,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final CallStatisticBloc callStatisticBloc = sl<CallStatisticBloc>();
   final IncomingCallBloc incomingCallBloc = sl<IncomingCallBloc>();
   final RouteCubit routeCubit = sl<RouteCubit>();
+  final SignOutCubit signOutCubit = sl<SignOutCubit>();
   final UserBloc userBloc = sl<UserBloc>();
   final UserRepository userRepository = sl<UserRepository>();
   late final StreamController<SwipeRefreshState> swipeRefreshController;
@@ -69,10 +70,18 @@ class _HomeScreenState extends State<HomeScreen> {
       providers: [
         BlocProvider(create: (context) => callStatisticBloc),
         BlocProvider(create: (context) => routeCubit),
+        BlocProvider(create: (context) => signOutCubit),
         BlocProvider(create: (context) => userBloc),
       ],
       child: MultiBlocListener(
         listeners: [
+          BlocListener<SignOutCubit, SignOutState>(
+            listener: (context, state) {
+              if (state is SignOutSuccessfully || state is SignOutError) {
+                appNavigator.goToSplash(context);
+              }
+            },
+          ),
           BlocListener<IncomingCallBloc, IncomingCallState>(
             bloc: incomingCallBloc,
             listener: (context, state) {
@@ -113,8 +122,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   _PermissionCard(),
                   SizedBox(height: kDefaultSpacing * 1.5),
                   _CallStatistic(),
-                  SizedBox(height: kDefaultSpacing),
+                  SizedBox(height: kDefaultSpacing * 1.5),
                   _CallHistoryButton(),
+                  SizedBox(height: kDefaultSpacing * 1.5),
+                  _SignOutButton(),
                   SizedBox(height: kDefaultSpacing * 2),
                 ],
               ),
