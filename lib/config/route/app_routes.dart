@@ -42,6 +42,11 @@ abstract class AppRoutes {
                     );
                   }),
               GoRoute(
+                path: AppPages.callHistory,
+                name: AppPages.callHistory,
+                builder: (context, state) => const CallHistoryScreen(),
+              ),
+              GoRoute(
                 path: AppPages.createCall,
                 name: AppPages.createCall,
                 builder: (context, state) => CreateCallScreen(
