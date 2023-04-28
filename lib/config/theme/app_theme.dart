@@ -113,7 +113,7 @@ CardTheme? _getCardTheme(Brightness brightness) {
       borderRadius: BorderRadius.circular(kBorderRadius),
     ),
     margin: const EdgeInsets.all(kDefaultSpacing),
-    elevation: 24,
+    elevation: 0,
     shadowColor: isDark ? Colors.white12 : Colors.black12,
   );
 }

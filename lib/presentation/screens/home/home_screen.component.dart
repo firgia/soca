@@ -132,7 +132,7 @@ class _PermissionCardState extends State<_PermissionCard>
         key: const Key("home_screen_permission_card_content"),
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: kDefaultSpacing * 1.5),
+          const SizedBox(height: kDefaultSpacing * .5),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: kDefaultSpacing),
             child: Text(
@@ -418,5 +418,22 @@ class _CallStatistic extends StatelessWidget {
         ),
       );
     }
+  }
+}
+
+class _CallHistoryButton extends StatelessWidget {
+  const _CallHistoryButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return PageIconButton(
+      key: const Key("home_screen_call_history_button"),
+      icon: EvaIcons.clockOutline,
+      label: LocaleKeys.call_history.tr(),
+      iconColor: Colors.amber,
+      onPressed: () {
+        sl<AppNavigator>().goToCallHistory(context);
+      },
+    );
   }
 }

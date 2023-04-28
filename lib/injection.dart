@@ -88,6 +88,7 @@ void setupInjection() {
 
   /* --------------------------------> LOGIC <------------------------------- */
   sl.registerFactory<CallActionBloc>(() => CallActionBloc());
+  sl.registerFactory<CallHistoryBloc>(() => CallHistoryBloc());
   sl.registerFactory<CallStatisticBloc>(() => CallStatisticBloc());
   sl.registerFactory<FileBloc>(() => FileBloc());
   sl.registerSingleton<IncomingCallBloc>(IncomingCallBloc());

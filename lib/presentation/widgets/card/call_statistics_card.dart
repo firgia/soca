@@ -126,7 +126,7 @@ class _CallStatisticsCard extends StatelessWidget {
               height: 250,
               dataSource: dataSource,
               xSpacing: 80,
-              preferLastData: true,
+              preferLastData: false,
             ),
             _buildJoinedDayText(context),
           ],

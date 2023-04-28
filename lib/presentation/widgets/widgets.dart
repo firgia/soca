@@ -14,6 +14,7 @@ export 'chart/chart.dart';
 export 'chip/chip.dart';
 export 'dropdown/dropdown.dart';
 export 'image/image.dart';
+export 'item/item.dart';
 export 'loading/loading.dart';
 export 'message/message.dart';
 export 'shadow/shadow.dart';

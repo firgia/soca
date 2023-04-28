@@ -36,6 +36,9 @@ class AppNavigator {
         "url_image": urlImage,
       });
 
+  void goToCallHistory(BuildContext context) =>
+      context.pushNamed(AppPages.callHistory);
+
   void goToCreateCall(BuildContext context, {required User user}) =>
       context.pushNamed(AppPages.createCall, extra: user);
 

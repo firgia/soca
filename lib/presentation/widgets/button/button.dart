@@ -16,6 +16,7 @@ export 'flag_button.dart';
 export 'gender_button.dart';
 export 'gradient_button.dart';
 export 'illustration_card_button.dart';
+export 'page_icon_button.dart';
 export 'profile_image_button.dart';
 export 'sign_in_button.dart';
 export 'sign_in_with_apple_button.dart';
