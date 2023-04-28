@@ -44,42 +44,40 @@ class _CallHistoryScreenState extends State<CallHistoryScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => callHistoryBloc,
-      child: BlocListener<CallHistoryBloc, CallHistoryState>(
-        listener: (context, state) {
-          if (state is CallHistoryError &&
-              state.failure?.code != CallingFailureCode.notFound) {
-            Alert(context).showSomethingErrorMessage();
-          }
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            leading: const CustomBackButton(),
-            title: const Text(LocaleKeys.call_history).tr(),
-          ),
-          body: BlocBuilder<CallHistoryBloc, CallHistoryState>(
-            builder: (context, state) {
-              bool isLoading = state is CallHistoryLoading;
-              List<List<CallHistory>> data = [];
+      child: Scaffold(
+        appBar: AppBar(
+          leading: const CustomBackButton(),
+          title: const Text(LocaleKeys.call_history).tr(),
+        ),
+        body: BlocConsumer<CallHistoryBloc, CallHistoryState>(
+          listener: (context, state) {
+            if (state is CallHistoryError &&
+                state.failure?.code != CallingFailureCode.notFound) {
+              Alert(context).showSomethingErrorMessage();
+            }
+          },
+          builder: (context, state) {
+            bool isLoading = state is CallHistoryLoading;
+            List<List<CallHistory>> data = [];
 
-              if (state is CallHistoryLoaded) {
-                data = state.data;
-              }
+            if (state is CallHistoryLoaded) {
+              data = state.data;
+            }
 
-              return SwipeRefresh.builder(
-                stateStream: swipeRefreshController.stream,
-                onRefresh: onRefresh,
-                platform: CustomPlatformWrapper(),
-                itemCount: isLoading ? 2 : data.length,
-                itemBuilder: (context, index) {
-                  if (isLoading) {
-                    return const CallHistoryCard.loading();
-                  } else {
-                    return CallHistoryCard(data: data[index]);
-                  }
-                },
-              );
-            },
-          ),
+            return SwipeRefresh.builder(
+              stateStream: swipeRefreshController.stream,
+              onRefresh: onRefresh,
+              platform: CustomPlatformWrapper(),
+              itemCount: isLoading ? 2 : data.length,
+              itemBuilder: (context, index) {
+                if (isLoading) {
+                  return const CallHistoryCard.loading();
+                } else {
+                  return CallHistoryCard(data: data[index]);
+                }
+              },
+            );
+          },
         ),
       ),
     );

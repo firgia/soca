@@ -81,6 +81,7 @@ export 'mock.mocks.dart';
 
   /* --------------------------------> LOGIC <------------------------------- */
   MockSpec<CallActionBloc>(),
+  MockSpec<CallHistoryBloc>(),
   MockSpec<CallStatisticBloc>(),
   MockSpec<FileBloc>(),
   MockSpec<IncomingCallBloc>(),
