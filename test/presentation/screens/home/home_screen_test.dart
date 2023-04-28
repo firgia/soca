@@ -59,6 +59,8 @@ void main() {
 
   tearDown(() => unregisterLocator());
 
+  Finder findCallHistoryButton() =>
+      find.byKey(const Key("home_screen_call_history_button"));
   Finder findLoadingPanel() => find.byType(LoadingPanel);
   Finder findPermissionCamera() =>
       find.byKey(const Key("home_screen_permission_camera_card"));
@@ -1099,6 +1101,49 @@ void main() {
           expect(findCallStatisticCardLoading(), findsNothing);
           expect(findCallStatisticCardEmpty(), findsOneWidget);
         });
+      });
+    });
+  });
+
+  group("Call History Button", () {
+    setUp(() {
+      when(callStatisticBloc.state).thenReturn(const CallStatisticState(
+        calls: [],
+        listOfYear: [],
+        selectedYear: null,
+        totalCall: null,
+        totalDayJoined: null,
+        userType: null,
+      ));
+    });
+
+    testWidgets("Should show call history button", (tester) async {
+      await tester.runAsync(() async {
+        await tester.setScreenSize(iphone14);
+        await tester.pumpApp(child: const HomeScreen());
+
+        await tester.drag(find.byType(SwipeRefresh), const Offset(0, -100));
+        await tester.pump();
+
+        expect(findCallHistoryButton(), findsOneWidget);
+      });
+    });
+
+    testWidgets(
+        "Should navigate to call history page when call history button is tapped",
+        (tester) async {
+      await tester.runAsync(() async {
+        await tester.setScreenSize(iphone14);
+        await tester.pumpApp(child: const HomeScreen());
+
+        await tester.drag(find.byType(SwipeRefresh), const Offset(0, -100));
+        await tester.pump();
+
+        await tester.ensureVisible(findCallHistoryButton());
+        await tester.tap(findCallHistoryButton());
+        await tester.pump();
+
+        verify(appNavigator.goToCallHistory(any));
       });
     });
   });
