@@ -149,7 +149,8 @@ void main() {
       });
     });
 
-    testWidgets("Should show user type text", (tester) async {
+    testWidgets("Should show user type text with [UserTypeChip]",
+        (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(
           child: Scaffold(
@@ -164,10 +165,12 @@ void main() {
                 ? LocaleKeys.blind.tr()
                 : LocaleKeys.volunteer.tr()),
             findsOneWidget);
+
+        expect(find.byType(UserTypeChip), findsOneWidget);
       });
     });
 
-    testWidgets("Should show age text with GenderAgeChip", (tester) async {
+    testWidgets("Should show age text with [GenderAgeChip]", (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(
           child: Scaffold(
