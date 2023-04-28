@@ -9,7 +9,6 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_icons/custom_icons.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -87,43 +86,36 @@ class _Item extends StatelessWidget with UIMixin {
     final name = data.name;
     final type = data.type;
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(kDefaultSpacing * 1.2),
-        child: Row(
-          children: [
-            _buildAvatar(context),
-            const SizedBox(width: kDefaultSpacing),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (name != null) _buildName(name, context),
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      if (type != null)
-                        _buildTypeText(
-                            type == UserType.blind
-                                ? LocaleKeys.blind.tr()
-                                : LocaleKeys.volunteer.tr(),
-                            context),
-                      const SizedBox(width: kDefaultSpacing / 2),
-                      GenderAgeChip(
-                        gender: data.gender,
-                        age: (data.dateOfBirth == null)
-                            ? null
-                            : Calculator.calculateAge(data.dateOfBirth!),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+    return Padding(
+      padding: const EdgeInsets.all(kDefaultSpacing * 1.2),
+      child: Row(
+        children: [
+          _buildAvatar(context),
+          const SizedBox(width: kDefaultSpacing),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (name != null) _buildName(name, context),
+                const SizedBox(height: kDefaultSpacing / 2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    if (type != null) UserTypeChip(userType: type),
+                    const SizedBox(width: kDefaultSpacing / 2),
+                    GenderAgeChip(
+                      gender: data.gender,
+                      age: (data.dateOfBirth == null)
+                          ? null
+                          : Calculator.calculateAge(data.dateOfBirth!),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            _buildEditButton(context),
-          ],
-        ),
+          ),
+          _buildEditButton(context),
+        ],
       ),
     );
   }
@@ -160,7 +152,7 @@ class _Item extends StatelessWidget with UIMixin {
                 avatar,
                 cacheManager: sl<DefaultCacheManager>(),
               ),
-              radius: 60,
+              radius: 75,
             ),
             if (isOnline != null)
               Container(
@@ -184,19 +176,12 @@ class _Item extends StatelessWidget with UIMixin {
   Widget _buildName(String name, BuildContext context) {
     return Text(
       name,
-      style: Theme.of(context).textTheme.titleLarge,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-    );
-  }
-
-  Widget _buildTypeText(String text, BuildContext context) {
-    return Text(
-      text,
       style: Theme.of(context)
           .textTheme
-          .bodyLarge
-          ?.copyWith(color: AppColors.fontPallets[1]),
+          .headlineSmall
+          ?.copyWith(fontWeight: FontWeight.w500),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }
@@ -206,31 +191,29 @@ class _ItemLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(kDefaultSpacing * 1.2),
-        child: Row(
-          children: [
-            _buildAvatar(context),
-            const SizedBox(width: kDefaultSpacing),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  CustomShimmer(
-                    height: 18,
-                    width: 150,
-                  ),
-                  SizedBox(height: 10),
-                  CustomShimmer(
-                    height: 14,
-                    width: 100,
-                  ),
-                ],
-              ),
+    return Padding(
+      padding: const EdgeInsets.all(kDefaultSpacing * 1.2),
+      child: Row(
+        children: [
+          _buildAvatar(context),
+          const SizedBox(width: kDefaultSpacing),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                CustomShimmer(
+                  height: 25,
+                  width: 150,
+                ),
+                SizedBox(height: 10),
+                CustomShimmer(
+                  height: 20,
+                  width: 100,
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -242,7 +225,7 @@ class _ItemLoading extends StatelessWidget {
         borderRadius: BorderRadius.circular(30),
         boxShadow: [CustomShadow()],
       ),
-      child: const ProfileImage.loading(radius: 60),
+      child: const ProfileImage.loading(radius: 75),
     );
   }
 }

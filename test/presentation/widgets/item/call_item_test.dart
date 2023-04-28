@@ -15,8 +15,7 @@ import 'package:mocktail_image_network/mocktail_image_network.dart';
 import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
-import 'package:soca/presentation/widgets/item/item.dart';
-import 'package:soca/presentation/widgets/widgets.dart';
+import 'package:soca/presentation/presentation.dart';
 
 import '../../../helper/helper.dart';
 import '../../../mock/mock.dart';

@@ -21,8 +21,8 @@ class GenderAgeChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 50,
       height: 25,
+      padding: const EdgeInsets.symmetric(horizontal: kDefaultSpacing / 1.5),
       decoration: BoxDecoration(
         color: gender == Gender.female
             ? AppColors.genderFemaleColor

@@ -8,3 +8,4 @@
  */
 
 export 'gender_age_chip.dart';
+export 'user_type_chip.dart';
