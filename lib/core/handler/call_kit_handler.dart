@@ -19,7 +19,10 @@ import '../../injection.dart';
 import '../../logic/logic.dart';
 import '../core.dart';
 
-class CallKitHandler {
+/// This Handler is used for handling incoming call features.
+///
+/// Please call initialize to use this handler
+abstract class CallKitHandler {
   static bool _isInitialized = false;
 
   static void initialize() async {

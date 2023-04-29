@@ -9,3 +9,4 @@
 
 export 'call_kit_handler.dart';
 export 'onesignal_handler.dart';
+export 'siri_handler.dart';

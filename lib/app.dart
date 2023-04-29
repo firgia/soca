@@ -85,6 +85,7 @@ Future<void> initializeApp() async {
 
   CallKitHandler.initialize();
   OnesignalHandler.initialize();
+  SiriHandler.initialize();
   Bloc.observer = AppBlocObserver();
 }
 

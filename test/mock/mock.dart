@@ -80,6 +80,7 @@ export 'mock.mocks.dart';
   MockSpec<WidgetsBinding>(),
 
   /* --------------------------------> LOGIC <------------------------------- */
+  MockSpec<AssistantCommandBloc>(),
   MockSpec<CallActionBloc>(),
   MockSpec<CallHistoryBloc>(),
   MockSpec<CallStatisticBloc>(),
