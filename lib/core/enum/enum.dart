@@ -8,6 +8,7 @@
  */
 
 export 'adaptive_platform.dart';
+export 'assistant_command_type.dart';
 export 'auth_method.dart';
 export 'button_size.dart';
 export 'call_action_type.dart';

@@ -33,6 +33,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final AppNavigator appNavigator = sl<AppNavigator>();
+  final AssistantCommandBloc assistantCommandBloc = sl<AssistantCommandBloc>();
   final CallStatisticBloc callStatisticBloc = sl<CallStatisticBloc>();
   final IncomingCallBloc incomingCallBloc = sl<IncomingCallBloc>();
   final RouteCubit routeCubit = sl<RouteCubit>();
@@ -54,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
+    assistantCommandBloc.add(const AssistantCommandFetched());
     userBloc.add(const UserFetched());
     incomingCallBloc.add(const IncomingCallFetched());
   }
@@ -75,6 +77,15 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
       child: MultiBlocListener(
         listeners: [
+          BlocListener<AssistantCommandBloc, AssistantCommandState?>(
+            bloc: assistantCommandBloc,
+            listener: (context, state) {
+              if (state is AssistantCommandCallVolunteerLoaded) {
+                appNavigator.goToCreateCall(context, user: state.data);
+                assistantCommandBloc.add(const AssistantCommandEventRemoved());
+              }
+            },
+          ),
           BlocListener<SignOutCubit, SignOutState>(
             listener: (context, state) {
               if (state is SignOutSuccessfully || state is SignOutError) {

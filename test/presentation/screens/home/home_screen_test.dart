@@ -26,6 +26,7 @@ import '../../../mock/mock.mocks.dart';
 
 void main() {
   late MockAppNavigator appNavigator;
+  late MockAssistantCommandBloc assistantCommandBloc;
   late MockCompleter completer;
   late MockCallStatisticBloc callStatisticBloc;
   late MockDeviceInfo deviceInfo;
@@ -41,6 +42,7 @@ void main() {
     registerLocator();
 
     appNavigator = getMockAppNavigator();
+    assistantCommandBloc = getMockAssistantCommandBloc();
     completer = getMockCompleter();
     callStatisticBloc = getMockCallStatisticBloc();
     deviceInfo = getMockDeviceInfo();
@@ -118,6 +120,15 @@ void main() {
         await tester.pumpApp(child: const HomeScreen());
 
         verify(userBloc.add(const UserFetched()));
+      });
+    });
+
+    testWidgets("Should call assistantCommandBloc.add(AssistantCommandFetched)",
+        (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(child: const HomeScreen());
+
+        verify(assistantCommandBloc.add(const AssistantCommandFetched()));
       });
     });
 
@@ -328,6 +339,30 @@ void main() {
         totalDayJoined: null,
         userType: null,
       ));
+    });
+
+    testWidgets(
+        'Should navigate to create call page when [AssistantCommandCallVolunteerLoaded]',
+        (tester) async {
+      await tester.runAsync(() async {
+        const User user = User(id: "123");
+        when(assistantCommandBloc.stream).thenAnswer(
+          (_) => Stream.value(
+            const AssistantCommandCallVolunteerLoaded(user),
+          ),
+        );
+
+        await tester.pumpApp(child: const HomeScreen());
+
+        verify(
+          appNavigator.goToCreateCall(
+            any,
+            user: user,
+          ),
+        );
+
+        verify(assistantCommandBloc.add(const AssistantCommandEventRemoved()));
+      });
     });
 
     testWidgets('Should navigate to answer call page when [IncomingCallLoaded]',
