@@ -72,15 +72,20 @@ class _LoadingWrapper extends StatelessWidget {
     return Stack(
       children: [
         child,
-        BlocBuilder<RouteCubit, RouteState>(
-          builder: (context, state) {
-            bool isLoading = state is RouteLoading;
+        BlocBuilder<SignOutCubit, SignOutState>(
+          builder: (context, signOutState) {
+            return BlocBuilder<RouteCubit, RouteState>(
+              builder: (context, routeState) {
+                bool isLoading = (routeState is RouteLoading) ||
+                    (signOutState is SignOutLoading);
 
-            if (isLoading) {
-              return const LoadingPanel();
-            } else {
-              return const SizedBox();
-            }
+                if (isLoading) {
+                  return const LoadingPanel();
+                } else {
+                  return const SizedBox();
+                }
+              },
+            );
           },
         ),
       ],
@@ -132,7 +137,7 @@ class _PermissionCardState extends State<_PermissionCard>
         key: const Key("home_screen_permission_card_content"),
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: kDefaultSpacing * 1.5),
+          const SizedBox(height: kDefaultSpacing * .5),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: kDefaultSpacing),
             child: Text(
@@ -331,5 +336,153 @@ class _PermissionCardState extends State<_PermissionCard>
     super.dispose();
 
     WidgetsBinding.instance.removeObserver(this);
+  }
+}
+
+class _CallStatistic extends StatelessWidget {
+  const _CallStatistic();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CallStatisticBloc, CallStatisticState>(
+      builder: (context, state) {
+        if (state is CallStatisticLoading) {
+          return const CallStatisticsCard.loading();
+        } else if (state is CallStatisticError) {
+          if (state.callingFailure?.code == CallingFailureCode.notFound) {
+            return CallStatisticsCard.empty(
+              userType: state.userType,
+              header: _buildYearDrowpdown(
+                context,
+                items: state.listOfYear,
+                value: state.selectedYear,
+              ),
+            );
+          } else {
+            return const CallStatisticsCard.loading();
+          }
+        } else {
+          if (state.calls.isEmpty) {
+            return CallStatisticsCard.empty(
+              userType: state.userType,
+              header: _buildYearDrowpdown(
+                context,
+                items: state.listOfYear,
+                value: state.selectedYear,
+              ),
+            );
+          } else {
+            return CallStatisticsCard(
+              dataSource: state.calls,
+              joinedDay: state.totalDayJoined,
+              header: _buildYearDrowpdown(
+                context,
+                items: state.listOfYear,
+                value: state.selectedYear,
+                totalCall: state.totalCall ?? 0,
+              ),
+            );
+          }
+        }
+      },
+    );
+  }
+
+  Widget _buildYearDrowpdown(
+    BuildContext context, {
+    required List<String> items,
+    required String? value,
+    int? totalCall,
+  }) {
+    if (items.isEmpty) {
+      return const SizedBox();
+    } else {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: kDefaultSpacing)
+            .copyWith(top: kDefaultSpacing / 2),
+        child: Row(
+          children: [
+            (totalCall != null)
+                ? Expanded(child: TotalCallText(totalCall))
+                : const Spacer(),
+            YearDropdown(
+              items: items,
+              value: value,
+              onChanged: (value) {
+                if (value != null) {
+                  context.read<CallStatisticBloc>().add(
+                        CallStatisticYearChanged(
+                          year: value,
+                          locale: context.locale.languageCode,
+                        ),
+                      );
+                }
+              },
+            ),
+          ],
+        ),
+      );
+    }
+  }
+}
+
+class _CallHistoryButton extends StatelessWidget {
+  const _CallHistoryButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return PageIconButton(
+      key: const Key("home_screen_call_history_button"),
+      icon: EvaIcons.clockOutline,
+      label: LocaleKeys.call_history.tr(),
+      iconColor: Colors.amber,
+      onPressed: () {
+        sl<AppNavigator>().goToCallHistory(context);
+      },
+    );
+  }
+}
+
+class _SignOutButton extends StatelessWidget {
+  const _SignOutButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      key: const Key("home_screen_sign_out_button"),
+      margin: const EdgeInsets.symmetric(horizontal: kDefaultSpacing),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(kBorderRadius),
+        onTap: () {
+          context.read<SignOutCubit>().signOut();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(kDefaultSpacing * 1.1),
+          child: BrightnessBuilder(builder: (context, brightness) {
+            Color color = brightness == Brightness.dark
+                ? Colors.redAccent[100]!
+                : AppColors.red;
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  EvaIcons.logOut,
+                  color: color,
+                ),
+                const SizedBox(width: kDefaultSpacing / 2),
+                Text(
+                  LocaleKeys.sign_out.tr(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(color: color),
+                ),
+                const SizedBox(width: kDefaultSpacing / 2),
+              ],
+            );
+          }),
+        ),
+      ),
+    );
   }
 }

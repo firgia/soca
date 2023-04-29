@@ -290,6 +290,22 @@ MockCallActionBloc getMockCallActionBloc() {
   return mock;
 }
 
+MockCallHistoryBloc getMockCallHistoryBloc() {
+  MockCallHistoryBloc mock = MockCallHistoryBloc();
+  _removeRegistrationIfExists<CallHistoryBloc>();
+  locator.registerSingleton<CallHistoryBloc>(mock);
+
+  return mock;
+}
+
+MockCallStatisticBloc getMockCallStatisticBloc() {
+  MockCallStatisticBloc mock = MockCallStatisticBloc();
+  _removeRegistrationIfExists<CallStatisticBloc>();
+  locator.registerSingleton<CallStatisticBloc>(mock);
+
+  return mock;
+}
+
 MockFileBloc getMockFileBloc() {
   MockFileBloc mock = MockFileBloc();
   _removeRegistrationIfExists<FileBloc>();
@@ -422,6 +438,8 @@ void registerLocator() {
 
   /* --------------------------------> LOGIC <------------------------------- */
   getMockCallActionBloc();
+  getMockCallHistoryBloc();
+  getMockCallStatisticBloc();
   getMockFileBloc();
   getMockIncomingCallBloc();
   getMockLanguageBloc();
@@ -479,6 +497,8 @@ void unregisterLocator() {
 
   /* --------------------------------> LOGIC <------------------------------- */
   locator.unregister<CallActionBloc>();
+  locator.unregister<CallHistoryBloc>();
+  locator.unregister<CallStatisticBloc>();
   locator.unregister<FileBloc>();
   locator.unregister<IncomingCallBloc>();
   locator.unregister<LanguageBloc>();

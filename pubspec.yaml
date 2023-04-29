@@ -74,6 +74,7 @@ dependencies:
   shimmer: ^2.0.0
   sign_in_with_apple: ^4.3.0
   swipe_refresh: ^1.0.2
+  syncfusion_flutter_charts: ^21.1.41
   uuid: ^3.0.7
   wakelock: ^0.6.2
 

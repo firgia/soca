@@ -8,6 +8,8 @@
  */
 
 export 'account_card.dart';
+export 'call_history_card.dart';
+export 'call_statistics_card.dart';
 export 'language_card.dart';
 export 'language_selection_card.dart';
 export 'permission_card.dart';

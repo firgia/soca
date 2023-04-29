@@ -22,7 +22,7 @@ void main() {
   );
 
   group("VideoCallState", () {
-    group(".()", () {
+    group("()", () {
       test("Should fill up the fields based on the constructor parameter", () {
         const VideoCallState state = VideoCallState(
           setting: CallSetting(enableFlip: false, enableFlashlight: true),
@@ -42,18 +42,6 @@ void main() {
     });
 
     group(".copyWith()", () {
-      late VideoCallState defaultState;
-
-      setUp(() {
-        defaultState = const VideoCallState(
-          setting: CallSetting(enableFlip: false, enableFlashlight: true),
-          isLocalJoined: true,
-          isCallEnded: false,
-          isUserOffline: false,
-          remoteUID: 1,
-        );
-      });
-
       test("Should copy the setting", () {
         VideoCallState state = defaultState.copyWith(
           setting:
@@ -116,7 +104,7 @@ void main() {
   });
 
   group("VideoCallSettingFlashlightLoading", () {
-    group(".()", () {
+    group("()", () {
       test("Should fill up the fields based on the constructor parameter", () {
         const VideoCallSettingFlashlightLoading state =
             VideoCallSettingFlashlightLoading(
