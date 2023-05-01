@@ -7,11 +7,13 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
-import 'package:flutter_siri_suggestions/flutter_siri_suggestions.dart';
+import 'package:flutter/services.dart';
 
 import '../../injection.dart';
 import '../../logic/logic.dart';
 import '../core.dart';
+
+const EventChannel _siriEventChannel = EventChannel("com.firgia.soca/siri");
 
 /// This Handler is used for handling siri features.
 ///
@@ -24,18 +26,11 @@ abstract class SiriHandler {
       DeviceInfo deviceInfo = sl<DeviceInfo>();
 
       if (deviceInfo.isIOS()) {
-        await FlutterSiriSuggestions.instance.registerActivity(
-          const FlutterSiriActivity(
-            "Call a volunteer",
-            "call_volunteer",
-            isEligibleForSearch: true,
-            isEligibleForPrediction: true,
-            contentDescription: "Search and call a volunteer",
-            suggestedInvocationPhrase: "Call a volunteer",
-          ),
+        _siriEventChannel.receiveBroadcastStream().listen(
+          (event) {
+            _onEvent(event);
+          },
         );
-
-        FlutterSiriSuggestions.instance.configure(onLaunch: _onLaunch);
       }
     }
 
@@ -44,15 +39,15 @@ abstract class SiriHandler {
 }
 
 @pragma('vm:entry-point')
-Future<void> _onLaunch(Map<String, dynamic> message) async {
+Future<void> _onEvent(dynamic value) async {
   if (!sl.isRegistered<AssistantCommandBloc>()) {
     sl.registerSingleton<AssistantCommandBloc>(AssistantCommandBloc());
   }
 
   AssistantCommandBloc assistantCommandBloc = sl<AssistantCommandBloc>();
 
-  switch (message["key"]) {
-    case "call_volunteer":
+  switch (value.toString()) {
+    case "com.firgia.soca.call_volunteer":
       assistantCommandBloc.add(
           const AssistantCommandEventAdded(AssistantCommandType.callVolunteer));
       break;
