@@ -79,11 +79,11 @@ class AppNavigator {
     return isTopStack(context) && page == AppPages.home;
   }
 
-  // Return true if current page is not answer call
+  // Return true if current shown page is not answer call
   bool isCanGoToAnswerCall(BuildContext context) {
     String? page = GoRouterState.of(context).name;
 
-    return page != AppPages.answerCall;
+    return isTopStack(context) && page != AppPages.answerCall;
   }
 
   // Return true if current shown page is create call or answer call
