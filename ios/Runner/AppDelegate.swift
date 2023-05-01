@@ -3,15 +3,35 @@ import PushKit
 import Flutter
 import flutter_callkit_incoming
 
+enum ChannelName {
+    static let siri = "com.firgia.soca/siri"
+}
+
+enum UserActivityType {
+    static let callVolunteer = "com.firgia.soca.call_volunteer"
+}
+
+
 @UIApplicationMain
-@objc class AppDelegate: FlutterAppDelegate, PKPushRegistryDelegate {
+@objc class AppDelegate: FlutterAppDelegate, PKPushRegistryDelegate, FlutterStreamHandler {
+    private var eventSink: FlutterEventSink?
+
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         GeneratedPluginRegistrant.register(with: self)
         
-        //Setup VOIP
+        // Setup Siri shortcuts
+        createUserActivity()
+        guard let controller = window?.rootViewController as? FlutterViewController else {
+            fatalError("rootViewController is not type FlutterViewController")
+        }
+          
+        let siriChannel = FlutterEventChannel(name: ChannelName.siri, binaryMessenger: controller.binaryMessenger)
+        siriChannel.setStreamHandler(self)
+        
+        // Setup VOIP
         let mainQueue = DispatchQueue.main
         let voipRegistry: PKPushRegistry = PKPushRegistry(queue: mainQueue)
         voipRegistry.delegate = self
@@ -20,32 +40,6 @@ import flutter_callkit_incoming
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
-    // Call back from Recent history
-    //
-    // This function triggered when user want to call other user from history phone call
-    // We don't need this functions because app cannot allowed user to select specific target answered
-    //    override func application(_ application: UIApplication,
-    //                              continue userActivity: NSUserActivity,
-    //                              restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-    //
-    //        guard let handleObj = userActivity.handle else {
-    //            return false
-    //        }
-    //
-    //        guard let isVideo = userActivity.isVideo else {
-    //            return false
-    //        }
-    //        let nameCaller = handleObj.getDecryptHandle()["nameCaller"] as? String ?? ""
-    //        let handle = handleObj.getDecryptHandle()["handle"] as? String ?? ""
-    //        let data = flutter_callkit_incoming.Data(id: UUID().uuidString, nameCaller: nameCaller, handle: handle, type: isVideo ? 1 : 0)
-    //        //set more data...
-    //        data.nameCaller = "Firgia"
-    //        print("startCall")
-    //        SwiftFlutterCallkitIncomingPlugin.sharedInstance?.startCall(data, fromPushKit: true)
-    //
-    //        return super.application(application, continue: userActivity, restorationHandler: restorationHandler)
-    //    }
-        
     // Handle updated push credentials
     func pushRegistry(_ registry: PKPushRegistry, didUpdate credentials: PKPushCredentials, for type: PKPushType) {
         print(credentials.token)
@@ -100,4 +94,31 @@ import flutter_callkit_incoming
             SwiftFlutterCallkitIncomingPlugin.sharedInstance?.endCall(data)
         }
     }
+    
+    /* SIRI SHORTCUTS */
+   override func application(_ application: UIApplication, willContinueUserActivityWithType userActivityType: String) -> Bool {
+       if(eventSink != nil) {eventSink!(userActivityType)}
+       return false
+   }
+   
+   func createUserActivity(){
+       let activity = NSUserActivity(activityType: UserActivityType.callVolunteer)
+       
+       activity.title = "Call a volunteer"
+       activity.isEligibleForSearch = true
+       activity.isEligibleForPrediction = true
+       
+       self.userActivity = activity
+       self.userActivity?.becomeCurrent()
+   }
+   
+   func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+       self.eventSink = events
+       return nil
+   }
+   
+   func onCancel(withArguments arguments: Any?) -> FlutterError? {
+       eventSink = nil
+       return nil
+   }
 }

@@ -87,7 +87,9 @@ void setupInjection() {
   sl.registerSingleton<WidgetsBinding>(WidgetsBinding.instance);
 
   /* --------------------------------> LOGIC <------------------------------- */
-  sl.registerSingleton<AssistantCommandBloc>(AssistantCommandBloc());
+  if (!sl.isRegistered<AssistantCommandBloc>()) {
+    sl.registerSingleton<AssistantCommandBloc>(AssistantCommandBloc());
+  }
   sl.registerFactory<CallActionBloc>(() => CallActionBloc());
   sl.registerFactory<CallHistoryBloc>(() => CallHistoryBloc());
   sl.registerFactory<CallStatisticBloc>(() => CallStatisticBloc());
