@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mockito/mockito.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/logic/logic.dart';
@@ -22,11 +23,13 @@ import '../../../mock/mock.mocks.dart';
 
 void main() {
   late MockAppNavigator appNavigator;
+  late MockDeviceInfo deviceInfo;
   late MockRouteCubit routeCubit;
 
   setUp(() {
     registerLocator();
     appNavigator = getMockAppNavigator();
+    deviceInfo = getMockDeviceInfo();
     routeCubit = getMockRouteCubit();
 
     MockWidgetsBinding widgetBinding = getMockWidgetsBinding();
@@ -40,6 +43,31 @@ void main() {
   Finder findErrorMessageSomethingError() =>
       find.byKey(const Key("error_message_something_error"));
 
+  group("Initialize", () {
+    testWidgets(
+        "Should request notification permission when notification permission is not granted",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(deviceInfo.getPermissionStatus(Permission.notification))
+            .thenAnswer(
+          (_) => Future.value(PermissionStatus.denied),
+        );
+
+        await tester.pumpApp(child: const SplashScreen());
+
+        verify(deviceInfo.requestPermission(Permission.notification));
+      });
+    });
+
+    testWidgets("Should call routeCubit.getTargetRoute", (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(child: const SplashScreen());
+
+        verify(routeCubit.getTargetRoute());
+      });
+    });
+  });
+
   group("Route", () {
     testWidgets(
         "Should navigate to sign in page when routeTarget return [AppPages.signIn]",
@@ -48,7 +76,7 @@ void main() {
         when(routeCubit.stream)
             .thenAnswer((_) => Stream.value(RouteTarget(AppPages.signIn)));
 
-        await tester.pumpApp(child: SplashScreen());
+        await tester.pumpApp(child: const SplashScreen());
 
         verify(routeCubit.getTargetRoute());
         verify(appNavigator.goToSignIn(any));
@@ -62,7 +90,7 @@ void main() {
         when(routeCubit.stream)
             .thenAnswer((_) => Stream.value(RouteTarget(AppPages.language)));
 
-        await tester.pumpApp(child: SplashScreen());
+        await tester.pumpApp(child: const SplashScreen());
 
         verify(routeCubit.getTargetRoute());
         verify(appNavigator.goToLanguage(any));
@@ -76,7 +104,7 @@ void main() {
         when(routeCubit.stream)
             .thenAnswer((_) => Stream.value(RouteTarget(AppPages.home)));
 
-        await tester.pumpApp(child: SplashScreen());
+        await tester.pumpApp(child: const SplashScreen());
 
         verify(routeCubit.getTargetRoute());
         verify(appNavigator.goToHome(any));
@@ -90,7 +118,7 @@ void main() {
         when(routeCubit.stream)
             .thenAnswer((_) => Stream.value(RouteTarget(AppPages.signUp)));
 
-        await tester.pumpApp(child: SplashScreen());
+        await tester.pumpApp(child: const SplashScreen());
 
         verify(routeCubit.getTargetRoute());
         verify(appNavigator.goToSignUp(any));
@@ -104,7 +132,7 @@ void main() {
         when(routeCubit.stream).thenAnswer(
             (_) => Stream.value(RouteTarget(AppPages.unknownDevice)));
 
-        await tester.pumpApp(child: SplashScreen());
+        await tester.pumpApp(child: const SplashScreen());
 
         verify(routeCubit.getTargetRoute());
         verify(appNavigator.goToUnknownDevice(any));
@@ -117,7 +145,7 @@ void main() {
         when(routeCubit.stream)
             .thenAnswer((_) => Stream.value(const RouteError()));
 
-        await tester.pumpApp(child: SplashScreen());
+        await tester.pumpApp(child: const SplashScreen());
         await tester.pump();
 
         expect(
@@ -135,7 +163,7 @@ void main() {
         when(routeCubit.stream)
             .thenAnswer((_) => Stream.value(const RouteError()));
 
-        await tester.pumpApp(child: SplashScreen());
+        await tester.pumpApp(child: const SplashScreen());
         await tester.pump();
 
         expect(
@@ -156,7 +184,7 @@ void main() {
   group("Animation Loading", () {
     testWidgets("Should show animation loading", (tester) async {
       await tester.runAsync(() async {
-        await tester.pumpApp(child: SplashScreen());
+        await tester.pumpApp(child: const SplashScreen());
 
         expect(find.byType(LottieBuilder), findsOneWidget);
 

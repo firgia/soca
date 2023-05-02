@@ -10,22 +10,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../injection.dart';
 import '../../../logic/logic.dart';
 import '../../../config/config.dart';
 import '../../../core/core.dart';
 import '../../widgets/widgets.dart';
 
-class SplashScreen extends StatelessWidget with UIMixin {
-  SplashScreen({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> with UIMixin {
   final AppNavigator appNavigator = sl<AppNavigator>();
   final RouteCubit routeCubit = sl<RouteCubit>();
+  final DeviceInfo deviceInfo = sl<DeviceInfo>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    deviceInfo
+        .getPermissionStatus(Permission.notification)
+        .then((status) async {
+      if (status != PermissionStatus.granted) {
+        await deviceInfo.requestPermission(Permission.notification);
+      }
+      routeCubit.getTargetRoute();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    routeCubit.getTargetRoute();
-
     return BlocListener<RouteCubit, RouteState>(
       bloc: routeCubit,
       listener: (context, state) {
