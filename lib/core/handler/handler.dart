@@ -7,6 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+export 'assistant_handler.dart';
 export 'call_kit_handler.dart';
 export 'onesignal_handler.dart';
 export 'siri_handler.dart';
