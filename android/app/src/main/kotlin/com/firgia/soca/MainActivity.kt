@@ -13,12 +13,15 @@ class MainActivity: FlutterActivity() {
 
         // Logging for troubleshooting purposes
         logIntent(intent)
-    }
 
+        // Handle the intent this activity was launched with.
+        intent?.handleIntent()
+    }
+    
     /**
      * For debugging Android intents
      */
-    fun logIntent(intent: Intent) {
+    private fun logIntent(intent: Intent) {
         val bundle: Bundle = intent.extras ?: return
 
         Log.d(TAG, "======= logIntent =========")
@@ -29,5 +32,23 @@ class MainActivity: FlutterActivity() {
         }
 
         Log.d(TAG, "Logging intent data complete")
+    }
+
+    /**
+     * Handles the action from the intent base on the type.
+     *
+     * @receiver the intent to handle
+     */
+    private fun Intent.handleIntent() {
+        val callName = intent?.extras?.getString("callName")
+        if(callName != null) {
+            val supportedVolunteerPhrases = arrayOf("volunteer", "sukarelawan")
+            val callVolunteer = supportedVolunteerPhrases.contains(callName.trim().lowercase())
+
+            if(callVolunteer) {
+                // TODO: Calling a volunteer
+                Log.d(TAG, "Call a volunteer")
+            }
+        }
     }
 }
