@@ -7,6 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+export 'assistant_command/assistant_command_bloc.dart';
 export 'call_action/call_action_bloc.dart';
 export 'call_history/call_history_bloc.dart';
 export 'call_statistic/call_statistic_bloc.dart';

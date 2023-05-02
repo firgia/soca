@@ -155,7 +155,7 @@ void main() {
 
     group("IncomingCallEventRemoved", () {
       blocTest<IncomingCallBloc, IncomingCallState>(
-        'Should emits [IncomingCallLoaded] when successfully to add event',
+        'Should emits [IncomingCallEmpty] when successfully to remove event',
         build: () => IncomingCallBloc(),
         act: (bloc) {
           bloc.tempCallEvent = CallEvent(

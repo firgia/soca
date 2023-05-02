@@ -19,7 +19,10 @@ import '../../injection.dart';
 import '../../logic/logic.dart';
 import '../core.dart';
 
-class CallKitHandler {
+/// This Handler is used for handling incoming call features.
+///
+/// Please call initialize to use this handler
+abstract class CallKitHandler {
   static bool _isInitialized = false;
 
   static void initialize() async {
@@ -49,14 +52,24 @@ class CallKitHandler {
           // Check to make sure incoming call not called twice with same call ID
           // (uuid is mean call id)
           if (calls.isNotEmpty) {
-            final tempUuid = calls.where((element) {
-              final savedUuid = Parser.getString(element["extra"]["uuid"]);
-              return savedUuid == uuid;
-            }).toList();
+            bool invalidUUID = false;
+            try {
+              final tempUuid = calls.where((call) {
+                final extra = Parser.getMap(call["extra"]);
+                if (extra == null) {
+                  return false;
+                } else {
+                  final savedUuid = Parser.getString(extra["uuid"]);
+                  return savedUuid == uuid;
+                }
+              }).toList();
 
-            // The incoming call for this [uuid] has been shown before, so we don't
-            // need to show the incoming call again
-            if (tempUuid.isNotEmpty) return;
+              // The incoming call for this [uuid] has been shown before,
+              // so we don't need to show the incoming call again
+              invalidUUID = (tempUuid.isNotEmpty);
+            } catch (_) {}
+
+            if (invalidUUID) return;
           }
         }
 

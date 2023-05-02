@@ -251,6 +251,7 @@
 				C3AB03FB298011E60078C921 /* Copy GoogleService-Info.plist to the correct location */,
 				89A9609A285DFC16EA692315 /* [CP] Embed Pods Frameworks */,
 				C3B0DC042980DB5300718340 /* Embed Foundation Extensions */,
+				C3A6E15229FD47430016AE7C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -417,7 +418,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
+		};
+		C3A6E15229FD47430016AE7C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n${PODS_ROOT}/FirebaseCrashlytics/run\n\n";
 		};
 		C3AB03FB298011E60078C921 /* Copy GoogleService-Info.plist to the correct location */ = {
 			isa = PBXShellScriptBuildPhase;

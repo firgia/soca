@@ -282,6 +282,14 @@ MockWidgetsBinding getMockWidgetsBinding() {
 
 /* ---------------------------------> LOGIC <-------------------------------- */
 
+MockAssistantCommandBloc getMockAssistantCommandBloc() {
+  MockAssistantCommandBloc mock = MockAssistantCommandBloc();
+  _removeRegistrationIfExists<AssistantCommandBloc>();
+  locator.registerSingleton<AssistantCommandBloc>(mock);
+
+  return mock;
+}
+
 MockCallActionBloc getMockCallActionBloc() {
   MockCallActionBloc mock = MockCallActionBloc();
   _removeRegistrationIfExists<CallActionBloc>();
@@ -437,6 +445,7 @@ void registerLocator() {
   getMockWidgetsBinding();
 
   /* --------------------------------> LOGIC <------------------------------- */
+  getMockAssistantCommandBloc();
   getMockCallActionBloc();
   getMockCallHistoryBloc();
   getMockCallStatisticBloc();
@@ -496,6 +505,7 @@ void unregisterLocator() {
   locator.unregister<WidgetsBinding>();
 
   /* --------------------------------> LOGIC <------------------------------- */
+  locator.unregister<AssistantCommandBloc>();
   locator.unregister<CallActionBloc>();
   locator.unregister<CallHistoryBloc>();
   locator.unregister<CallStatisticBloc>();
