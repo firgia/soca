@@ -1149,6 +1149,42 @@ class MockAppNavigator extends _i1.Mock implements _i36.AppNavigator {
         ),
         returnValueForMissingStub: null,
       );
+  @override
+  bool isCanGoToCreateCall(_i17.BuildContext? context) => (super.noSuchMethod(
+        Invocation.method(
+          #isCanGoToCreateCall,
+          [context],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  bool isCanGoToAnswerCall(_i17.BuildContext? context) => (super.noSuchMethod(
+        Invocation.method(
+          #isCanGoToAnswerCall,
+          [context],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  bool isCanGoToVideoCall(_i17.BuildContext? context) => (super.noSuchMethod(
+        Invocation.method(
+          #isCanGoToVideoCall,
+          [context],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  bool isTopStack(_i17.BuildContext? context) => (super.noSuchMethod(
+        Invocation.method(
+          #isTopStack,
+          [context],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
 }
 
 /// A class which mocks [CallKit].

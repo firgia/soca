@@ -20,7 +20,7 @@ abstract class AppRoutes {
           GoRoute(
             path: "/${AppPages.splash}",
             name: AppPages.splash,
-            builder: (context, state) => SplashScreen(),
+            builder: (context, state) => const SplashScreen(),
           ),
           GoRoute(
             path: "/${AppPages.home}",
