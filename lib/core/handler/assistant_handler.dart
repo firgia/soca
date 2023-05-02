@@ -3,7 +3,7 @@
  * Website    : https://www.firgia.com
  * Repository : https://github.com/firgia/soca
  * 
- * Created on Sat Apr 29 2023
+ * Created on Tue May 02 2023
  * Copyright (c) 2023 Mochamad Firgia
  */
 
@@ -13,22 +13,23 @@ import '../../injection.dart';
 import '../../logic/logic.dart';
 import '../core.dart';
 
-const EventChannel _siriEventChannel = EventChannel("com.firgia.soca/siri");
+const EventChannel _assistantEventChannel =
+    EventChannel("com.firgia.soca/assistant");
 
-/// This Handler is used for handling siri features.
+/// This Handler is used for handling assistant features.
 ///
 /// Please call initialize to use this handler
-abstract class SiriHandler {
+abstract class AssistantHandler {
   static bool _isInitialized = false;
 
   static void initialize() {
     if (_isInitialized != true) {
       DeviceInfo deviceInfo = sl<DeviceInfo>();
 
-      if (deviceInfo.isIOS()) {
-        _siriEventChannel.receiveBroadcastStream().listen(
+      if (deviceInfo.isAndroid()) {
+        _assistantEventChannel.receiveBroadcastStream().listen(
           (event) {
-            _onSiriEvent(event);
+            _onAssistantEvent(event);
           },
         );
       }
@@ -39,7 +40,7 @@ abstract class SiriHandler {
 }
 
 @pragma('vm:entry-point')
-void _onSiriEvent(dynamic value) {
+void _onAssistantEvent(dynamic value) {
   if (!sl.isRegistered<AssistantCommandBloc>()) {
     sl.registerSingleton<AssistantCommandBloc>(AssistantCommandBloc());
   }
@@ -47,7 +48,7 @@ void _onSiriEvent(dynamic value) {
   AssistantCommandBloc assistantCommandBloc = sl<AssistantCommandBloc>();
 
   switch (value.toString()) {
-    case "com.firgia.soca.call_volunteer":
+    case "call_volunteer":
       assistantCommandBloc.add(
           const AssistantCommandEventAdded(AssistantCommandType.callVolunteer));
       break;
