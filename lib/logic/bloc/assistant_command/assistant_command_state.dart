@@ -13,17 +13,18 @@ abstract class AssistantCommandState extends Equatable {
   const AssistantCommandState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class AssistantCommandInitial extends AssistantCommandState {}
 
 class AssistantCommandCallVolunteerLoaded extends AssistantCommandState {
   final User data;
-  const AssistantCommandCallVolunteerLoaded(this.data);
+  final DateTime? dateTime;
+  const AssistantCommandCallVolunteerLoaded(this.data, [this.dateTime]);
 
   @override
-  List<Object> get props => [data];
+  List<Object?> get props => [data, dateTime];
 }
 
 class AssistantCommandEmpty extends AssistantCommandState {

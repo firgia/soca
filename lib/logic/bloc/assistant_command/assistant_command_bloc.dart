@@ -66,7 +66,7 @@ class AssistantCommandBloc
         _logger.fine("Getting user data successfully");
 
         if (userData.type == UserType.blind) {
-          emit(AssistantCommandCallVolunteerLoaded(userData));
+          emit(AssistantCommandCallVolunteerLoaded(userData, DateTime.now()));
         } else {
           _logger.fine("Ignoring call volunteer becuase is not blind user");
           tempCommand = null;

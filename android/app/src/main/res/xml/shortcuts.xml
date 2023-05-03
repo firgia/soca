@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!--
+    Author     : Mochamad Firgia
+    Website    : https://www.firgia.com
+    Repository : https://github.com/firgia/soca
+    
+    Created on Tue May 02 2023
+    Copyright (c) 2023 Mochamad Firgia
+    -->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <capability android:name="actions.intent.CREATE_CALL">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.firgia.soca"
+            android:targetClass="com.firgia.soca.MainActivity">
+            <parameter
+                android:name="call.participant.name"
+                android:key="callName"/>
+        </intent>
+    </capability>
+</shortcuts>
