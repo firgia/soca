@@ -264,10 +264,26 @@ MockOneSignal getMockOneSignal() {
   return mock;
 }
 
+MockPackageInfo getMockPackageInfo() {
+  MockPackageInfo mock = MockPackageInfo();
+  _removeRegistrationIfExists<PackageInfo>();
+  locator.registerSingleton<PackageInfo>(mock);
+
+  return mock;
+}
+
 MockRtcEngine getMockRtcEngine() {
   MockRtcEngine mock = MockRtcEngine();
   _removeRegistrationIfExists<agora.RtcEngine>();
   locator.registerSingleton<agora.RtcEngine>(mock);
+
+  return mock;
+}
+
+MockSharedPreferences getMockSharedPreferences() {
+  MockSharedPreferences mock = MockSharedPreferences();
+  _removeRegistrationIfExists<SharedPreferences>();
+  locator.registerSingleton<SharedPreferences>(mock);
 
   return mock;
 }
@@ -441,7 +457,9 @@ void registerLocator() {
   getMockImagePicker();
   getMockInternetConnectionChecker();
   getMockOneSignal();
+  getMockPackageInfo();
   getMockRtcEngine();
+  getMockSharedPreferences();
   getMockWidgetsBinding();
 
   /* --------------------------------> LOGIC <------------------------------- */
@@ -501,7 +519,9 @@ void unregisterLocator() {
   locator.unregister<ImagePicker>();
   locator.unregister<InternetConnectionChecker>();
   locator.unregister<OneSignal>();
+  locator.unregister<PackageInfo>();
   locator.unregister<agora.RtcEngine>();
+  locator.unregister<SharedPreferences>();
   locator.unregister<WidgetsBinding>();
 
   /* --------------------------------> LOGIC <------------------------------- */
