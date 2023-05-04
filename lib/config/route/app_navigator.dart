@@ -72,6 +72,9 @@ class AppNavigator {
     }
   }
 
+  void goUpdateApp(BuildContext context) =>
+      context.pushReplacementNamed(AppPages.updateApp);
+
   // Return true if current shown page is home
   bool isCanGoToCreateCall(BuildContext context) {
     String? page = GoRouterState.of(context).name;
