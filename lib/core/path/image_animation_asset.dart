@@ -20,6 +20,7 @@ class ImageAnimation {
   static const eyeBallRobot = "$_path/eye-ball-robot.json";
   static const fingerprintFailed = "$_path/fingerprint-failed.json";
   static const group = "$_path/group.json";
+  static const mobileAppRepair = "$_path/mobile-app-repair.json";
   static const monsterError = "$_path/monster-error.json";
   static const splashLoading = "$_path/splash-loading.json";
 }

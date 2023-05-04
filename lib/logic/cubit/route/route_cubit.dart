@@ -20,6 +20,7 @@ part 'route_state.dart';
 class RouteCubit extends Cubit<RouteState> {
   RouteCubit() : super(const RouteInitial());
 
+  final AppRepository appRepository = sl<AppRepository>();
   final AuthRepository authRepository = sl<AuthRepository>();
   final UserRepository userRepository = sl<UserRepository>();
 
@@ -27,10 +28,25 @@ class RouteCubit extends Cubit<RouteState> {
 
   void getTargetRoute({
     bool checkDifferentDevice = true,
+    bool checkMinimumVersion = false,
     UserDevice? userDevice,
   }) async {
-    String targetName = "/";
     emit(const RouteLoading());
+
+    if (checkMinimumVersion) {
+      _logger.info("Checking is outdated version app...");
+
+      await appRepository.checkMinimumVersion();
+      bool isOutdatedVersion = appRepository.isOutdated;
+
+      if (isOutdatedVersion) {
+        emit(RouteTarget(AppPages.updateApp));
+        _logger.fine("The target route is ${AppPages.updateApp}");
+        return;
+      }
+    }
+
+    String targetName = "/";
     _logger.info("Checking user signed in...");
 
     bool isSignedIn = await authRepository.isSignedIn();

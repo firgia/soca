@@ -30,6 +30,7 @@
 ///  A [TimeoutException] maybe Thrown when a scheduled timeout happens while waiting for an async result.
 /// {@endtemplate}
 
+export 'app_provider.dart';
 export 'auth_provider.dart';
 export 'calling_provider.dart';
 export 'database_provider.dart';

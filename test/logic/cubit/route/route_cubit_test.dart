@@ -19,17 +19,40 @@ import '../../../helper/helper.dart';
 import '../../../mock/mock.mocks.dart';
 
 void main() {
+  late MockAppRepository appRepository;
   late MockAuthRepository authRepository;
   late MockUserRepository userRepository;
 
   setUp(() {
     registerLocator();
+    appRepository = getMockAppRepository();
     authRepository = getMockAuthRepository();
     userRepository = getMockUserRepository();
   });
   tearDown(() => unregisterLocator());
 
   group(".getTargetRoute()", () {
+    blocTest<RouteCubit, RouteState>(
+      'Should not call appRepository.checkMinimumVersion when '
+      '[checkMinimumVersion] is false',
+      build: () => RouteCubit(),
+      act: (route) => route.getTargetRoute(checkMinimumVersion: false),
+      verify: (bloc) {
+        verifyNever(appRepository.checkMinimumVersion());
+      },
+    );
+
+    blocTest<RouteCubit, RouteState>(
+      'Should call appRepository.checkMinimumVersion when [checkMinimumVersion]'
+      ' is true',
+      build: () => RouteCubit(),
+      act: (route) => route.getTargetRoute(
+          checkDifferentDevice: true, checkMinimumVersion: true),
+      verify: (bloc) {
+        verify(appRepository.checkMinimumVersion());
+      },
+    );
+
     blocTest<RouteCubit, RouteState>(
       'Should not call userRepository.useDifferentDevice and '
       'userRepository.isDifferentDevice when [checkDifferentDevice] is false',
@@ -72,6 +95,26 @@ void main() {
       verify: (bloc) {
         verify(userRepository.isDifferentDeviceID(any));
         verifyNever(userRepository.useDifferentDevice());
+      },
+    );
+
+    blocTest<RouteCubit, RouteState>(
+      'Should emits [RouteLoading, RouteTarget(AppPages.updateApp)] when '
+      'app version is outdated.',
+      build: () => RouteCubit(),
+      act: (route) => route.getTargetRoute(checkMinimumVersion: true),
+      setUp: () {
+        when(appRepository.isOutdated).thenReturn(true);
+      },
+      expect: () => <RouteState>[
+        const RouteLoading(),
+        RouteTarget(AppPages.updateApp),
+      ],
+      verify: (bloc) {
+        verifyInOrder([
+          appRepository.checkMinimumVersion(),
+          appRepository.isOutdated,
+        ]);
       },
     );
 

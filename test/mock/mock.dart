@@ -23,6 +23,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:mockito/annotations.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
@@ -40,6 +42,7 @@ export 'mock.mocks.dart';
   MockSpec<DeviceSettings>(),
 
   /* ---------------------------------> DATA <------------------------------- */
+  MockSpec<AppProvider>(),
   MockSpec<AuthProvider>(),
   MockSpec<CallingProvider>(),
   MockSpec<DatabaseProvider>(),
@@ -48,6 +51,7 @@ export 'mock.mocks.dart';
   MockSpec<LocalLanguageProvider>(),
   MockSpec<OneSignalProvider>(),
   MockSpec<UserProvider>(),
+  MockSpec<AppRepository>(),
   MockSpec<AuthRepository>(),
   MockSpec<CallingRepository>(),
   MockSpec<FileRepository>(),
@@ -75,8 +79,10 @@ export 'mock.mocks.dart';
   MockSpec<ImagePicker>(),
   MockSpec<InternetConnectionChecker>(),
   MockSpec<OneSignal>(),
+  MockSpec<PackageInfo>(),
   MockSpec<agora.RtcEngine>(),
   MockSpec<SingletonFlutterWindow>(),
+  MockSpec<SharedPreferences>(),
   MockSpec<WidgetsBinding>(),
 
   /* --------------------------------> LOGIC <------------------------------- */
