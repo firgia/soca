@@ -20,7 +20,7 @@ abstract class AppRepository {
   bool get isOutdated;
 
   /// {@macro get_minimum_version}
-  Future<void> initialize();
+  Future<void> checkMinimumVersion();
 }
 
 class AppRepositoryImpl extends AppRepository {
@@ -32,7 +32,7 @@ class AppRepositoryImpl extends AppRepository {
   bool get isOutdated => _appProvider.getIsOutdated() ?? false;
 
   @override
-  Future<void> initialize() async {
+  Future<void> checkMinimumVersion() async {
     late PackageInfo packageInfo;
 
     // We don't register the PackageInfo on injection.dart because

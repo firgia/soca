@@ -63,7 +63,7 @@ void main() {
       await tester.runAsync(() async {
         await tester.pumpApp(child: const SplashScreen());
 
-        verify(routeCubit.getTargetRoute());
+        verify(routeCubit.getTargetRoute(checkMinimumVersion: true));
       });
     });
   });
@@ -78,7 +78,7 @@ void main() {
 
         await tester.pumpApp(child: const SplashScreen());
 
-        verify(routeCubit.getTargetRoute());
+        verify(routeCubit.getTargetRoute(checkMinimumVersion: true));
         verify(appNavigator.goToSignIn(any));
       });
     });
@@ -92,7 +92,7 @@ void main() {
 
         await tester.pumpApp(child: const SplashScreen());
 
-        verify(routeCubit.getTargetRoute());
+        verify(routeCubit.getTargetRoute(checkMinimumVersion: true));
         verify(appNavigator.goToLanguage(any));
       });
     });
@@ -106,7 +106,7 @@ void main() {
 
         await tester.pumpApp(child: const SplashScreen());
 
-        verify(routeCubit.getTargetRoute());
+        verify(routeCubit.getTargetRoute(checkMinimumVersion: true));
         verify(appNavigator.goToHome(any));
       });
     });
@@ -120,7 +120,7 @@ void main() {
 
         await tester.pumpApp(child: const SplashScreen());
 
-        verify(routeCubit.getTargetRoute());
+        verify(routeCubit.getTargetRoute(checkMinimumVersion: true));
         verify(appNavigator.goToSignUp(any));
       });
     });
@@ -134,7 +134,7 @@ void main() {
 
         await tester.pumpApp(child: const SplashScreen());
 
-        verify(routeCubit.getTargetRoute());
+        verify(routeCubit.getTargetRoute(checkMinimumVersion: true));
         verify(appNavigator.goToUnknownDevice(any));
       });
     });
@@ -152,7 +152,7 @@ void main() {
           findErrorMessageSomethingError(),
           findsOneWidget,
         );
-        verify(routeCubit.getTargetRoute());
+        verify(routeCubit.getTargetRoute(checkMinimumVersion: true));
       });
     });
 
@@ -170,13 +170,28 @@ void main() {
           findErrorMessageSomethingError(),
           findsOneWidget,
         );
-        verify(routeCubit.getTargetRoute());
+        verify(routeCubit.getTargetRoute(checkMinimumVersion: true));
 
         when(routeCubit.stream)
             .thenAnswer((_) => Stream.value(RouteTarget(AppPages.signUp)));
         await tester.tap(find.text(LocaleKeys.ok.tr()));
         await tester.pump();
-        verify(routeCubit.getTargetRoute());
+        verify(routeCubit.getTargetRoute(
+            checkMinimumVersion: true, checkDifferentDevice: true));
+      });
+    });
+
+    testWidgets(
+        "Should navigate to update app page when routeTarget return [AppPages.updateApp]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(routeCubit.stream)
+            .thenAnswer((_) => Stream.value(RouteTarget(AppPages.updateApp)));
+
+        await tester.pumpApp(child: const SplashScreen());
+
+        verify(routeCubit.getTargetRoute(checkMinimumVersion: true));
+        verify(appNavigator.goToUpdateApp(any));
       });
     });
   });

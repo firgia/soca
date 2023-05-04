@@ -72,7 +72,7 @@ class AppNavigator {
     }
   }
 
-  void goUpdateApp(BuildContext context) =>
+  void goToUpdateApp(BuildContext context) =>
       context.pushReplacementNamed(AppPages.updateApp);
 
   // Return true if current shown page is home
