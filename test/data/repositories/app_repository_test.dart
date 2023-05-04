@@ -53,7 +53,7 @@ void main() {
     });
   });
 
-  group(".initialize", () {
+  group(".checkMinimumVersion", () {
     setUp(() {
       when(appProvider.getMinimumVersion()).thenAnswer(
         (_) => Future.value(
@@ -72,7 +72,7 @@ void main() {
     });
 
     test("Should call appProvider.getMinimumVersion()", () async {
-      await appRepository.initialize();
+      await appRepository.checkMinimumVersion();
 
       verify(appProvider.getMinimumVersion());
     });
@@ -84,7 +84,7 @@ void main() {
         when(deviceInfo.isAndroid()).thenReturn(true);
         when(packageInfo.buildNumber).thenReturn("9");
 
-        await appRepository.initialize();
+        await appRepository.checkMinimumVersion();
 
         verify(appProvider.getMinimumVersion());
         verify(appProvider.setIsOutdated(true));
@@ -96,7 +96,7 @@ void main() {
         when(deviceInfo.isAndroid()).thenReturn(true);
         when(packageInfo.buildNumber).thenReturn("10");
 
-        await appRepository.initialize();
+        await appRepository.checkMinimumVersion();
 
         verify(appProvider.getMinimumVersion());
         verify(appProvider.setIsOutdated(false));
@@ -110,7 +110,7 @@ void main() {
         when(deviceInfo.isIOS()).thenReturn(true);
         when(packageInfo.buildNumber).thenReturn("19");
 
-        await appRepository.initialize();
+        await appRepository.checkMinimumVersion();
 
         verify(appProvider.getMinimumVersion());
         verify(appProvider.setIsOutdated(true));
@@ -122,7 +122,7 @@ void main() {
         when(deviceInfo.isIOS()).thenReturn(true);
         when(packageInfo.buildNumber).thenReturn("20");
 
-        await appRepository.initialize();
+        await appRepository.checkMinimumVersion();
 
         verify(appProvider.getMinimumVersion());
         verify(appProvider.setIsOutdated(false));

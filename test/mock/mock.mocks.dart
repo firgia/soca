@@ -2146,9 +2146,9 @@ class MockAppRepository extends _i1.Mock implements _i3.AppRepository {
         returnValueForMissingStub: false,
       ) as bool);
   @override
-  _i38.Future<void> initialize() => (super.noSuchMethod(
+  _i38.Future<void> checkMinimumVersion() => (super.noSuchMethod(
         Invocation.method(
-          #initialize,
+          #checkMinimumVersion,
           [],
         ),
         returnValue: _i38.Future<void>.value(),
