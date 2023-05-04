@@ -55,6 +55,14 @@ MockDeviceSettings getMockDeviceSettings() {
 }
 
 /* ----------------------------------> DATA <-------------------------------- */
+MockAppProvider getMockAppProvider() {
+  MockAppProvider mock = MockAppProvider();
+  _removeRegistrationIfExists<AppProvider>();
+  locator.registerSingleton<AppProvider>(mock);
+
+  return mock;
+}
+
 MockAuthProvider getMockAuthProvider() {
   MockAuthProvider mock = MockAuthProvider();
   _removeRegistrationIfExists<AuthProvider>();
@@ -115,6 +123,14 @@ MockUserProvider getMockUserProvider() {
   MockUserProvider mock = MockUserProvider();
   _removeRegistrationIfExists<UserProvider>();
   locator.registerSingleton<UserProvider>(mock);
+
+  return mock;
+}
+
+MockAppRepository getMockAppRepository() {
+  MockAppRepository mock = MockAppRepository();
+  _removeRegistrationIfExists<AppRepository>();
+  locator.registerSingleton<AppRepository>(mock);
 
   return mock;
 }
@@ -429,6 +445,7 @@ void registerLocator() {
   getMockDeviceSettings();
 
   /* ---------------------------------> DATA <------------------------------- */
+  getMockAppProvider();
   getMockAuthProvider();
   getMockCallingProvider();
   getMockDatabaseProvider();
@@ -437,6 +454,7 @@ void registerLocator() {
   getMockLocalLanguageProvider();
   getMockOneSignalProvider();
   getMockUserProvider();
+  getMockAppRepository();
   getMockAuthRepository();
   getMockCallingRepository();
   getMockFileRepository();
@@ -491,6 +509,7 @@ void unregisterLocator() {
   locator.unregister<DeviceSettings>();
 
   /* ---------------------------------> DATA <------------------------------- */
+  locator.unregister<AppProvider>();
   locator.unregister<AuthProvider>();
   locator.unregister<CallingProvider>();
   locator.unregister<DatabaseProvider>();
@@ -499,6 +518,7 @@ void unregisterLocator() {
   locator.unregister<LocalLanguageProvider>();
   locator.unregister<OneSignalProvider>();
   locator.unregister<UserProvider>();
+  locator.unregister<AppRepository>();
   locator.unregister<AuthRepository>();
   locator.unregister<CallingRepository>();
   locator.unregister<FileRepository>();

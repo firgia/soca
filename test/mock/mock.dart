@@ -42,6 +42,7 @@ export 'mock.mocks.dart';
   MockSpec<DeviceSettings>(),
 
   /* ---------------------------------> DATA <------------------------------- */
+  MockSpec<AppProvider>(),
   MockSpec<AuthProvider>(),
   MockSpec<CallingProvider>(),
   MockSpec<DatabaseProvider>(),
@@ -50,6 +51,7 @@ export 'mock.mocks.dart';
   MockSpec<LocalLanguageProvider>(),
   MockSpec<OneSignalProvider>(),
   MockSpec<UserProvider>(),
+  MockSpec<AppRepository>(),
   MockSpec<AuthRepository>(),
   MockSpec<CallingRepository>(),
   MockSpec<FileRepository>(),

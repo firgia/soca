@@ -65,7 +65,7 @@ Future<void> initializeApp() async {
   await dotenv.load(fileName: envFileName);
 
   await Firebase.initializeApp();
-  setupInjection();
+  await setupInjection();
 
   // Initialize all asynchronous methods which possible to initialize at the
   // same time to speed up the initialization process

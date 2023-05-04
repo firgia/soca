@@ -1488,6 +1488,30 @@ class MockDeviceSettings extends _i1.Mock implements _i37.DeviceSettings {
       ) as _i38.Future<void>);
 }
 
+/// A class which mocks [AppProvider].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAppProvider extends _i1.Mock implements _i3.AppProvider {
+  @override
+  _i38.Future<dynamic> getMinimumVersion() => (super.noSuchMethod(
+        Invocation.method(
+          #getMinimumVersion,
+          [],
+        ),
+        returnValue: _i38.Future<dynamic>.value(),
+        returnValueForMissingStub: _i38.Future<dynamic>.value(),
+      ) as _i38.Future<dynamic>);
+  @override
+  _i38.Future<bool> setIsOutdated(bool? value) => (super.noSuchMethod(
+        Invocation.method(
+          #setIsOutdated,
+          [value],
+        ),
+        returnValue: _i38.Future<bool>.value(false),
+        returnValueForMissingStub: _i38.Future<bool>.value(false),
+      ) as _i38.Future<bool>);
+}
+
 /// A class which mocks [AuthProvider].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -2109,6 +2133,27 @@ class MockUserProvider extends _i1.Mock implements _i3.UserProvider {
           ),
         )),
       ) as _i38.Future<_i4.TaskSnapshot>);
+}
+
+/// A class which mocks [AppRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAppRepository extends _i1.Mock implements _i3.AppRepository {
+  @override
+  bool get isOutdated => (super.noSuchMethod(
+        Invocation.getter(#isOutdated),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  _i38.Future<void> initialize() => (super.noSuchMethod(
+        Invocation.method(
+          #initialize,
+          [],
+        ),
+        returnValue: _i38.Future<void>.value(),
+        returnValueForMissingStub: _i38.Future<void>.value(),
+      ) as _i38.Future<void>);
 }
 
 /// A class which mocks [AuthRepository].

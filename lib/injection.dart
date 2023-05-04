@@ -24,6 +24,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'config/config.dart';
 import 'core/core.dart';
 import 'data/data.dart';
@@ -32,7 +33,9 @@ import 'logic/logic.dart';
 /// Service locator
 final sl = GetIt.instance;
 
-void setupInjection() {
+Future<void> setupInjection() async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
   /* ---------------------------------> CORE <------------------------------- */
   sl.registerSingleton<CallKit>(CallKit());
   sl.registerSingleton<DeviceFeedback>(DeviceFeedbackImpl());
@@ -44,6 +47,7 @@ void setupInjection() {
   sl.registerSingleton<AppSystemOverlay>(AppSystemOverlayImpl());
 
   /* ---------------------------------> DATA <------------------------------- */
+  sl.registerLazySingleton<AppProvider>(() => AppProviderImpl());
   sl.registerLazySingleton<AuthProvider>(() => AuthProviderImpl());
   sl.registerLazySingleton<CallingProvider>(() => CallingProviderImpl());
   sl.registerLazySingleton<DatabaseProvider>(() => DatabaseProviderImpl());
@@ -53,7 +57,7 @@ void setupInjection() {
       () => LocalLanguageProviderImpl());
   sl.registerLazySingleton<OneSignalProvider>(() => OneSignalProviderImpl());
   sl.registerLazySingleton<UserProvider>(() => UserProviderImpl());
-
+  sl.registerLazySingleton<AppRepository>(() => AppRepositoryImpl());
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
   sl.registerLazySingleton<CallingRepository>(() => CallingRepositoryImpl());
   sl.registerLazySingleton<FileRepository>(() => FileRepositoryImpl());
@@ -84,6 +88,7 @@ void setupInjection() {
   );
   sl.registerSingleton<OneSignal>(OneSignal.shared);
   sl.registerFactory<agora.RtcEngine>(() => agora.createAgoraRtcEngine());
+  sl.registerFactory<SharedPreferences>(() => sharedPreferences);
   sl.registerSingleton<WidgetsBinding>(WidgetsBinding.instance);
 
   /* --------------------------------> LOGIC <------------------------------- */

@@ -69,6 +69,7 @@ dependencies:
   logging: ^1.1.1
   lottie: ^2.2.0
   onesignal_flutter: ^3.5.0
+  package_info_plus: ^3.1.2
   permission_handler: ^10.2.0
   responsive_framework: ^0.2.0
   shared_preferences: ^2.0.17
