@@ -8,6 +8,7 @@
  */
 
 import * as admin from "firebase-admin";
+import * as app from "./app/index";
 import * as auth from "./auth/index";
 import * as calling from "./calling/index";
 import * as file from "./file/index";
@@ -16,6 +17,9 @@ import * as notification from "./notification/index";
 import * as user from "./user/index";
 
 admin.initializeApp();
+
+// App
+export const getMinimumVersionApp = app.getMinimumVersion;
 
 // Auth
 export const onSignIn = auth.onSignIn;

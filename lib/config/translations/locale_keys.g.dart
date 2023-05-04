@@ -105,6 +105,9 @@ abstract class LocaleKeys {
   static const turn_off_reverse_screen = 'turn_off_reverse_screen';
   static const total_call = 'total_call';
   static const try_again = 'try_again';
+  static const update_app_required = 'update_app_required';
+  static const update_app_required_desc = 'update_app_required_desc';
+  static const update_now = 'update_now';
   static const va_device_language_changed = 'va_device_language_changed';
   static const va_please_select_device_language =
       'va_please_select_device_language';

@@ -17,6 +17,7 @@ abstract class FunctionName {
   static const String getCall = "getCall";
   static const String getCallHistory = "getCallHistory";
   static const String getCallStatistic = "getCallStatistic";
+  static const String getMinimumVersionApp = "getMinimumVersionApp";
   static const String getProfileUser = "getProfileUser";
   static const String getRTCCredential = "getRTCCredential";
   static const String onSignIn = "onSignIn";

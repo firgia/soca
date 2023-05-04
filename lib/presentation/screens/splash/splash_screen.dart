@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> with UIMixin {
       if (status != PermissionStatus.granted) {
         await deviceInfo.requestPermission(Permission.notification);
       }
-      routeCubit.getTargetRoute();
+      routeCubit.getTargetRoute(checkMinimumVersion: true);
     });
   }
 
@@ -59,13 +59,16 @@ class _SplashScreenState extends State<SplashScreen> with UIMixin {
             appNavigator.goToSignUp(context);
           } else if (state.name == AppPages.unknownDevice) {
             appNavigator.goToUnknownDevice(context);
+          } else if (state.name == AppPages.updateApp) {
+            appNavigator.goToUpdateApp(context);
           }
         }
 
         if (state is RouteError) {
           /// Allow user to retry when got any error
           Alert(context).showSomethingErrorMessage(
-            onActionPressed: () => routeCubit.getTargetRoute(),
+            onActionPressed: () =>
+                routeCubit.getTargetRoute(checkMinimumVersion: true),
           );
         }
       },

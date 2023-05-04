@@ -82,6 +82,11 @@ abstract class AppRoutes {
               setup: state.extra as CallingSetup,
             ),
           ),
+          GoRoute(
+            path: "/${AppPages.updateApp}",
+            name: AppPages.updateApp,
+            builder: (context, state) => const UpdateAppScreen(),
+          ),
         ],
         observers: [
           AppNavigatorObserver(),

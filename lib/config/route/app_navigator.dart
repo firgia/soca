@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../data/data.dart';
+import '../../injection.dart';
 import '../config.dart';
 
 class AppNavigator {
@@ -29,7 +30,9 @@ class AppNavigator {
     required String? name,
     required String? urlImage,
   }) {
-    if (isCanGoToAnswerCall(context)) {
+    if (_isCanGoToAnswerCall(context)) {
+      if (_isOutdatedApp(context)) return;
+
       context.pushNamed(AppPages.answerCall, extra: {
         "call_id": callID,
         "blind_id": blindID,
@@ -39,61 +42,87 @@ class AppNavigator {
     }
   }
 
-  void goToCallHistory(BuildContext context) =>
-      context.pushNamed(AppPages.callHistory);
+  void goToCallHistory(BuildContext context) {
+    if (_isOutdatedApp(context)) return;
+    context.pushNamed(AppPages.callHistory);
+  }
 
   void goToCreateCall(BuildContext context, {required User user}) {
-    if (isCanGoToCreateCall(context)) {
+    if (_isCanGoToCreateCall(context)) {
+      if (_isOutdatedApp(context)) return;
       context.pushNamed(AppPages.createCall, extra: user);
     }
   }
 
-  void goToHome(BuildContext context) =>
-      context.pushReplacementNamed(AppPages.home);
+  void goToHome(BuildContext context) {
+    if (_isOutdatedApp(context)) return;
+    context.pushReplacementNamed(AppPages.home);
+  }
 
-  void goToLanguage(BuildContext context) =>
-      context.pushReplacementNamed(AppPages.language);
+  void goToLanguage(BuildContext context) {
+    if (_isOutdatedApp(context)) return;
+    context.pushReplacementNamed(AppPages.language);
+  }
 
-  void goToSplash(BuildContext context) =>
-      context.pushReplacementNamed(AppPages.splash);
+  void goToSplash(BuildContext context) {
+    if (_isOutdatedApp(context)) return;
+    context.pushReplacementNamed(AppPages.splash);
+  }
 
-  void goToSignIn(BuildContext context) =>
-      context.pushReplacementNamed(AppPages.signIn);
+  void goToSignIn(BuildContext context) {
+    if (_isOutdatedApp(context)) return;
+    context.pushReplacementNamed(AppPages.signIn);
+  }
 
-  void goToSignUp(BuildContext context) =>
-      context.pushReplacementNamed(AppPages.signUp);
+  void goToSignUp(BuildContext context) {
+    if (_isOutdatedApp(context)) return;
+    context.pushReplacementNamed(AppPages.signUp);
+  }
 
-  void goToUnknownDevice(BuildContext context) =>
-      context.pushReplacementNamed(AppPages.unknownDevice);
+  void goToUnknownDevice(BuildContext context) {
+    if (_isOutdatedApp(context)) return;
+    context.pushReplacementNamed(AppPages.unknownDevice);
+  }
 
   void goToVideoCall(BuildContext context, {required CallingSetup setup}) {
-    if (isCanGoToVideoCall(context)) {
+    if (_isCanGoToVideoCall(context)) {
+      if (_isOutdatedApp(context)) return;
       context.pushReplacementNamed(AppPages.videoCall, extra: setup);
     }
   }
 
+  void goToUpdateApp(BuildContext context) =>
+      context.pushReplacementNamed(AppPages.updateApp);
+
   // Return true if current shown page is home
-  bool isCanGoToCreateCall(BuildContext context) {
+  bool _isCanGoToCreateCall(BuildContext context) {
     String? page = GoRouterState.of(context).name;
 
-    return isTopStack(context) && page == AppPages.home;
+    return _isTopStack(context) && page == AppPages.home;
   }
 
   // Return true if page is not answer call
-  bool isCanGoToAnswerCall(BuildContext context) {
+  bool _isCanGoToAnswerCall(BuildContext context) {
     String? page = GoRouterState.of(context).name;
 
     return page != AppPages.answerCall;
   }
 
   // Return true if current shown page is create call or answer call
-  bool isCanGoToVideoCall(BuildContext context) {
+  bool _isCanGoToVideoCall(BuildContext context) {
     String? page = GoRouterState.of(context).name;
 
-    return isTopStack(context) &&
+    return _isTopStack(context) &&
         (page == AppPages.answerCall || page == AppPages.createCall);
   }
 
-  bool isTopStack(BuildContext context) =>
+  bool _isTopStack(BuildContext context) =>
       ModalRoute.of(context)?.isCurrent ?? false;
+
+  bool _isOutdatedApp(BuildContext context) {
+    bool isOutdated = sl<AppRepository>().isOutdated;
+    if (isOutdated) goToUpdateApp(context);
+
+    return isOutdated;
+  }
 }

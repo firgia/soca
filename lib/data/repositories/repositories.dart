@@ -7,6 +7,7 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+export 'app_repository.dart';
 export 'auth_repository.dart';
 export 'calling_repository.dart';
 export 'file_repository.dart';
