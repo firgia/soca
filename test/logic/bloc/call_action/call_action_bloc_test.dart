@@ -386,6 +386,26 @@ void main() {
       );
 
       blocTest<CallActionBloc, CallActionState>(
+        'Should emits [CallActionLoading, CallActionCreatedUnanswered] '
+        'when throw CallingFailureCode.unavailable code',
+        build: () => CallActionBloc(),
+        act: (bloc) => bloc.add(const CallActionCreated()),
+        setUp: () {
+          when(callingRepository.createCall()).thenThrow(
+              const CallingFailure(code: CallingFailureCode.unavailable));
+        },
+        expect: () => <CallActionState>[
+          const CallActionLoading(CallActionType.created),
+          const CallActionCreatedUnanswered()
+        ],
+        verify: (_) {
+          verifyInOrder([
+            callingRepository.createCall(),
+          ]);
+        },
+      );
+
+      blocTest<CallActionBloc, CallActionState>(
         'Should emits [CallActionLoading, CallActionError] when error to '
         'create call',
         build: () => CallActionBloc(),
