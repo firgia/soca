@@ -157,8 +157,13 @@ class CallActionBloc extends Bloc<CallActionEvent, CallActionState> {
         emit(const CallActionError(CallActionType.created));
       }
     } on CallingFailure catch (e) {
-      _logger.shout("Error to create call");
-      emit(CallActionError(CallActionType.created, e));
+      if (e.code == CallingFailureCode.unavailable) {
+        _logger.shout("Volunteer is not available");
+        emit(const CallActionCreatedUnanswered());
+      } else {
+        _logger.shout("Error to create call");
+        emit(CallActionError(CallActionType.created, e));
+      }
     } catch (e) {
       _logger.shout("Error to create call");
       emit(const CallActionError(CallActionType.created));
