@@ -38,15 +38,14 @@ class AnswerCallScreen extends StatefulWidget {
 }
 
 class _AnswerCallScreenState extends State<AnswerCallScreen> {
-  late AppNavigator appNavigator;
-  late CallActionBloc callActionBloc;
+  AppNavigator appNavigator = sl<AppNavigator>();
+  CallActionBloc callActionBloc = sl<CallActionBloc>();
+  CallKit callKit = sl<CallKit>();
 
   @override
   void initState() {
     super.initState();
 
-    appNavigator = sl<AppNavigator>();
-    callActionBloc = sl<CallActionBloc>();
     callActionBloc.add(CallActionAnswered(
       callID: widget.callID,
       blindID: widget.blindID,
@@ -62,10 +61,14 @@ class _AnswerCallScreenState extends State<AnswerCallScreen> {
           if (state is CallActionAnsweredSuccessfully) {
             appNavigator.goToVideoCall(context, setup: state.data);
           } else if (state is CallActionEndedSuccessfully) {
+            callKit.endAllCalls();
             appNavigator.back(context);
           } else if (state is CallActionError) {
-            Alert(context).showSomethingErrorMessage(
-              errorCode: state.failure?.code.name,
+            callKit.endAllCalls();
+            appNavigator.back(context);
+            AppSnackbar(context).showMessage(
+              LocaleKeys.error_something_wrong.tr(),
+              style: SnacbarStyle.danger,
             );
           }
         },

@@ -101,6 +101,7 @@ class App extends StatefulWidget {
 class _AppState extends State<App> with WidgetsBindingObserver {
   final AuthRepository authRepository = sl<AuthRepository>();
   final OnesignalRepository onesignalRepository = sl<OnesignalRepository>();
+  final CallKit callKit = sl<CallKit>();
 
   @override
   void initState() {
@@ -162,6 +163,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   void dispose() {
     super.dispose();
 
+    callKit.endAllCalls();
     authRepository.dispose();
     onesignalRepository.dispose();
   }
