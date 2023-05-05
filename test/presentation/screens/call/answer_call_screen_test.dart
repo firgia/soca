@@ -24,13 +24,14 @@ import '../../../mock/mock.mocks.dart';
 void main() {
   late MockAppNavigator appNavigator;
   late MockCallActionBloc callActionBloc;
+  late MockCallKit callKit;
   late MockWidgetsBinding widgetBinding;
 
   setUp(() {
     registerLocator();
     appNavigator = getMockAppNavigator();
     callActionBloc = getMockCallActionBloc();
-
+    callKit = getMockCallKit();
     widgetBinding = getMockWidgetsBinding();
     MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
 
@@ -42,7 +43,8 @@ void main() {
 
   Finder findCallBackgroundImage() => find.byType(CallBackgroundImage);
   Finder findCancelButton() => find.byType(CancelCallButton);
-  Finder findErrorMessage() => find.byType(ErrorMessage);
+  Finder findErrorMessageText() =>
+      find.text(LocaleKeys.error_something_wrong.tr());
 
   String callID = "456";
   String blindID = "123";
@@ -50,7 +52,8 @@ void main() {
   String? urlImage = "test";
 
   group("Bloc Listener", () {
-    testWidgets("Should show error message when [CallActionError]",
+    testWidgets(
+        "Should show error message and back to previous pagewhen [CallActionError]",
         (tester) async {
       await mockNetworkImages(() async {
         await tester.runAsync(() async {
@@ -64,13 +67,14 @@ void main() {
                   name: name,
                   urlImage: urlImage));
           await tester.pump();
-          expect(findErrorMessage(), findsOneWidget);
+          expect(findErrorMessageText(), findsOneWidget);
+          verify(appNavigator.back(any));
         });
       });
     });
 
     testWidgets(
-        'Should back to previous page when [CallActionEndedSuccessfully]',
+        'Should back to previous page and end all calls when [CallActionEndedSuccessfully]',
         (tester) async {
       await mockNetworkImages(() async {
         await tester.runAsync(() async {
@@ -85,6 +89,7 @@ void main() {
                   urlImage: urlImage));
           await tester.pump();
           verify(appNavigator.back(any));
+          verify(callKit.endAllCalls());
         });
       });
     });

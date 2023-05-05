@@ -7,6 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,7 @@ void main() {
   late FakeDefaultCacheManager imageCacheManager;
   late MockAppNavigator appNavigator;
   late MockCallActionBloc callActionBloc;
+  late MockCallKit callKit;
   late MockDeviceInfo deviceInfo;
   late MockDotEnv dotEnv;
   late MockRtcEngine rtcEngine;
@@ -39,6 +42,7 @@ void main() {
     imageCacheManager = getFakeDefaultCacheManager();
     appNavigator = getMockAppNavigator();
     callActionBloc = getMockCallActionBloc();
+    callKit = getMockCallKit();
     deviceInfo = getMockDeviceInfo();
     dotEnv = getMockDotEnv();
     rtcEngine = getMockRtcEngine();
@@ -927,6 +931,57 @@ void main() {
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
 
           expect(find.text(callingSetup.remoteUser.name), findsOneWidget);
+        });
+      });
+    });
+  });
+
+  group("onDispose", () {
+    testWidgets("Should leave channel and end all calls", (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          StreamController<Widget> widgetStreamController =
+              StreamController<Widget>();
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: false,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: null,
+            ),
+          );
+
+          widgetStreamController.add(VideoCallScreen(setup: callingSetup));
+          await tester.pumpApp(
+            child: StreamBuilder<Widget>(
+              stream: widgetStreamController.stream,
+              builder: (context, snapshot) {
+                return snapshot.data ?? Container();
+              },
+            ),
+          );
+
+          await tester.pump();
+
+          widgetStreamController.add(const SizedBox());
+          await tester.pumpAndSettle();
+
+          // now onDispose of VideoCallScreen is called
+
+          verify(callKit.endAllCalls());
+          verify(
+            rtcEngine.leaveChannel(
+              options: const LeaveChannelOptions(
+                stopAllEffect: true,
+                stopAudioMixing: true,
+                stopMicrophoneRecording: true,
+              ),
+            ),
+          );
+          verify(rtcEngine.unregisterEventHandler(any));
+
+          widgetStreamController.close();
         });
       });
     });

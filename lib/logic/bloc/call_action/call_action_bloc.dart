@@ -9,12 +9,10 @@
 
 import 'dart:async';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 
-import '../../../config/config.dart';
 import '../../../core/core.dart';
 import '../../../data/data.dart';
 import '../../../injection.dart';
@@ -24,10 +22,9 @@ part 'call_action_state.dart';
 
 class CallActionBloc extends Bloc<CallActionEvent, CallActionState> {
   final List answeredCallID = [];
-  final CallKit _callKit = sl<CallKit>();
   final CallingRepository _callingRepository = sl<CallingRepository>();
   final UserRepository _userRepository = sl<UserRepository>();
-  final Logger _logger = Logger("Call Bloc");
+  final Logger _logger = Logger("Call Action Bloc");
 
   StreamSubscription? _stateSub;
 
@@ -157,8 +154,13 @@ class CallActionBloc extends Bloc<CallActionEvent, CallActionState> {
         emit(const CallActionError(CallActionType.created));
       }
     } on CallingFailure catch (e) {
-      _logger.shout("Error to create call");
-      emit(CallActionError(CallActionType.created, e));
+      if (e.code == CallingFailureCode.unavailable) {
+        _logger.shout("Volunteer is not available");
+        emit(const CallActionCreatedUnanswered());
+      } else {
+        _logger.shout("Error to create call");
+        emit(CallActionError(CallActionType.created, e));
+      }
     } catch (e) {
       _logger.shout("Error to create call");
       emit(const CallActionError(CallActionType.created));
@@ -211,8 +213,6 @@ class CallActionBloc extends Bloc<CallActionEvent, CallActionState> {
     } catch (e) {
       _logger.shout("Error to end call");
       emit(const CallActionError(CallActionType.ended));
-    } finally {
-      _callKit.endAllCalls();
     }
   }
 
@@ -246,15 +246,6 @@ class CallActionBloc extends Bloc<CallActionEvent, CallActionState> {
         );
 
         _logger.finest("Successfully to get data, starting video calling..");
-
-        await _callKit.startCall(
-          CallKitArgument(
-            id: callID,
-            nameCaller: volunteerUser.name,
-            handle: LocaleKeys.volunteer.tr(),
-            type: 1,
-          ),
-        );
 
         CallingSetup callingSetup = CallingSetup(
           rtc: RTCIdentity(
@@ -294,7 +285,6 @@ class CallActionBloc extends Bloc<CallActionEvent, CallActionState> {
     _CallActionUnanswered event,
     Emitter<CallActionState> emit,
   ) async {
-    await _callKit.endAllCalls();
     emit(const CallActionCreatedUnanswered());
   }
 }

@@ -34,14 +34,13 @@ class VideoCallScreen extends StatefulWidget {
 }
 
 class _VideoCallScreenState extends State<VideoCallScreen> {
-  late String agoraAppID;
-  late AppNavigator appNavigator;
-  late CallActionBloc callActionBloc;
-  late CallingSetup callingSetup;
-  late DeviceInfo deviceInfo;
-  late agora.RtcEngineEventHandler eventHandler;
-  late agora.RtcEngine rtcEngine;
-  late VideoCallBloc videoCallBloc;
+  String agoraAppID = Environtment.agoraAppID;
+  AppNavigator appNavigator = sl<AppNavigator>();
+  CallActionBloc callActionBloc = sl<CallActionBloc>();
+  CallKit callKit = sl<CallKit>();
+  DeviceInfo deviceInfo = sl<DeviceInfo>();
+  agora.RtcEngine rtcEngine = sl<agora.RtcEngine>();
+  VideoCallBloc videoCallBloc = sl<VideoCallBloc>();
 
   final Logger _logger = Logger("Video Call Screen");
   bool hasBeenSwitchCamera = false;
@@ -49,18 +48,15 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   bool lastEnableFlip = false;
   bool isOnProcessEndCall = false;
 
+  late CallingSetup callingSetup;
+  late agora.RtcEngineEventHandler eventHandler;
+
   @override
   void initState() {
     super.initState();
 
-    agoraAppID = Environtment.agoraAppID;
-    appNavigator = sl<AppNavigator>();
     callingSetup = widget.setup;
-    callActionBloc = sl<CallActionBloc>();
-    deviceInfo = sl<DeviceInfo>();
     eventHandler = createHandler();
-    rtcEngine = sl<agora.RtcEngine>();
-    videoCallBloc = sl<VideoCallBloc>();
 
     videoCallBloc.add(
       VideoCallStarted(callingSetup: callingSetup),
@@ -293,6 +289,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   void dispose() {
     super.dispose();
 
+    callKit.endAllCalls();
     rtcEngine
         .leaveChannel(
           options: const agora.LeaveChannelOptions(
