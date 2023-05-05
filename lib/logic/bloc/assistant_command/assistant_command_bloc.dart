@@ -20,6 +20,7 @@ part 'assistant_command_state.dart';
 
 class AssistantCommandBloc
     extends Bloc<AssistantCommandEvent, AssistantCommandState> {
+  final DeviceInfo deviceInfo = sl<DeviceInfo>();
   final UserRepository userRepository = sl<UserRepository>();
   final Logger _logger = Logger("Assistant Command Bloc");
 
@@ -66,7 +67,8 @@ class AssistantCommandBloc
         _logger.fine("Getting user data successfully");
 
         if (userData.type == UserType.blind) {
-          emit(AssistantCommandCallVolunteerLoaded(userData, DateTime.now()));
+          emit(AssistantCommandCallVolunteerLoaded(
+              userData, deviceInfo.localTime));
         } else {
           _logger.fine("Ignoring call volunteer becuase is not blind user");
           tempCommand = null;

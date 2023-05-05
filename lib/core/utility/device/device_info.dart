@@ -80,6 +80,8 @@ abstract class DeviceInfo {
   /// Returns a [Map] containing the status per requested [Permission].
   Future<Map<Permission, PermissionStatus>> requestPermissions(
       List<Permission> permissions);
+
+  DateTime get localTime;
 }
 
 class DeviceInfoImpl implements DeviceInfo {
@@ -137,4 +139,7 @@ class DeviceInfoImpl implements DeviceInfo {
       List<Permission> permissions) {
     return permissions.request();
   }
+
+  @override
+  DateTime get localTime => DateTime.now();
 }

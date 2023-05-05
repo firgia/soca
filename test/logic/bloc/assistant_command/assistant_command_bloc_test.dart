@@ -18,11 +18,15 @@ import '../../../helper/helper.dart';
 import '../../../mock/mock.dart';
 
 void main() {
+  late DeviceInfo deviceInfo;
   late MockUserRepository userRepository;
+  DateTime currentTime = DateTime.now();
 
   setUp(() {
     registerLocator();
+    deviceInfo = getMockDeviceInfo();
     userRepository = getMockUserRepository();
+    when(deviceInfo.localTime).thenReturn(currentTime);
   });
 
   tearDown(() => unregisterLocator());
@@ -43,9 +47,10 @@ void main() {
         act: (bloc) => bloc.add(
           const AssistantCommandEventAdded(AssistantCommandType.callVolunteer),
         ),
-        expect: () => const <AssistantCommandState>[
+        expect: () => <AssistantCommandState>[
           AssistantCommandCallVolunteerLoaded(
-            User(type: UserType.blind),
+            const User(type: UserType.blind),
+            currentTime,
           )
         ],
         verify: (bloc) {
@@ -128,9 +133,10 @@ void main() {
             const AssistantCommandFetched(),
           );
         },
-        expect: () => const <AssistantCommandState>[
+        expect: () => <AssistantCommandState>[
           AssistantCommandCallVolunteerLoaded(
-            User(type: UserType.blind),
+            const User(type: UserType.blind),
+            currentTime,
           )
         ],
         verify: (bloc) {
