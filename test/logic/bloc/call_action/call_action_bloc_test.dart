@@ -8,10 +8,8 @@
  */
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
 import 'package:soca/logic/logic.dart';
@@ -21,13 +19,11 @@ import '../../../mock/mock.mocks.dart';
 
 void main() {
   late MockCallingRepository callingRepository;
-  late MockCallKit callKit;
   late MockUserRepository userRepository;
 
   setUp(() {
     registerLocator();
     callingRepository = getMockCallingRepository();
-    callKit = getMockCallKit();
     userRepository = getMockUserRepository();
   });
 
@@ -347,12 +343,6 @@ void main() {
               role: RTCRole.publisher,
               userType: UserType.blind,
             ),
-            callKit.startCall(CallKitArgument(
-              id: call.id,
-              nameCaller: volunteerUser.name,
-              handle: LocaleKeys.volunteer.tr(),
-              type: 1,
-            )),
           ]);
         },
       );
