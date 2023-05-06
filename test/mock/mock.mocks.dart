@@ -1312,6 +1312,12 @@ class MockDeviceInfo extends _i1.Mock implements _i21.DeviceInfo {
         returnValueForMissingStub: _i38.Stream<double>.empty(),
       ) as _i38.Stream<double>);
   @override
+  _i38.Stream<double> get onVolumeUpAndDown => (super.noSuchMethod(
+        Invocation.getter(#onVolumeUpAndDown),
+        returnValue: _i38.Stream<double>.empty(),
+        returnValueForMissingStub: _i38.Stream<double>.empty(),
+      ) as _i38.Stream<double>);
+  @override
   DateTime get localTime => (super.noSuchMethod(
         Invocation.getter(#localTime),
         returnValue: _FakeDateTime_0(

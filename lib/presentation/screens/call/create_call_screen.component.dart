@@ -17,8 +17,25 @@ class _CancelButton extends StatefulWidget {
 }
 
 class _CancelButtonState extends State<_CancelButton> {
+  final DeviceInfo deviceInfo = sl<DeviceInfo>();
   String? callID;
   bool requestCancel = false;
+
+  StreamSubscription? volumeListenerSubscribtion;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Cancel call when volume up and down is pressed
+    Future.delayed(const Duration(milliseconds: 100)).then((value) {
+      volumeListenerSubscribtion = deviceInfo.onVolumeUpAndDown.listen(
+        (volume) {
+          if (!requestCancel && mounted) setState(() => cancel());
+        },
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +66,13 @@ class _CancelButtonState extends State<_CancelButton> {
     if (callID != null) {
       callActionBloc.add(CallActionEnded(callID!));
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    volumeListenerSubscribtion?.cancel();
   }
 }
 

@@ -70,6 +70,7 @@ dependencies:
   lottie: ^2.2.0
   onesignal_flutter: ^3.5.0
   package_info_plus: ^3.1.2
+  perfect_volume_control: ^1.0.5
   permission_handler: ^10.2.0
   responsive_framework: ^0.2.0
   shared_preferences: ^2.0.17
@@ -78,7 +79,6 @@ dependencies:
   swipe_refresh: ^1.0.2
   syncfusion_flutter_charts: ^21.1.41
   uuid: ^3.0.7
-  volume_controller: ^2.0.6
   wakelock: ^0.6.2
 
 dev_dependencies:

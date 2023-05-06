@@ -63,7 +63,13 @@ class _HomeScreenState extends State<HomeScreen> {
     assistantCommandBloc.add(const AssistantCommandFetched());
     userBloc.add(const UserFetched());
     incomingCallBloc.add(const IncomingCallFetched());
-    volumeGestureListener();
+
+    // Create call when volume up and down is pressed and user type is blind
+    volumeListenerSubscribtion = deviceInfo.onVolumeUpAndDown.listen((volume) {
+      if (user?.type == UserType.blind) {
+        appNavigator.goToCreateCall(context, user: user!);
+      }
+    });
   }
 
   @override
@@ -178,36 +184,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!swipeRefreshController.isClosed) {
       swipeRefreshController.sink.add(SwipeRefreshState.hidden);
     }
-  }
-
-  /// This method is used for create new call with volume button
-  ///
-  /// When blind user hit volume button up and down app would create new call
-  void volumeGestureListener() async {
-    double currentvol = -1;
-    DateTime? lastVolumeUp;
-
-    deviceInfo.getVolume().then((value) {
-      currentvol = value;
-      volumeListenerSubscribtion = deviceInfo.onVolumeChanged.listen((volume) {
-        if (volume != currentvol) {
-          if (volume > currentvol) {
-            lastVolumeUp = deviceInfo.localTime;
-          } else {
-            if (lastVolumeUp != null) {
-              DateTime? now = deviceInfo.localTime;
-              if (now.difference(lastVolumeUp!).inSeconds < 1) {
-                if (user?.type == UserType.blind) {
-                  appNavigator.goToCreateCall(context, user: user!);
-                }
-              }
-            }
-          }
-        }
-
-        currentvol = volume;
-      });
-    });
   }
 
   @override
