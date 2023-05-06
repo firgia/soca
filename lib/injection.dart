@@ -25,6 +25,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:volume_controller/volume_controller.dart';
 import 'config/config.dart';
 import 'core/core.dart';
 import 'data/data.dart';
@@ -88,7 +89,8 @@ Future<void> setupInjection() async {
   );
   sl.registerSingleton<OneSignal>(OneSignal.shared);
   sl.registerFactory<agora.RtcEngine>(() => agora.createAgoraRtcEngine());
-  sl.registerFactory<SharedPreferences>(() => sharedPreferences);
+  sl.registerSingleton<SharedPreferences>(sharedPreferences);
+  sl.registerSingleton<VolumeController>(VolumeController());
   sl.registerSingleton<WidgetsBinding>(WidgetsBinding.instance);
 
   /* --------------------------------> LOGIC <------------------------------- */

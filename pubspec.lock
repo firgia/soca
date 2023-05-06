@@ -1163,6 +1163,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.1"
+  perfect_volume_control:
+    dependency: "direct main"
+    description:
+      name: perfect_volume_control
+      sha256: "9bc513e4a2b6151f7d04fc917271c40bdd44cbe67224d52a314302879d2a30f8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
   permission_handler:
     dependency: "direct main"
     description:
@@ -1648,6 +1656,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.4.0"
+  volume_controller:
+    dependency: "direct main"
+    description:
+      name: volume_controller
+      sha256: "3bcaadd0e3298286c4ef3b758a3ea44fc98a9abe24d0e7ef087bfab72a4b6924"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.6"
   wakelock:
     dependency: "direct main"
     description:

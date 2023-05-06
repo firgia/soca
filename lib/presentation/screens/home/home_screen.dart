@@ -16,6 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:soca/core/core.dart';
 import 'package:swipe_refresh/swipe_refresh.dart';
+import 'package:volume_controller/volume_controller.dart';
 import '../../../config/config.dart';
 import '../../../data/data.dart';
 import '../../../injection.dart';
@@ -40,15 +41,20 @@ class _HomeScreenState extends State<HomeScreen> {
   final SignOutCubit signOutCubit = sl<SignOutCubit>();
   final UserBloc userBloc = sl<UserBloc>();
   final UserRepository userRepository = sl<UserRepository>();
+  final VolumeController volumeController = sl<VolumeController>();
+
   late final StreamController<SwipeRefreshState> swipeRefreshController;
-  late final StreamSubscription subscription;
+  late final StreamSubscription onUserDeviceUpdatedSubscribtion;
+  late final StreamSubscription volumeListenerSubscribtion;
+
+  User? user;
 
   @override
   void initState() {
     super.initState();
 
     swipeRefreshController = StreamController<SwipeRefreshState>.broadcast();
-    subscription = userRepository.onUserDeviceUpdated.listen(
+    onUserDeviceUpdatedSubscribtion = userRepository.onUserDeviceUpdated.listen(
       (userDevice) => routeCubit.getTargetRoute(
         checkDifferentDevice: true,
         userDevice: userDevice,
@@ -58,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
     assistantCommandBloc.add(const AssistantCommandFetched());
     userBloc.add(const UserFetched());
     incomingCallBloc.add(const IncomingCallFetched());
+    volumeGestureListener();
   }
 
   @override
@@ -117,6 +124,11 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             },
           ),
+          BlocListener<UserBloc, UserState>(
+            listener: (context, state) {
+              if (state is UserLoaded) user = state.data;
+            },
+          ),
         ],
         child: Scaffold(
           body: _LoadingWrapper(
@@ -169,11 +181,42 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  /// This method is used for create new call with volume button
+  ///
+  /// When blind user hit volume button up and down app would create new call
+  void volumeGestureListener() async {
+    double currentvol = -1;
+    DateTime? lastVolumeUp;
+
+    volumeController.getVolume().then((value) {
+      currentvol = value;
+      volumeListenerSubscribtion = volumeController.listener((volume) {
+        if (volume != currentvol) {
+          if (volume > currentvol) {
+            lastVolumeUp = DateTime.now();
+          } else {
+            if (lastVolumeUp != null) {
+              DateTime? now = DateTime.now();
+              if (now.difference(lastVolumeUp!).inSeconds < 1) {
+                if (user?.type == UserType.blind) {
+                  appNavigator.goToCreateCall(context, user: user!);
+                }
+              }
+            }
+          }
+        }
+
+        currentvol = volume;
+      });
+    });
+  }
+
   @override
   void dispose() {
     super.dispose();
 
-    subscription.cancel();
+    onUserDeviceUpdatedSubscribtion.cancel();
+    volumeListenerSubscribtion.cancel();
     swipeRefreshController.close();
   }
 }
