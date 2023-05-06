@@ -986,4 +986,98 @@ void main() {
       });
     });
   });
+
+  group("On Volume Changed", () {
+    testWidgets(
+        'Should end call when pressed volume up and down and user type is blind',
+        (tester) async {
+      await mockNetworkImages(() async {
+        CallingSetup callingSetup = const CallingSetup(
+          id: "1",
+          rtc: RTCIdentity(token: "abc", channelName: "a", uid: 1),
+          localUser: UserCallIdentity(
+            name: "name",
+            uid: "uid",
+            avatar: "avatar",
+            type: UserType.blind,
+          ),
+          remoteUser: UserCallIdentity(
+            name: "name",
+            uid: "uid",
+            avatar: "avatar",
+            type: UserType.volunteer,
+          ),
+        );
+
+        await tester.runAsync(() async {
+          when(deviceInfo.onVolumeUpAndDown)
+              .thenAnswer((_) => Stream.value(.4));
+
+          when(callActionBloc.stream).thenAnswer(
+            (_) => Stream.value(const CallActionInitial()),
+          );
+
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: false,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: null,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
+
+          verify(callActionBloc.add(CallActionEnded(callingSetup.id)));
+        });
+      });
+    });
+
+    testWidgets(
+        'Should not end call when pressed volume up and down '
+        'but user type is not blind', (tester) async {
+      await mockNetworkImages(() async {
+        CallingSetup callingSetup = const CallingSetup(
+          id: "1",
+          rtc: RTCIdentity(token: "abc", channelName: "a", uid: 1),
+          localUser: UserCallIdentity(
+            name: "name",
+            uid: "uid",
+            avatar: "avatar",
+            type: UserType.volunteer,
+          ),
+          remoteUser: UserCallIdentity(
+            name: "name",
+            uid: "uid",
+            avatar: "avatar",
+            type: UserType.volunteer,
+          ),
+        );
+
+        await tester.runAsync(() async {
+          when(deviceInfo.onVolumeUpAndDown)
+              .thenAnswer((_) => Stream.value(.4));
+
+          when(callActionBloc.stream).thenAnswer(
+            (_) => Stream.value(const CallActionInitial()),
+          );
+
+          when(videoCallBloc.state).thenReturn(
+            const VideoCallState(
+              setting: null,
+              isLocalJoined: false,
+              isCallEnded: false,
+              isUserOffline: false,
+              remoteUID: null,
+            ),
+          );
+
+          await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
+
+          verifyNever(callActionBloc.add(CallActionEnded(callingSetup.id)));
+        });
+      });
+    });
+  });
 }

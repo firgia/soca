@@ -1268,7 +1268,7 @@ void main() {
     });
 
     testWidgets(
-        'Should create call when volume changed to up and down under 1 second '
+        'Should create call when volume changed to up and down '
         'and user type is blind', (tester) async {
       await tester.runAsync(() async {
         const User user = User(id: "123", type: UserType.blind);
@@ -1293,7 +1293,7 @@ void main() {
 
     testWidgets(
         'Should not to create call when volume changed to up and down '
-        'under 1 second but user type is not blind', (tester) async {
+        'but user type is not blind', (tester) async {
       await tester.runAsync(() async {
         final volumeChanged = StreamController<double>();
 

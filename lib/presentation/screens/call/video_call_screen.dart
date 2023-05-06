@@ -7,6 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart' as agora;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -50,6 +52,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   late CallingSetup callingSetup;
   late agora.RtcEngineEventHandler eventHandler;
+  late final StreamSubscription volumeListenerSubscribtion;
+
+  bool isLoadingCallAction = false;
 
   @override
   void initState() {
@@ -63,6 +68,14 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     );
 
     initializeRTCEngine(agoraAppID);
+
+    // End call when volume up and down is pressed
+    volumeListenerSubscribtion = deviceInfo.onVolumeUpAndDown.listen((volume) {
+      if (!isLoadingCallAction &&
+          callingSetup.localUser.type == UserType.blind) {
+        callActionBloc.add(CallActionEnded(callingSetup.id));
+      }
+    });
   }
 
   @override
@@ -112,6 +125,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           ),
           BlocListener<CallActionBloc, CallActionState>(
             listener: (context, state) {
+              isLoadingCallAction = state is CallActionLoading;
               if ((state is CallActionEndedSuccessfully) ||
                   (state is CallActionError &&
                       state.type == CallActionType.ended)) {
@@ -299,5 +313,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           ),
         )
         .then((_) => rtcEngine.unregisterEventHandler(eventHandler));
+
+    volumeListenerSubscribtion.cancel();
   }
 }
