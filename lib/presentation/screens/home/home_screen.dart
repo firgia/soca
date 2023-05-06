@@ -16,7 +16,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:soca/core/core.dart';
 import 'package:swipe_refresh/swipe_refresh.dart';
-import 'package:volume_controller/volume_controller.dart';
 import '../../../config/config.dart';
 import '../../../data/data.dart';
 import '../../../injection.dart';
@@ -36,12 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
   final AppNavigator appNavigator = sl<AppNavigator>();
   final AssistantCommandBloc assistantCommandBloc = sl<AssistantCommandBloc>();
   final CallStatisticBloc callStatisticBloc = sl<CallStatisticBloc>();
+  final DeviceInfo deviceInfo = sl<DeviceInfo>();
   final IncomingCallBloc incomingCallBloc = sl<IncomingCallBloc>();
   final RouteCubit routeCubit = sl<RouteCubit>();
   final SignOutCubit signOutCubit = sl<SignOutCubit>();
   final UserBloc userBloc = sl<UserBloc>();
   final UserRepository userRepository = sl<UserRepository>();
-  final VolumeController volumeController = sl<VolumeController>();
 
   late final StreamController<SwipeRefreshState> swipeRefreshController;
   late final StreamSubscription onUserDeviceUpdatedSubscribtion;
@@ -188,15 +187,15 @@ class _HomeScreenState extends State<HomeScreen> {
     double currentvol = -1;
     DateTime? lastVolumeUp;
 
-    volumeController.getVolume().then((value) {
+    deviceInfo.getVolume().then((value) {
       currentvol = value;
-      volumeListenerSubscribtion = volumeController.listener((volume) {
+      volumeListenerSubscribtion = deviceInfo.onVolumeChanged.listen((volume) {
         if (volume != currentvol) {
           if (volume > currentvol) {
-            lastVolumeUp = DateTime.now();
+            lastVolumeUp = deviceInfo.localTime;
           } else {
             if (lastVolumeUp != null) {
-              DateTime? now = DateTime.now();
+              DateTime? now = deviceInfo.localTime;
               if (now.difference(lastVolumeUp!).inSeconds < 1) {
                 if (user?.type == UserType.blind) {
                   appNavigator.goToCreateCall(context, user: user!);

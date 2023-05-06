@@ -1254,4 +1254,106 @@ void main() {
       });
     });
   });
+
+  group("On Volume Changed", () {
+    setUp(() {
+      when(callStatisticBloc.state).thenReturn(const CallStatisticState(
+        calls: [],
+        listOfYear: [],
+        selectedYear: null,
+        totalCall: null,
+        totalDayJoined: null,
+        userType: null,
+      ));
+    });
+
+    testWidgets(
+        'Should create call when volume changed to up and down under 1 second '
+        'and user type is blind', (tester) async {
+      await tester.runAsync(() async {
+        final volumeChanged = StreamController<double>();
+
+        const User user = User(id: "123", type: UserType.blind);
+        when(deviceInfo.getVolume()).thenAnswer((_) => Future.value(0.5));
+        when(deviceInfo.onVolumeChanged)
+            .thenAnswer((realInvocation) => volumeChanged.stream);
+
+        when(userBloc.stream).thenAnswer(
+            (realInvocation) => Stream.value(const UserLoaded(user)));
+
+        await tester.setScreenSize(iphone14);
+        await tester.pumpApp(child: const HomeScreen());
+
+        // Increase volume and decrease volume under 1 second
+        when(deviceInfo.localTime).thenReturn(DateTime.now());
+        volumeChanged.add(.6);
+        await Future.delayed(const Duration(milliseconds: 900));
+
+        when(deviceInfo.localTime).thenReturn(DateTime.now());
+        volumeChanged.add(.5);
+
+        await tester.pump();
+        verify(appNavigator.goToCreateCall(any, user: user));
+      });
+    });
+
+    testWidgets(
+        'Should not to create call when volume changed to up and down '
+        'under 1 second but user type is not blind', (tester) async {
+      await tester.runAsync(() async {
+        final volumeChanged = StreamController<double>();
+
+        const User user = User(id: "123", type: UserType.volunteer);
+        when(deviceInfo.getVolume()).thenAnswer((_) => Future.value(0.5));
+        when(deviceInfo.onVolumeChanged)
+            .thenAnswer((realInvocation) => volumeChanged.stream);
+
+        when(userBloc.stream).thenAnswer(
+            (realInvocation) => Stream.value(const UserLoaded(user)));
+
+        await tester.setScreenSize(iphone14);
+        await tester.pumpApp(child: const HomeScreen());
+
+        // Increase volume and decrease volume under 1 second
+        when(deviceInfo.localTime).thenReturn(DateTime.now());
+        volumeChanged.add(.6);
+        await Future.delayed(const Duration(milliseconds: 900));
+
+        when(deviceInfo.localTime).thenReturn(DateTime.now());
+        volumeChanged.add(.5);
+
+        await tester.pump();
+        verifyNever(appNavigator.goToCreateCall(any, user: user));
+      });
+    });
+
+    testWidgets(
+        'Should not to create call when volume changed to up and down '
+        'over 1 second even user type is blind', (tester) async {
+      await tester.runAsync(() async {
+        final volumeChanged = StreamController<double>();
+
+        const User user = User(id: "123", type: UserType.blind);
+        when(deviceInfo.getVolume()).thenAnswer((_) => Future.value(0.5));
+        when(deviceInfo.onVolumeChanged)
+            .thenAnswer((realInvocation) => volumeChanged.stream);
+
+        when(userBloc.stream).thenAnswer(
+            (realInvocation) => Stream.value(const UserLoaded(user)));
+
+        await tester.setScreenSize(iphone14);
+        await tester.pumpApp(child: const HomeScreen());
+
+        // Increase volume and decrease volume over 1 second
+        when(deviceInfo.localTime).thenReturn(DateTime.now());
+        volumeChanged.add(.6);
+        await Future.delayed(const Duration(milliseconds: 1100));
+        when(deviceInfo.localTime).thenReturn(DateTime.now());
+        volumeChanged.add(.5);
+
+        await tester.pump();
+        verifyNever(appNavigator.goToCreateCall(any, user: user));
+      });
+    });
+  });
 }

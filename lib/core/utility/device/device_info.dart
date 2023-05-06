@@ -7,12 +7,14 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:soca/core/core.dart';
+import 'package:volume_controller/volume_controller.dart';
 
 // We have to convert all static Fields and Functions to make it testable
 abstract class DeviceInfo {
@@ -68,6 +70,9 @@ abstract class DeviceInfo {
   /// The current status of this permission.
   Future<PermissionStatus> getPermissionStatus(Permission permission);
 
+  /// This method get the current system volume.
+  Future<double> getVolume();
+
   /// Request the user for access to this [Permission], if access hasn't already
   /// been grant access before.
   ///
@@ -80,6 +85,9 @@ abstract class DeviceInfo {
   /// Returns a [Map] containing the status per requested [Permission].
   Future<Map<Permission, PermissionStatus>> requestPermissions(
       List<Permission> permissions);
+
+  /// Fires when the volume was changed.
+  Stream<double> get onVolumeChanged;
 
   DateTime get localTime;
 }
@@ -142,4 +150,14 @@ class DeviceInfoImpl implements DeviceInfo {
 
   @override
   DateTime get localTime => DateTime.now();
+
+  @override
+  Stream<double> get onVolumeChanged {
+    final controller = StreamController<double>.broadcast();
+    VolumeController().listener((volume) => controller.sink.add(volume));
+    return controller.stream;
+  }
+
+  @override
+  Future<double> getVolume() => VolumeController().getVolume();
 }
