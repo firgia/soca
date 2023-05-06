@@ -35,20 +35,25 @@ class _HomeScreenState extends State<HomeScreen> {
   final AppNavigator appNavigator = sl<AppNavigator>();
   final AssistantCommandBloc assistantCommandBloc = sl<AssistantCommandBloc>();
   final CallStatisticBloc callStatisticBloc = sl<CallStatisticBloc>();
+  final DeviceInfo deviceInfo = sl<DeviceInfo>();
   final IncomingCallBloc incomingCallBloc = sl<IncomingCallBloc>();
   final RouteCubit routeCubit = sl<RouteCubit>();
   final SignOutCubit signOutCubit = sl<SignOutCubit>();
   final UserBloc userBloc = sl<UserBloc>();
   final UserRepository userRepository = sl<UserRepository>();
+
   late final StreamController<SwipeRefreshState> swipeRefreshController;
-  late final StreamSubscription subscription;
+  late final StreamSubscription onUserDeviceUpdatedSubscribtion;
+  late final StreamSubscription volumeListenerSubscribtion;
+
+  User? user;
 
   @override
   void initState() {
     super.initState();
 
     swipeRefreshController = StreamController<SwipeRefreshState>.broadcast();
-    subscription = userRepository.onUserDeviceUpdated.listen(
+    onUserDeviceUpdatedSubscribtion = userRepository.onUserDeviceUpdated.listen(
       (userDevice) => routeCubit.getTargetRoute(
         checkDifferentDevice: true,
         userDevice: userDevice,
@@ -58,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
     assistantCommandBloc.add(const AssistantCommandFetched());
     userBloc.add(const UserFetched());
     incomingCallBloc.add(const IncomingCallFetched());
+    volumeGestureListener();
   }
 
   @override
@@ -117,6 +123,11 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             },
           ),
+          BlocListener<UserBloc, UserState>(
+            listener: (context, state) {
+              if (state is UserLoaded) user = state.data;
+            },
+          ),
         ],
         child: Scaffold(
           body: _LoadingWrapper(
@@ -169,11 +180,42 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  /// This method is used for create new call with volume button
+  ///
+  /// When blind user hit volume button up and down app would create new call
+  void volumeGestureListener() async {
+    double currentvol = -1;
+    DateTime? lastVolumeUp;
+
+    deviceInfo.getVolume().then((value) {
+      currentvol = value;
+      volumeListenerSubscribtion = deviceInfo.onVolumeChanged.listen((volume) {
+        if (volume != currentvol) {
+          if (volume > currentvol) {
+            lastVolumeUp = deviceInfo.localTime;
+          } else {
+            if (lastVolumeUp != null) {
+              DateTime? now = deviceInfo.localTime;
+              if (now.difference(lastVolumeUp!).inSeconds < 1) {
+                if (user?.type == UserType.blind) {
+                  appNavigator.goToCreateCall(context, user: user!);
+                }
+              }
+            }
+          }
+        }
+
+        currentvol = volume;
+      });
+    });
+  }
+
   @override
   void dispose() {
     super.dispose();
 
-    subscription.cancel();
+    onUserDeviceUpdatedSubscribtion.cancel();
+    volumeListenerSubscribtion.cancel();
     swipeRefreshController.close();
   }
 }
