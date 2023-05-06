@@ -43,6 +43,13 @@ void main() {
         ),
       );
 
+      final unavailable = CallingFailure.fromException(
+        FirebaseFunctionsException(
+          code: "unavailable",
+          message: "error",
+        ),
+      );
+
       final permissionDenied = CallingFailure.fromException(
         FirebaseFunctionsException(
           code: "permission-denied",
@@ -60,6 +67,7 @@ void main() {
       expect(invalidArgument.code, CallingFailureCode.invalidArgument);
       expect(notFound.code, CallingFailureCode.notFound);
       expect(unauthenticated.code, CallingFailureCode.unauthenticated);
+      expect(unavailable.code, CallingFailureCode.unavailable);
       expect(permissionDenied.code, CallingFailureCode.permissionDenied);
       expect(unknown.code, CallingFailureCode.unknown);
     });

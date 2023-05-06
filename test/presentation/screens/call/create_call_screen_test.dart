@@ -24,12 +24,14 @@ import '../../../mock/mock.mocks.dart';
 void main() {
   late MockAppNavigator appNavigator;
   late MockCallActionBloc callActionBloc;
+  late MockCallKit callKit;
   late MockWidgetsBinding widgetBinding;
 
   setUp(() {
     registerLocator();
     appNavigator = getMockAppNavigator();
     callActionBloc = getMockCallActionBloc();
+    callKit = getMockCallKit();
 
     widgetBinding = getMockWidgetsBinding();
     MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
@@ -42,7 +44,8 @@ void main() {
 
   Finder findCallBackgroundImage() => find.byType(CallBackgroundImage);
   Finder findCancelButton() => find.byType(CancelCallButton);
-  Finder findErrorMessage() => find.byType(ErrorMessage);
+  Finder findErrorMessageText() =>
+      find.text(LocaleKeys.error_something_wrong.tr());
   Finder findNoVolunteerText() =>
       find.text(LocaleKeys.fail_to_call_no_volunteers.tr());
 
@@ -73,7 +76,8 @@ void main() {
   );
 
   group("Bloc Listener", () {
-    testWidgets("Should show error choose message when [CallActionError]",
+    testWidgets(
+        "Should show error message and back to previous pagewhen [CallActionError]",
         (tester) async {
       await mockNetworkImages(() async {
         await tester.runAsync(() async {
@@ -82,7 +86,8 @@ void main() {
 
           await tester.pumpApp(child: CreateCallScreen(user: user));
           await tester.pump();
-          expect(findErrorMessage(), findsOneWidget);
+          expect(findErrorMessageText(), findsOneWidget);
+          verify(appNavigator.back(any));
         });
       });
     });
@@ -105,7 +110,7 @@ void main() {
     });
 
     testWidgets(
-        'Should go to Video call page when '
+        'Should go to Video call page and start call when '
         '[CallActionCreatedSuccessfully]', (tester) async {
       await mockNetworkImages(() async {
         await tester.runAsync(() async {
@@ -131,6 +136,17 @@ void main() {
 
           await tester.pumpApp(child: CreateCallScreen(user: user));
           await tester.pump();
+
+          verify(
+            callKit.startCall(
+              CallKitArgument(
+                id: "1",
+                nameCaller: "name",
+                handle: LocaleKeys.volunteer.tr(),
+                type: 1,
+              ),
+            ),
+          );
 
           verify(appNavigator.goToVideoCall(any, setup: callingSetup));
         });

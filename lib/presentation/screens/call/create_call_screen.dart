@@ -33,15 +33,14 @@ class CreateCallScreen extends StatefulWidget {
 }
 
 class _CreateCallScreenState extends State<CreateCallScreen> {
-  late AppNavigator appNavigator;
-  late CallActionBloc callActionBloc;
+  AppNavigator appNavigator = sl<AppNavigator>();
+  CallActionBloc callActionBloc = sl<CallActionBloc>();
+  CallKit callKit = sl<CallKit>();
 
   @override
   void initState() {
     super.initState();
 
-    appNavigator = sl<AppNavigator>();
-    callActionBloc = sl<CallActionBloc>();
     callActionBloc.add(const CallActionCreated());
   }
 
@@ -52,6 +51,15 @@ class _CreateCallScreenState extends State<CreateCallScreen> {
       child: BlocListener<CallActionBloc, CallActionState>(
         listener: (context, state) {
           if (state is CallActionCreatedSuccessfully) {
+            CallingSetup data = state.data;
+            callKit.startCall(
+              CallKitArgument(
+                id: data.id,
+                nameCaller: data.remoteUser.name,
+                handle: LocaleKeys.volunteer.tr(),
+                type: 1,
+              ),
+            );
             appNavigator.goToVideoCall(context, setup: state.data);
           } else if (state is CallActionEndedSuccessfully) {
             appNavigator.back(context);
@@ -60,8 +68,10 @@ class _CreateCallScreenState extends State<CreateCallScreen> {
             AppSnackbar(context)
                 .showMessage(LocaleKeys.fail_to_call_no_volunteers.tr());
           } else if (state is CallActionError) {
-            Alert(context).showSomethingErrorMessage(
-              errorCode: state.failure?.code.name,
+            appNavigator.back(context);
+            AppSnackbar(context).showMessage(
+              LocaleKeys.error_something_wrong.tr(),
+              style: SnacbarStyle.danger,
             );
           }
         },

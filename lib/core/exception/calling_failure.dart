@@ -23,6 +23,9 @@ enum CallingFailureCode {
   /// The caller does not have permission to execute the specified operation.
   permissionDenied,
 
+  /// Volunteers is not available to receive the call
+  unavailable,
+
   unknown,
 }
 
@@ -56,6 +59,12 @@ class CallingFailure implements Exception {
             message:
                 'The request does not have valid authentication credentials '
                 'for the operation.',
+          );
+
+        case "unavailable":
+          return const CallingFailure(
+            code: CallingFailureCode.unavailable,
+            message: 'Volunteers is not available.',
           );
 
         case "permission-denied":
