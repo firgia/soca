@@ -14,7 +14,7 @@ import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:soca/core/core.dart';
-import 'package:volume_controller/volume_controller.dart';
+import 'package:perfect_volume_control/perfect_volume_control.dart';
 
 // We have to convert all static Fields and Functions to make it testable
 abstract class DeviceInfo {
@@ -89,6 +89,10 @@ abstract class DeviceInfo {
   /// Fires when the volume was changed.
   Stream<double> get onVolumeChanged;
 
+  /// Fires when the volume changes to up and down or to down and up under 500
+  /// milliseconds.
+  Stream<double> get onVolumeUpAndDown;
+
   DateTime get localTime;
 }
 
@@ -138,6 +142,9 @@ class DeviceInfoImpl implements DeviceInfo {
   }
 
   @override
+  Future<double> getVolume() => PerfectVolumeControl.getVolume();
+
+  @override
   Future<PermissionStatus> requestPermission(Permission permission) {
     return permission.request();
   }
@@ -152,12 +159,46 @@ class DeviceInfoImpl implements DeviceInfo {
   DateTime get localTime => DateTime.now();
 
   @override
-  Stream<double> get onVolumeChanged {
-    final controller = StreamController<double>.broadcast();
-    VolumeController().listener((volume) => controller.sink.add(volume));
-    return controller.stream;
-  }
+  Stream<double> get onVolumeChanged => PerfectVolumeControl.stream;
 
   @override
-  Future<double> getVolume() => VolumeController().getVolume();
+  Stream<double> get onVolumeUpAndDown {
+    final controller = StreamController<double>.broadcast();
+
+    int intervalMilliSeconds = 500;
+
+    PerfectVolumeControl.getVolume().then((value) {
+      double currentvol = value;
+      DateTime? lastVolumeUp;
+      DateTime? lastVolumeDown;
+
+      PerfectVolumeControl.stream.listen((volume) {
+        if (volume != currentvol) {
+          if (volume > currentvol) {
+            lastVolumeUp = DateTime.now();
+
+            if (lastVolumeDown != null) {
+              if (lastVolumeUp!.difference(lastVolumeDown!).inMilliseconds <
+                  intervalMilliSeconds) {
+                controller.sink.add(volume);
+              }
+            }
+          } else {
+            lastVolumeDown = DateTime.now();
+
+            if (lastVolumeUp != null) {
+              if (lastVolumeDown!.difference(lastVolumeUp!).inMilliseconds <
+                  intervalMilliSeconds) {
+                controller.sink.add(volume);
+              }
+            }
+          }
+        }
+
+        currentvol = volume;
+      });
+    });
+
+    return controller.stream;
+  }
 }

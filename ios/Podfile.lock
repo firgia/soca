@@ -924,8 +924,6 @@ PODS:
     - Flutter
     - FMDB (>= 2.7.5)
   - TOCropViewController (2.6.1)
-  - volume_controller (0.0.1):
-    - Flutter
   - wakelock (0.0.1):
     - Flutter
 
@@ -958,7 +956,6 @@ DEPENDENCIES:
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
-  - volume_controller (from `.symlinks/plugins/volume_controller/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
 
 SPEC REPOS:
@@ -1058,8 +1055,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sign_in_with_apple/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
-  volume_controller:
-    :path: ".symlinks/plugins/volume_controller/ios"
   wakelock:
     :path: ".symlinks/plugins/wakelock/ios"
 
@@ -1130,7 +1125,6 @@ SPEC CHECKSUMS:
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
-  volume_controller: 531ddf792994285c9b17f9d8a7e4dcdd29b3eae9
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 
 PODFILE CHECKSUM: 17fadd98fb8774fe02141020d61b57bbeb686699

@@ -25,6 +25,7 @@ void main() {
   late MockAppNavigator appNavigator;
   late MockCallActionBloc callActionBloc;
   late MockCallKit callKit;
+  late MockDeviceInfo deviceInfo;
   late MockWidgetsBinding widgetBinding;
 
   setUp(() {
@@ -32,6 +33,7 @@ void main() {
     appNavigator = getMockAppNavigator();
     callActionBloc = getMockCallActionBloc();
     callKit = getMockCallKit();
+    deviceInfo = getMockDeviceInfo();
 
     widgetBinding = getMockWidgetsBinding();
     MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
@@ -248,6 +250,36 @@ void main() {
 
           expect(find.text(LocaleKeys.async_calling_volunteer.tr()),
               findsOneWidget);
+        });
+      });
+    });
+  });
+
+  group("On Volume Changed", () {
+    testWidgets(
+        'Should cancel call when volume changed to up and down under 1 second',
+        (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(deviceInfo.onVolumeUpAndDown)
+              .thenAnswer((_) => Stream.value(.4));
+
+          Call call = const Call(id: "123");
+
+          when(callActionBloc.stream).thenAnswer((_) => Stream.fromIterable([
+                const CallActionLoading(CallActionType.created),
+                CallActionCreatedSuccessfullyWithWaitingAnswer(call),
+              ]));
+
+          await tester.pumpApp(
+            child: CreateCallScreen(user: user),
+          );
+
+          // Execute request end call when Create call is completed but waiting
+          // the answer
+          await Future.delayed(const Duration(milliseconds: 200));
+          await tester.pump();
+          verify(callActionBloc.add(CallActionEnded(call.id!))).called(1);
         });
       });
     });
