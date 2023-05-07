@@ -472,7 +472,7 @@ void main() {
           VideoCallState state = const VideoCallState(
             setting: CallSetting(enableFlip: true),
             isLocalJoined: false,
-            isCallEnded: true,
+            isCallEnded: false,
             isUserOffline: false,
             remoteUID: null,
           );
@@ -480,7 +480,7 @@ void main() {
           when(videoCallBloc.state).thenReturn(state);
           when(videoCallBloc.stream).thenAnswer((_) => Stream.value(state));
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
-          await Future.delayed(const Duration(milliseconds: 200));
+
           await tester.pump();
           expect(findFlipModeOnMessage(), findsOneWidget);
           expect(findFlipModeOffMessage(), findsNothing);
@@ -496,7 +496,7 @@ void main() {
           VideoCallState state = const VideoCallState(
             setting: CallSetting(enableFlip: false),
             isLocalJoined: false,
-            isCallEnded: true,
+            isCallEnded: false,
             isUserOffline: false,
             remoteUID: null,
           );
@@ -526,7 +526,7 @@ void main() {
           VideoCallState state = const VideoCallState(
             setting: CallSetting(enableFlashlight: true),
             isLocalJoined: false,
-            isCallEnded: true,
+            isCallEnded: false,
             isUserOffline: false,
             remoteUID: null,
           );
