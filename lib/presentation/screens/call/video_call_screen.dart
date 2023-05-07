@@ -69,11 +69,20 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     );
 
     initializeRTCEngine(agoraAppID).then((value) {
+      bool volumeButtonActive = false;
+      Future.delayed(const Duration(seconds: 2)).then((value) {
+        volumeButtonActive = true;
+      });
+
       // End call when volume up and down is pressed
       volumeListenerSubscribtion =
           deviceInfo.onVolumeUpAndDown.listen((volume) {
         if (!isLoadingCallAction &&
-            callingSetup.localUser.type == UserType.blind) {
+            callingSetup.localUser.type == UserType.blind &&
+            volumeButtonActive &&
+            mounted) {
+          // TODO: Change this message
+          AppSnackbar(context).showMessage("TRY TO END CALL");
           callActionBloc.add(CallActionEnded(callingSetup.id));
         }
       });
@@ -319,7 +328,11 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     rtcEngine.unregisterEventHandler(eventHandler);
     await callKit.endAllCalls();
 
-    if (mounted) appNavigator.goToSplash(context);
+    if (mounted) {
+      appNavigator.goToSplash(context);
+      // TODO: Change this message
+      AppSnackbar(context).showMessage("Call ended");
+    }
   }
 
   @override

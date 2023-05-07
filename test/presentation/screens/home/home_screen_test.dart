@@ -1283,7 +1283,7 @@ void main() {
         await tester.pumpApp(child: const HomeScreen());
 
         volumeChanged.add(.6);
-        await Future.delayed(const Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 2100));
         volumeChanged.add(.5);
         await tester.pump();
 
@@ -1308,7 +1308,7 @@ void main() {
         await tester.pumpApp(child: const HomeScreen());
 
         volumeChanged.add(.6);
-        await Future.delayed(const Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 2100));
         volumeChanged.add(.5);
         await tester.pump();
 

@@ -64,9 +64,14 @@ class _HomeScreenState extends State<HomeScreen> {
     userBloc.add(const UserFetched());
     incomingCallBloc.add(const IncomingCallFetched());
 
+    bool volumeButtonActive = false;
+    Future.delayed(const Duration(seconds: 2)).then((value) {
+      volumeButtonActive = true;
+    });
+
     // Create call when volume up and down is pressed and user type is blind
     volumeListenerSubscribtion = deviceInfo.onVolumeUpAndDown.listen((volume) {
-      if (user?.type == UserType.blind) {
+      if (user?.type == UserType.blind && volumeButtonActive) {
         appNavigator.goToCreateCall(context, user: user!);
       }
     });

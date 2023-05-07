@@ -480,6 +480,7 @@ void main() {
           when(videoCallBloc.state).thenReturn(state);
           when(videoCallBloc.stream).thenAnswer((_) => Stream.value(state));
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
+          await Future.delayed(const Duration(milliseconds: 200));
           await tester.pump();
           expect(findFlipModeOnMessage(), findsOneWidget);
           expect(findFlipModeOffMessage(), findsNothing);
@@ -981,6 +982,7 @@ void main() {
         'Should end call when pressed volume up and down and user type is blind',
         (tester) async {
       await mockNetworkImages(() async {
+        StreamController<double> volumeUpAndDown = StreamController<double>();
         CallingSetup callingSetup = const CallingSetup(
           id: "1",
           rtc: RTCIdentity(token: "abc", channelName: "a", uid: 1),
@@ -1009,7 +1011,7 @@ void main() {
             ),
           );
           when(deviceInfo.onVolumeUpAndDown)
-              .thenAnswer((_) => Stream.value(.4));
+              .thenAnswer((_) => volumeUpAndDown.stream);
 
           when(callActionBloc.stream).thenAnswer(
             (_) => Stream.value(const CallActionInitial()),
@@ -1021,6 +1023,9 @@ void main() {
           /// is completed, so we need add delay to make sure all initialize is
           /// completed
           await Future.delayed(const Duration(milliseconds: 200));
+          volumeUpAndDown.sink.add(.2);
+          await Future.delayed(const Duration(seconds: 2));
+          volumeUpAndDown.sink.add(.3);
           await tester.pump();
 
           verify(callActionBloc.add(CallActionEnded(callingSetup.id)));
@@ -1032,6 +1037,7 @@ void main() {
         'Should not end call when pressed volume up and down '
         'but user type is not blind', (tester) async {
       await mockNetworkImages(() async {
+        StreamController<double> volumeUpAndDown = StreamController<double>();
         CallingSetup callingSetup = const CallingSetup(
           id: "1",
           rtc: RTCIdentity(token: "abc", channelName: "a", uid: 1),
@@ -1071,8 +1077,11 @@ void main() {
 
           /// deviceInfo.onVolumeUpAndDown will called when initialize agora
           /// is completed, so we need add delay to make sure all initialize is
-          /// completed.
+          /// completed
           await Future.delayed(const Duration(milliseconds: 200));
+          volumeUpAndDown.sink.add(.2);
+          await Future.delayed(const Duration(seconds: 2));
+          volumeUpAndDown.sink.add(.3);
           await tester.pump();
 
           verifyNever(callActionBloc.add(CallActionEnded(callingSetup.id)));

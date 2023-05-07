@@ -29,9 +29,16 @@ class _CancelButtonState extends State<_CancelButton> {
 
     // Cancel call when volume up and down is pressed
     Future.delayed(const Duration(milliseconds: 100)).then((value) {
+      bool volumeButtonActive = false;
+      Future.delayed(const Duration(seconds: 2)).then((value) {
+        volumeButtonActive = true;
+      });
+
       volumeListenerSubscribtion = deviceInfo.onVolumeUpAndDown.listen(
         (volume) {
-          if (!requestCancel && mounted) setState(() => cancel());
+          if (!requestCancel && mounted && volumeButtonActive) {
+            setState(() => cancel());
+          }
         },
       );
     });
