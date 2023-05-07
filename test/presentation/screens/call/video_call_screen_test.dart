@@ -350,7 +350,7 @@ void main() {
 
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
 
-          verify(appNavigator.back(any));
+          verify(appNavigator.goToSplash(any));
         });
       });
     });
@@ -375,7 +375,7 @@ void main() {
 
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
 
-          verify(appNavigator.back(any));
+          verify(appNavigator.goToSplash(any));
         });
       });
     });
@@ -438,7 +438,7 @@ void main() {
           when(videoCallBloc.state).thenReturn(state);
           when(videoCallBloc.stream).thenAnswer((_) => Stream.value(state));
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
-          verify(appNavigator.back(any));
+          verify(appNavigator.goToSplash(any));
         });
       });
     });
@@ -459,7 +459,7 @@ void main() {
           when(videoCallBloc.state).thenReturn(state);
           when(videoCallBloc.stream).thenAnswer((_) => Stream.value(state));
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
-          verifyNever(appNavigator.back(any));
+          verifyNever(appNavigator.goToSplash(any));
         });
       });
     });
@@ -936,12 +936,10 @@ void main() {
     });
   });
 
-  group("onDispose", () {
+  group("end call", () {
     testWidgets("Should leave channel and end all calls", (tester) async {
       await mockNetworkImages(() async {
         await tester.runAsync(() async {
-          StreamController<Widget> widgetStreamController =
-              StreamController<Widget>();
           when(videoCallBloc.state).thenReturn(
             const VideoCallState(
               setting: null,
@@ -952,23 +950,16 @@ void main() {
             ),
           );
 
-          widgetStreamController.add(VideoCallScreen(setup: callingSetup));
+          when(callActionBloc.stream).thenAnswer((realInvocation) =>
+              Stream.value(const CallActionEndedSuccessfully()));
+
           await tester.pumpApp(
-            child: StreamBuilder<Widget>(
-              stream: widgetStreamController.stream,
-              builder: (context, snapshot) {
-                return snapshot.data ?? Container();
-              },
-            ),
+            child: VideoCallScreen(setup: callingSetup),
           );
 
           await tester.pump();
 
-          widgetStreamController.add(const SizedBox());
-          await tester.pumpAndSettle();
-
           // now onDispose of VideoCallScreen is called
-
           verify(callKit.endAllCalls());
           verify(
             rtcEngine.leaveChannel(
@@ -980,8 +971,6 @@ void main() {
             ),
           );
           verify(rtcEngine.unregisterEventHandler(any));
-
-          widgetStreamController.close();
         });
       });
     });
@@ -1010,13 +999,6 @@ void main() {
         );
 
         await tester.runAsync(() async {
-          when(deviceInfo.onVolumeUpAndDown)
-              .thenAnswer((_) => Stream.value(.4));
-
-          when(callActionBloc.stream).thenAnswer(
-            (_) => Stream.value(const CallActionInitial()),
-          );
-
           when(videoCallBloc.state).thenReturn(
             const VideoCallState(
               setting: null,
@@ -1026,8 +1008,20 @@ void main() {
               remoteUID: null,
             ),
           );
+          when(deviceInfo.onVolumeUpAndDown)
+              .thenAnswer((_) => Stream.value(.4));
+
+          when(callActionBloc.stream).thenAnswer(
+            (_) => Stream.value(const CallActionInitial()),
+          );
 
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
+
+          /// deviceInfo.onVolumeUpAndDown will called when initialize agora
+          /// is completed, so we need add delay to make sure all initialize is
+          /// completed
+          await Future.delayed(const Duration(milliseconds: 200));
+          await tester.pump();
 
           verify(callActionBloc.add(CallActionEnded(callingSetup.id)));
         });
@@ -1074,6 +1068,12 @@ void main() {
           );
 
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
+
+          /// deviceInfo.onVolumeUpAndDown will called when initialize agora
+          /// is completed, so we need add delay to make sure all initialize is
+          /// completed.
+          await Future.delayed(const Duration(milliseconds: 200));
+          await tester.pump();
 
           verifyNever(callActionBloc.add(CallActionEnded(callingSetup.id)));
         });
