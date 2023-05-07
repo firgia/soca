@@ -1276,10 +1276,17 @@ class MockDeviceFeedback extends _i1.Mock implements _i21.DeviceFeedback {
         returnValueForMissingStub: null,
       );
   @override
-  void playVoiceAssistant(String? message) => super.noSuchMethod(
+  void playVoiceAssistant(
+    String? message,
+    _i17.BuildContext? context,
+  ) =>
+      super.noSuchMethod(
         Invocation.method(
           #playVoiceAssistant,
-          [message],
+          [
+            message,
+            context,
+          ],
         ),
         returnValueForMissingStub: null,
       );

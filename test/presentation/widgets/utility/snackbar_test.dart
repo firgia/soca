@@ -57,7 +57,7 @@ void main() {
 
         expect(find.text("snackbar message"), findsOneWidget);
         verify(deviceFeedback.vibrate());
-        verify(deviceFeedback.playVoiceAssistant("snackbar message"));
+        verify(deviceFeedback.playVoiceAssistant("snackbar message", any));
       });
     });
   });
