@@ -48,7 +48,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   bool hasBeenSwitchCamera = false;
   bool lastEnableFlashlight = false;
   bool lastEnableFlip = false;
-  bool isOnProcessEndCall = false;
+  bool hasCallEndCallOnBloc = false;
+  bool hasRequestClosePage = false;
 
   late CallingSetup callingSetup;
   late agora.RtcEngineEventHandler eventHandler;
@@ -95,8 +96,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
               AppSnackbar appSnackbar = AppSnackbar(context);
 
-              if (state.isUserOffline && !isOnProcessEndCall) {
-                isOnProcessEndCall = true;
+              if (state.isUserOffline && !hasCallEndCallOnBloc) {
+                hasCallEndCallOnBloc = true;
                 callActionBloc.add(CallActionEnded(callingSetup.id));
               } else if (state.isCallEnded) {
                 endCall();
@@ -130,7 +131,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
               if ((state is CallActionEndedSuccessfully) ||
                   (state is CallActionError &&
                       state.type == CallActionType.ended)) {
-                isOnProcessEndCall = false;
+                hasCallEndCallOnBloc = false;
                 endCall();
               }
             },
@@ -301,6 +302,12 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   }
 
   void endCall() async {
+    if (hasRequestClosePage) {
+      return;
+    } else {
+      hasRequestClosePage = true;
+    }
+
     await rtcEngine.leaveChannel(
       options: const agora.LeaveChannelOptions(
         stopAllEffect: true,
