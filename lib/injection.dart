@@ -88,7 +88,7 @@ Future<void> setupInjection() async {
   );
   sl.registerSingleton<OneSignal>(OneSignal.shared);
   sl.registerFactory<agora.RtcEngine>(() => agora.createAgoraRtcEngine());
-  sl.registerFactory<SharedPreferences>(() => sharedPreferences);
+  sl.registerSingleton<SharedPreferences>(sharedPreferences);
   sl.registerSingleton<WidgetsBinding>(WidgetsBinding.instance);
 
   /* --------------------------------> LOGIC <------------------------------- */

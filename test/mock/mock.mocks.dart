@@ -1306,6 +1306,18 @@ class MockDeviceFeedback extends _i1.Mock implements _i21.DeviceFeedback {
 /// See the documentation for Mockito's code generation for more information.
 class MockDeviceInfo extends _i1.Mock implements _i21.DeviceInfo {
   @override
+  _i38.Stream<double> get onVolumeChanged => (super.noSuchMethod(
+        Invocation.getter(#onVolumeChanged),
+        returnValue: _i38.Stream<double>.empty(),
+        returnValueForMissingStub: _i38.Stream<double>.empty(),
+      ) as _i38.Stream<double>);
+  @override
+  _i38.Stream<double> get onVolumeUpAndDown => (super.noSuchMethod(
+        Invocation.getter(#onVolumeUpAndDown),
+        returnValue: _i38.Stream<double>.empty(),
+        returnValueForMissingStub: _i38.Stream<double>.empty(),
+      ) as _i38.Stream<double>);
+  @override
   DateTime get localTime => (super.noSuchMethod(
         Invocation.getter(#localTime),
         returnValue: _FakeDateTime_0(
@@ -1414,6 +1426,15 @@ class MockDeviceInfo extends _i1.Mock implements _i21.DeviceInfo {
         returnValueForMissingStub: _i38.Future<_i40.PermissionStatus>.value(
             _i40.PermissionStatus.denied),
       ) as _i38.Future<_i40.PermissionStatus>);
+  @override
+  _i38.Future<double> getVolume() => (super.noSuchMethod(
+        Invocation.method(
+          #getVolume,
+          [],
+        ),
+        returnValue: _i38.Future<double>.value(0.0),
+        returnValueForMissingStub: _i38.Future<double>.value(0.0),
+      ) as _i38.Future<double>);
   @override
   _i38.Future<_i40.PermissionStatus> requestPermission(
           _i40.Permission? permission) =>

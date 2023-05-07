@@ -1254,4 +1254,66 @@ void main() {
       });
     });
   });
+
+  group("On Volume Changed", () {
+    setUp(() {
+      when(callStatisticBloc.state).thenReturn(const CallStatisticState(
+        calls: [],
+        listOfYear: [],
+        selectedYear: null,
+        totalCall: null,
+        totalDayJoined: null,
+        userType: null,
+      ));
+    });
+
+    testWidgets(
+        'Should create call when volume changed to up and down '
+        'and user type is blind', (tester) async {
+      await tester.runAsync(() async {
+        const User user = User(id: "123", type: UserType.blind);
+        final volumeChanged = StreamController<double>();
+
+        when(deviceInfo.onVolumeUpAndDown)
+            .thenAnswer((_) => volumeChanged.stream);
+        when(userBloc.stream)
+            .thenAnswer((_) => Stream.value(const UserLoaded(user)));
+
+        await tester.setScreenSize(iphone14);
+        await tester.pumpApp(child: const HomeScreen());
+
+        volumeChanged.add(.6);
+        await Future.delayed(const Duration(milliseconds: 2100));
+        volumeChanged.add(.5);
+        await tester.pump();
+
+        verify(appNavigator.goToCreateCall(any, user: user));
+      });
+    });
+
+    testWidgets(
+        'Should not to create call when volume changed to up and down '
+        'but user type is not blind', (tester) async {
+      await tester.runAsync(() async {
+        final volumeChanged = StreamController<double>();
+
+        const User user = User(id: "123", type: UserType.volunteer);
+        when(deviceInfo.onVolumeUpAndDown)
+            .thenAnswer((_) => volumeChanged.stream);
+
+        when(userBloc.stream).thenAnswer(
+            (realInvocation) => Stream.value(const UserLoaded(user)));
+
+        await tester.setScreenSize(iphone14);
+        await tester.pumpApp(child: const HomeScreen());
+
+        volumeChanged.add(.6);
+        await Future.delayed(const Duration(milliseconds: 2100));
+        volumeChanged.add(.5);
+        await tester.pump();
+
+        verifyNever(appNavigator.goToCreateCall(any, user: user));
+      });
+    });
+  });
 }

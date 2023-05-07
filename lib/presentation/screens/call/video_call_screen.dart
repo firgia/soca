@@ -7,6 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart' as agora;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -46,10 +48,14 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   bool hasBeenSwitchCamera = false;
   bool lastEnableFlashlight = false;
   bool lastEnableFlip = false;
-  bool isOnProcessEndCall = false;
+  bool hasCallEndCallOnBloc = false;
+  bool hasRequestClosePage = false;
 
   late CallingSetup callingSetup;
   late agora.RtcEngineEventHandler eventHandler;
+  StreamSubscription? volumeListenerSubscribtion;
+
+  bool isLoadingCallAction = false;
 
   @override
   void initState() {
@@ -62,7 +68,25 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       VideoCallStarted(callingSetup: callingSetup),
     );
 
-    initializeRTCEngine(agoraAppID);
+    initializeRTCEngine(agoraAppID).then((value) {
+      bool volumeButtonActive = false;
+      Future.delayed(const Duration(seconds: 2)).then((value) {
+        volumeButtonActive = true;
+      });
+
+      // End call when volume up and down is pressed
+      volumeListenerSubscribtion =
+          deviceInfo.onVolumeUpAndDown.listen((volume) {
+        if (!isLoadingCallAction &&
+            callingSetup.localUser.type == UserType.blind &&
+            volumeButtonActive &&
+            mounted) {
+          // TODO: Change this message
+          AppSnackbar(context).showMessage("TRY TO END CALL");
+          callActionBloc.add(CallActionEnded(callingSetup.id));
+        }
+      });
+    });
   }
 
   @override
@@ -81,11 +105,11 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
               AppSnackbar appSnackbar = AppSnackbar(context);
 
-              if (state.isUserOffline && !isOnProcessEndCall) {
-                isOnProcessEndCall = true;
+              if (state.isUserOffline && !hasCallEndCallOnBloc) {
+                hasCallEndCallOnBloc = true;
                 callActionBloc.add(CallActionEnded(callingSetup.id));
               } else if (state.isCallEnded) {
-                appNavigator.back(context);
+                endCall();
               }
 
               // Show enable or disable flashlight message
@@ -112,11 +136,12 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           ),
           BlocListener<CallActionBloc, CallActionState>(
             listener: (context, state) {
+              isLoadingCallAction = state is CallActionLoading;
               if ((state is CallActionEndedSuccessfully) ||
                   (state is CallActionError &&
                       state.type == CallActionType.ended)) {
-                isOnProcessEndCall = false;
-                appNavigator.back(context);
+                hasCallEndCallOnBloc = false;
+                endCall();
               }
             },
           ),
@@ -169,7 +194,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     );
   }
 
-  void initializeRTCEngine(String agoraAppID) async {
+  Future<void> initializeRTCEngine(String agoraAppID) async {
     if (agoraAppID.trim().isEmpty) {
       _logger.shout("Agora App ID is required");
       return;
@@ -285,19 +310,35 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     );
   }
 
+  void endCall() async {
+    if (hasRequestClosePage) {
+      return;
+    } else {
+      hasRequestClosePage = true;
+    }
+
+    await rtcEngine.leaveChannel(
+      options: const agora.LeaveChannelOptions(
+        stopAllEffect: true,
+        stopAudioMixing: true,
+        stopMicrophoneRecording: true,
+      ),
+    );
+
+    rtcEngine.unregisterEventHandler(eventHandler);
+    await callKit.endAllCalls();
+
+    if (mounted) {
+      appNavigator.goToSplash(context);
+      // TODO: Change this message
+      AppSnackbar(context).showMessage("Call ended");
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
 
-    callKit.endAllCalls();
-    rtcEngine
-        .leaveChannel(
-          options: const agora.LeaveChannelOptions(
-            stopAllEffect: true,
-            stopAudioMixing: true,
-            stopMicrophoneRecording: true,
-          ),
-        )
-        .then((_) => rtcEngine.unregisterEventHandler(eventHandler));
+    volumeListenerSubscribtion?.cancel();
   }
 }

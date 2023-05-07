@@ -908,6 +908,8 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - perfect_volume_control (0.0.1):
+    - Flutter
   - permission_handler_apple (9.0.4):
     - Flutter
   - PromisesObjC (2.2.0)
@@ -949,6 +951,7 @@ DEPENDENCIES:
   - OneSignalXCFramework (< 4.0, >= 3.4.3)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
+  - perfect_volume_control (from `.symlinks/plugins/perfect_volume_control/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
@@ -1042,6 +1045,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/ios"
+  perfect_volume_control:
+    :path: ".symlinks/plugins/perfect_volume_control/ios"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   shared_preferences_foundation:
@@ -1112,6 +1117,7 @@ SPEC CHECKSUMS:
   OneSignalXCFramework: 75844c29607ca95e6176f6f21257b4382c7fdbfb
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
+  perfect_volume_control: 79b165ecd79d6ee20e60bf15534de61ebf3bb5f3
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   PromisesSwift: cf9eb58666a43bbe007302226e510b16c1e10959

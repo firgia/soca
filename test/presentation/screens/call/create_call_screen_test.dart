@@ -7,6 +7,8 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -25,6 +27,7 @@ void main() {
   late MockAppNavigator appNavigator;
   late MockCallActionBloc callActionBloc;
   late MockCallKit callKit;
+  late MockDeviceInfo deviceInfo;
   late MockWidgetsBinding widgetBinding;
 
   setUp(() {
@@ -32,6 +35,7 @@ void main() {
     appNavigator = getMockAppNavigator();
     callActionBloc = getMockCallActionBloc();
     callKit = getMockCallKit();
+    deviceInfo = getMockDeviceInfo();
 
     widgetBinding = getMockWidgetsBinding();
     MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
@@ -248,6 +252,43 @@ void main() {
 
           expect(find.text(LocaleKeys.async_calling_volunteer.tr()),
               findsOneWidget);
+        });
+      });
+    });
+  });
+
+  group("On Volume Changed", () {
+    testWidgets(
+        'Should cancel call when volume changed to up and down under 1 second',
+        (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          StreamController<double> volumeUpAndDown = StreamController<double>();
+
+          when(deviceInfo.onVolumeUpAndDown)
+              .thenAnswer((_) => volumeUpAndDown.stream);
+
+          Call call = const Call(id: "123");
+
+          when(callActionBloc.stream).thenAnswer((_) => Stream.fromIterable([
+                const CallActionLoading(CallActionType.created),
+                CallActionCreatedSuccessfullyWithWaitingAnswer(call),
+              ]));
+
+          await tester.pumpApp(
+            child: CreateCallScreen(user: user),
+          );
+
+          // Execute request end call when Create call is completed but waiting
+          // the answer
+          await Future.delayed(const Duration(milliseconds: 1200));
+
+          volumeUpAndDown.sink.add(.2);
+          await Future.delayed(const Duration(seconds: 2));
+          volumeUpAndDown.sink.add(.3);
+          await tester.pump();
+
+          verify(callActionBloc.add(CallActionEnded(call.id!))).called(1);
         });
       });
     });

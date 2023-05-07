@@ -35,20 +35,25 @@ class _HomeScreenState extends State<HomeScreen> {
   final AppNavigator appNavigator = sl<AppNavigator>();
   final AssistantCommandBloc assistantCommandBloc = sl<AssistantCommandBloc>();
   final CallStatisticBloc callStatisticBloc = sl<CallStatisticBloc>();
+  final DeviceInfo deviceInfo = sl<DeviceInfo>();
   final IncomingCallBloc incomingCallBloc = sl<IncomingCallBloc>();
   final RouteCubit routeCubit = sl<RouteCubit>();
   final SignOutCubit signOutCubit = sl<SignOutCubit>();
   final UserBloc userBloc = sl<UserBloc>();
   final UserRepository userRepository = sl<UserRepository>();
+
   late final StreamController<SwipeRefreshState> swipeRefreshController;
-  late final StreamSubscription subscription;
+  late final StreamSubscription onUserDeviceUpdatedSubscribtion;
+  late final StreamSubscription volumeListenerSubscribtion;
+
+  User? user;
 
   @override
   void initState() {
     super.initState();
 
     swipeRefreshController = StreamController<SwipeRefreshState>.broadcast();
-    subscription = userRepository.onUserDeviceUpdated.listen(
+    onUserDeviceUpdatedSubscribtion = userRepository.onUserDeviceUpdated.listen(
       (userDevice) => routeCubit.getTargetRoute(
         checkDifferentDevice: true,
         userDevice: userDevice,
@@ -58,6 +63,18 @@ class _HomeScreenState extends State<HomeScreen> {
     assistantCommandBloc.add(const AssistantCommandFetched());
     userBloc.add(const UserFetched());
     incomingCallBloc.add(const IncomingCallFetched());
+
+    bool volumeButtonActive = false;
+    Future.delayed(const Duration(seconds: 2)).then((value) {
+      volumeButtonActive = true;
+    });
+
+    // Create call when volume up and down is pressed and user type is blind
+    volumeListenerSubscribtion = deviceInfo.onVolumeUpAndDown.listen((volume) {
+      if (user?.type == UserType.blind && volumeButtonActive) {
+        appNavigator.goToCreateCall(context, user: user!);
+      }
+    });
   }
 
   @override
@@ -117,6 +134,11 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             },
           ),
+          BlocListener<UserBloc, UserState>(
+            listener: (context, state) {
+              if (state is UserLoaded) user = state.data;
+            },
+          ),
         ],
         child: Scaffold(
           body: _LoadingWrapper(
@@ -173,7 +195,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     super.dispose();
 
-    subscription.cancel();
+    onUserDeviceUpdatedSubscribtion.cancel();
+    volumeListenerSubscribtion.cancel();
     swipeRefreshController.close();
   }
 }
