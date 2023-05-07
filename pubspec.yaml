@@ -60,7 +60,7 @@ dependencies:
   flutter_svg: ^2.0.0+1
   font_awesome_flutter: ^10.3.0
   get_it: ^7.2.0
-  go_router: ^6.0.1
+  go_router: ^7.0.0
   google_sign_in: ^5.4.3
   image_cropper: ^3.0.1
   image_picker: ^0.8.6+3

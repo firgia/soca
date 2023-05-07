@@ -87,6 +87,11 @@ class AppNavigator {
   void goToVideoCall(BuildContext context, {required CallingSetup setup}) {
     if (_isCanGoToVideoCall(context)) {
       if (_isOutdatedApp(context)) return;
+      // remove all previous page to make video call the single page on route
+      // stack
+      while (context.canPop()) {
+        context.pop();
+      }
       context.pushReplacementNamed(AppPages.videoCall, extra: setup);
     }
   }

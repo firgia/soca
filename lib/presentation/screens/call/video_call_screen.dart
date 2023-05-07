@@ -52,7 +52,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   late CallingSetup callingSetup;
   late agora.RtcEngineEventHandler eventHandler;
-  late final StreamSubscription volumeListenerSubscribtion;
+  StreamSubscription? volumeListenerSubscribtion;
 
   bool isLoadingCallAction = false;
 
@@ -67,14 +67,15 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       VideoCallStarted(callingSetup: callingSetup),
     );
 
-    initializeRTCEngine(agoraAppID);
-
-    // End call when volume up and down is pressed
-    volumeListenerSubscribtion = deviceInfo.onVolumeUpAndDown.listen((volume) {
-      if (!isLoadingCallAction &&
-          callingSetup.localUser.type == UserType.blind) {
-        callActionBloc.add(CallActionEnded(callingSetup.id));
-      }
+    initializeRTCEngine(agoraAppID).then((value) {
+      // End call when volume up and down is pressed
+      volumeListenerSubscribtion =
+          deviceInfo.onVolumeUpAndDown.listen((volume) {
+        if (!isLoadingCallAction &&
+            callingSetup.localUser.type == UserType.blind) {
+          callActionBloc.add(CallActionEnded(callingSetup.id));
+        }
+      });
     });
   }
 
@@ -98,7 +99,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                 isOnProcessEndCall = true;
                 callActionBloc.add(CallActionEnded(callingSetup.id));
               } else if (state.isCallEnded) {
-                appNavigator.back(context);
+                endCall();
               }
 
               // Show enable or disable flashlight message
@@ -130,7 +131,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                   (state is CallActionError &&
                       state.type == CallActionType.ended)) {
                 isOnProcessEndCall = false;
-                appNavigator.back(context);
+                endCall();
               }
             },
           ),
@@ -183,7 +184,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     );
   }
 
-  void initializeRTCEngine(String agoraAppID) async {
+  Future<void> initializeRTCEngine(String agoraAppID) async {
     if (agoraAppID.trim().isEmpty) {
       _logger.shout("Agora App ID is required");
       return;
@@ -299,21 +300,25 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     );
   }
 
+  void endCall() async {
+    await rtcEngine.leaveChannel(
+      options: const agora.LeaveChannelOptions(
+        stopAllEffect: true,
+        stopAudioMixing: true,
+        stopMicrophoneRecording: true,
+      ),
+    );
+
+    rtcEngine.unregisterEventHandler(eventHandler);
+    await callKit.endAllCalls();
+
+    if (mounted) appNavigator.goToSplash(context);
+  }
+
   @override
   void dispose() {
     super.dispose();
 
-    callKit.endAllCalls();
-    rtcEngine
-        .leaveChannel(
-          options: const agora.LeaveChannelOptions(
-            stopAllEffect: true,
-            stopAudioMixing: true,
-            stopMicrophoneRecording: true,
-          ),
-        )
-        .then((_) => rtcEngine.unregisterEventHandler(eventHandler));
-
-    volumeListenerSubscribtion.cancel();
+    volumeListenerSubscribtion?.cancel();
   }
 }
