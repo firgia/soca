@@ -30,6 +30,7 @@ void main() {
   late MockCompleter completer;
   late MockCallStatisticBloc callStatisticBloc;
   late MockDeviceInfo deviceInfo;
+  late MockDeviceFeedback deviceFeedback;
   late MockDeviceSettings deviceSettings;
   late MockIncomingCallBloc incomingCallBloc;
   late MockRouteCubit routeCubit;
@@ -46,6 +47,7 @@ void main() {
     completer = getMockCompleter();
     callStatisticBloc = getMockCallStatisticBloc();
     deviceInfo = getMockDeviceInfo();
+    deviceFeedback = getMockDeviceFeedback();
     deviceSettings = getMockDeviceSettings();
     incomingCallBloc = getMockIncomingCallBloc();
     routeCubit = getMockRouteCubit();
@@ -1313,6 +1315,57 @@ void main() {
         await tester.pump();
 
         verifyNever(appNavigator.goToCreateCall(any, user: user));
+      });
+    });
+  });
+
+  group("Voice Assistant", () {
+    setUp(() {
+      when(callStatisticBloc.state).thenReturn(const CallStatisticState(
+        calls: [],
+        listOfYear: [],
+        selectedYear: null,
+        totalCall: null,
+        totalDayJoined: null,
+        userType: null,
+      ));
+    });
+
+    testWidgets('Should play home info for blind user', (tester) async {
+      await tester.runAsync(() async {
+        const User user = User(id: "123", type: UserType.blind);
+
+        when(userBloc.stream)
+            .thenAnswer((_) => Stream.value(const UserLoaded(user)));
+
+        await tester.setScreenSize(iphone14);
+        await tester.pumpApp(child: const HomeScreen());
+
+        verify(
+          deviceFeedback.playVoiceAssistant([
+            LocaleKeys.va_home_page.tr(),
+            LocaleKeys.va_home_page_blind_info.tr()
+          ], any),
+        );
+      });
+    });
+
+    testWidgets('Should play home info for volunteer user', (tester) async {
+      await tester.runAsync(() async {
+        const User user = User(id: "123", type: UserType.volunteer);
+
+        when(userBloc.stream)
+            .thenAnswer((_) => Stream.value(const UserLoaded(user)));
+
+        await tester.setScreenSize(iphone14);
+        await tester.pumpApp(child: const HomeScreen());
+
+        verify(
+          deviceFeedback.playVoiceAssistant([
+            LocaleKeys.va_home_page.tr(),
+            LocaleKeys.va_home_page_volunteer_info.tr()
+          ], any),
+        );
       });
     });
   });

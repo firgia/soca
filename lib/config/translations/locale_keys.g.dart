@@ -109,6 +109,9 @@ abstract class LocaleKeys {
   static const update_app_required_desc = 'update_app_required_desc';
   static const update_now = 'update_now';
   static const va_device_language_changed = 'va_device_language_changed';
+  static const va_home_page = 'va_home_page';
+  static const va_home_page_blind_info = 'va_home_page_blind_info';
+  static const va_home_page_volunteer_info = 'va_home_page_volunteer_info';
   static const va_please_select_device_language =
       'va_please_select_device_language';
   static const va_sign_in_page = 'va_sign_in_page';
