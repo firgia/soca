@@ -111,8 +111,16 @@ abstract class LocaleKeys {
   static const va_device_language_changed = 'va_device_language_changed';
   static const va_please_select_device_language =
       'va_please_select_device_language';
-  static const va_sign_in_required = 'va_sign_in_required';
-  static const va_sign_up_required = 'va_sign_up_required';
+  static const va_sign_in_page = 'va_sign_in_page';
+  static const va_sign_in_required_1 = 'va_sign_in_required_1';
+  static const va_sign_in_required_2 = 'va_sign_in_required_2';
+  static const va_sign_in_required_3 = 'va_sign_in_required_3';
+  static const va_sign_in_successfully = 'va_sign_in_successfully';
+  static const va_sign_up_page = 'va_sign_up_page';
+  static const va_sign_up_required_1 = 'va_sign_up_required_1';
+  static const va_sign_up_required_2 = 'va_sign_up_required_2';
+  static const va_sign_up_required_3 = 'va_sign_up_required_3';
+  static const va_sign_up_successfully = 'va_sign_up_successfully';
   static const va_welcome = 'va_welcome';
   static const visitors = 'visitors';
   static const volunteer = 'volunteer';
