@@ -19,8 +19,8 @@ import '../../../core/core.dart';
 abstract class DeviceFeedback {
   void vibrate();
 
-  /// Playing voice assistant based on [message]
-  void playVoiceAssistant(String message, BuildContext context);
+  /// Playing voice assistant based on [messages]
+  void playVoiceAssistant(List<String> messages, BuildContext context);
 
   /// Set enable feedback
   ///
@@ -45,8 +45,8 @@ class DeviceFeedbackImpl implements DeviceFeedback {
   }
 
   @override
-  void playVoiceAssistant(String message, BuildContext context) async {
-    if (_enableVoiceAssistant) {
+  void playVoiceAssistant(List<String> messages, BuildContext context) async {
+    if (_enableVoiceAssistant && messages.isNotEmpty) {
       DeviceLanguage? language = context.locale.toDeviceLanguage();
       await _flutterTts.stop();
 
@@ -118,7 +118,16 @@ class DeviceFeedbackImpl implements DeviceFeedback {
         _tempLanguage = language;
       }
 
-      await _flutterTts.speak(message);
+      int indexPlay = 0;
+      await _flutterTts.speak(messages[indexPlay]);
+
+      _flutterTts.setCompletionHandler(() async {
+        indexPlay++;
+        if (indexPlay < messages.length) {
+          await Future.delayed(const Duration(milliseconds: 500));
+          await _flutterTts.speak(messages[indexPlay]);
+        }
+      });
     }
   }
 

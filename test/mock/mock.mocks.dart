@@ -1277,14 +1277,14 @@ class MockDeviceFeedback extends _i1.Mock implements _i21.DeviceFeedback {
       );
   @override
   void playVoiceAssistant(
-    String? message,
+    List<String>? messages,
     _i17.BuildContext? context,
   ) =>
       super.noSuchMethod(
         Invocation.method(
           #playVoiceAssistant,
           [
-            message,
+            messages,
             context,
           ],
         ),
