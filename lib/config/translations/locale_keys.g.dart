@@ -116,6 +116,7 @@ abstract class LocaleKeys {
   static const va_sign_in_required_2 = 'va_sign_in_required_2';
   static const va_sign_in_required_3 = 'va_sign_in_required_3';
   static const va_sign_in_successfully = 'va_sign_in_successfully';
+  static const va_sign_out_successfully = 'va_sign_out_successfully';
   static const va_sign_up_page = 'va_sign_up_page';
   static const va_sign_up_required_1 = 'va_sign_up_required_1';
   static const va_sign_up_required_2 = 'va_sign_up_required_2';

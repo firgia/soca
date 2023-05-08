@@ -17,10 +17,14 @@ import '../../../core/core.dart';
 /// [DeviceFeedback] is useful for a blind user to recognize process when
 /// interact with an App
 abstract class DeviceFeedback {
-  void vibrate();
+  Future<void> vibrate();
 
   /// Playing voice assistant based on [messages]
-  void playVoiceAssistant(List<String> messages, BuildContext context);
+  void playVoiceAssistant(
+    List<String> messages,
+    BuildContext context, {
+    bool immediately = false,
+  });
 
   /// Set enable feedback
   ///
@@ -38,17 +42,24 @@ class DeviceFeedbackImpl implements DeviceFeedback {
   DeviceLanguage? _tempLanguage;
 
   @override
-  void vibrate() {
+  Future<void> vibrate() async {
     if (_enableHaptick) {
-      HapticFeedback.vibrate();
+      await HapticFeedback.vibrate();
     }
   }
 
   @override
-  void playVoiceAssistant(List<String> messages, BuildContext context) async {
+  void playVoiceAssistant(
+    List<String> messages,
+    BuildContext context, {
+    bool immediately = false,
+  }) async {
     if (_enableVoiceAssistant && messages.isNotEmpty) {
       DeviceLanguage? language = context.locale.toDeviceLanguage();
-      await _flutterTts.stop();
+
+      if (immediately) {
+        await _flutterTts.stop();
+      }
 
       /// When language is changed we need to configure tts again before used it
       if (language != _tempLanguage) {
@@ -118,16 +129,13 @@ class DeviceFeedbackImpl implements DeviceFeedback {
         _tempLanguage = language;
       }
 
-      int indexPlay = 0;
-      await _flutterTts.speak(messages[indexPlay]);
+      String newLang = "";
+      for (String message in messages) {
+        newLang += "$message,";
+      }
 
-      _flutterTts.setCompletionHandler(() async {
-        indexPlay++;
-        if (indexPlay < messages.length) {
-          await Future.delayed(const Duration(milliseconds: 500));
-          await _flutterTts.speak(messages[indexPlay]);
-        }
-      });
+      await _flutterTts.speak(newLang);
+      await _flutterTts.awaitSpeakCompletion(true);
     }
   }
 

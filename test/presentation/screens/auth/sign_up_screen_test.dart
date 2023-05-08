@@ -26,6 +26,7 @@ import '../../../mock/mock.mocks.dart';
 void main() {
   late MockAppNavigator appNavigator;
   late MockAccountCubit accountCubit;
+  late MockDeviceFeedback deviceFeedback;
   late MockFileBloc fileBloc;
   late MockLanguageBloc languageBloc;
   late MockSignUpBloc signUpBloc;
@@ -115,6 +116,7 @@ void main() {
 
     appNavigator = getMockAppNavigator();
     accountCubit = getMockAccountCubit();
+    deviceFeedback = getMockDeviceFeedback();
     fileBloc = getMockFileBloc();
     languageBloc = getMockLanguageBloc();
     signUpBloc = getMockSignUpBloc();
@@ -141,7 +143,7 @@ void main() {
           (_) => Stream.value(const FileError()),
         );
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
         await tester.pumpAndSettle();
 
         expect(findErrorChooseImageText(), findsOneWidget);
@@ -160,7 +162,7 @@ void main() {
           (_) => Stream.value(FilePicked(file)),
         );
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
         verify(signUpFormBloc.add(SignUpFormProfileImageChanged(file)));
       });
     });
@@ -176,7 +178,7 @@ void main() {
           (_) => Stream.value(const SignUpSuccessfully()),
         );
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
         verify(appNavigator.goToHome(any));
       });
     });
@@ -192,7 +194,7 @@ void main() {
           (_) => Stream.value(const SignOutSuccessfully()),
         );
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
         verify(appNavigator.goToSplash(any));
       });
     });
@@ -208,7 +210,7 @@ void main() {
           (_) => Stream.value(const SignOutError()),
         );
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
         verify(appNavigator.goToSplash(any));
       });
     });
@@ -221,17 +223,11 @@ void main() {
       );
     });
 
-    test("Should implements [ResponsiveLayoutInterface]", () {
-      SignUpScreen signUpScreen = SignUpScreen();
-
-      expect(signUpScreen, isA<ResponsiveLayoutInterface>());
-    });
-
     testWidgets("Should use [ResponsiveBuilder]", (tester) async {
       await tester.runAsync(() async {
         when(accountCubit.state).thenReturn(const AccountEmpty());
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
 
         expect(findResponsiveBuilder(), findsOneWidget);
       });
@@ -242,7 +238,7 @@ void main() {
       await tester.runAsync(() async {
         when(accountCubit.state).thenReturn(const AccountEmpty());
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
 
         await tester.setScreenSize(iphone14);
         await tester.pumpAndSettle();
@@ -257,7 +253,7 @@ void main() {
       await tester.runAsync(() async {
         when(accountCubit.state).thenReturn(const AccountEmpty());
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
 
         await tester.setScreenSize(ipad12Pro);
         await tester.pumpAndSettle();
@@ -279,7 +275,7 @@ void main() {
       await tester.runAsync(() async {
         when(accountCubit.state).thenReturn(const AccountEmpty());
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
 
         await tester.setScreenSize(iphone14);
         await tester.pumpAndSettle();
@@ -297,7 +293,7 @@ void main() {
       await tester.runAsync(() async {
         when(accountCubit.state).thenReturn(const AccountEmpty());
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
 
         await tester.setScreenSize(iphone14);
         await tester.pumpAndSettle();
@@ -315,7 +311,7 @@ void main() {
       await tester.runAsync(() async {
         when(accountCubit.state).thenReturn(const AccountEmpty());
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
 
         await tester.setScreenSize(iphone14);
         await tester.pumpAndSettle();
@@ -355,7 +351,7 @@ void main() {
           ),
         );
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
 
         await tester.setScreenSize(iphone14);
         await tester.pumpAndSettle();
@@ -384,7 +380,7 @@ void main() {
           ),
         );
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
 
         await tester.setScreenSize(ipad12Pro);
         await tester.pumpAndSettle();
@@ -413,7 +409,7 @@ void main() {
           ),
         );
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
 
         await tester.setScreenSize(iphone14);
         await tester.pumpAndSettle();
@@ -437,7 +433,7 @@ void main() {
           ),
         );
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
 
         await tester.setScreenSize(ipad12Pro);
         await tester.pumpAndSettle();
@@ -460,7 +456,7 @@ void main() {
           ),
         );
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
 
         await tester.setScreenSize(ipad12Pro);
         await tester.pumpAndSettle();
@@ -481,7 +477,7 @@ void main() {
 
   group("Sign Out", () {
     Future showAndTapSignOutButton(WidgetTester tester) async {
-      await tester.pumpApp(child: SignUpScreen());
+      await tester.pumpApp(child: const SignUpScreen());
       await tester.setScreenSize(iphone14);
       await tester.pumpAndSettle();
       await tester.tapAt(tester.getCenter(findAuthIconButton()));
@@ -552,7 +548,7 @@ void main() {
           const SignUpFormState(currentStep: SignUpStep.selectUserType),
         );
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
 
         expect(
           findSelectUserTypePage(),
@@ -579,7 +575,7 @@ void main() {
           const SignUpFormState(currentStep: SignUpStep.selectLanguage),
         );
 
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
 
         expect(
           findSelectUserTypePage(),
@@ -608,7 +604,7 @@ void main() {
         );
 
         await tester.setScreenSize(iphone14);
-        await tester.pumpApp(child: SignUpScreen());
+        await tester.pumpApp(child: const SignUpScreen());
 
         expect(
           findSelectUserTypePage(),
@@ -636,7 +632,7 @@ void main() {
             const SignUpFormState(currentStep: SignUpStep.selectUserType),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           expect(findNextButton(), findsOneWidget);
         });
@@ -650,7 +646,7 @@ void main() {
             const SignUpFormState(type: UserType.volunteer),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
           ElevatedButton nextButton =
               findNextButton().getWidget() as ElevatedButton;
 
@@ -666,7 +662,7 @@ void main() {
             const SignUpFormState(type: null),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
           ElevatedButton nextButton =
               findNextButton().getWidget() as ElevatedButton;
 
@@ -682,7 +678,7 @@ void main() {
             const SignUpFormState(type: UserType.volunteer),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           await tester.tap(findNextButton());
           await tester.pumpAndSettle();
@@ -699,7 +695,7 @@ void main() {
             const SignUpFormState(currentStep: SignUpStep.selectUserType),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           expect(
             findBlindUserButton(),
@@ -714,7 +710,7 @@ void main() {
             const SignUpFormState(currentStep: SignUpStep.selectUserType),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           expect(
             findVolunteerUserButton(),
@@ -731,7 +727,7 @@ void main() {
             const SignUpFormState(currentStep: SignUpStep.selectUserType),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
           await tester.tap(findBlindUserButton());
           await tester.pumpAndSettle();
 
@@ -749,7 +745,7 @@ void main() {
             const SignUpFormState(currentStep: SignUpStep.selectUserType),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
           await tester.tap(findVolunteerUserButton());
           await tester.pumpAndSettle();
 
@@ -767,7 +763,7 @@ void main() {
             const SignUpFormState(currentStep: SignUpStep.selectUserType),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
           expect(findSelectUserTypeText(), findsOneWidget);
         });
       });
@@ -778,7 +774,7 @@ void main() {
             const SignUpFormState(currentStep: SignUpStep.selectUserType),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
           expect(findSelectUserTypeDescText(), findsOneWidget);
         });
       });
@@ -796,7 +792,7 @@ void main() {
             ),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           expect(
             findAddLanguageButton(),
@@ -823,7 +819,7 @@ void main() {
                 ]),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           expect(
             findAddLanguageButton(),
@@ -857,7 +853,7 @@ void main() {
             ),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
           await tester.tap(findAddLanguageButton());
 
           await tester.pumpAndSettle();
@@ -880,7 +876,7 @@ void main() {
             const SignUpFormState(currentStep: SignUpStep.selectLanguage),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           expect(
             findBackIconButton(),
@@ -905,7 +901,7 @@ void main() {
             ),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           await tester.tap(findBackIconButton());
           await tester.pumpAndSettle();
@@ -926,7 +922,7 @@ void main() {
             const SignUpFormState(currentStep: SignUpStep.selectLanguage),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           expect(
             findNextButton(),
@@ -951,7 +947,7 @@ void main() {
             ),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
           ElevatedButton nextButton =
               findNextButton().getWidget() as ElevatedButton;
 
@@ -975,7 +971,7 @@ void main() {
             ),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
           ElevatedButton nextButton =
               findNextButton().getWidget() as ElevatedButton;
 
@@ -999,7 +995,7 @@ void main() {
             ),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           await tester.tap(findNextButton());
           await tester.pumpAndSettle();
@@ -1046,7 +1042,7 @@ void main() {
           "Should show LanguageCard based on [SignUpFormState.languages]",
           (tester) async {
         await tester.runAsync(() async {
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           expect(findLanguageCard(), findsNWidgets(2));
           expect(find.byKey(const Key("language_card_ru")), findsOneWidget);
@@ -1058,7 +1054,7 @@ void main() {
           "Should call the [SignUpFormLanguageAdded] when tap selection language",
           (tester) async {
         await tester.runAsync(() async {
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           // Tap to show selection language
           await tester.tap(findAddLanguageButton());
@@ -1085,7 +1081,7 @@ void main() {
           "Should call the [SignUpFormLanguageRemoved] when tap remove button on Language Card",
           (tester) async {
         await tester.runAsync(() async {
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           await tester.tap(
             find.byKey(const Key("language_card_remove_button_ru")),
@@ -1113,7 +1109,7 @@ void main() {
             const SignUpFormState(currentStep: SignUpStep.selectLanguage),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
           expect(findSelectLanguageText(), findsOneWidget);
         });
       });
@@ -1124,7 +1120,7 @@ void main() {
             const SignUpFormState(currentStep: SignUpStep.selectLanguage),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
           expect(findAddLanguageDescText(), findsOneWidget);
         });
       });
@@ -1139,7 +1135,7 @@ void main() {
             ),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
           expect(
             findSelectLanguageBlindDescText(),
             findsOneWidget,
@@ -1157,7 +1153,7 @@ void main() {
             ),
           );
 
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
           expect(
             findSelectLanguageVolunteerDescText(),
             findsOneWidget,
@@ -1177,7 +1173,7 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           expect(
             findBackIconButton(),
@@ -1203,7 +1199,7 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           await tester.tap(findBackIconButton());
           await tester.pumpAndSettle();
@@ -1226,7 +1222,7 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           expect(
             findDateOfBirthField(),
@@ -1250,7 +1246,7 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           // Showing Date Dialog
           await tester.tap(findDateOfBirthField());
@@ -1294,7 +1290,7 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           expect(
             findGenderMaleButton(),
@@ -1324,7 +1320,7 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           await tester.tap(findGenderMaleButton());
           await tester.pumpAndSettle();
@@ -1357,7 +1353,7 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           expect(
             findNameField(),
@@ -1381,7 +1377,7 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           Future enterText(String text) async {
             await tester.enterText(findNameField(), text);
@@ -1415,7 +1411,7 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           expect(
             findProfileImageButton(),
@@ -1439,7 +1435,7 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           // Test pick image from Camera
           await tester.tap(findProfileImageButton());
@@ -1485,7 +1481,7 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           ProfileImageButton profileImageButton =
               find.byType(ProfileImageButton).getWidget() as ProfileImageButton;
@@ -1509,7 +1505,7 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           expect(
             findSaveButton(),
@@ -1539,7 +1535,7 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           AsyncButton saveButton = findSaveButton().getWidget() as AsyncButton;
 
@@ -1564,7 +1560,7 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           AsyncButton saveButton = findSaveButton().getWidget() as AsyncButton;
 
@@ -1594,7 +1590,7 @@ void main() {
           when(signUpFormBloc.state).thenReturn(signUpFormState);
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           await tester.tap(findSaveButton());
           await tester.pumpAndSettle();
@@ -1619,7 +1615,7 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
 
           expect(
             find.text(LocaleKeys.personal_information.tr()),
@@ -1637,9 +1633,79 @@ void main() {
           );
 
           await tester.setScreenSize(iphone14);
-          await tester.pumpApp(child: SignUpScreen());
+          await tester.pumpApp(child: const SignUpScreen());
           expect(findSelectUserTypeDescText(), findsOneWidget);
         });
+      });
+    });
+  });
+
+  group("Voice Assistant", () {
+    testWidgets('Should play sign up info', (tester) async {
+      await tester.runAsync(() async {
+        when(signUpFormBloc.state).thenReturn(
+          const SignUpFormState(currentStep: SignUpStep.selectUserType),
+        );
+
+        when(fileBloc.stream).thenAnswer(
+          (_) => Stream.value(const FileError()),
+        );
+
+        await tester.pumpApp(child: const SignUpScreen());
+        await tester.pumpAndSettle();
+
+        verify(deviceFeedback.playVoiceAssistant([
+          LocaleKeys.va_sign_up_page.tr(),
+          LocaleKeys.va_sign_up_required_1.tr(),
+          LocaleKeys.va_sign_up_required_2.tr(),
+          LocaleKeys.va_sign_up_required_3.tr(),
+        ], any));
+      });
+    });
+
+    testWidgets(
+        "Should play sign up successfully when state is [SignUpSuccessfully]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signUpFormBloc.state).thenReturn(
+          const SignUpFormState(currentStep: SignUpStep.selectUserType),
+        );
+
+        when(signUpBloc.stream).thenAnswer(
+          (_) => Stream.value(const SignUpSuccessfully()),
+        );
+
+        await tester.pumpApp(child: const SignUpScreen());
+        verify(
+          deviceFeedback.playVoiceAssistant(
+            [LocaleKeys.va_sign_up_successfully.tr()],
+            any,
+            immediately: true,
+          ),
+        );
+      });
+    });
+
+    testWidgets(
+        "Should play sign out successfully when state is [SignOutSuccessfully]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signUpFormBloc.state).thenReturn(
+          const SignUpFormState(currentStep: SignUpStep.selectUserType),
+        );
+
+        when(signOutCubit.stream).thenAnswer(
+          (_) => Stream.value(const SignOutSuccessfully()),
+        );
+
+        await tester.pumpApp(child: const SignUpScreen());
+        verify(
+          deviceFeedback.playVoiceAssistant(
+            [LocaleKeys.va_sign_out_successfully.tr()],
+            any,
+            immediately: true,
+          ),
+        );
       });
     });
   });

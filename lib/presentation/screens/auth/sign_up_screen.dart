@@ -27,30 +27,47 @@ import '../../../config/config.dart';
 part 'sign_up_screen.component.dart';
 part 'sign_up_screen.page.dart';
 
-class SignUpScreen extends StatelessWidget
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen>
     with UIMixin
     implements ResponsiveLayoutInterface {
   final AppNavigator _appNavigator = sl<AppNavigator>();
   final AccountCubit _accountCubit = sl<AccountCubit>();
+  final DeviceFeedback _deviceFeedback = sl<DeviceFeedback>();
   final FileBloc _fileBloc = sl<FileBloc>();
   final LanguageBloc _languageBloc = sl<LanguageBloc>();
   final SignUpBloc _signUpBloc = sl<SignUpBloc>();
   final SignUpFormBloc _signUpFormBloc = sl<SignUpFormBloc>();
   final SignOutCubit _signOutCubit = sl<SignOutCubit>();
 
-  SignUpScreen({super.key});
-
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+
     _accountCubit.getAccountData();
     _languageBloc.add(const LanguageFetched());
+  }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    playPageInfo();
     DeviceLanguage? deviceLanguage = context.locale.toDeviceLanguage();
 
     if (deviceLanguage != null) {
       _signUpFormBloc.add(SignUpFormDeviceLanguageChanged(deviceLanguage));
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => _accountCubit),
@@ -83,6 +100,7 @@ class SignUpScreen extends StatelessWidget
               BlocListener<SignUpBloc, SignUpState>(
                 listener: (context, state) {
                   if (state is SignUpSuccessfully) {
+                    playSignUpSuccessfully();
                     _appNavigator.goToHome(context);
                   }
                 },
@@ -90,6 +108,7 @@ class SignUpScreen extends StatelessWidget
               BlocListener<SignOutCubit, SignOutState>(
                 listener: (context, state) {
                   if (state is SignOutSuccessfully || state is SignOutError) {
+                    playSignOutSuccessfully();
                     _appNavigator.goToSplash(context);
                   }
                 },
@@ -174,5 +193,43 @@ class SignUpScreen extends StatelessWidget
         ),
       ),
     );
+  }
+
+  void playPageInfo() {
+    if (mounted) {
+      _deviceFeedback.playVoiceAssistant(
+        [
+          LocaleKeys.va_sign_up_page.tr(),
+          LocaleKeys.va_sign_up_required_1.tr(),
+          LocaleKeys.va_sign_up_required_2.tr(),
+          LocaleKeys.va_sign_up_required_3.tr(),
+        ],
+        context,
+      );
+    }
+  }
+
+  void playSignUpSuccessfully() {
+    if (mounted) {
+      _deviceFeedback.playVoiceAssistant(
+        [
+          LocaleKeys.va_sign_up_successfully.tr(),
+        ],
+        context,
+        immediately: true,
+      );
+    }
+  }
+
+  void playSignOutSuccessfully() {
+    if (mounted) {
+      _deviceFeedback.playVoiceAssistant(
+        [
+          LocaleKeys.va_sign_out_successfully.tr(),
+        ],
+        context,
+        immediately: true,
+      );
+    }
   }
 }

@@ -58,12 +58,12 @@ abstract class AppRoutes {
           GoRoute(
             path: "/${AppPages.signIn}",
             name: AppPages.signIn,
-            builder: (context, state) => SignInScreen(),
+            builder: (context, state) => const SignInScreen(),
           ),
           GoRoute(
             path: "/${AppPages.signUp}",
             name: AppPages.signUp,
-            builder: (context, state) => SignUpScreen(),
+            builder: (context, state) => const SignUpScreen(),
           ),
           GoRoute(
             path: "/${AppPages.language}",
