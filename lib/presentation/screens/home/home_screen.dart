@@ -162,6 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _CallStatistic(),
                   SizedBox(height: kDefaultSpacing * 1.5),
                   _CallHistoryButton(),
+                  _SettingsButton(),
                   SizedBox(height: kDefaultSpacing * 1.5),
                   _SignOutButton(),
                   SizedBox(height: kDefaultSpacing * 2),

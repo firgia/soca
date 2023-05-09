@@ -1153,6 +1153,14 @@ class MockAppNavigator extends _i1.Mock implements _i37.AppNavigator {
         returnValueForMissingStub: null,
       );
   @override
+  void goToSettings(_i17.BuildContext? context) => super.noSuchMethod(
+        Invocation.method(
+          #goToSettings,
+          [context],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
   void goToSignUp(_i17.BuildContext? context) => super.noSuchMethod(
         Invocation.method(
           #goToSignUp,

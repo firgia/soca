@@ -53,6 +53,11 @@ abstract class AppRoutes {
                   user: state.extra as User,
                 ),
               ),
+              GoRoute(
+                path: AppPages.settings,
+                name: AppPages.settings,
+                builder: (context, state) => const SettingsScreen(),
+              ),
             ],
           ),
           GoRoute(

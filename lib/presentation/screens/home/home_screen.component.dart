@@ -435,9 +435,46 @@ class _CallHistoryButton extends StatelessWidget {
       key: const Key("home_screen_call_history_button"),
       icon: EvaIcons.clockOutline,
       label: LocaleKeys.call_history.tr(),
-      iconColor: Colors.amber,
+      iconColor: AppColors.blue,
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(kBorderRadius),
+        topRight: Radius.circular(kBorderRadius),
+      ),
+      padding: const EdgeInsets.only(
+        bottom: kDefaultSpacing * .75,
+        right: kDefaultSpacing,
+        left: kDefaultSpacing,
+        top: kDefaultSpacing,
+      ),
       onPressed: () {
         sl<AppNavigator>().goToCallHistory(context);
+      },
+    );
+  }
+}
+
+class _SettingsButton extends StatelessWidget {
+  const _SettingsButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return PageIconButton(
+      key: const Key("home_screen_settings_button"),
+      icon: EvaIcons.settingsOutline,
+      label: LocaleKeys.settings.tr(),
+      iconColor: AppColors.blue,
+      borderRadius: const BorderRadius.only(
+        bottomLeft: Radius.circular(kBorderRadius),
+        bottomRight: Radius.circular(kBorderRadius),
+      ),
+      padding: const EdgeInsets.only(
+        bottom: kDefaultSpacing,
+        right: kDefaultSpacing,
+        left: kDefaultSpacing,
+        top: kDefaultSpacing * .75,
+      ),
+      onPressed: () {
+        sl<AppNavigator>().goToSettings(context);
       },
     );
   }

@@ -93,8 +93,10 @@ void main() {
       find.byKey(const Key("permission_message_restricted"));
   Finder findSignOutButton() =>
       find.byKey(const Key("home_screen_sign_out_button"));
-  Finder findSettingsButton() =>
+  Finder findMessageSettingsButton() =>
       find.byKey(const Key("permission_message_settings_button"));
+  Finder findSettingsButton() =>
+      find.byKey(const Key("home_screen_settings_button"));
   Finder findCallStatisticCard() =>
       find.byKey(const Key("call_statistics_card"));
   Finder findCallStatisticCardAdaptiveLoading() =>
@@ -666,7 +668,7 @@ void main() {
             expect(findPermanentlyDenied(), findsOneWidget);
 
             // tapped settings button on alert message
-            await tester.tap(findSettingsButton());
+            await tester.tap(findMessageSettingsButton());
             await tester.pump();
             verify(deviceSettings.openAppSettings());
           });
@@ -781,7 +783,7 @@ void main() {
             expect(findPermanentlyDenied(), findsOneWidget);
 
             // tapped settings button on alert message
-            await tester.tap(findSettingsButton());
+            await tester.tap(findMessageSettingsButton());
             await tester.pump();
             verify(deviceSettings.openAppSettings());
           });
@@ -897,7 +899,7 @@ void main() {
             expect(findPermanentlyDenied(), findsOneWidget);
 
             // tapped settings button on alert message
-            await tester.tap(findSettingsButton());
+            await tester.tap(findMessageSettingsButton());
             await tester.pump();
             verify(deviceSettings.openNotificationSettings());
           });
@@ -1210,6 +1212,49 @@ void main() {
         await tester.pump();
 
         verify(appNavigator.goToCallHistory(any));
+      });
+    });
+  });
+
+  group("Settings Button", () {
+    setUp(() {
+      when(callStatisticBloc.state).thenReturn(const CallStatisticState(
+        calls: [],
+        listOfYear: [],
+        selectedYear: null,
+        totalCall: null,
+        totalDayJoined: null,
+        userType: null,
+      ));
+    });
+
+    testWidgets("Should show call settings button", (tester) async {
+      await tester.runAsync(() async {
+        await tester.setScreenSize(iphone14);
+        await tester.pumpApp(child: const HomeScreen());
+
+        await tester.drag(find.byType(SwipeRefresh), const Offset(0, -100));
+        await tester.pump();
+
+        expect(findSettingsButton(), findsOneWidget);
+      });
+    });
+
+    testWidgets(
+        "Should navigate to settings page when settings button is tapped",
+        (tester) async {
+      await tester.runAsync(() async {
+        await tester.setScreenSize(iphone14);
+        await tester.pumpApp(child: const HomeScreen());
+
+        await tester.drag(find.byType(SwipeRefresh), const Offset(0, -100));
+        await tester.pump();
+
+        await tester.ensureVisible(findSettingsButton());
+        await tester.tap(findSettingsButton());
+        await tester.pump();
+
+        verify(appNavigator.goToSettings(any));
       });
     });
   });

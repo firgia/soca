@@ -74,6 +74,11 @@ class AppNavigator {
     context.pushReplacementNamed(AppPages.signIn);
   }
 
+  void goToSettings(BuildContext context) {
+    if (_isOutdatedApp(context)) return;
+    context.pushNamed(AppPages.settings);
+  }
+
   void goToSignUp(BuildContext context) {
     if (_isOutdatedApp(context)) return;
     context.pushReplacementNamed(AppPages.signUp);
