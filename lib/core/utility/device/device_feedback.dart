@@ -19,6 +19,9 @@ import '../../../core/core.dart';
 abstract class DeviceFeedback {
   Future<void> vibrate();
 
+  bool get isHaptickEnable;
+  bool get isVoiceAssistantEnable;
+
   /// Playing voice assistant based on [messages]
   void playVoiceAssistant(
     List<String> messages,
@@ -64,9 +67,6 @@ class DeviceFeedbackImpl implements DeviceFeedback {
       /// When language is changed we need to configure tts again before used it
       if (language != _tempLanguage) {
         String? lang;
-        double volume = 1;
-        double rate = (language == DeviceLanguage.spanish) ? 0.35 : 0.4;
-        double pitch = 1;
 
         dynamic ttsSupportedLanguage = await _flutterTts.getLanguages;
         List<String>? supportedLanguage =
@@ -120,14 +120,18 @@ class DeviceFeedbackImpl implements DeviceFeedback {
           await _flutterTts.setLanguage(lang);
         }
 
-        await Future.wait([
-          _flutterTts.setVolume(volume),
-          _flutterTts.setSpeechRate(rate),
-          _flutterTts.setPitch(pitch),
-        ]);
-
         _tempLanguage = language;
       }
+
+      double volume = 1;
+      double rate = (language == DeviceLanguage.spanish) ? 0.35 : 0.4;
+      double pitch = 1;
+
+      await Future.wait([
+        _flutterTts.setVolume(volume),
+        _flutterTts.setSpeechRate(rate),
+        _flutterTts.setPitch(pitch),
+      ]);
 
       String newLang = "";
       for (String message in messages) {
@@ -152,4 +156,10 @@ class DeviceFeedbackImpl implements DeviceFeedback {
       _enableVoiceAssistant = enableVoiceAssistant;
     }
   }
+
+  @override
+  bool get isHaptickEnable => _enableHaptick;
+
+  @override
+  bool get isVoiceAssistantEnable => _enableVoiceAssistant;
 }
