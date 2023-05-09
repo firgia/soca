@@ -16,12 +16,27 @@ import '../../../config/config.dart';
 import '../../../injection.dart';
 import '../../presentation.dart';
 
-class SignInScreen extends StatelessWidget with UIMixin {
-  SignInScreen({super.key});
+class SignInScreen extends StatefulWidget with UIMixin {
+  const SignInScreen({super.key});
+
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> with UIMixin {
   final AppNavigator appNavigator = sl<AppNavigator>();
+  final DeviceFeedback deviceFeedback = sl<DeviceFeedback>();
   final DeviceInfo deviceInfo = sl<DeviceInfo>();
   final SignInBloc signInBloc = sl<SignInBloc>();
   final RouteCubit routeCubit = sl<RouteCubit>();
+  bool playSignInInfo = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    playPageInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +69,7 @@ class SignInScreen extends StatelessWidget with UIMixin {
           BlocListener<SignInBloc, SignInState>(
             listener: (context, state) {
               if (state is SignInSuccessfully) {
+                playSignInSuccessfully();
                 routeCubit.getTargetRoute(checkDifferentDevice: false);
               }
               // Error handling
@@ -156,6 +172,32 @@ class SignInScreen extends StatelessWidget with UIMixin {
     } else {
       return SignInWithGoogleButton(
         onPressed: () => signInBloc.add(const SignInWithGoogle()),
+      );
+    }
+  }
+
+  void playPageInfo() {
+    if (mounted) {
+      deviceFeedback.playVoiceAssistant(
+        [
+          LocaleKeys.va_sign_in_page.tr(),
+          LocaleKeys.va_sign_in_required_1.tr(),
+          LocaleKeys.va_sign_in_required_2.tr(),
+          LocaleKeys.va_sign_in_required_3.tr(),
+        ],
+        context,
+      );
+    }
+  }
+
+  void playSignInSuccessfully() {
+    if (mounted) {
+      deviceFeedback.playVoiceAssistant(
+        [
+          LocaleKeys.va_sign_in_successfully.tr(),
+        ],
+        context,
+        immediately: true,
       );
     }
   }

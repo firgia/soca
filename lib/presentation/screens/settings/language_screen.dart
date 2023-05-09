@@ -111,7 +111,13 @@ class LanguageScreen extends StatelessWidget {
               isLoading: isLoading,
               // TODO: Implement this
               ///  onPressed: () => controller.next(),
-              onPressed: () {},
+              onPressed: () async {
+                sl<DeviceFeedback>().playVoiceAssistant([
+                  LocaleKeys.va_sign_in_required_1.tr(),
+                  LocaleKeys.va_sign_in_required_2.tr(),
+                  LocaleKeys.va_sign_in_required_3.tr(),
+                ], context);
+              },
               style: FlatButtonStyle(expanded: true, size: ButtonSize.large),
               child: const Text(LocaleKeys.next).tr(),
             );

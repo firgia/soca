@@ -1268,18 +1268,40 @@ class MockCallKit extends _i1.Mock implements _i21.CallKit {
 /// See the documentation for Mockito's code generation for more information.
 class MockDeviceFeedback extends _i1.Mock implements _i21.DeviceFeedback {
   @override
-  void vibrate() => super.noSuchMethod(
+  bool get isHaptickEnable => (super.noSuchMethod(
+        Invocation.getter(#isHaptickEnable),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  bool get isVoiceAssistantEnable => (super.noSuchMethod(
+        Invocation.getter(#isVoiceAssistantEnable),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  _i38.Future<void> vibrate() => (super.noSuchMethod(
         Invocation.method(
           #vibrate,
           [],
         ),
-        returnValueForMissingStub: null,
-      );
+        returnValue: _i38.Future<void>.value(),
+        returnValueForMissingStub: _i38.Future<void>.value(),
+      ) as _i38.Future<void>);
   @override
-  void playVoiceAssistant(String? message) => super.noSuchMethod(
+  void playVoiceAssistant(
+    List<String>? messages,
+    _i17.BuildContext? context, {
+    bool? immediately = false,
+  }) =>
+      super.noSuchMethod(
         Invocation.method(
           #playVoiceAssistant,
-          [message],
+          [
+            messages,
+            context,
+          ],
+          {#immediately: immediately},
         ),
         returnValueForMissingStub: null,
       );

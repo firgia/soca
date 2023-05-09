@@ -67,6 +67,7 @@ class _CancelButtonState extends State<_CancelButton> {
   }
 
   void cancel() {
+    AppSnackbar(context).showMessage(LocaleKeys.end_call.tr());
     CallActionBloc callActionBloc = context.read<CallActionBloc>();
     requestCancel = true;
 

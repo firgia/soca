@@ -81,8 +81,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             callingSetup.localUser.type == UserType.blind &&
             volumeButtonActive &&
             mounted) {
-          // TODO: Change this message
-          AppSnackbar(context).showMessage("TRY TO END CALL");
+          AppSnackbar(context).showMessage(LocaleKeys.end_call.tr());
           callActionBloc.add(CallActionEnded(callingSetup.id));
         }
       });
@@ -330,8 +329,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     if (mounted) {
       appNavigator.goToSplash(context);
-      // TODO: Change this message
-      AppSnackbar(context).showMessage("Call ended");
+      AppSnackbar(context).showMessage(LocaleKeys.call_state_ended.tr());
     }
   }
 

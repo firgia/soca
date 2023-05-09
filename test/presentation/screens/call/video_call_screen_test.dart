@@ -79,6 +79,7 @@ void main() {
 
   Finder findAdaptiveLoading() => find.byType(AdaptiveLoading);
   Finder findAgoraView() => find.byType(AgoraVideoView);
+  Finder findCallEndedText() => find.text(LocaleKeys.call_state_ended.tr());
 
   Finder findEndCallButton() =>
       find.byKey(const Key("video_call_screen_end_call_button"));
@@ -88,6 +89,8 @@ void main() {
 
   Finder findEndCallButtonLoading() =>
       find.byKey(const Key("video_call_screen_end_call_button_loading"));
+
+  Finder findEndCallText() => find.text(LocaleKeys.end_call.tr());
 
   Finder findFlashlightButton() =>
       find.byKey(const Key("video_call_screen_flashlight_button"));
@@ -156,6 +159,7 @@ void main() {
           verify(callActionBloc.add(CallActionEnded(callingSetup.id)));
           expect(findEndCallButtonIcon(), findsOneWidget);
           expect(findEndCallButtonLoading(), findsNothing);
+          expect(findEndCallText(), findsOneWidget);
         });
       });
     });
@@ -972,6 +976,7 @@ void main() {
             ),
           );
           verify(rtcEngine.unregisterEventHandler(any));
+          expect(findCallEndedText(), findsOneWidget);
         });
       });
     });
@@ -1027,8 +1032,10 @@ void main() {
           await Future.delayed(const Duration(seconds: 2));
           volumeUpAndDown.sink.add(.3);
           await tester.pump();
+          await tester.pump();
 
           verify(callActionBloc.add(CallActionEnded(callingSetup.id)));
+          expect(findEndCallText(), findsOneWidget);
         });
       });
     });

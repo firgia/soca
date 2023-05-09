@@ -20,9 +20,12 @@ import '../../../helper/helper.dart';
 import '../../../mock/mock.mocks.dart';
 
 void main() {
+  late MockDeviceFeedback deviceFeedback;
+
   setUp(() {
     registerLocator();
 
+    deviceFeedback = getMockDeviceFeedback();
     MockWidgetsBinding widgetBinding = getMockWidgetsBinding();
     MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
 
@@ -79,6 +82,24 @@ void main() {
         await tester.pumpApp(child: const UpdateAppScreen());
 
         expect(findUpdateDescText(), findsOneWidget);
+      });
+    });
+  });
+
+  group("Voice Assistant", () {
+    testWidgets('Should play update app info', (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(child: const UpdateAppScreen());
+
+        verify(
+          deviceFeedback.playVoiceAssistant(
+            [
+              LocaleKeys.update_app_required_desc.tr(),
+            ],
+            any,
+            immediately: true,
+          ),
+        );
       });
     });
   });

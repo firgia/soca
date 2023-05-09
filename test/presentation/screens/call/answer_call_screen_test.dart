@@ -25,6 +25,7 @@ void main() {
   late MockAppNavigator appNavigator;
   late MockCallActionBloc callActionBloc;
   late MockCallKit callKit;
+  late MockDeviceFeedback deviceFeedback;
   late MockWidgetsBinding widgetBinding;
 
   setUp(() {
@@ -32,6 +33,7 @@ void main() {
     appNavigator = getMockAppNavigator();
     callActionBloc = getMockCallActionBloc();
     callKit = getMockCallKit();
+    deviceFeedback = getMockDeviceFeedback();
     widgetBinding = getMockWidgetsBinding();
     MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
 
@@ -45,6 +47,8 @@ void main() {
   Finder findCancelButton() => find.byType(CancelCallButton);
   Finder findErrorMessageText() =>
       find.text(LocaleKeys.error_something_wrong.tr());
+  Finder findEndCallSuccessfullyText() =>
+      find.text(LocaleKeys.end_call_successfully.tr());
 
   String callID = "456";
   String blindID = "123";
@@ -90,6 +94,7 @@ void main() {
           await tester.pump();
           verify(appNavigator.back(any));
           verify(callKit.endAllCalls());
+          expect(findEndCallSuccessfullyText(), findsOneWidget);
         });
       });
     });
@@ -125,6 +130,7 @@ void main() {
                   blindID: blindID,
                   name: name,
                   urlImage: urlImage));
+          await Future.delayed(const Duration(seconds: 2));
           await tester.pump();
 
           verify(appNavigator.goToVideoCall(any, setup: callingSetup));
@@ -254,6 +260,78 @@ void main() {
 
           expect(
               find.text(LocaleKeys.async_answering_call.tr()), findsOneWidget);
+        });
+      });
+    });
+  });
+
+  group("Voice Assistant", () {
+    testWidgets('Should play answering call info', (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          await tester.pumpApp(
+            child: AnswerCallScreen(
+              callID: callID,
+              blindID: blindID,
+              name: name,
+              urlImage: urlImage,
+            ),
+          );
+          verify(
+            deviceFeedback.playVoiceAssistant(
+              [
+                LocaleKeys.va_async_answering_call.tr(),
+              ],
+              any,
+              immediately: true,
+            ),
+          );
+        });
+      });
+    });
+
+    testWidgets(
+        'Should play starting call when [CallActionAnsweredSuccessfully]',
+        (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          CallingSetup callingSetup = const CallingSetup(
+            id: "1",
+            rtc: RTCIdentity(token: "abc", channelName: "a", uid: 1),
+            localUser: UserCallIdentity(
+              name: "name",
+              uid: "uid",
+              avatar: "avatar",
+              type: UserType.blind,
+            ),
+            remoteUser: UserCallIdentity(
+              name: "name",
+              uid: "uid",
+              avatar: "avatar",
+              type: UserType.volunteer,
+            ),
+          );
+
+          when(callActionBloc.stream).thenAnswer((_) =>
+              Stream.value(CallActionAnsweredSuccessfully(callingSetup)));
+
+          await tester.pumpApp(
+              child: AnswerCallScreen(
+                  callID: callID,
+                  blindID: blindID,
+                  name: name,
+                  urlImage: urlImage));
+          await tester.pump();
+
+          verify(
+            deviceFeedback.playVoiceAssistant(
+              [
+                LocaleKeys.va_starting_video_call.tr(),
+              ],
+              any,
+              immediately: true,
+            ),
+          );
         });
       });
     });

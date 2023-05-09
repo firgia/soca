@@ -28,6 +28,7 @@ void main() {
   late MockCallActionBloc callActionBloc;
   late MockCallKit callKit;
   late MockDeviceInfo deviceInfo;
+  late MockDeviceFeedback deviceFeedback;
   late MockWidgetsBinding widgetBinding;
 
   setUp(() {
@@ -36,6 +37,7 @@ void main() {
     callActionBloc = getMockCallActionBloc();
     callKit = getMockCallKit();
     deviceInfo = getMockDeviceInfo();
+    deviceFeedback = getMockDeviceFeedback();
 
     widgetBinding = getMockWidgetsBinding();
     MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
@@ -50,6 +52,8 @@ void main() {
   Finder findCancelButton() => find.byType(CancelCallButton);
   Finder findErrorMessageText() =>
       find.text(LocaleKeys.error_something_wrong.tr());
+  Finder findEndCallSuccessfullyText() =>
+      find.text(LocaleKeys.end_call_successfully.tr());
   Finder findNoVolunteerText() =>
       find.text(LocaleKeys.fail_to_call_no_volunteers.tr());
 
@@ -153,6 +157,23 @@ void main() {
           );
 
           verify(appNavigator.goToVideoCall(any, setup: callingSetup));
+        });
+      });
+    });
+
+    testWidgets(
+        'Should back to previous page and end all calls when '
+        '[CallActionEndedSuccessfully]', (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          when(callActionBloc.stream).thenAnswer(
+              (_) => Stream.value(const CallActionEndedSuccessfully()));
+
+          await tester.pumpApp(child: CreateCallScreen(user: user));
+
+          await tester.pump();
+          verify(appNavigator.back(any));
+          expect(findEndCallSuccessfullyText(), findsOneWidget);
         });
       });
     });
@@ -289,6 +310,67 @@ void main() {
           await tester.pump();
 
           verify(callActionBloc.add(CallActionEnded(call.id!))).called(1);
+        });
+      });
+    });
+  });
+
+  group("Voice Assistant", () {
+    testWidgets('Should play calling volunteer info', (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          await tester.pumpApp(child: CreateCallScreen(user: user));
+
+          verify(
+            deviceFeedback.playVoiceAssistant(
+              [
+                LocaleKeys.va_async_calling_volunteer.tr(),
+              ],
+              any,
+              immediately: true,
+            ),
+          );
+        });
+      });
+    });
+
+    testWidgets(
+        'Should play starting call when [CallActionAnsweredSuccessfully]',
+        (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          CallingSetup callingSetup = const CallingSetup(
+            id: "1",
+            rtc: RTCIdentity(token: "abc", channelName: "a", uid: 1),
+            localUser: UserCallIdentity(
+              name: "name",
+              uid: "uid",
+              avatar: "avatar",
+              type: UserType.blind,
+            ),
+            remoteUser: UserCallIdentity(
+              name: "name",
+              uid: "uid",
+              avatar: "avatar",
+              type: UserType.volunteer,
+            ),
+          );
+
+          when(callActionBloc.stream).thenAnswer(
+              (_) => Stream.value(CallActionCreatedSuccessfully(callingSetup)));
+
+          await tester.pumpApp(child: CreateCallScreen(user: user));
+          await tester.pump();
+
+          verify(
+            deviceFeedback.playVoiceAssistant(
+              [
+                LocaleKeys.va_starting_video_call.tr(),
+              ],
+              any,
+              immediately: true,
+            ),
+          );
         });
       });
     });
