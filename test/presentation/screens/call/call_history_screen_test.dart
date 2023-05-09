@@ -149,7 +149,7 @@ void main() {
   });
 
   group("Voice Assistant", () {
-    testWidgets('Should play update app info', (tester) async {
+    testWidgets('Should play call history info', (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(child: const CallHistoryScreen());
 
