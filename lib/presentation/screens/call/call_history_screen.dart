@@ -31,6 +31,8 @@ class CallHistoryScreen extends StatefulWidget {
 class _CallHistoryScreenState extends State<CallHistoryScreen> {
   CallHistoryBloc callHistoryBloc = sl<CallHistoryBloc>();
   late final StreamController<SwipeRefreshState> swipeRefreshController;
+  DeviceFeedback deviceFeedback = sl<DeviceFeedback>();
+  bool hasPlayPageInfo = false;
 
   @override
   void initState() {
@@ -38,6 +40,12 @@ class _CallHistoryScreenState extends State<CallHistoryScreen> {
 
     swipeRefreshController = StreamController<SwipeRefreshState>.broadcast();
     callHistoryBloc.add(const CallHistoryFetched());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    playPageInfo();
   }
 
   @override
@@ -99,5 +107,19 @@ class _CallHistoryScreenState extends State<CallHistoryScreen> {
     super.dispose();
 
     swipeRefreshController.close();
+  }
+
+  void playPageInfo() {
+    if (mounted && !hasPlayPageInfo) {
+      hasPlayPageInfo = true;
+
+      deviceFeedback.playVoiceAssistant(
+        [
+          LocaleKeys.va_call_history_page.tr(),
+        ],
+        context,
+        immediately: true,
+      );
+    }
   }
 }

@@ -7,9 +7,11 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/data/data.dart';
 import 'package:soca/logic/logic.dart';
@@ -22,6 +24,7 @@ import '../../../mock/mock.mocks.dart';
 void main() {
   late CallHistoryBloc callHistoryBloc;
   late MockDeviceInfo deviceInfo;
+  late MockDeviceFeedback deviceFeedback;
   late MockWidgetsBinding widgetBinding;
 
   setUp(() {
@@ -29,6 +32,7 @@ void main() {
 
     callHistoryBloc = getMockCallHistoryBloc();
     deviceInfo = getMockDeviceInfo();
+    deviceFeedback = getMockDeviceFeedback();
     widgetBinding = getMockWidgetsBinding();
 
     MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
@@ -140,6 +144,24 @@ void main() {
         await tester.drag(find.byType(SwipeRefresh), const Offset(0, 400));
         await tester.pump();
         verify(callHistoryBloc.add(CallHistoryFetched(completer: completer)));
+      });
+    });
+  });
+
+  group("Voice Assistant", () {
+    testWidgets('Should play update app info', (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(child: const CallHistoryScreen());
+
+        verify(
+          deviceFeedback.playVoiceAssistant(
+            [
+              LocaleKeys.va_call_history_page.tr(),
+            ],
+            any,
+            immediately: true,
+          ),
+        );
       });
     });
   });

@@ -21,10 +21,12 @@ import '../../../mock/mock.mocks.dart';
 
 void main() {
   late MockAppNavigator appNavigator;
+  late MockDeviceFeedback deviceFeedback;
 
   setUp(() {
     registerLocator();
     appNavigator = getMockAppNavigator();
+    deviceFeedback = getMockDeviceFeedback();
 
     MockWidgetsBinding widgetBinding = getMockWidgetsBinding();
     MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
@@ -95,6 +97,24 @@ void main() {
         await tester.pumpApp(child: const UnknownDeviceScreen());
 
         expect(findDifferentDeviceInfoText(), findsOneWidget);
+      });
+    });
+  });
+
+  group("Voice Assistant", () {
+    testWidgets('Should play sign in on different device info', (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(child: const UnknownDeviceScreen());
+
+        verify(
+          deviceFeedback.playVoiceAssistant(
+            [
+              LocaleKeys.sign_in_different_device_info.tr(),
+            ],
+            any,
+            immediately: true,
+          ),
+        );
       });
     });
   });

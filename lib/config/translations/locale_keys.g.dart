@@ -112,6 +112,7 @@ abstract class LocaleKeys {
   static const update_now = 'update_now';
   static const va_async_answering_call = 'va_async_answering_call';
   static const va_async_calling_volunteer = 'va_async_calling_volunteer';
+  static const va_call_history_page = 'va_call_history_page';
   static const va_device_language_changed = 'va_device_language_changed';
   static const va_home_page = 'va_home_page';
   static const va_home_page_blind_info = 'va_home_page_blind_info';
