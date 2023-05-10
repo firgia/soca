@@ -1276,8 +1276,8 @@ class MockCallKit extends _i1.Mock implements _i21.CallKit {
 /// See the documentation for Mockito's code generation for more information.
 class MockDeviceFeedback extends _i1.Mock implements _i21.DeviceFeedback {
   @override
-  bool get isHaptickEnable => (super.noSuchMethod(
-        Invocation.getter(#isHaptickEnable),
+  bool get isHapticEnable => (super.noSuchMethod(
+        Invocation.getter(#isHapticEnable),
         returnValue: false,
         returnValueForMissingStub: false,
       ) as bool);
@@ -1314,21 +1314,22 @@ class MockDeviceFeedback extends _i1.Mock implements _i21.DeviceFeedback {
         returnValueForMissingStub: null,
       );
   @override
-  void enableFeedback({
-    bool? enableHaptick,
+  _i38.Future<void> enableFeedback({
+    bool? enableHaptic,
     bool? enableVoiceAssistant,
   }) =>
-      super.noSuchMethod(
+      (super.noSuchMethod(
         Invocation.method(
           #enableFeedback,
           [],
           {
-            #enableHaptick: enableHaptick,
+            #enableHaptic: enableHaptic,
             #enableVoiceAssistant: enableVoiceAssistant,
           },
         ),
-        returnValueForMissingStub: null,
-      );
+        returnValue: _i38.Future<void>.value(),
+        returnValueForMissingStub: _i38.Future<void>.value(),
+      ) as _i38.Future<void>);
 }
 
 /// A class which mocks [DeviceInfo].
@@ -2065,6 +2066,30 @@ class MockOneSignalProvider extends _i1.Mock implements _i3.OneSignalProvider {
       ) as _i38.Future<void>);
 }
 
+/// A class which mocks [SettingsProvider].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSettingsProvider extends _i1.Mock implements _i3.SettingsProvider {
+  @override
+  _i38.Future<bool> setEnableHaptics(bool? value) => (super.noSuchMethod(
+        Invocation.method(
+          #setEnableHaptics,
+          [value],
+        ),
+        returnValue: _i38.Future<bool>.value(false),
+        returnValueForMissingStub: _i38.Future<bool>.value(false),
+      ) as _i38.Future<bool>);
+  @override
+  _i38.Future<bool> setEnableVoiceAssistant(bool? value) => (super.noSuchMethod(
+        Invocation.method(
+          #setEnableVoiceAssistant,
+          [value],
+        ),
+        returnValue: _i38.Future<bool>.value(false),
+        returnValueForMissingStub: _i38.Future<bool>.value(false),
+      ) as _i38.Future<bool>);
+}
+
 /// A class which mocks [UserProvider].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -2621,6 +2646,44 @@ class MockLanguageRepository extends _i1.Mock
         Invocation.method(
           #updateLastChangedOnesignal,
           [language],
+        ),
+        returnValue: _i38.Future<void>.value(),
+        returnValueForMissingStub: _i38.Future<void>.value(),
+      ) as _i38.Future<void>);
+}
+
+/// A class which mocks [SettingsRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSettingsRepository extends _i1.Mock
+    implements _i3.SettingsRepository {
+  @override
+  bool get isHapticsEnable => (super.noSuchMethod(
+        Invocation.getter(#isHapticsEnable),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  bool get isVoiceAssistantEnable => (super.noSuchMethod(
+        Invocation.getter(#isVoiceAssistantEnable),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  _i38.Future<void> setEnableHaptics(bool? enable) => (super.noSuchMethod(
+        Invocation.method(
+          #setEnableHaptics,
+          [enable],
+        ),
+        returnValue: _i38.Future<void>.value(),
+        returnValueForMissingStub: _i38.Future<void>.value(),
+      ) as _i38.Future<void>);
+  @override
+  _i38.Future<void> setEnableVoiceAssistant(bool? enable) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #setEnableVoiceAssistant,
+          [enable],
         ),
         returnValue: _i38.Future<void>.value(),
         returnValueForMissingStub: _i38.Future<void>.value(),

@@ -119,6 +119,14 @@ MockOneSignalProvider getMockOneSignalProvider() {
   return mock;
 }
 
+MockSettingsProvider getMockSettingsProvider() {
+  MockSettingsProvider mock = MockSettingsProvider();
+  _removeRegistrationIfExists<SettingsProvider>();
+  locator.registerSingleton<SettingsProvider>(mock);
+
+  return mock;
+}
+
 MockUserProvider getMockUserProvider() {
   MockUserProvider mock = MockUserProvider();
   _removeRegistrationIfExists<UserProvider>();
@@ -163,6 +171,14 @@ MockLanguageRepository getMockLanguageRepository() {
   MockLanguageRepository mock = MockLanguageRepository();
   _removeRegistrationIfExists<LanguageRepository>();
   locator.registerSingleton<LanguageRepository>(mock);
+
+  return mock;
+}
+
+MockSettingsRepository getMockSettingsRepository() {
+  MockSettingsRepository mock = MockSettingsRepository();
+  _removeRegistrationIfExists<SettingsRepository>();
+  locator.registerSingleton<SettingsRepository>(mock);
 
   return mock;
 }
@@ -453,12 +469,14 @@ void registerLocator() {
   getMockFunctionsProvider();
   getMockLocalLanguageProvider();
   getMockOneSignalProvider();
+  getMockSettingsProvider();
   getMockUserProvider();
   getMockAppRepository();
   getMockAuthRepository();
   getMockCallingRepository();
   getMockFileRepository();
   getMockLanguageRepository();
+  getMockSettingsRepository();
   getMockUserRepository();
 
   /* ------------------------------> DEPENDENCIES <-------------------------- */
@@ -517,12 +535,14 @@ void unregisterLocator() {
   locator.unregister<FunctionsProvider>();
   locator.unregister<LocalLanguageProvider>();
   locator.unregister<OneSignalProvider>();
+  locator.unregister<SettingsProvider>();
   locator.unregister<UserProvider>();
   locator.unregister<AppRepository>();
   locator.unregister<AuthRepository>();
   locator.unregister<CallingRepository>();
   locator.unregister<FileRepository>();
   locator.unregister<LanguageRepository>();
+  locator.unregister<SettingsRepository>();
   locator.unregister<UserRepository>();
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */

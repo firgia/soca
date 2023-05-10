@@ -13,4 +13,5 @@ export 'calling_repository.dart';
 export 'file_repository.dart';
 export 'language_repository.dart';
 export 'onesignal_repository.dart';
+export 'settings_repository.dart';
 export 'user_repository.dart';
