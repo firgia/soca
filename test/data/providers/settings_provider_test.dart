@@ -10,7 +10,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:soca/core/core.dart';
-import 'package:soca/data/providers/providers.dart';
+import 'package:soca/data/data.dart';
 
 import '../../helper/helper.dart';
 import '../../mock/mock.dart';
@@ -56,6 +56,20 @@ void main() {
     });
   });
 
+  group(".getIsFirstTimeUsed()", () {
+    test(
+        "Should load from local storage by calling sharedPreferences.getBool()",
+        () async {
+      when(sharedPreferences.getBool(LocalStoragePath.isFirstTimeUsed))
+          .thenReturn(true);
+
+      bool? enable = settingsProvider.getIsFirstTimeUsed();
+
+      expect(enable, isTrue);
+      verify(sharedPreferences.getBool(LocalStoragePath.isFirstTimeUsed));
+    });
+  });
+
   group(".setEnableHaptics()", () {
     test("Should save to local storage by calling sharedPreferences.setBool()",
         () async {
@@ -81,6 +95,19 @@ void main() {
       expect(status, isTrue);
       verify(sharedPreferences.setBool(
           LocalStoragePath.enableVoiceAssistant, true));
+    });
+  });
+
+  group(".setIsFirstTimeUsed()", () {
+    test("Should save to local storage by calling sharedPreferences.setBool()",
+        () async {
+      when(sharedPreferences.setBool(LocalStoragePath.isFirstTimeUsed, true))
+          .thenAnswer((_) => Future.value(true));
+
+      bool? status = await settingsProvider.setIsFirstTimeUsed(true);
+
+      expect(status, isTrue);
+      verify(sharedPreferences.setBool(LocalStoragePath.isFirstTimeUsed, true));
     });
   });
 }

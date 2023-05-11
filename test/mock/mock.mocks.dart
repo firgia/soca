@@ -1141,6 +1141,14 @@ class MockAppNavigator extends _i1.Mock implements _i38.AppNavigator {
         returnValueForMissingStub: null,
       );
   @override
+  void goToInitialLanguage(_i17.BuildContext? context) => super.noSuchMethod(
+        Invocation.method(
+          #goToInitialLanguage,
+          [context],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
   void goToLanguage(_i17.BuildContext? context) => super.noSuchMethod(
         Invocation.method(
           #goToLanguage,
@@ -2083,6 +2091,15 @@ class MockSettingsProvider extends _i1.Mock implements _i3.SettingsProvider {
         returnValue: _i39.Future<bool>.value(false),
         returnValueForMissingStub: _i39.Future<bool>.value(false),
       ) as _i39.Future<bool>);
+  @override
+  _i39.Future<bool> setIsFirstTimeUsed(bool? value) => (super.noSuchMethod(
+        Invocation.method(
+          #setIsFirstTimeUsed,
+          [value],
+        ),
+        returnValue: _i39.Future<bool>.value(false),
+        returnValueForMissingStub: _i39.Future<bool>.value(false),
+      ) as _i39.Future<bool>);
 }
 
 /// A class which mocks [UserProvider].
@@ -2665,6 +2682,12 @@ class MockSettingsRepository extends _i1.Mock
         returnValueForMissingStub: false,
       ) as bool);
   @override
+  bool get isFirstTimeUsed => (super.noSuchMethod(
+        Invocation.getter(#isFirstTimeUsed),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
   _i39.Future<void> setEnableHaptics(bool? enable) => (super.noSuchMethod(
         Invocation.method(
           #setEnableHaptics,
@@ -2679,6 +2702,15 @@ class MockSettingsRepository extends _i1.Mock
         Invocation.method(
           #setEnableVoiceAssistant,
           [enable],
+        ),
+        returnValue: _i39.Future<void>.value(),
+        returnValueForMissingStub: _i39.Future<void>.value(),
+      ) as _i39.Future<void>);
+  @override
+  _i39.Future<void> setIsFirstTimeUsed(bool? firstTime) => (super.noSuchMethod(
+        Invocation.method(
+          #setIsFirstTimeUsed,
+          [firstTime],
         ),
         returnValue: _i39.Future<void>.value(),
         returnValueForMissingStub: _i39.Future<void>.value(),

@@ -19,6 +19,9 @@ abstract class SettingsRepository {
   /// Return true if voice assistant settings is enable
   bool get isVoiceAssistantEnable;
 
+  /// Return true if user first time used app
+  bool get isFirstTimeUsed;
+
   /// Set enable haptics
   /// * `true` is enable
   /// * `false` is disable
@@ -28,6 +31,11 @@ abstract class SettingsRepository {
   /// * `true` is enable
   /// * `false` is disable
   Future<void> setEnableVoiceAssistant(bool enable);
+
+  /// Set is first time used
+  /// * `true` is first time
+  /// * `false` is not first time
+  Future<void> setIsFirstTimeUsed(bool firstTime);
 }
 
 class SettingsRepositoryImpl extends SettingsRepository {
@@ -48,6 +56,12 @@ class SettingsRepositoryImpl extends SettingsRepository {
   }
 
   @override
+  bool get isFirstTimeUsed {
+    _logger.info("Getting is first time used ...");
+    return _settingsProvider.getIsFirstTimeUsed() ?? true;
+  }
+
+  @override
   Future<void> setEnableHaptics(bool enable) async {
     _logger.info("Set haptics settings...");
     await _settingsProvider.setEnableHaptics(enable);
@@ -57,5 +71,11 @@ class SettingsRepositoryImpl extends SettingsRepository {
   Future<void> setEnableVoiceAssistant(bool enable) async {
     _logger.info("Set voice assistant settings...");
     await _settingsProvider.setEnableVoiceAssistant(enable);
+  }
+
+  @override
+  Future<void> setIsFirstTimeUsed(bool firstTime) async {
+    _logger.info("Set is first time used...");
+    await _settingsProvider.setIsFirstTimeUsed(firstTime);
   }
 }

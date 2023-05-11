@@ -20,11 +20,17 @@ abstract class SettingsProvider {
   /// Get enable voice assistant from local storage
   bool? getEnableVoiceAssistant();
 
+  /// Get is first time used app from local storage
+  bool? getIsFirstTimeUsed();
+
   /// Save enable haptics to local storage
   Future<bool> setEnableHaptics(bool value);
 
   /// Save enable voice assistant to local storage
   Future<bool> setEnableVoiceAssistant(bool value);
+
+  /// Save is first time used app to local storage
+  Future<bool> setIsFirstTimeUsed(bool value);
 }
 
 class SettingsProviderImpl implements SettingsProvider {
@@ -33,6 +39,7 @@ class SettingsProviderImpl implements SettingsProvider {
 
   String get enableHapticsKey => LocalStoragePath.enableHaptics;
   String get enableVoiceAssistantKey => LocalStoragePath.enableVoiceAssistant;
+  String get isFirstTimeUsedKey => LocalStoragePath.isFirstTimeUsed;
 
   @override
   bool? getEnableHaptics() {
@@ -53,6 +60,15 @@ class SettingsProviderImpl implements SettingsProvider {
   }
 
   @override
+  bool? getIsFirstTimeUsed() {
+    _logger.info("Getting $isFirstTimeUsedKey data...");
+    final locale = sharedPreferences.getBool(isFirstTimeUsedKey);
+
+    _logger.fine("Successfully to getting $isFirstTimeUsedKey data");
+    return locale;
+  }
+
+  @override
   Future<bool> setEnableHaptics(bool value) async {
     _logger.info("Saving $enableHapticsKey data..");
     bool result = await sharedPreferences.setBool(enableHapticsKey, value);
@@ -68,6 +84,15 @@ class SettingsProviderImpl implements SettingsProvider {
         await sharedPreferences.setBool(enableVoiceAssistantKey, value);
 
     _logger.fine("Successfully to save $enableVoiceAssistantKey data");
+    return result;
+  }
+
+  @override
+  Future<bool> setIsFirstTimeUsed(bool value) async {
+    _logger.info("Saving $isFirstTimeUsedKey data..");
+    bool result = await sharedPreferences.setBool(isFirstTimeUsedKey, value);
+
+    _logger.fine("Successfully to save $isFirstTimeUsedKey data");
     return result;
   }
 }

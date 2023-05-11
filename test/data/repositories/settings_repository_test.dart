@@ -51,7 +51,8 @@ void main() {
   });
 
   group(".isVoiceAssistantEnable", () {
-    test("Should load from settingsProvider.getEnableHaptics() when available",
+    test(
+        "Should load from settingsProvider.getEnableVoiceAssistant() when available",
         () async {
       when(settingsProvider.getEnableVoiceAssistant()).thenReturn(false);
 
@@ -62,7 +63,7 @@ void main() {
     });
 
     test(
-        'Should return true when data from settingsProvider.getEnableHaptics() '
+        'Should return true when data from settingsProvider.getEnableVoiceAssistant() '
         'when unavailable', () async {
       when(settingsProvider.getEnableVoiceAssistant()).thenReturn(null);
 
@@ -70,6 +71,30 @@ void main() {
 
       verify(settingsProvider.getEnableVoiceAssistant());
       expect(isVoiceAssistantEnable, isTrue);
+    });
+  });
+
+  group(".isFirstTimeUsed", () {
+    test(
+        "Should load from settingsProvider.getIsFirstTimeUsed() when available",
+        () async {
+      when(settingsProvider.getIsFirstTimeUsed()).thenReturn(false);
+
+      bool? isFirstTimeUsed = settingsRepository.isFirstTimeUsed;
+
+      verify(settingsProvider.getIsFirstTimeUsed());
+      expect(isFirstTimeUsed, isFalse);
+    });
+
+    test(
+        'Should return true when data from settingsProvider.getIsFirstTimeUsed() '
+        'when unavailable', () async {
+      when(settingsProvider.getIsFirstTimeUsed()).thenReturn(null);
+
+      bool? isFirstTimeUsed = settingsRepository.isFirstTimeUsed;
+
+      verify(settingsProvider.getIsFirstTimeUsed());
+      expect(isFirstTimeUsed, isTrue);
     });
   });
 
@@ -94,6 +119,18 @@ void main() {
       await settingsRepository.setEnableVoiceAssistant(true);
 
       verify(settingsProvider.setEnableVoiceAssistant(true));
+    });
+  });
+
+  group(".setIsFirstTimeUsed()", () {
+    test("Should update by calling settingsProvider.setIsFirstTimeUsed()",
+        () async {
+      when(settingsProvider.setIsFirstTimeUsed(true))
+          .thenAnswer((_) => Future.value(true));
+
+      await settingsRepository.setIsFirstTimeUsed(true);
+
+      verify(settingsProvider.setIsFirstTimeUsed(true));
     });
   });
 }
