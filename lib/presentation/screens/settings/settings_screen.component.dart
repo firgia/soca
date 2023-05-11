@@ -9,6 +9,42 @@
 
 part of 'settings_screen.dart';
 
+class _AccountCard extends StatelessWidget {
+  const _AccountCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AccountCubit, AccountState>(
+      builder: (context, state) {
+        if (state is AccountData) {
+          AuthMethod? authMethod = state.signInMethod;
+          String? email = state.email;
+
+          if (authMethod != null && email != null) {
+            return Card(
+              key: const Key("settings_screen_account_card"),
+              margin: const EdgeInsets.only(
+                left: kDefaultSpacing,
+                right: kDefaultSpacing,
+                bottom: kDefaultSpacing * 1.5,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(kDefaultSpacing),
+                child: AccountCard(
+                  authMethod: authMethod,
+                  email: email,
+                ),
+              ),
+            );
+          }
+        }
+
+        return const SizedBox();
+      },
+    );
+  }
+}
+
 class _HapticsFeedbackSwitch extends StatelessWidget {
   const _HapticsFeedbackSwitch();
 

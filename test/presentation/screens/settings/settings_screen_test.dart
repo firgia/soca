@@ -12,6 +12,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:soca/core/core.dart';
 import 'package:soca/logic/logic.dart';
 import 'package:soca/presentation/presentation.dart';
 
@@ -19,18 +20,22 @@ import '../../../helper/helper.dart';
 import '../../../mock/mock.dart';
 
 void main() {
+  late MockAccountCubit accountCubit;
   late MockAppNavigator appNavigator;
   late MockSettingsCubit settingsCubit;
 
   setUp(() {
     registerLocator();
 
+    accountCubit = getMockAccountCubit();
     appNavigator = getMockAppNavigator();
     settingsCubit = getMockSettingsCubit();
   });
 
   tearDown(() => unregisterLocator());
 
+  Finder findAccountCard() =>
+      find.byKey(const Key("settings_screen_account_card"));
   Finder findHaptics() => find.byKey(const Key("settings_screen_haptics"));
   Finder findHapticsSwitch() =>
       find.byKey(const Key("settings_screen_haptics_switch"));
@@ -40,6 +45,58 @@ void main() {
       find.byKey(const Key("settings_screen_voice_assistant"));
   Finder findVoiceAssistantSwitch() =>
       find.byKey(const Key("settings_screen_voice_assistant_switch"));
+
+  group("Initial", () {
+    testWidgets("Should call accountCubit.getAccountData()", (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(child: const SettingsScreen());
+
+        verify(accountCubit.getAccountData());
+      });
+    });
+  });
+
+  group("Account Card", () {
+    testWidgets(
+        "Should show account card when account type and email is available",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(accountCubit.stream).thenAnswer(
+          (_) => Stream.value(
+            const AccountData(
+              email: "a",
+              signInMethod: AuthMethod.apple,
+            ),
+          ),
+        );
+
+        await tester.pumpApp(child: const SettingsScreen());
+        await tester.pump();
+
+        expect(findAccountCard(), findsOneWidget);
+      });
+    });
+
+    testWidgets(
+        "Should hide account card when account type or email is unavailable",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(accountCubit.stream).thenAnswer(
+          (_) => Stream.value(
+            const AccountData(
+              email: null,
+              signInMethod: null,
+            ),
+          ),
+        );
+
+        await tester.pumpApp(child: const SettingsScreen());
+        await tester.pump();
+
+        expect(findAccountCard(), findsNothing);
+      });
+    });
+  });
 
   group("Language Button", () {
     testWidgets("Should show language button", (tester) async {
