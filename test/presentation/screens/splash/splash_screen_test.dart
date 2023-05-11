@@ -194,6 +194,20 @@ void main() {
         verify(appNavigator.goToUpdateApp(any));
       });
     });
+
+    testWidgets(
+        'Should navigate to initial language page when routeTarget return '
+        '[AppPages.initialLanguage]', (tester) async {
+      await tester.runAsync(() async {
+        when(routeCubit.stream).thenAnswer(
+            (_) => Stream.value(RouteTarget(AppPages.initialLanguage)));
+
+        await tester.pumpApp(child: const SplashScreen());
+
+        verify(routeCubit.getTargetRoute(checkMinimumVersion: true));
+        verify(appNavigator.goToInitialLanguage(any));
+      });
+    });
   });
 
   group("Animation Loading", () {

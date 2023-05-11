@@ -59,6 +59,11 @@ class AppNavigator {
     context.pushReplacementNamed(AppPages.home);
   }
 
+  void goToInitialLanguage(BuildContext context) {
+    if (_isOutdatedApp(context)) return;
+    context.pushReplacementNamed(AppPages.initialLanguage);
+  }
+
   void goToLanguage(BuildContext context) {
     if (_isOutdatedApp(context)) return;
     context.pushNamed(AppPages.language);

@@ -61,6 +61,8 @@ class _SplashScreenState extends State<SplashScreen> with UIMixin {
             appNavigator.goToUnknownDevice(context);
           } else if (state.name == AppPages.updateApp) {
             appNavigator.goToUpdateApp(context);
+          } else if (state.name == AppPages.initialLanguage) {
+            appNavigator.goToInitialLanguage(context);
           }
         }
 

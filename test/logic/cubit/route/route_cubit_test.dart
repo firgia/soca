@@ -21,12 +21,14 @@ import '../../../mock/mock.mocks.dart';
 void main() {
   late MockAppRepository appRepository;
   late MockAuthRepository authRepository;
+  late MockSettingsRepository settingsRepository;
   late MockUserRepository userRepository;
 
   setUp(() {
     registerLocator();
     appRepository = getMockAppRepository();
     authRepository = getMockAuthRepository();
+    settingsRepository = getMockSettingsRepository();
     userRepository = getMockUserRepository();
   });
   tearDown(() => unregisterLocator());
@@ -115,6 +117,23 @@ void main() {
           appRepository.checkMinimumVersion(),
           appRepository.isOutdated,
         ]);
+      },
+    );
+
+    blocTest<RouteCubit, RouteState>(
+      'Should emits [RouteLoading, RouteTarget(AppPages.initialLanguage)] when '
+      'user not pick language yet.',
+      build: () => RouteCubit(),
+      act: (route) => route.getTargetRoute(),
+      setUp: () {
+        when(settingsRepository.hasPickLanguage).thenReturn(false);
+      },
+      expect: () => <RouteState>[
+        const RouteLoading(),
+        RouteTarget(AppPages.initialLanguage),
+      ],
+      verify: (bloc) {
+        verify(settingsRepository.hasPickLanguage);
       },
     );
 

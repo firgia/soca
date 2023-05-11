@@ -67,6 +67,11 @@ abstract class AppRoutes {
             ],
           ),
           GoRoute(
+            path: "/${AppPages.initialLanguage}",
+            name: AppPages.initialLanguage,
+            builder: (context, state) => const LanguageScreen(),
+          ),
+          GoRoute(
             path: "/${AppPages.signIn}",
             name: AppPages.signIn,
             builder: (context, state) => const SignInScreen(),

@@ -11,6 +11,7 @@ abstract class AppPages {
   static String get answerCall => "answer_call";
   static String get callHistory => "call_history";
   static String get createCall => "create_call";
+  static String get initialLanguage => "initial_language";
   static String get language => "language";
   static String get home => "home";
   static String get signIn => "sign_in";
