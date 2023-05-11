@@ -101,4 +101,30 @@ void main() {
       },
     );
   });
+
+  group(".setHasPickLanguage()", () {
+    blocTest<SettingsCubit, SettingsState>(
+      'Should emits [SettingsLoading, SettingsValue]',
+      build: () => SettingsCubit(),
+      act: (settings) => settings.setHasPickLanguage(true),
+      setUp: () {
+        when(settingsRepository.isHapticsEnable).thenReturn(true);
+        when(settingsRepository.isVoiceAssistantEnable).thenReturn(false);
+      },
+      expect: () => const <SettingsState>[
+        SettingsLoading(),
+        SettingsValue(
+          isHapticsEnable: true,
+          isVoiceAssistantEnable: false,
+        ),
+      ],
+      verify: (bloc) {
+        verifyInOrder([
+          settingsRepository.setHasPickLanguage(true),
+          settingsRepository.isHapticsEnable,
+          settingsRepository.isVoiceAssistantEnable,
+        ]);
+      },
+    );
+  });
 }

@@ -42,6 +42,15 @@ class SettingsCubit extends Cubit<SettingsState> {
     _updateValue();
   }
 
+  void setHasPickLanguage(bool picked) async {
+    _logger.info("Updating has pick language ...");
+    emit(const SettingsLoading());
+    await _settingsRepository.setHasPickLanguage(picked);
+
+    _logger.info("Successfully to update pick language");
+    _updateValue();
+  }
+
   void _updateValue() {
     emit(SettingsValue(
       isHapticsEnable: _settingsRepository.isHapticsEnable,

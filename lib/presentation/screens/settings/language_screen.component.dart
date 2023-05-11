@@ -59,7 +59,8 @@ class _NextButton extends StatelessWidget {
               key: const Key("language_screen_next_button"),
               isLoading: isLoading,
               onPressed: () {
-                // TODO: Implement this
+                sl<SettingsCubit>().setHasPickLanguage(true);
+                sl<AppNavigator>().goToSplash(context);
               },
               style: FlatButtonStyle(expanded: true, size: ButtonSize.large),
               child: const Text(LocaleKeys.next).tr(),

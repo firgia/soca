@@ -21,11 +21,13 @@ import '../../../mock/mock.mocks.dart';
 
 void main() async {
   late MockAppNavigator appNavigator;
+  late MockSettingsCubit settingsCubit;
 
   setUp(() {
     registerLocator();
 
     appNavigator = getMockAppNavigator();
+    settingsCubit = getMockSettingsCubit();
   });
 
   tearDown(() => unregisterLocator());
@@ -198,6 +200,18 @@ void main() async {
       });
     });
 
+    testWidgets("Should back to previous page when button is tapped",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(appNavigator.canPop(any)).thenReturn(true);
+        await tester.pumpApp(child: const LanguageScreen());
+
+        await tester.ensureVisible(findBackButton());
+        await tester.tap(findBackButton());
+        verify(appNavigator.back(any));
+      });
+    });
+
     testWidgets(
         "Should set the isLoading of [AsyncButton] to true when state is [LanguageLoading()]",
         (tester) async {
@@ -266,6 +280,21 @@ void main() async {
 
         AsyncButton nextButton = findNextButton().getWidget() as AsyncButton;
         expect(nextButton.isLoading, false);
+      });
+    });
+
+    testWidgets(
+        'Should go to splash page and set has picked language to true '
+        'when button is tapped', (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(child: const LanguageScreen());
+
+        await tester.ensureVisible(findNextButton());
+        await tester.tap(findNextButton());
+        verifyInOrder([
+          settingsCubit.setHasPickLanguage(true),
+          appNavigator.goToSplash(any),
+        ]);
       });
     });
   });
