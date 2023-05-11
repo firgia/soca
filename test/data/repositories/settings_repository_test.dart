@@ -40,7 +40,7 @@ void main() {
 
     test(
         'Should return true when data from settingsProvider.getEnableHaptics() '
-        'when unavailable', () async {
+        'is unavailable', () async {
       when(settingsProvider.getEnableHaptics()).thenReturn(null);
 
       bool? isHapticsEnable = settingsRepository.isHapticsEnable;
@@ -64,7 +64,7 @@ void main() {
 
     test(
         'Should return true when data from settingsProvider.getEnableVoiceAssistant() '
-        'when unavailable', () async {
+        'is unavailable', () async {
       when(settingsProvider.getEnableVoiceAssistant()).thenReturn(null);
 
       bool? isVoiceAssistantEnable = settingsRepository.isVoiceAssistantEnable;
@@ -74,27 +74,27 @@ void main() {
     });
   });
 
-  group(".isFirstTimeUsed", () {
+  group(".hasPickLanguage", () {
     test(
-        "Should load from settingsProvider.getIsFirstTimeUsed() when available",
+        "Should load from settingsProvider.getHasPickLanguage() when available",
         () async {
-      when(settingsProvider.getIsFirstTimeUsed()).thenReturn(false);
+      when(settingsProvider.getHasPickLanguage()).thenReturn(false);
 
-      bool? isFirstTimeUsed = settingsRepository.isFirstTimeUsed;
+      bool? hasPickLanguage = settingsRepository.hasPickLanguage;
 
-      verify(settingsProvider.getIsFirstTimeUsed());
-      expect(isFirstTimeUsed, isFalse);
+      verify(settingsProvider.getHasPickLanguage());
+      expect(hasPickLanguage, isFalse);
     });
 
     test(
-        'Should return true when data from settingsProvider.getIsFirstTimeUsed() '
-        'when unavailable', () async {
-      when(settingsProvider.getIsFirstTimeUsed()).thenReturn(null);
+        'Should return false when data from settingsProvider.getHasPickLanguage() '
+        'is unavailable', () async {
+      when(settingsProvider.getHasPickLanguage()).thenReturn(null);
 
-      bool? isFirstTimeUsed = settingsRepository.isFirstTimeUsed;
+      bool? hasPickLanguage = settingsRepository.hasPickLanguage;
 
-      verify(settingsProvider.getIsFirstTimeUsed());
-      expect(isFirstTimeUsed, isTrue);
+      verify(settingsProvider.getHasPickLanguage());
+      expect(hasPickLanguage, isFalse);
     });
   });
 
@@ -122,15 +122,15 @@ void main() {
     });
   });
 
-  group(".setIsFirstTimeUsed()", () {
-    test("Should update by calling settingsProvider.setIsFirstTimeUsed()",
+  group(".setHasPickLanguage()", () {
+    test("Should update by calling settingsProvider.setHasPickLanguage()",
         () async {
-      when(settingsProvider.setIsFirstTimeUsed(true))
+      when(settingsProvider.setHasPickLanguage(true))
           .thenAnswer((_) => Future.value(true));
 
-      await settingsRepository.setIsFirstTimeUsed(true);
+      await settingsRepository.setHasPickLanguage(true);
 
-      verify(settingsProvider.setIsFirstTimeUsed(true));
+      verify(settingsProvider.setHasPickLanguage(true));
     });
   });
 }

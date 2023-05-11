@@ -19,8 +19,8 @@ abstract class SettingsRepository {
   /// Return true if voice assistant settings is enable
   bool get isVoiceAssistantEnable;
 
-  /// Return true if user first time used app
-  bool get isFirstTimeUsed;
+  /// Return true if user has pick language app
+  bool get hasPickLanguage;
 
   /// Set enable haptics
   /// * `true` is enable
@@ -32,10 +32,10 @@ abstract class SettingsRepository {
   /// * `false` is disable
   Future<void> setEnableVoiceAssistant(bool enable);
 
-  /// Set is first time used
-  /// * `true` is first time
-  /// * `false` is not first time
-  Future<void> setIsFirstTimeUsed(bool firstTime);
+  /// Set has pick language
+  /// * `true` if has pick language
+  /// * `false` if not pick language yet
+  Future<void> setHasPickLanguage(bool hasPicked);
 }
 
 class SettingsRepositoryImpl extends SettingsRepository {
@@ -56,9 +56,9 @@ class SettingsRepositoryImpl extends SettingsRepository {
   }
 
   @override
-  bool get isFirstTimeUsed {
-    _logger.info("Getting is first time used ...");
-    return _settingsProvider.getIsFirstTimeUsed() ?? true;
+  bool get hasPickLanguage {
+    _logger.info("Getting has pick language ...");
+    return _settingsProvider.getHasPickLanguage() ?? false;
   }
 
   @override
@@ -74,8 +74,8 @@ class SettingsRepositoryImpl extends SettingsRepository {
   }
 
   @override
-  Future<void> setIsFirstTimeUsed(bool firstTime) async {
-    _logger.info("Set is first time used...");
-    await _settingsProvider.setIsFirstTimeUsed(firstTime);
+  Future<void> setHasPickLanguage(bool hasPicked) async {
+    _logger.info("Set has pick language...");
+    await _settingsProvider.setHasPickLanguage(hasPicked);
   }
 }

@@ -20,8 +20,8 @@ abstract class SettingsProvider {
   /// Get enable voice assistant from local storage
   bool? getEnableVoiceAssistant();
 
-  /// Get is first time used app from local storage
-  bool? getIsFirstTimeUsed();
+  /// Get has pick language app from local storage
+  bool? getHasPickLanguage();
 
   /// Save enable haptics to local storage
   Future<bool> setEnableHaptics(bool value);
@@ -29,8 +29,8 @@ abstract class SettingsProvider {
   /// Save enable voice assistant to local storage
   Future<bool> setEnableVoiceAssistant(bool value);
 
-  /// Save is first time used app to local storage
-  Future<bool> setIsFirstTimeUsed(bool value);
+  /// Save has pick language app to local storage
+  Future<bool> setHasPickLanguage(bool value);
 }
 
 class SettingsProviderImpl implements SettingsProvider {
@@ -39,7 +39,7 @@ class SettingsProviderImpl implements SettingsProvider {
 
   String get enableHapticsKey => LocalStoragePath.enableHaptics;
   String get enableVoiceAssistantKey => LocalStoragePath.enableVoiceAssistant;
-  String get isFirstTimeUsedKey => LocalStoragePath.isFirstTimeUsed;
+  String get hasPickLanguageKey => LocalStoragePath.hasPickLanguage;
 
   @override
   bool? getEnableHaptics() {
@@ -60,11 +60,11 @@ class SettingsProviderImpl implements SettingsProvider {
   }
 
   @override
-  bool? getIsFirstTimeUsed() {
-    _logger.info("Getting $isFirstTimeUsedKey data...");
-    final locale = sharedPreferences.getBool(isFirstTimeUsedKey);
+  bool? getHasPickLanguage() {
+    _logger.info("Getting $hasPickLanguageKey data...");
+    final locale = sharedPreferences.getBool(hasPickLanguageKey);
 
-    _logger.fine("Successfully to getting $isFirstTimeUsedKey data");
+    _logger.fine("Successfully to getting $hasPickLanguageKey data");
     return locale;
   }
 
@@ -88,11 +88,11 @@ class SettingsProviderImpl implements SettingsProvider {
   }
 
   @override
-  Future<bool> setIsFirstTimeUsed(bool value) async {
-    _logger.info("Saving $isFirstTimeUsedKey data..");
-    bool result = await sharedPreferences.setBool(isFirstTimeUsedKey, value);
+  Future<bool> setHasPickLanguage(bool value) async {
+    _logger.info("Saving $hasPickLanguageKey data..");
+    bool result = await sharedPreferences.setBool(hasPickLanguageKey, value);
 
-    _logger.fine("Successfully to save $isFirstTimeUsedKey data");
+    _logger.fine("Successfully to save $hasPickLanguageKey data");
     return result;
   }
 }

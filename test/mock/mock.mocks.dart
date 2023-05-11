@@ -2092,9 +2092,9 @@ class MockSettingsProvider extends _i1.Mock implements _i3.SettingsProvider {
         returnValueForMissingStub: _i39.Future<bool>.value(false),
       ) as _i39.Future<bool>);
   @override
-  _i39.Future<bool> setIsFirstTimeUsed(bool? value) => (super.noSuchMethod(
+  _i39.Future<bool> setHasPickLanguage(bool? value) => (super.noSuchMethod(
         Invocation.method(
-          #setIsFirstTimeUsed,
+          #setHasPickLanguage,
           [value],
         ),
         returnValue: _i39.Future<bool>.value(false),
@@ -2682,8 +2682,8 @@ class MockSettingsRepository extends _i1.Mock
         returnValueForMissingStub: false,
       ) as bool);
   @override
-  bool get isFirstTimeUsed => (super.noSuchMethod(
-        Invocation.getter(#isFirstTimeUsed),
+  bool get hasPickLanguage => (super.noSuchMethod(
+        Invocation.getter(#hasPickLanguage),
         returnValue: false,
         returnValueForMissingStub: false,
       ) as bool);
@@ -2707,10 +2707,10 @@ class MockSettingsRepository extends _i1.Mock
         returnValueForMissingStub: _i39.Future<void>.value(),
       ) as _i39.Future<void>);
   @override
-  _i39.Future<void> setIsFirstTimeUsed(bool? firstTime) => (super.noSuchMethod(
+  _i39.Future<void> setHasPickLanguage(bool? hasPicked) => (super.noSuchMethod(
         Invocation.method(
-          #setIsFirstTimeUsed,
-          [firstTime],
+          #setHasPickLanguage,
+          [hasPicked],
         ),
         returnValue: _i39.Future<void>.value(),
         returnValueForMissingStub: _i39.Future<void>.value(),

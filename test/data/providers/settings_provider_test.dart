@@ -56,17 +56,17 @@ void main() {
     });
   });
 
-  group(".getIsFirstTimeUsed()", () {
+  group(".getHasPickLanguage()", () {
     test(
         "Should load from local storage by calling sharedPreferences.getBool()",
         () async {
-      when(sharedPreferences.getBool(LocalStoragePath.isFirstTimeUsed))
+      when(sharedPreferences.getBool(LocalStoragePath.hasPickLanguage))
           .thenReturn(true);
 
-      bool? enable = settingsProvider.getIsFirstTimeUsed();
+      bool? enable = settingsProvider.getHasPickLanguage();
 
       expect(enable, isTrue);
-      verify(sharedPreferences.getBool(LocalStoragePath.isFirstTimeUsed));
+      verify(sharedPreferences.getBool(LocalStoragePath.hasPickLanguage));
     });
   });
 
@@ -98,16 +98,16 @@ void main() {
     });
   });
 
-  group(".setIsFirstTimeUsed()", () {
+  group(".setHasPickLanguage()", () {
     test("Should save to local storage by calling sharedPreferences.setBool()",
         () async {
-      when(sharedPreferences.setBool(LocalStoragePath.isFirstTimeUsed, true))
+      when(sharedPreferences.setBool(LocalStoragePath.hasPickLanguage, true))
           .thenAnswer((_) => Future.value(true));
 
-      bool? status = await settingsProvider.setIsFirstTimeUsed(true);
+      bool? status = await settingsProvider.setHasPickLanguage(true);
 
       expect(status, isTrue);
-      verify(sharedPreferences.setBool(LocalStoragePath.isFirstTimeUsed, true));
+      verify(sharedPreferences.setBool(LocalStoragePath.hasPickLanguage, true));
     });
   });
 }
