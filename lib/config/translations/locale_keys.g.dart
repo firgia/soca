@@ -18,6 +18,9 @@ abstract class LocaleKeys {
   static const camera = 'camera';
   static const cannot_allow_permission_desc = 'cannot_allow_permission_desc';
   static const calls = 'calls';
+  static const call_ended = 'call_ended';
+  static const call_ended_blind_info = 'call_ended_blind_info';
+  static const call_ended_volunteer_info = 'call_ended_volunteer_info';
   static const call_history = 'call_history';
   static const call_state_ended = 'call_state_ended';
   static const call_state_ended_with_declined =
