@@ -8,5 +8,7 @@
  */
 
 abstract class LocalStoragePath {
+  static String get enableHaptics => "enable_haptics";
+  static String get enableVoiceAssistant => "enable_voice_assistant";
   static String get isOutdated => "is_outdated";
 }
