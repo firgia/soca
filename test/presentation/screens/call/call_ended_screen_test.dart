@@ -90,7 +90,7 @@ void main() {
       });
     });
 
-    testWidgets("Should navigate to home page automatically on 4 seconds",
+    testWidgets("Should navigate to home page automatically on 6 seconds",
         (tester) async {
       await tester.runAsync(() async {
         await tester.pumpApp(
@@ -98,7 +98,7 @@ void main() {
           userType: UserType.blind,
         ));
 
-        await Future.delayed(const Duration(seconds: 5));
+        await Future.delayed(const Duration(seconds: 7));
         await tester.pump();
 
         expect(findCircularBar(), findsOneWidget);
