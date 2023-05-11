@@ -335,7 +335,7 @@ void main() {
 
   group("Bloc Listener", () {
     testWidgets(
-        'Should back to previous page when [CallActionError] with '
+        'Should go to call ended page page when [CallActionError] with '
         'CallActionType.ended type', (tester) async {
       await mockNetworkImages(() async {
         await tester.runAsync(() async {
@@ -354,13 +354,14 @@ void main() {
 
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
 
-          verify(appNavigator.goToSplash(any));
+          verify(appNavigator.goToCallEnded(any,
+              userType: callingSetup.localUser.type));
         });
       });
     });
 
     testWidgets(
-        "Should back to previous page when [CallActionEndedSuccessfully]",
+        "Should go to call ended page when [CallActionEndedSuccessfully]",
         (tester) async {
       await mockNetworkImages(() async {
         await tester.runAsync(() async {
@@ -379,7 +380,8 @@ void main() {
 
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
 
-          verify(appNavigator.goToSplash(any));
+          verify(appNavigator.goToCallEnded(any,
+              userType: callingSetup.localUser.type));
         });
       });
     });
@@ -427,7 +429,7 @@ void main() {
     });
 
     testWidgets(
-        'Should back to previous page when [VideoCallState.isCallEnded] '
+        'Should go to call ended page when [VideoCallState.isCallEnded] '
         'is true', (tester) async {
       await mockNetworkImages(() async {
         await tester.runAsync(() async {
@@ -442,7 +444,9 @@ void main() {
           when(videoCallBloc.state).thenReturn(state);
           when(videoCallBloc.stream).thenAnswer((_) => Stream.value(state));
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
-          verify(appNavigator.goToSplash(any));
+
+          verify(appNavigator.goToCallEnded(any,
+              userType: callingSetup.localUser.type));
         });
       });
     });
@@ -976,7 +980,8 @@ void main() {
             ),
           );
           verify(rtcEngine.unregisterEventHandler(any));
-          expect(findCallEndedText(), findsOneWidget);
+          verify(appNavigator.goToCallEnded(any,
+              userType: callingSetup.localUser.type));
         });
       });
     });

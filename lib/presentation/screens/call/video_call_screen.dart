@@ -328,8 +328,10 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     await callKit.endAllCalls();
 
     if (mounted) {
-      appNavigator.goToSplash(context);
-      AppSnackbar(context).showMessage(LocaleKeys.call_state_ended.tr());
+      appNavigator.goToCallEnded(
+        context,
+        userType: callingSetup.localUser.type,
+      );
     }
   }
 

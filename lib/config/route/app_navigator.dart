@@ -10,6 +10,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/core.dart';
 import '../../data/data.dart';
 import '../../injection.dart';
 import '../config.dart';
@@ -40,6 +41,12 @@ class AppNavigator {
         "url_image": urlImage,
       });
     }
+  }
+
+  void goToCallEnded(BuildContext context, {required UserType userType}) {
+    if (_isOutdatedApp(context)) return;
+
+    context.pushReplacementNamed(AppPages.callEnded, extra: userType);
   }
 
   void goToCallHistory(BuildContext context) {

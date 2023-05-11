@@ -8,6 +8,7 @@
  */
 
 import 'package:go_router/go_router.dart';
+import '../../core/core.dart';
 import '../../data/data.dart';
 import '../../observer.dart';
 import '../../presentation/presentation.dart';
@@ -21,6 +22,13 @@ abstract class AppRoutes {
             path: "/${AppPages.splash}",
             name: AppPages.splash,
             builder: (context, state) => const SplashScreen(),
+          ),
+          GoRoute(
+            path: "/${AppPages.callEnded}",
+            name: AppPages.callEnded,
+            builder: (context, state) => CallEndedScreen(
+              userType: state.extra as UserType,
+            ),
           ),
           GoRoute(
             path: "/${AppPages.home}",
