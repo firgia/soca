@@ -51,6 +51,69 @@ class _CallEndedText extends StatelessWidget {
   }
 }
 
+class _CallEndedCountdown extends StatefulWidget {
+  const _CallEndedCountdown({
+    required this.duration,
+    required this.onEnded,
+  });
+
+  final Duration duration;
+  final VoidCallback onEnded;
+
+  @override
+  State<_CallEndedCountdown> createState() => _CallEndedCountdownState();
+}
+
+class _CallEndedCountdownState extends State<_CallEndedCountdown> {
+  late Duration duration;
+  late ValueNotifier<double> value = ValueNotifier(0);
+
+  Timer? timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    duration = widget.duration;
+
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      this.timer = timer;
+
+      if (value.value < duration.inSeconds.toDouble()) {
+        value.value++;
+      } else {
+        timer.cancel();
+        widget.onEnded();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BrightnessBuilder(builder: (context, brightness) {
+      bool isDarkMode = brightness == Brightness.dark;
+
+      return SimpleCircularProgressBar(
+        progressStrokeWidth: 20,
+        backStrokeWidth: 8,
+        size: 300,
+        valueNotifier: value,
+        mergeMode: true,
+        maxValue: duration.inSeconds.toDouble(),
+        animationDuration: duration.inSeconds,
+        backColor: isDarkMode ? const Color(0xFF16262D) : Colors.grey[200]!,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    timer?.cancel();
+  }
+}
+
 class _IllustrationImage extends StatelessWidget {
   const _IllustrationImage();
 

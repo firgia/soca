@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mockito/mockito.dart';
+import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:soca/config/config.dart';
 import 'package:soca/core/core.dart';
 import 'package:soca/presentation/presentation.dart';
@@ -46,6 +47,8 @@ void main() {
   Finder findIllustrationImage() =>
       find.byKey(const Key("call_ended_screen_illustration_image"));
 
+  Finder findCircularBar() => find.byType(SimpleCircularProgressBar);
+
   group("Button", () {
     testWidgets("Should show ok button", (tester) async {
       await tester.runAsync(() async {
@@ -70,6 +73,35 @@ void main() {
         await tester.tap(findOkButton());
         await tester.pump();
 
+        verify(appNavigator.goToHome(any));
+      });
+    });
+  });
+
+  group("Circular Bar", () {
+    testWidgets("Should show circular bar", (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(
+            child: const CallEndedScreen(
+          userType: UserType.blind,
+        ));
+
+        expect(findCircularBar(), findsOneWidget);
+      });
+    });
+
+    testWidgets("Should navigate to home page automatically on 4 seconds",
+        (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpApp(
+            child: const CallEndedScreen(
+          userType: UserType.blind,
+        ));
+
+        await Future.delayed(const Duration(seconds: 5));
+        await tester.pump();
+
+        expect(findCircularBar(), findsOneWidget);
         verify(appNavigator.goToHome(any));
       });
     });

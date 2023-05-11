@@ -7,9 +7,12 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import '../../../config/config.dart';
 import '../../../core/core.dart';
 import '../../../injection.dart';
@@ -59,7 +62,16 @@ class _CallEndedScreenState extends State<CallEndedScreen> {
                 const Spacer(),
                 const _CallEndedText(),
                 const Spacer(flex: 2),
-                const _IllustrationImage(),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    const _IllustrationImage(),
+                    _CallEndedCountdown(
+                      duration: const Duration(seconds: 4),
+                      onEnded: () => sl<AppNavigator>().goToHome(context),
+                    ),
+                  ],
+                ),
                 const Spacer(flex: 2),
                 _CallEndedInfoText(userType),
                 const Spacer(flex: 2),
