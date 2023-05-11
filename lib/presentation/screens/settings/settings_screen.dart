@@ -9,8 +9,11 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../config/config.dart';
+import '../../../injection.dart';
+import '../../../logic/logic.dart';
 import '../../widgets/widgets.dart';
 
 part 'settings_screen.component.dart';
@@ -23,15 +26,28 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  SettingsCubit settingsCubit = sl<SettingsCubit>();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: const CustomBackButton(),
-        title: const Text(LocaleKeys.settings).tr(),
-      ),
-      body: ListView(
-        children: [],
+    return BlocProvider(
+      create: (context) => settingsCubit,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: const CustomBackButton(),
+          title: const Text(LocaleKeys.settings).tr(),
+        ),
+        body: ListView(
+          padding: const EdgeInsets.symmetric(
+            vertical: kDefaultSpacing,
+          ),
+          children: const [
+            _HapticsFeedbackSwitch(),
+            _VoiceAssistantFeedbackSwitch(),
+            SizedBox(height: kDefaultSpacing * 1.5),
+            _LanguageButton(),
+          ],
+        ),
       ),
     );
   }

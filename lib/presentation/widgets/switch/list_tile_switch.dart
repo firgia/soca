@@ -23,9 +23,11 @@ class ListTileSwitch extends StatelessWidget with UIMixin {
     this.iconColor,
     this.borderRadius,
     this.padding,
+    this.switchKey,
     super.key,
   });
 
+  final Key? switchKey;
   final String title;
   final String? subtitle;
   final bool value;
@@ -67,6 +69,7 @@ class ListTileSwitch extends StatelessWidget with UIMixin {
                 CupertinoSwitch(
                   value: value,
                   onChanged: onChanged,
+                  key: switchKey,
                 ),
               ],
             ),

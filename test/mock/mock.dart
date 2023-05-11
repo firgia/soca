@@ -102,6 +102,7 @@ export 'mock.mocks.dart';
   MockSpec<VideoCallBloc>(),
   MockSpec<AccountCubit>(),
   MockSpec<RouteCubit>(),
+  MockSpec<SettingsCubit>(),
   MockSpec<SignOutCubit>(),
 ])
 main(List<String> args) {}

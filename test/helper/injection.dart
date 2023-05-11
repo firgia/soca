@@ -442,6 +442,14 @@ MockRouteCubit getMockRouteCubit() {
   return mock;
 }
 
+MockSettingsCubit getMockSettingsCubit() {
+  MockSettingsCubit mock = MockSettingsCubit();
+  _removeRegistrationIfExists<SettingsCubit>();
+  locator.registerSingleton<SettingsCubit>(mock);
+
+  return mock;
+}
+
 MockSignOutCubit getMockSignOutCubit() {
   MockSignOutCubit mock = MockSignOutCubit();
   _removeRegistrationIfExists<SignOutCubit>();
@@ -513,6 +521,7 @@ void registerLocator() {
   getMockVideoCallBloc();
   getMockAccountCubit();
   getMockRouteCubit();
+  getMockSettingsCubit();
   getMockSignOutCubit();
 }
 
@@ -579,6 +588,7 @@ void unregisterLocator() {
   locator.unregister<VideoCallBloc>();
   locator.unregister<AccountCubit>();
   locator.unregister<RouteCubit>();
+  locator.unregister<SettingsCubit>();
   locator.unregister<SignOutCubit>();
 }
 
