@@ -21,12 +21,14 @@ import '../../../mock/mock.mocks.dart';
 void main() {
   late MockAppRepository appRepository;
   late MockAuthRepository authRepository;
+  late MockSettingsRepository settingsRepository;
   late MockUserRepository userRepository;
 
   setUp(() {
     registerLocator();
     appRepository = getMockAppRepository();
     authRepository = getMockAuthRepository();
+    settingsRepository = getMockSettingsRepository();
     userRepository = getMockUserRepository();
   });
   tearDown(() => unregisterLocator());
@@ -72,6 +74,8 @@ void main() {
       ' is true and [userDevice] is null',
       build: () => RouteCubit(),
       setUp: () {
+        when(settingsRepository.hasPickLanguage).thenReturn(true);
+
         when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
       },
       act: (route) => route.getTargetRoute(checkDifferentDevice: true),
@@ -86,6 +90,7 @@ void main() {
       '[checkDifferentDevice] is true and [userDevice] is not null',
       build: () => RouteCubit(),
       setUp: () {
+        when(settingsRepository.hasPickLanguage).thenReturn(true);
         when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
       },
       act: (route) => route.getTargetRoute(
@@ -119,11 +124,29 @@ void main() {
     );
 
     blocTest<RouteCubit, RouteState>(
+      'Should emits [RouteLoading, RouteTarget(AppPages.initialLanguage)] when '
+      'user not pick language yet.',
+      build: () => RouteCubit(),
+      act: (route) => route.getTargetRoute(),
+      setUp: () {
+        when(settingsRepository.hasPickLanguage).thenReturn(false);
+      },
+      expect: () => <RouteState>[
+        const RouteLoading(),
+        RouteTarget(AppPages.initialLanguage),
+      ],
+      verify: (bloc) {
+        verify(settingsRepository.hasPickLanguage);
+      },
+    );
+
+    blocTest<RouteCubit, RouteState>(
       'Should emits [RouteLoading, RouteTarget(AppPages.unknownDevice)] when '
       'user use different device.',
       build: () => RouteCubit(),
       act: (route) => route.getTargetRoute(),
       setUp: () {
+        when(settingsRepository.hasPickLanguage).thenReturn(true);
         when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
         when(userRepository.getProfile())
             .thenAnswer((_) => Future.value(const User()));
@@ -145,6 +168,7 @@ void main() {
       build: () => RouteCubit(),
       act: (route) => route.getTargetRoute(),
       setUp: () {
+        when(settingsRepository.hasPickLanguage).thenReturn(true);
         when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
         when(userRepository.getProfile())
             .thenAnswer((_) => Future.value(const User()));
@@ -182,6 +206,7 @@ void main() {
       build: () => RouteCubit(),
       act: (route) => route.getTargetRoute(),
       setUp: () {
+        when(settingsRepository.hasPickLanguage).thenReturn(true);
         when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
         when(userRepository.getProfile()).thenThrow(Exception());
       },

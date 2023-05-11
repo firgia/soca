@@ -11,21 +11,34 @@ import 'package:auto_animated/auto_animated.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../injection.dart';
 import '../../../core/core.dart';
 import '../../../logic/logic.dart';
 import '../../../config/config.dart';
 import '../../widgets/widgets.dart';
 
-class LanguageScreen extends StatelessWidget {
+part 'language_screen.component.dart';
+
+class LanguageScreen extends StatefulWidget {
+  const LanguageScreen({super.key});
+
+  @override
+  State<LanguageScreen> createState() => _LanguageScreenState();
+}
+
+class _LanguageScreenState extends State<LanguageScreen> {
+  final AppNavigator appNavigator = sl<AppNavigator>();
   final LanguageBloc languageBloc = sl<LanguageBloc>();
 
-  LanguageScreen({super.key});
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _updateLanguageState(context);
+  }
 
   @override
   Widget build(BuildContext context) {
-    _updateLanguageState(context);
-
     return BlocProvider(
       create: (context) => languageBloc,
       child: Scaffold(
@@ -54,7 +67,9 @@ class LanguageScreen extends StatelessWidget {
                       },
                     ),
                   ),
-                  _buildNextButton(context),
+                  appNavigator.canPop(context)
+                      ? const _BackButton()
+                      : const _NextButton(),
                 ],
               ),
             ),
@@ -95,35 +110,6 @@ class LanguageScreen extends StatelessWidget {
         crossAxisCount: 3,
       ),
       itemCount: DeviceLanguage.values.length,
-    );
-  }
-
-  Widget _buildNextButton(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(kDefaultSpacing),
-        child: BlocBuilder<LanguageBloc, LanguageState>(
-          builder: (context, state) {
-            final isLoading = state is LanguageLoading;
-
-            return AsyncButton(
-              key: const Key("language_screen_next_button"),
-              isLoading: isLoading,
-              // TODO: Implement this
-              ///  onPressed: () => controller.next(),
-              onPressed: () async {
-                sl<DeviceFeedback>().playVoiceAssistant([
-                  LocaleKeys.va_sign_in_required_1.tr(),
-                  LocaleKeys.va_sign_in_required_2.tr(),
-                  LocaleKeys.va_sign_in_required_3.tr(),
-                ], context);
-              },
-              style: FlatButtonStyle(expanded: true, size: ButtonSize.large),
-              child: const Text(LocaleKeys.next).tr(),
-            );
-          },
-        ),
-      ),
     );
   }
 

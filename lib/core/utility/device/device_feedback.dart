@@ -13,13 +13,15 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 import '../../../core/core.dart';
+import '../../../data/data.dart';
+import '../../../injection.dart';
 
 /// [DeviceFeedback] is useful for a blind user to recognize process when
 /// interact with an App
 abstract class DeviceFeedback {
   Future<void> vibrate();
 
-  bool get isHaptickEnable;
+  bool get isHapticsEnable;
   bool get isVoiceAssistantEnable;
 
   /// Playing voice assistant based on [messages]
@@ -28,25 +30,17 @@ abstract class DeviceFeedback {
     BuildContext context, {
     bool immediately = false,
   });
-
-  /// Set enable feedback
-  ///
-  /// The default of [enableHaptick] and [enableVoiceAssistant] is true
-  void enableFeedback({
-    bool? enableHaptick,
-    bool? enableVoiceAssistant,
-  });
 }
 
 class DeviceFeedbackImpl implements DeviceFeedback {
-  bool _enableHaptick = true;
-  bool _enableVoiceAssistant = true;
+  final SettingsRepository _settingsRepository = sl<SettingsRepository>();
   final FlutterTts _flutterTts = FlutterTts();
+
   DeviceLanguage? _tempLanguage;
 
   @override
   Future<void> vibrate() async {
-    if (_enableHaptick) {
+    if (isHapticsEnable) {
       await HapticFeedback.vibrate();
     }
   }
@@ -57,7 +51,7 @@ class DeviceFeedbackImpl implements DeviceFeedback {
     BuildContext context, {
     bool immediately = false,
   }) async {
-    if (_enableVoiceAssistant && messages.isNotEmpty) {
+    if (isVoiceAssistantEnable && messages.isNotEmpty) {
       DeviceLanguage? language = context.locale.toDeviceLanguage();
 
       if (immediately) {
@@ -144,22 +138,8 @@ class DeviceFeedbackImpl implements DeviceFeedback {
   }
 
   @override
-  void enableFeedback({
-    bool? enableHaptick,
-    bool? enableVoiceAssistant,
-  }) {
-    if (enableHaptick != null) {
-      _enableHaptick = enableHaptick;
-    }
-
-    if (enableVoiceAssistant != null) {
-      _enableVoiceAssistant = enableVoiceAssistant;
-    }
-  }
+  bool get isHapticsEnable => _settingsRepository.isHapticsEnable;
 
   @override
-  bool get isHaptickEnable => _enableHaptick;
-
-  @override
-  bool get isVoiceAssistantEnable => _enableVoiceAssistant;
+  bool get isVoiceAssistantEnable => _settingsRepository.isVoiceAssistantEnable;
 }

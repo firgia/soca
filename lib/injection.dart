@@ -37,14 +37,14 @@ Future<void> setupInjection() async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
   /* ---------------------------------> CORE <------------------------------- */
-  sl.registerSingleton<CallKit>(CallKit());
-  sl.registerSingleton<DeviceFeedback>(DeviceFeedbackImpl());
-  sl.registerSingleton<DeviceInfo>(DeviceInfoImpl());
-  sl.registerSingleton<DeviceSettings>(DeviceSettingsImpl());
+  sl.registerLazySingleton<CallKit>(() => CallKit());
+  sl.registerLazySingleton<DeviceFeedback>(() => DeviceFeedbackImpl());
+  sl.registerLazySingleton<DeviceInfo>(() => DeviceInfoImpl());
+  sl.registerLazySingleton<DeviceSettings>(() => DeviceSettingsImpl());
 
   /* --------------------------------> CONFIG <------------------------------ */
-  sl.registerSingleton<AppNavigator>(AppNavigator());
-  sl.registerSingleton<AppSystemOverlay>(AppSystemOverlayImpl());
+  sl.registerLazySingleton<AppNavigator>(() => AppNavigator());
+  sl.registerLazySingleton<AppSystemOverlay>(() => AppSystemOverlayImpl());
 
   /* ---------------------------------> DATA <------------------------------- */
   sl.registerLazySingleton<AppProvider>(() => AppProviderImpl());
@@ -56,6 +56,7 @@ Future<void> setupInjection() async {
   sl.registerLazySingleton<LocalLanguageProvider>(
       () => LocalLanguageProviderImpl());
   sl.registerLazySingleton<OneSignalProvider>(() => OneSignalProviderImpl());
+  sl.registerLazySingleton<SettingsProvider>(() => SettingsProviderImpl());
   sl.registerLazySingleton<UserProvider>(() => UserProviderImpl());
   sl.registerLazySingleton<AppRepository>(() => AppRepositoryImpl());
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
@@ -64,6 +65,7 @@ Future<void> setupInjection() async {
   sl.registerLazySingleton<LanguageRepository>(() => LanguageRepositoryImpl());
   sl.registerLazySingleton<OnesignalRepository>(
       () => OnesignalRepositoryImpl());
+  sl.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl());
   sl.registerLazySingleton<UserRepository>(() => UserRepositoryImpl());
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
@@ -108,5 +110,6 @@ Future<void> setupInjection() async {
   sl.registerFactory<VideoCallBloc>(() => VideoCallBloc());
   sl.registerFactory<AccountCubit>(() => AccountCubit());
   sl.registerFactory<RouteCubit>(() => RouteCubit());
+  sl.registerFactory<SettingsCubit>(() => SettingsCubit());
   sl.registerFactory<SignOutCubit>(() => SignOutCubit());
 }

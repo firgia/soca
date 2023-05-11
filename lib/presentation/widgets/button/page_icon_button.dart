@@ -19,6 +19,8 @@ class PageIconButton extends StatelessWidget with UIMixin {
     required this.label,
     this.iconColor,
     this.onPressed,
+    this.borderRadius,
+    this.padding,
     super.key,
   });
 
@@ -26,16 +28,21 @@ class PageIconButton extends StatelessWidget with UIMixin {
   final IconData icon;
   final Color? iconColor;
   final VoidCallback? onPressed;
+  final EdgeInsets? padding;
+  final BorderRadius? borderRadius;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: kDefaultSpacing),
+      shape: RoundedRectangleBorder(
+        borderRadius: borderRadius ?? BorderRadius.circular(kBorderRadius),
+      ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(kBorderRadius),
+        borderRadius: borderRadius ?? BorderRadius.circular(kBorderRadius),
         onTap: onPressed,
         child: Padding(
-          padding: const EdgeInsets.all(kDefaultSpacing),
+          padding: padding ?? const EdgeInsets.all(kDefaultSpacing),
           child: Row(
             children: [
               Icon(

@@ -39,7 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final DeviceFeedback deviceFeedback = sl<DeviceFeedback>();
   final IncomingCallBloc incomingCallBloc = sl<IncomingCallBloc>();
   final RouteCubit routeCubit = sl<RouteCubit>();
-  final SignOutCubit signOutCubit = sl<SignOutCubit>();
   final UserBloc userBloc = sl<UserBloc>();
   final UserRepository userRepository = sl<UserRepository>();
 
@@ -91,7 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
       providers: [
         BlocProvider(create: (context) => callStatisticBloc),
         BlocProvider(create: (context) => routeCubit),
-        BlocProvider(create: (context) => signOutCubit),
         BlocProvider(create: (context) => userBloc),
       ],
       child: MultiBlocListener(
@@ -102,13 +100,6 @@ class _HomeScreenState extends State<HomeScreen> {
               if (state is AssistantCommandCallVolunteerLoaded) {
                 appNavigator.goToCreateCall(context, user: state.data);
                 assistantCommandBloc.add(const AssistantCommandEventRemoved());
-              }
-            },
-          ),
-          BlocListener<SignOutCubit, SignOutState>(
-            listener: (context, state) {
-              if (state is SignOutSuccessfully || state is SignOutError) {
-                appNavigator.goToSplash(context);
               }
             },
           ),
@@ -162,8 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _CallStatistic(),
                   SizedBox(height: kDefaultSpacing * 1.5),
                   _CallHistoryButton(),
-                  SizedBox(height: kDefaultSpacing * 1.5),
-                  _SignOutButton(),
+                  _SettingsButton(),
                   SizedBox(height: kDefaultSpacing * 2),
                 ],
               ),

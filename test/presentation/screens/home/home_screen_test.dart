@@ -34,7 +34,6 @@ void main() {
   late MockDeviceSettings deviceSettings;
   late MockIncomingCallBloc incomingCallBloc;
   late MockRouteCubit routeCubit;
-  late MockSignOutCubit signOutCubit;
   late MockUserBloc userBloc;
   late MockUserRepository userRepository;
   late MockWidgetsBinding widgetBinding;
@@ -51,7 +50,6 @@ void main() {
     deviceSettings = getMockDeviceSettings();
     incomingCallBloc = getMockIncomingCallBloc();
     routeCubit = getMockRouteCubit();
-    signOutCubit = getMockSignOutCubit();
     userBloc = getMockUserBloc();
     userRepository = getMockUserRepository();
     widgetBinding = getMockWidgetsBinding();
@@ -91,10 +89,10 @@ void main() {
       find.byKey(const Key("permission_message_permanently_denied"));
   Finder findRestricted() =>
       find.byKey(const Key("permission_message_restricted"));
-  Finder findSignOutButton() =>
-      find.byKey(const Key("home_screen_sign_out_button"));
-  Finder findSettingsButton() =>
+  Finder findMessageSettingsButton() =>
       find.byKey(const Key("permission_message_settings_button"));
+  Finder findSettingsButton() =>
+      find.byKey(const Key("home_screen_settings_button"));
   Finder findCallStatisticCard() =>
       find.byKey(const Key("call_statistics_card"));
   Finder findCallStatisticCardAdaptiveLoading() =>
@@ -205,11 +203,9 @@ void main() {
       ));
     });
 
-    testWidgets(
-        'Should hide [LoadingPanel] when state is not [RouteLoading] and [SignOutLoading]',
+    testWidgets('Should hide [LoadingPanel] when state is not [RouteLoading] ',
         (tester) async {
       await tester.runAsync(() async {
-        when(signOutCubit.state).thenReturn(const SignOutSuccessfully());
         when(routeCubit.state).thenReturn(const RouteError());
 
         await tester.pumpApp(child: const HomeScreen());
@@ -221,16 +217,6 @@ void main() {
         (tester) async {
       await tester.runAsync(() async {
         when(routeCubit.state).thenReturn(const RouteLoading());
-
-        await tester.pumpApp(child: const HomeScreen());
-        expect(findLoadingPanel(), findsOneWidget);
-      });
-    });
-
-    testWidgets("Should show LoadingPanel when state is [SignOutLoading]",
-        (tester) async {
-      await tester.runAsync(() async {
-        when(signOutCubit.state).thenReturn(const SignOutLoading());
 
         await tester.pumpApp(child: const HomeScreen());
         expect(findLoadingPanel(), findsOneWidget);
@@ -419,19 +405,6 @@ void main() {
         );
 
         verify(appNavigator.goToUnknownDevice(any));
-      });
-    });
-
-    testWidgets('Should navigate to splash page when [SignOutSuccessfully]',
-        (tester) async {
-      await tester.runAsync(() async {
-        when(signOutCubit.stream).thenAnswer(
-          (_) => Stream.value(const SignOutSuccessfully()),
-        );
-
-        await tester.pumpApp(child: const HomeScreen());
-
-        verify(appNavigator.goToSplash(any));
       });
     });
   });
@@ -666,7 +639,7 @@ void main() {
             expect(findPermanentlyDenied(), findsOneWidget);
 
             // tapped settings button on alert message
-            await tester.tap(findSettingsButton());
+            await tester.tap(findMessageSettingsButton());
             await tester.pump();
             verify(deviceSettings.openAppSettings());
           });
@@ -781,7 +754,7 @@ void main() {
             expect(findPermanentlyDenied(), findsOneWidget);
 
             // tapped settings button on alert message
-            await tester.tap(findSettingsButton());
+            await tester.tap(findMessageSettingsButton());
             await tester.pump();
             verify(deviceSettings.openAppSettings());
           });
@@ -897,7 +870,7 @@ void main() {
             expect(findPermanentlyDenied(), findsOneWidget);
 
             // tapped settings button on alert message
-            await tester.tap(findSettingsButton());
+            await tester.tap(findMessageSettingsButton());
             await tester.pump();
             verify(deviceSettings.openNotificationSettings());
           });
@@ -1214,7 +1187,7 @@ void main() {
     });
   });
 
-  group("Sign Out Button", () {
+  group("Settings Button", () {
     setUp(() {
       when(callStatisticBloc.state).thenReturn(const CallStatisticState(
         calls: [],
@@ -1226,7 +1199,7 @@ void main() {
       ));
     });
 
-    testWidgets("Should show sign out button", (tester) async {
+    testWidgets("Should show call settings button", (tester) async {
       await tester.runAsync(() async {
         await tester.setScreenSize(iphone14);
         await tester.pumpApp(child: const HomeScreen());
@@ -1234,12 +1207,12 @@ void main() {
         await tester.drag(find.byType(SwipeRefresh), const Offset(0, -100));
         await tester.pump();
 
-        expect(findSignOutButton(), findsOneWidget);
+        expect(findSettingsButton(), findsOneWidget);
       });
     });
 
     testWidgets(
-        "Should call [signOutCubit.signOut()] when sign out button is tapped",
+        "Should navigate to settings page when settings button is tapped",
         (tester) async {
       await tester.runAsync(() async {
         await tester.setScreenSize(iphone14);
@@ -1248,11 +1221,11 @@ void main() {
         await tester.drag(find.byType(SwipeRefresh), const Offset(0, -100));
         await tester.pump();
 
-        await tester.ensureVisible(findSignOutButton());
-        await tester.tap(findSignOutButton());
+        await tester.ensureVisible(findSettingsButton());
+        await tester.tap(findSettingsButton());
         await tester.pump();
 
-        verify(signOutCubit.signOut());
+        verify(appNavigator.goToSettings(any));
       });
     });
   });

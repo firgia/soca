@@ -19,6 +19,7 @@ export 'loading/loading.dart';
 export 'message/message.dart';
 export 'shadow/shadow.dart';
 export 'style/style.dart';
+export 'switch/switch.dart';
 export 'text/text.dart';
 export 'text_field/text_field.dart';
 export 'utility/utility.dart';

@@ -72,20 +72,13 @@ class _LoadingWrapper extends StatelessWidget {
     return Stack(
       children: [
         child,
-        BlocBuilder<SignOutCubit, SignOutState>(
-          builder: (context, signOutState) {
-            return BlocBuilder<RouteCubit, RouteState>(
-              builder: (context, routeState) {
-                bool isLoading = (routeState is RouteLoading) ||
-                    (signOutState is SignOutLoading);
-
-                if (isLoading) {
-                  return const LoadingPanel();
-                } else {
-                  return const SizedBox();
-                }
-              },
-            );
+        BlocBuilder<RouteCubit, RouteState>(
+          builder: (context, state) {
+            if (state is RouteLoading) {
+              return const LoadingPanel();
+            } else {
+              return const SizedBox();
+            }
           },
         ),
       ],
@@ -435,7 +428,17 @@ class _CallHistoryButton extends StatelessWidget {
       key: const Key("home_screen_call_history_button"),
       icon: EvaIcons.clockOutline,
       label: LocaleKeys.call_history.tr(),
-      iconColor: Colors.amber,
+      iconColor: AppColors.blue,
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(kBorderRadius),
+        topRight: Radius.circular(kBorderRadius),
+      ),
+      padding: const EdgeInsets.only(
+        bottom: kDefaultSpacing * .75,
+        right: kDefaultSpacing,
+        left: kDefaultSpacing,
+        top: kDefaultSpacing,
+      ),
       onPressed: () {
         sl<AppNavigator>().goToCallHistory(context);
       },
@@ -443,46 +446,29 @@ class _CallHistoryButton extends StatelessWidget {
   }
 }
 
-class _SignOutButton extends StatelessWidget {
-  const _SignOutButton();
+class _SettingsButton extends StatelessWidget {
+  const _SettingsButton();
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      key: const Key("home_screen_sign_out_button"),
-      margin: const EdgeInsets.symmetric(horizontal: kDefaultSpacing),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(kBorderRadius),
-        onTap: () {
-          context.read<SignOutCubit>().signOut();
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(kDefaultSpacing * 1.1),
-          child: BrightnessBuilder(builder: (context, brightness) {
-            Color color = brightness == Brightness.dark
-                ? Colors.redAccent[100]!
-                : AppColors.red;
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  EvaIcons.logOut,
-                  color: color,
-                ),
-                const SizedBox(width: kDefaultSpacing / 2),
-                Text(
-                  LocaleKeys.sign_out.tr(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(color: color),
-                ),
-                const SizedBox(width: kDefaultSpacing / 2),
-              ],
-            );
-          }),
-        ),
+    return PageIconButton(
+      key: const Key("home_screen_settings_button"),
+      icon: EvaIcons.settingsOutline,
+      label: LocaleKeys.settings.tr(),
+      iconColor: AppColors.blue,
+      borderRadius: const BorderRadius.only(
+        bottomLeft: Radius.circular(kBorderRadius),
+        bottomRight: Radius.circular(kBorderRadius),
       ),
+      padding: const EdgeInsets.only(
+        bottom: kDefaultSpacing,
+        right: kDefaultSpacing,
+        left: kDefaultSpacing,
+        top: kDefaultSpacing * .75,
+      ),
+      onPressed: () {
+        sl<AppNavigator>().goToSettings(context);
+      },
     );
   }
 }
