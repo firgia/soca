@@ -60,8 +60,6 @@ class RouteCubit extends Cubit<RouteState> {
 
     bool isSignedIn = await authRepository.isSignedIn();
 
-    // TODO: Must add more validation
-    // Check is first time use app
     if (isSignedIn) {
       RouteError? error;
 
