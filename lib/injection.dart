@@ -110,6 +110,6 @@ Future<void> setupInjection() async {
   sl.registerFactory<VideoCallBloc>(() => VideoCallBloc());
   sl.registerFactory<AccountCubit>(() => AccountCubit());
   sl.registerFactory<RouteCubit>(() => RouteCubit());
-  sl.registerLazySingleton<SettingsCubit>(() => SettingsCubit());
+  sl.registerFactory<SettingsCubit>(() => SettingsCubit());
   sl.registerFactory<SignOutCubit>(() => SignOutCubit());
 }

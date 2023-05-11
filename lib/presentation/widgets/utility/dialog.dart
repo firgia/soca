@@ -126,9 +126,12 @@ class AppDialog {
       barrierDismissible: false,
       context: context,
       barrierColor: AppColors.barrier,
-      builder: (_) => const AdaptiveLoading(
-        radius: 24,
-        color: Colors.white,
+      builder: (_) => WillPopScope(
+        onWillPop: () async => false,
+        child: const AdaptiveLoading(
+          radius: 24,
+          color: Colors.white,
+        ),
       ),
     );
   }
