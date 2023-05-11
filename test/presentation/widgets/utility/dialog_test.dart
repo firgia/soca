@@ -35,6 +35,7 @@ void main() {
       find.byKey(const Key("dialog_pick_image_camera_icon_button"));
   Finder findPickImageGalleryIcon() =>
       find.byKey(const Key("dialog_pick_image_gallery_icon_button"));
+  Finder findAdaptiveLoading() => find.byType(AdaptiveLoading);
 
   group(".pickImage()", () {
     setUp(() {
@@ -298,6 +299,72 @@ void main() {
         expect(
           find.byKey(const Key("test_child_dark")),
           findsNothing,
+        );
+      });
+    });
+  });
+
+  group(".showLoadingPanel()", () {
+    setUp(() {
+      when(window.platformBrightness).thenReturn(Brightness.dark);
+      when(widgetBinding.window).thenReturn(window);
+    });
+
+    Future showLoadingPanel(WidgetTester tester) async {
+      await tester.pumpApp(
+        child: Scaffold(
+          body: Builder(
+            builder: (context) {
+              return ElevatedButton(
+                onPressed: () {
+                  AppDialog dialog = AppDialog(context);
+                  dialog.showLoadingPanel();
+                },
+                child: const Text("show dialog"),
+              );
+            },
+          ),
+        ),
+      );
+
+      await tester.tap(find.text("show dialog"));
+      await tester.pump();
+    }
+
+    testWidgets("Should show [AdaptiveLoading]", (tester) async {
+      await tester.runAsync(() async {
+        await showLoadingPanel(tester);
+
+        expect(
+          findAdaptiveLoading(),
+          findsOneWidget,
+        );
+      });
+    });
+
+    testWidgets("Should still show when screen is tapped", (tester) async {
+      await tester.runAsync(() async {
+        await showLoadingPanel(tester);
+
+        expect(
+          findAdaptiveLoading(),
+          findsOneWidget,
+        );
+
+        await tester.tapAt(const Offset(10, 10));
+        await tester.pump();
+
+        expect(
+          findAdaptiveLoading(),
+          findsOneWidget,
+        );
+
+        await tester.tapAt(const Offset(30, 30));
+        await tester.pump();
+
+        expect(
+          findAdaptiveLoading(),
+          findsOneWidget,
         );
       });
     });

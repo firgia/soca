@@ -74,6 +74,8 @@ void main() {
       ' is true and [userDevice] is null',
       build: () => RouteCubit(),
       setUp: () {
+        when(settingsRepository.hasPickLanguage).thenReturn(true);
+
         when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
       },
       act: (route) => route.getTargetRoute(checkDifferentDevice: true),
@@ -88,6 +90,7 @@ void main() {
       '[checkDifferentDevice] is true and [userDevice] is not null',
       build: () => RouteCubit(),
       setUp: () {
+        when(settingsRepository.hasPickLanguage).thenReturn(true);
         when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
       },
       act: (route) => route.getTargetRoute(
@@ -143,6 +146,7 @@ void main() {
       build: () => RouteCubit(),
       act: (route) => route.getTargetRoute(),
       setUp: () {
+        when(settingsRepository.hasPickLanguage).thenReturn(true);
         when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
         when(userRepository.getProfile())
             .thenAnswer((_) => Future.value(const User()));
@@ -164,6 +168,7 @@ void main() {
       build: () => RouteCubit(),
       act: (route) => route.getTargetRoute(),
       setUp: () {
+        when(settingsRepository.hasPickLanguage).thenReturn(true);
         when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
         when(userRepository.getProfile())
             .thenAnswer((_) => Future.value(const User()));
@@ -201,6 +206,7 @@ void main() {
       build: () => RouteCubit(),
       act: (route) => route.getTargetRoute(),
       setUp: () {
+        when(settingsRepository.hasPickLanguage).thenReturn(true);
         when(authRepository.isSignedIn()).thenAnswer((_) => Future.value(true));
         when(userRepository.getProfile()).thenThrow(Exception());
       },

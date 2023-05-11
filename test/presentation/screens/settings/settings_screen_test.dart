@@ -23,6 +23,8 @@ void main() {
   late MockAccountCubit accountCubit;
   late MockAppNavigator appNavigator;
   late MockSettingsCubit settingsCubit;
+  late MockSignOutCubit signOutCubit;
+  late MockWidgetsBinding widgetBinding;
 
   setUp(() {
     registerLocator();
@@ -30,17 +32,27 @@ void main() {
     accountCubit = getMockAccountCubit();
     appNavigator = getMockAppNavigator();
     settingsCubit = getMockSettingsCubit();
+    signOutCubit = getMockSignOutCubit();
+    widgetBinding = getMockWidgetsBinding();
+
+    MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
+    when(window.platformBrightness).thenReturn(Brightness.dark);
+    when(widgetBinding.window).thenReturn(window);
   });
 
   tearDown(() => unregisterLocator());
 
   Finder findAccountCard() =>
       find.byKey(const Key("settings_screen_account_card"));
+
+  Finder findAdaptiveLoading() => find.byType(AdaptiveLoading);
   Finder findHaptics() => find.byKey(const Key("settings_screen_haptics"));
   Finder findHapticsSwitch() =>
       find.byKey(const Key("settings_screen_haptics_switch"));
   Finder findLanguageButton() =>
       find.byKey(const Key("settings_screen_language_button"));
+  Finder findSignOutButton() =>
+      find.byKey(const Key("settings_screen_sign_out_button"));
   Finder findVoiceAssistant() =>
       find.byKey(const Key("settings_screen_voice_assistant"));
   Finder findVoiceAssistantSwitch() =>
@@ -52,6 +64,54 @@ void main() {
         await tester.pumpApp(child: const SettingsScreen());
 
         verify(accountCubit.getAccountData());
+      });
+    });
+  });
+
+  group("Bloc Listener", () {
+    testWidgets('Should navigate to splash page when [SignOutSuccessfully]',
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signOutCubit.stream)
+            .thenAnswer((_) => Stream.value(const SignOutSuccessfully()));
+
+        await tester.pumpApp(child: const SettingsScreen());
+
+        verify(
+          appNavigator.goToSplash(
+            any,
+          ),
+        );
+      });
+    });
+
+    testWidgets('Should navigate to splash page when [SignOutError]',
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signOutCubit.stream)
+            .thenAnswer((_) => Stream.value(const SignOutError()));
+
+        await tester.pumpApp(child: const SettingsScreen());
+
+        verify(
+          appNavigator.goToSplash(
+            any,
+          ),
+        );
+      });
+    });
+
+    testWidgets(
+        'Should show [AdaptiveLoading] when to splash page when [SignOutLoading]',
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signOutCubit.stream)
+            .thenAnswer((_) => Stream.value(const SignOutLoading()));
+
+        await tester.pumpApp(child: const SettingsScreen());
+        await tester.pump();
+
+        expect(findAdaptiveLoading(), findsOneWidget);
       });
     });
   });
@@ -251,6 +311,32 @@ void main() {
             findVoiceAssistantSwitch().getWidget() as CupertinoSwitch;
 
         expect(cupertinoSwitch.value, isTrue);
+      });
+    });
+  });
+
+  group("Sign Out Button", () {
+    testWidgets("Should show sign out button", (tester) async {
+      await tester.runAsync(() async {
+        await tester.setScreenSize(iphone14);
+        await tester.pumpApp(child: const SettingsScreen());
+
+        expect(findSignOutButton(), findsOneWidget);
+      });
+    });
+
+    testWidgets(
+        "Should call [signOutCubit.signOut()] when sign out button is tapped",
+        (tester) async {
+      await tester.runAsync(() async {
+        await tester.setScreenSize(iphone14);
+        await tester.pumpApp(child: const SettingsScreen());
+
+        await tester.ensureVisible(findSignOutButton());
+        await tester.tap(findSignOutButton());
+        await tester.pump();
+
+        verify(signOutCubit.signOut());
       });
     });
   });

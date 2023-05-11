@@ -135,3 +135,47 @@ class _LanguageButton extends StatelessWidget {
     );
   }
 }
+
+class _SignOutButton extends StatelessWidget {
+  const _SignOutButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      key: const Key("settings_screen_sign_out_button"),
+      margin: const EdgeInsets.symmetric(horizontal: kDefaultSpacing),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(kBorderRadius),
+        onTap: () {
+          context.read<SignOutCubit>().signOut();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(kDefaultSpacing * 1.1),
+          child: BrightnessBuilder(builder: (context, brightness) {
+            Color color = brightness == Brightness.dark
+                ? Colors.redAccent[100]!
+                : AppColors.red;
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  EvaIcons.logOut,
+                  color: color,
+                ),
+                const SizedBox(width: kDefaultSpacing / 2),
+                Text(
+                  LocaleKeys.sign_out.tr(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(color: color),
+                ),
+                const SizedBox(width: kDefaultSpacing / 2),
+              ],
+            );
+          }),
+        ),
+      ),
+    );
+  }
+}
