@@ -9,6 +9,7 @@
 
 abstract class AppPages {
   static String get answerCall => "answer_call";
+  static String get callEnded => "call_ended";
   static String get callHistory => "call_history";
   static String get createCall => "create_call";
   static String get initialLanguage => "initial_language";

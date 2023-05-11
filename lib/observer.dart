@@ -59,6 +59,9 @@ class AppNavigatorObserver extends NavigatorObserver {
       _appSystemOverlay.setSystemUIOverlayStyleForCall();
     } else if (routeName == AppPages.splash) {
       _appSystemOverlay.setSystemUIOverlayStyleForSplash();
+    } else if (routeName == AppPages.callEnded) {
+      Wakelock.disable();
+      _appSystemOverlay.setSystemUIOverlayStyle();
     }
   }
 
