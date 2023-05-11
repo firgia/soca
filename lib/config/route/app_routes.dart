@@ -54,10 +54,16 @@ abstract class AppRoutes {
                 ),
               ),
               GoRoute(
-                path: AppPages.settings,
-                name: AppPages.settings,
-                builder: (context, state) => const SettingsScreen(),
-              ),
+                  path: AppPages.settings,
+                  name: AppPages.settings,
+                  builder: (context, state) => const SettingsScreen(),
+                  routes: [
+                    GoRoute(
+                      path: AppPages.language,
+                      name: AppPages.language,
+                      builder: (context, state) => const LanguageScreen(),
+                    ),
+                  ]),
             ],
           ),
           GoRoute(
@@ -69,11 +75,6 @@ abstract class AppRoutes {
             path: "/${AppPages.signUp}",
             name: AppPages.signUp,
             builder: (context, state) => const SignUpScreen(),
-          ),
-          GoRoute(
-            path: "/${AppPages.language}",
-            name: AppPages.language,
-            builder: (context, state) => LanguageScreen(),
           ),
           GoRoute(
             path: "/${AppPages.unknownDevice}",

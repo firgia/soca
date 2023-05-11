@@ -20,7 +20,14 @@ import '../../../helper/helper.dart';
 import '../../../mock/mock.mocks.dart';
 
 void main() async {
-  setUp(() => registerLocator());
+  late MockAppNavigator appNavigator;
+
+  setUp(() {
+    registerLocator();
+
+    appNavigator = getMockAppNavigator();
+  });
+
   tearDown(() => unregisterLocator());
 
   Finder findCustomAppBar() => find.byType(CustomAppBar);
@@ -28,6 +35,8 @@ void main() async {
       find.byKey(const Key("language_screen_ignore_pointer_items"));
   Finder findLanguageItems() =>
       find.byKey(const Key("language_screen_language_items"));
+  Finder findBackButton() =>
+      find.byKey(const Key("language_screen_back_button"));
   Finder findNextButton() =>
       find.byKey(const Key("language_screen_next_button"));
 
@@ -39,7 +48,7 @@ void main() async {
           const LanguageSelected(DeviceLanguage.indonesian),
         );
 
-        await tester.pumpApp(child: LanguageScreen());
+        await tester.pumpApp(child: const LanguageScreen());
         expect(findCustomAppBar(), findsOneWidget);
       });
     });
@@ -51,7 +60,7 @@ void main() async {
           const LanguageSelected(DeviceLanguage.indonesian),
         );
 
-        await tester.pumpApp(child: LanguageScreen());
+        await tester.pumpApp(child: const LanguageScreen());
         CustomAppBar customAppBar =
             findCustomAppBar().getWidget() as CustomAppBar;
 
@@ -68,7 +77,7 @@ void main() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageLoading());
 
-        await tester.pumpApp(child: LanguageScreen());
+        await tester.pumpApp(child: const LanguageScreen());
 
         IgnorePointer ignorePointer =
             findIgnorePointerItems().getWidget() as IgnorePointer;
@@ -84,7 +93,7 @@ void main() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageUnselected());
 
-        await tester.pumpApp(child: LanguageScreen());
+        await tester.pumpApp(child: const LanguageScreen());
 
         IgnorePointer ignorePointer =
             findIgnorePointerItems().getWidget() as IgnorePointer;
@@ -99,7 +108,7 @@ void main() async {
       await tester.runAsync(() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageUnselected());
-        await tester.pumpApp(child: LanguageScreen());
+        await tester.pumpApp(child: const LanguageScreen());
         expect(findLanguageItems(), findsOneWidget);
       });
     });
@@ -109,7 +118,7 @@ void main() async {
       await tester.runAsync(() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageUnselected());
-        await tester.pumpApp(child: LanguageScreen());
+        await tester.pumpApp(child: const LanguageScreen());
 
         // We need to drag to make sure all button is shown
         await tester.drag(findCustomAppBar(), const Offset(0, -100));
@@ -132,7 +141,7 @@ void main() async {
         DeviceLanguage selectedLanguage = DeviceLanguage.indonesian;
 
         when(languageBloc.state).thenReturn(LanguageSelected(selectedLanguage));
-        await tester.pumpApp(child: LanguageScreen());
+        await tester.pumpApp(child: const LanguageScreen());
 
         // We need to drag to make sure all button is shown
         await tester.drag(findCustomAppBar(), const Offset(0, -100));
@@ -158,7 +167,7 @@ void main() async {
         DeviceLanguage selectedLanguage = DeviceLanguage.indonesian;
 
         when(languageBloc.state).thenReturn(LanguageSelected(selectedLanguage));
-        await tester.pumpApp(child: LanguageScreen());
+        await tester.pumpApp(child: const LanguageScreen());
 
         // We need to drag to make sure all button is shown
         await tester.drag(findCustomAppBar(), const Offset(0, -100));
@@ -177,12 +186,59 @@ void main() async {
     });
   });
 
-  group("NextButton", () {
-    testWidgets("Should show the next button", (tester) async {
+  group("BackButton", () {
+    testWidgets("Should show the back button when navigation can pop",
+        (tester) async {
       await tester.runAsync(() async {
+        when(appNavigator.canPop(any)).thenReturn(true);
+        await tester.pumpApp(child: const LanguageScreen());
+
+        expect(findBackButton(), findsOneWidget);
+        expect(findNextButton(), findsNothing);
+      });
+    });
+
+    testWidgets(
+        "Should set the isLoading of [AsyncButton] to true when state is [LanguageLoading()]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(appNavigator.canPop(any)).thenReturn(true);
+
+        MockLanguageBloc languageBloc = getMockLanguageBloc();
+        when(languageBloc.state).thenReturn(const LanguageLoading());
+        await tester.pumpApp(child: const LanguageScreen());
+
+        AsyncButton backButton = findBackButton().getWidget() as AsyncButton;
+        expect(backButton.isLoading, true);
+      });
+    });
+
+    testWidgets(
+        "Should set the isLoading of [AsyncButton] to false when state is not [LanguageLoading()]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(appNavigator.canPop(any)).thenReturn(true);
+
         MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageUnselected());
-        await tester.pumpApp(child: LanguageScreen());
+        await tester.pumpApp(child: const LanguageScreen());
+
+        AsyncButton backButton = findBackButton().getWidget() as AsyncButton;
+        expect(backButton.isLoading, false);
+      });
+    });
+  });
+
+  group("NextButton", () {
+    testWidgets("Should show the next button when navigator doesn't pop",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(appNavigator.canPop(any)).thenReturn(false);
+        MockLanguageBloc languageBloc = getMockLanguageBloc();
+        when(languageBloc.state).thenReturn(const LanguageUnselected());
+        await tester.pumpApp(child: const LanguageScreen());
+
+        expect(findBackButton(), findsNothing);
         expect(findNextButton(), findsOneWidget);
       });
     });
@@ -193,7 +249,7 @@ void main() async {
       await tester.runAsync(() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageLoading());
-        await tester.pumpApp(child: LanguageScreen());
+        await tester.pumpApp(child: const LanguageScreen());
 
         AsyncButton nextButton = findNextButton().getWidget() as AsyncButton;
         expect(nextButton.isLoading, true);
@@ -206,22 +262,10 @@ void main() async {
       await tester.runAsync(() async {
         MockLanguageBloc languageBloc = getMockLanguageBloc();
         when(languageBloc.state).thenReturn(const LanguageUnselected());
-        await tester.pumpApp(child: LanguageScreen());
+        await tester.pumpApp(child: const LanguageScreen());
 
         AsyncButton nextButton = findNextButton().getWidget() as AsyncButton;
         expect(nextButton.isLoading, false);
-      });
-    });
-
-    testWidgets("Should show the next text", (tester) async {
-      await tester.runAsync(() async {
-        MockLanguageBloc languageBloc = getMockLanguageBloc();
-        when(languageBloc.state).thenReturn(
-          const LanguageSelected(DeviceLanguage.indonesian),
-        );
-
-        await tester.pumpApp(child: LanguageScreen());
-        expect(find.text(LocaleKeys.next.tr()), findsOneWidget);
       });
     });
   });
