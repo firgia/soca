@@ -59,6 +59,10 @@ class AppSnackbar {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     deviceFeedback.vibrate();
-    deviceFeedback.playVoiceAssistant(msg);
+    deviceFeedback.playVoiceAssistant(
+      [msg],
+      context,
+      immediately: true,
+    );
   }
 }

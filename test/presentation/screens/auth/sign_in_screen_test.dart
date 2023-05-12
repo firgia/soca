@@ -21,6 +21,7 @@ import '../../../mock/mock.mocks.dart';
 void main() {
   late MockAppNavigator appNavigator;
   late MockDeviceInfo deviceInfo;
+  late MockDeviceFeedback deviceFeedback;
   late MockRouteCubit routeCubit;
   late MockSignInBloc signInBloc;
   late MockWidgetsBinding widgetBinding;
@@ -30,6 +31,7 @@ void main() {
 
     appNavigator = getMockAppNavigator();
     deviceInfo = getMockDeviceInfo();
+    deviceFeedback = getMockDeviceFeedback();
     routeCubit = getMockRouteCubit();
     signInBloc = getMockSignInBloc();
     widgetBinding = getMockWidgetsBinding();
@@ -55,7 +57,7 @@ void main() {
   group("Icons", () {
     testWidgets("Should show the app icon", (tester) async {
       await tester.runAsync(() async {
-        await tester.pumpApp(child: SignInScreen());
+        await tester.pumpApp(child: const SignInScreen());
         expect(find.byType(SocaIconImage), findsOneWidget);
       });
     });
@@ -69,7 +71,7 @@ void main() {
         when(routeCubit.state).thenReturn(const RouteError());
         when(signInBloc.state).thenReturn(const SignInError());
 
-        await tester.pumpApp(child: SignInScreen());
+        await tester.pumpApp(child: const SignInScreen());
         expect(findLoadingPanel(), findsNothing);
       });
     });
@@ -79,7 +81,7 @@ void main() {
       await tester.runAsync(() async {
         when(routeCubit.state).thenReturn(const RouteLoading());
 
-        await tester.pumpApp(child: SignInScreen());
+        await tester.pumpApp(child: const SignInScreen());
         expect(findLoadingPanel(), findsOneWidget);
       });
     });
@@ -89,7 +91,7 @@ void main() {
       await tester.runAsync(() async {
         when(signInBloc.state).thenReturn(const SignInLoading());
 
-        await tester.pumpApp(child: SignInScreen());
+        await tester.pumpApp(child: const SignInScreen());
         expect(findLoadingPanel(), findsOneWidget);
       });
     });
@@ -102,7 +104,7 @@ void main() {
         when(signInBloc.stream)
             .thenAnswer((_) => Stream.value(const SignInSuccessfully()));
 
-        await tester.pumpApp(child: SignInScreen());
+        await tester.pumpApp(child: const SignInScreen());
 
         await tester.tap(findSignInWithGoogleButton());
         await tester.pumpAndSettle();
@@ -122,7 +124,7 @@ void main() {
         when(routeCubit.stream)
             .thenAnswer((_) => Stream.value(RouteTarget(AppPages.home)));
 
-        await tester.pumpApp(child: SignInScreen());
+        await tester.pumpApp(child: const SignInScreen());
 
         await tester.tap(findSignInWithGoogleButton());
         await tester.pumpAndSettle();
@@ -142,7 +144,7 @@ void main() {
         when(routeCubit.stream)
             .thenAnswer((_) => Stream.value(RouteTarget(AppPages.signUp)));
 
-        await tester.pumpApp(child: SignInScreen());
+        await tester.pumpApp(child: const SignInScreen());
 
         await tester.tap(findSignInWithGoogleButton());
         await tester.pumpAndSettle();
@@ -160,7 +162,7 @@ void main() {
 
         when(routeCubit.stream)
             .thenAnswer((_) => Stream.value(const RouteError()));
-        await tester.pumpApp(child: SignInScreen());
+        await tester.pumpApp(child: const SignInScreen());
 
         await tester.tapAt(tester.getCenter(findSignInWithGoogleButton()));
         await tester.pump();
@@ -182,7 +184,7 @@ void main() {
 
         when(routeCubit.stream)
             .thenAnswer((_) => Stream.value(const RouteError()));
-        await tester.pumpApp(child: SignInScreen());
+        await tester.pumpApp(child: const SignInScreen());
 
         await tester.tapAt(tester.getCenter(findSignInWithGoogleButton()));
         await tester.pump();
@@ -209,7 +211,7 @@ void main() {
       await tester.runAsync(() async {
         when(deviceInfo.isIOS()).thenReturn(true);
 
-        await tester.pumpApp(child: SignInScreen());
+        await tester.pumpApp(child: const SignInScreen());
 
         expect(findSignInWithAppleButton(), findsOneWidget);
         expect(findSignInWithGoogleButton(), findsOneWidget);
@@ -222,7 +224,7 @@ void main() {
       await tester.runAsync(() async {
         when(deviceInfo.isIOS()).thenReturn(false);
 
-        await tester.pumpApp(child: SignInScreen());
+        await tester.pumpApp(child: const SignInScreen());
 
         expect(findSignInWithAppleButton(), findsNothing);
         expect(findSignInWithGoogleButton(), findsOneWidget);
@@ -235,7 +237,7 @@ void main() {
       await tester.runAsync(() async {
         when(deviceInfo.isIOS()).thenReturn(true);
 
-        await tester.pumpApp(child: SignInScreen());
+        await tester.pumpApp(child: const SignInScreen());
 
         await tester.tap(findSignInWithAppleButton());
         await tester.pumpAndSettle();
@@ -250,7 +252,7 @@ void main() {
       await tester.runAsync(() async {
         when(deviceInfo.isIOS()).thenReturn(true);
 
-        await tester.pumpApp(child: SignInScreen());
+        await tester.pumpApp(child: const SignInScreen());
 
         await tester.tap(findSignInWithGoogleButton());
         await tester.pumpAndSettle();
@@ -263,7 +265,7 @@ void main() {
   group("Text", () {
     testWidgets("Should show the sign in text", (tester) async {
       await tester.runAsync(() async {
-        await tester.pumpApp(child: SignInScreen());
+        await tester.pumpApp(child: const SignInScreen());
         expect(findSignInText(), findsOneWidget);
         expect(findSignInInfoText(), findsOneWidget);
       });
@@ -271,8 +273,44 @@ void main() {
 
     testWidgets("Should show the volunteer text info", (tester) async {
       await tester.runAsync(() async {
-        await tester.pumpApp(child: SignInScreen());
+        await tester.pumpApp(child: const SignInScreen());
         expect(findVolunteerSignInInfoText(), findsOneWidget);
+      });
+    });
+  });
+
+  group("Voice Assistant", () {
+    testWidgets('Should play sign in info', (tester) async {
+      await tester.runAsync(() async {
+        when(routeCubit.state).thenReturn(const RouteError());
+        when(signInBloc.state).thenReturn(const SignInError());
+
+        await tester.pumpApp(child: const SignInScreen());
+        verify(deviceFeedback.playVoiceAssistant([
+          LocaleKeys.va_sign_in_page.tr(),
+          LocaleKeys.va_sign_in_required_1.tr(),
+          LocaleKeys.va_sign_in_required_2.tr(),
+          LocaleKeys.va_sign_in_required_3.tr(),
+        ], any));
+      });
+    });
+
+    testWidgets(
+        "Should play sign in successfully when state is [SignInSuccessfully]",
+        (tester) async {
+      await tester.runAsync(() async {
+        when(signInBloc.stream)
+            .thenAnswer((_) => Stream.value(const SignInSuccessfully()));
+
+        await tester.pumpApp(child: const SignInScreen());
+
+        verify(
+          deviceFeedback.playVoiceAssistant(
+            [LocaleKeys.va_sign_in_successfully.tr()],
+            any,
+            immediately: true,
+          ),
+        );
       });
     });
   });

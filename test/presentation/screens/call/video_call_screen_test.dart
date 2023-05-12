@@ -79,6 +79,7 @@ void main() {
 
   Finder findAdaptiveLoading() => find.byType(AdaptiveLoading);
   Finder findAgoraView() => find.byType(AgoraVideoView);
+  Finder findCallEndedText() => find.text(LocaleKeys.call_state_ended.tr());
 
   Finder findEndCallButton() =>
       find.byKey(const Key("video_call_screen_end_call_button"));
@@ -88,6 +89,8 @@ void main() {
 
   Finder findEndCallButtonLoading() =>
       find.byKey(const Key("video_call_screen_end_call_button_loading"));
+
+  Finder findEndCallText() => find.text(LocaleKeys.end_call.tr());
 
   Finder findFlashlightButton() =>
       find.byKey(const Key("video_call_screen_flashlight_button"));
@@ -156,6 +159,7 @@ void main() {
           verify(callActionBloc.add(CallActionEnded(callingSetup.id)));
           expect(findEndCallButtonIcon(), findsOneWidget);
           expect(findEndCallButtonLoading(), findsNothing);
+          expect(findEndCallText(), findsOneWidget);
         });
       });
     });
@@ -331,7 +335,7 @@ void main() {
 
   group("Bloc Listener", () {
     testWidgets(
-        'Should back to previous page when [CallActionError] with '
+        'Should go to call ended page page when [CallActionError] with '
         'CallActionType.ended type', (tester) async {
       await mockNetworkImages(() async {
         await tester.runAsync(() async {
@@ -350,13 +354,14 @@ void main() {
 
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
 
-          verify(appNavigator.goToSplash(any));
+          verify(appNavigator.goToCallEnded(any,
+              userType: callingSetup.localUser.type));
         });
       });
     });
 
     testWidgets(
-        "Should back to previous page when [CallActionEndedSuccessfully]",
+        "Should go to call ended page when [CallActionEndedSuccessfully]",
         (tester) async {
       await mockNetworkImages(() async {
         await tester.runAsync(() async {
@@ -375,7 +380,8 @@ void main() {
 
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
 
-          verify(appNavigator.goToSplash(any));
+          verify(appNavigator.goToCallEnded(any,
+              userType: callingSetup.localUser.type));
         });
       });
     });
@@ -423,7 +429,7 @@ void main() {
     });
 
     testWidgets(
-        'Should back to previous page when [VideoCallState.isCallEnded] '
+        'Should go to call ended page when [VideoCallState.isCallEnded] '
         'is true', (tester) async {
       await mockNetworkImages(() async {
         await tester.runAsync(() async {
@@ -438,7 +444,9 @@ void main() {
           when(videoCallBloc.state).thenReturn(state);
           when(videoCallBloc.stream).thenAnswer((_) => Stream.value(state));
           await tester.pumpApp(child: VideoCallScreen(setup: callingSetup));
-          verify(appNavigator.goToSplash(any));
+
+          verify(appNavigator.goToCallEnded(any,
+              userType: callingSetup.localUser.type));
         });
       });
     });
@@ -972,6 +980,8 @@ void main() {
             ),
           );
           verify(rtcEngine.unregisterEventHandler(any));
+          verify(appNavigator.goToCallEnded(any,
+              userType: callingSetup.localUser.type));
         });
       });
     });
@@ -1027,8 +1037,10 @@ void main() {
           await Future.delayed(const Duration(seconds: 2));
           volumeUpAndDown.sink.add(.3);
           await tester.pump();
+          await tester.pump();
 
           verify(callActionBloc.add(CallActionEnded(callingSetup.id)));
+          expect(findEndCallText(), findsOneWidget);
         });
       });
     });

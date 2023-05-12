@@ -12,12 +12,27 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import '../../../config/config.dart';
 import '../../../core/core.dart';
+import '../../../injection.dart';
 import '../../widgets/widgets.dart';
 
 part 'update_app_screen.component.dart';
 
-class UpdateAppScreen extends StatelessWidget {
+class UpdateAppScreen extends StatefulWidget {
   const UpdateAppScreen({super.key});
+
+  @override
+  State<UpdateAppScreen> createState() => _UpdateAppScreenState();
+}
+
+class _UpdateAppScreenState extends State<UpdateAppScreen> {
+  DeviceFeedback deviceFeedback = sl<DeviceFeedback>();
+  bool hasPlayPageInfo = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    playPageInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,5 +62,19 @@ class UpdateAppScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void playPageInfo() {
+    if (mounted && !hasPlayPageInfo) {
+      hasPlayPageInfo = true;
+
+      deviceFeedback.playVoiceAssistant(
+        [
+          LocaleKeys.update_app_required_desc.tr(),
+        ],
+        context,
+        immediately: true,
+      );
+    }
   }
 }

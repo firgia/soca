@@ -11,6 +11,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../config/config.dart';
+import '../loading/loading.dart';
 import 'brightness_builder.dart';
 
 class AppDialog {
@@ -118,6 +119,21 @@ class AppDialog {
         ),
       );
     });
+  }
+
+  Future<void> showLoadingPanel() async {
+    await showDialog(
+      barrierDismissible: false,
+      context: context,
+      barrierColor: AppColors.barrier,
+      builder: (_) => WillPopScope(
+        onWillPop: () async => false,
+        child: const AdaptiveLoading(
+          radius: 24,
+          color: Colors.white,
+        ),
+      ),
+    );
   }
 
   void close() => Navigator.of(context, rootNavigator: true).pop();

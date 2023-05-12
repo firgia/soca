@@ -36,9 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final AssistantCommandBloc assistantCommandBloc = sl<AssistantCommandBloc>();
   final CallStatisticBloc callStatisticBloc = sl<CallStatisticBloc>();
   final DeviceInfo deviceInfo = sl<DeviceInfo>();
+  final DeviceFeedback deviceFeedback = sl<DeviceFeedback>();
   final IncomingCallBloc incomingCallBloc = sl<IncomingCallBloc>();
   final RouteCubit routeCubit = sl<RouteCubit>();
-  final SignOutCubit signOutCubit = sl<SignOutCubit>();
   final UserBloc userBloc = sl<UserBloc>();
   final UserRepository userRepository = sl<UserRepository>();
 
@@ -47,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late final StreamSubscription volumeListenerSubscribtion;
 
   User? user;
+  bool hasPlayPageInfo = false;
 
   @override
   void initState() {
@@ -89,7 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
       providers: [
         BlocProvider(create: (context) => callStatisticBloc),
         BlocProvider(create: (context) => routeCubit),
-        BlocProvider(create: (context) => signOutCubit),
         BlocProvider(create: (context) => userBloc),
       ],
       child: MultiBlocListener(
@@ -100,13 +100,6 @@ class _HomeScreenState extends State<HomeScreen> {
               if (state is AssistantCommandCallVolunteerLoaded) {
                 appNavigator.goToCreateCall(context, user: state.data);
                 assistantCommandBloc.add(const AssistantCommandEventRemoved());
-              }
-            },
-          ),
-          BlocListener<SignOutCubit, SignOutState>(
-            listener: (context, state) {
-              if (state is SignOutSuccessfully || state is SignOutError) {
-                appNavigator.goToSplash(context);
               }
             },
           ),
@@ -136,7 +129,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BlocListener<UserBloc, UserState>(
             listener: (context, state) {
-              if (state is UserLoaded) user = state.data;
+              if (state is UserLoaded) {
+                user = state.data;
+                playPageInfo(state.data);
+              }
             },
           ),
         ],
@@ -157,8 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _CallStatistic(),
                   SizedBox(height: kDefaultSpacing * 1.5),
                   _CallHistoryButton(),
-                  SizedBox(height: kDefaultSpacing * 1.5),
-                  _SignOutButton(),
+                  _SettingsButton(),
                   SizedBox(height: kDefaultSpacing * 2),
                 ],
               ),
@@ -167,6 +162,24 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void playPageInfo(User user) {
+    if (mounted && !hasPlayPageInfo) {
+      hasPlayPageInfo = true;
+      UserType? userType = user.type;
+
+      deviceFeedback.playVoiceAssistant(
+        [
+          LocaleKeys.va_home_page.tr(),
+          if (userType == UserType.blind)
+            LocaleKeys.va_home_page_blind_info.tr(),
+          if (userType == UserType.volunteer)
+            LocaleKeys.va_home_page_volunteer_info.tr()
+        ],
+        context,
+      );
+    }
   }
 
   Future<void> onRefresh() async {

@@ -38,4 +38,5 @@ export 'device_provider.dart';
 export 'functions_provider.dart';
 export 'onesignal_provider.dart';
 export 'local_language_provider.dart';
+export 'settings_provider.dart';
 export 'user_provider.dart';

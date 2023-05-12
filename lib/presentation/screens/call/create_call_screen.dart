@@ -37,13 +37,22 @@ class CreateCallScreen extends StatefulWidget {
 class _CreateCallScreenState extends State<CreateCallScreen> {
   AppNavigator appNavigator = sl<AppNavigator>();
   CallActionBloc callActionBloc = sl<CallActionBloc>();
+  DeviceFeedback deviceFeedback = sl<DeviceFeedback>();
   CallKit callKit = sl<CallKit>();
+  bool hasPlayPageInfo = false;
+  bool hasPlayStartVideoCall = false;
 
   @override
   void initState() {
     super.initState();
 
     callActionBloc.add(const CallActionCreated());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    playPageInfo();
   }
 
   @override
@@ -54,17 +63,25 @@ class _CreateCallScreenState extends State<CreateCallScreen> {
         listener: (context, state) {
           if (state is CallActionCreatedSuccessfully) {
             CallingSetup data = state.data;
-            callKit.startCall(
-              CallKitArgument(
-                id: data.id,
-                nameCaller: data.remoteUser.name,
-                handle: LocaleKeys.volunteer.tr(),
-                type: 1,
-              ),
+            playStartVideoCall().then(
+              (_) {
+                if (mounted) {
+                  callKit.startCall(
+                    CallKitArgument(
+                      id: data.id,
+                      nameCaller: data.remoteUser.name,
+                      handle: LocaleKeys.volunteer.tr(),
+                      type: 1,
+                    ),
+                  );
+                  appNavigator.goToVideoCall(context, setup: state.data);
+                }
+              },
             );
-            appNavigator.goToVideoCall(context, setup: state.data);
           } else if (state is CallActionEndedSuccessfully) {
             appNavigator.back(context);
+            AppSnackbar(context)
+                .showMessage(LocaleKeys.end_call_successfully.tr());
           } else if (state is CallActionCreatedUnanswered) {
             appNavigator.back(context);
             AppSnackbar(context)
@@ -102,5 +119,38 @@ class _CreateCallScreenState extends State<CreateCallScreen> {
         ),
       ),
     );
+  }
+
+  void playPageInfo() {
+    if (mounted && !hasPlayPageInfo) {
+      hasPlayPageInfo = true;
+
+      deviceFeedback.playVoiceAssistant(
+        [
+          LocaleKeys.va_async_calling_volunteer.tr(),
+        ],
+        context,
+        immediately: true,
+      );
+    }
+  }
+
+  Future<void> playStartVideoCall() async {
+    if (mounted && !hasPlayStartVideoCall) {
+      hasPlayStartVideoCall = true;
+
+      deviceFeedback.playVoiceAssistant(
+        [
+          LocaleKeys.va_starting_video_call.tr(),
+        ],
+        context,
+        immediately: true,
+      );
+
+      if (deviceFeedback.isVoiceAssistantEnable) {
+        // Add delay to make sure user hear the 'starting video call' voice
+        await Future.delayed(const Duration(seconds: 2));
+      }
+    }
   }
 }

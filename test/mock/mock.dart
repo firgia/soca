@@ -50,12 +50,14 @@ export 'mock.mocks.dart';
   MockSpec<FunctionsProvider>(),
   MockSpec<LocalLanguageProvider>(),
   MockSpec<OneSignalProvider>(),
+  MockSpec<SettingsProvider>(),
   MockSpec<UserProvider>(),
   MockSpec<AppRepository>(),
   MockSpec<AuthRepository>(),
   MockSpec<CallingRepository>(),
   MockSpec<FileRepository>(),
   MockSpec<LanguageRepository>(),
+  MockSpec<SettingsRepository>(),
   MockSpec<UserRepository>(),
 
   /* -----------------------------> DEPENDENCIES <--------------------------- */
@@ -100,6 +102,7 @@ export 'mock.mocks.dart';
   MockSpec<VideoCallBloc>(),
   MockSpec<AccountCubit>(),
   MockSpec<RouteCubit>(),
+  MockSpec<SettingsCubit>(),
   MockSpec<SignOutCubit>(),
 ])
 main(List<String> args) {}

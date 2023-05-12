@@ -10,6 +10,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/core.dart';
 import '../../data/data.dart';
 import '../../injection.dart';
 import '../config.dart';
@@ -42,6 +43,12 @@ class AppNavigator {
     }
   }
 
+  void goToCallEnded(BuildContext context, {required UserType userType}) {
+    if (_isOutdatedApp(context)) return;
+
+    context.pushReplacementNamed(AppPages.callEnded, extra: userType);
+  }
+
   void goToCallHistory(BuildContext context) {
     if (_isOutdatedApp(context)) return;
     context.pushNamed(AppPages.callHistory);
@@ -59,19 +66,33 @@ class AppNavigator {
     context.pushReplacementNamed(AppPages.home);
   }
 
+  void goToInitialLanguage(BuildContext context) {
+    if (_isOutdatedApp(context)) return;
+    context.pushReplacementNamed(AppPages.initialLanguage);
+  }
+
   void goToLanguage(BuildContext context) {
     if (_isOutdatedApp(context)) return;
-    context.pushReplacementNamed(AppPages.language);
+    context.pushNamed(AppPages.language);
   }
 
   void goToSplash(BuildContext context) {
     if (_isOutdatedApp(context)) return;
+
+    // remove all previous page to make splash screen the single page on route
+    // stack
+    _removeAllPage(context);
     context.pushReplacementNamed(AppPages.splash);
   }
 
   void goToSignIn(BuildContext context) {
     if (_isOutdatedApp(context)) return;
     context.pushReplacementNamed(AppPages.signIn);
+  }
+
+  void goToSettings(BuildContext context) {
+    if (_isOutdatedApp(context)) return;
+    context.pushNamed(AppPages.settings);
   }
 
   void goToSignUp(BuildContext context) {
@@ -87,11 +108,10 @@ class AppNavigator {
   void goToVideoCall(BuildContext context, {required CallingSetup setup}) {
     if (_isCanGoToVideoCall(context)) {
       if (_isOutdatedApp(context)) return;
+
       // remove all previous page to make video call the single page on route
       // stack
-      while (context.canPop()) {
-        context.pop();
-      }
+      _removeAllPage(context);
       context.pushReplacementNamed(AppPages.videoCall, extra: setup);
     }
   }
@@ -104,6 +124,12 @@ class AppNavigator {
     String? page = GoRouterState.of(context).name;
 
     return _isTopStack(context) && page == AppPages.home;
+  }
+
+  void _removeAllPage(BuildContext context) {
+    while (context.canPop()) {
+      context.pop();
+    }
   }
 
   // Return true if page is not answer call

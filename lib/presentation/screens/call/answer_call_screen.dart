@@ -41,6 +41,9 @@ class _AnswerCallScreenState extends State<AnswerCallScreen> {
   AppNavigator appNavigator = sl<AppNavigator>();
   CallActionBloc callActionBloc = sl<CallActionBloc>();
   CallKit callKit = sl<CallKit>();
+  DeviceFeedback deviceFeedback = sl<DeviceFeedback>();
+  bool hasPlayPageInfo = false;
+  bool hasPlayStartVideoCall = false;
 
   @override
   void initState() {
@@ -53,16 +56,30 @@ class _AnswerCallScreenState extends State<AnswerCallScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    playPageInfo();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => callActionBloc,
       child: BlocListener<CallActionBloc, CallActionState>(
         listener: (context, state) {
           if (state is CallActionAnsweredSuccessfully) {
-            appNavigator.goToVideoCall(context, setup: state.data);
+            playStartVideoCall().then(
+              (_) {
+                if (mounted) {
+                  appNavigator.goToVideoCall(context, setup: state.data);
+                }
+              },
+            );
           } else if (state is CallActionEndedSuccessfully) {
             callKit.endAllCalls();
             appNavigator.back(context);
+            AppSnackbar(context)
+                .showMessage(LocaleKeys.end_call_successfully.tr());
           } else if (state is CallActionError) {
             callKit.endAllCalls();
             appNavigator.back(context);
@@ -97,5 +114,39 @@ class _AnswerCallScreenState extends State<AnswerCallScreen> {
         ),
       ),
     );
+  }
+
+  void playPageInfo() {
+    if (mounted && !hasPlayPageInfo) {
+      hasPlayPageInfo = true;
+
+      deviceFeedback.playVoiceAssistant(
+        [
+          LocaleKeys.va_async_answering_call.tr(),
+        ],
+        context,
+        immediately: true,
+      );
+    }
+  }
+
+  Future<void> playStartVideoCall() async {
+    if (mounted && !hasPlayStartVideoCall) {
+      hasPlayStartVideoCall = true;
+      deviceFeedback.playVoiceAssistant(
+        [
+          LocaleKeys.va_starting_video_call.tr(),
+        ],
+        context,
+        immediately: true,
+      );
+
+      // Add delay to make sure user hear the 'starting video call' voice
+
+      if (deviceFeedback.isVoiceAssistantEnable) {
+        // Add delay to make sure user hear the 'starting video call' voice
+        await Future.delayed(const Duration(seconds: 2));
+      }
+    }
   }
 }

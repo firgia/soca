@@ -53,7 +53,10 @@ class _ActionButton extends StatelessWidget {
             key: const Key("video_call_screen_end_call_button"),
             onPressed: isLoading
                 ? null
-                : () => callActionBloc.add(CallActionEnded(callingSetup.id)),
+                : () {
+                    AppSnackbar(context).showMessage(LocaleKeys.end_call.tr());
+                    callActionBloc.add(CallActionEnded(callingSetup.id));
+                  },
             heroTag: null,
             backgroundColor: Colors.red,
             child: isLoading

@@ -22,6 +22,7 @@ class RouteCubit extends Cubit<RouteState> {
 
   final AppRepository appRepository = sl<AppRepository>();
   final AuthRepository authRepository = sl<AuthRepository>();
+  final SettingsRepository settingsRepository = sl<SettingsRepository>();
   final UserRepository userRepository = sl<UserRepository>();
 
   final Logger _logger = Logger("Route Cubit");
@@ -33,6 +34,7 @@ class RouteCubit extends Cubit<RouteState> {
   }) async {
     emit(const RouteLoading());
 
+    // Checking minimum version app
     if (checkMinimumVersion) {
       _logger.info("Checking is outdated version app...");
 
@@ -46,13 +48,18 @@ class RouteCubit extends Cubit<RouteState> {
       }
     }
 
+    // Checking user has pick language
+    if (!settingsRepository.hasPickLanguage) {
+      emit(RouteTarget(AppPages.initialLanguage));
+      _logger.fine("The target route is ${AppPages.initialLanguage}");
+      return;
+    }
+
     String targetName = "/";
     _logger.info("Checking user signed in...");
 
     bool isSignedIn = await authRepository.isSignedIn();
 
-    // TODO: Must add more validation
-    // Check is first time use app
     if (isSignedIn) {
       RouteError? error;
 

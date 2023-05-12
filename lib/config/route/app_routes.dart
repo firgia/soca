@@ -8,6 +8,7 @@
  */
 
 import 'package:go_router/go_router.dart';
+import '../../core/core.dart';
 import '../../data/data.dart';
 import '../../observer.dart';
 import '../../presentation/presentation.dart';
@@ -21,6 +22,13 @@ abstract class AppRoutes {
             path: "/${AppPages.splash}",
             name: AppPages.splash,
             builder: (context, state) => const SplashScreen(),
+          ),
+          GoRoute(
+            path: "/${AppPages.callEnded}",
+            name: AppPages.callEnded,
+            builder: (context, state) => CallEndedScreen(
+              userType: state.extra as UserType,
+            ),
           ),
           GoRoute(
             path: "/${AppPages.home}",
@@ -53,22 +61,33 @@ abstract class AppRoutes {
                   user: state.extra as User,
                 ),
               ),
+              GoRoute(
+                  path: AppPages.settings,
+                  name: AppPages.settings,
+                  builder: (context, state) => const SettingsScreen(),
+                  routes: [
+                    GoRoute(
+                      path: AppPages.language,
+                      name: AppPages.language,
+                      builder: (context, state) => const LanguageScreen(),
+                    ),
+                  ]),
             ],
+          ),
+          GoRoute(
+            path: "/${AppPages.initialLanguage}",
+            name: AppPages.initialLanguage,
+            builder: (context, state) => const LanguageScreen(),
           ),
           GoRoute(
             path: "/${AppPages.signIn}",
             name: AppPages.signIn,
-            builder: (context, state) => SignInScreen(),
+            builder: (context, state) => const SignInScreen(),
           ),
           GoRoute(
             path: "/${AppPages.signUp}",
             name: AppPages.signUp,
-            builder: (context, state) => SignUpScreen(),
-          ),
-          GoRoute(
-            path: "/${AppPages.language}",
-            name: AppPages.language,
-            builder: (context, state) => LanguageScreen(),
+            builder: (context, state) => const SignUpScreen(),
           ),
           GoRoute(
             path: "/${AppPages.unknownDevice}",

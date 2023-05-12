@@ -23,4 +23,5 @@ class ImageAnimation {
   static const mobileAppRepair = "$_path/mobile-app-repair.json";
   static const monsterError = "$_path/monster-error.json";
   static const splashLoading = "$_path/splash-loading.json";
+  static const star = "$_path/star.json";
 }

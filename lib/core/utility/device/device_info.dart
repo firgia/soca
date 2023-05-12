@@ -167,36 +167,34 @@ class DeviceInfoImpl implements DeviceInfo {
 
     int intervalMilliSeconds = 500;
 
-    PerfectVolumeControl.getVolume().then((value) {
-      double currentvol = value;
-      DateTime? lastVolumeUp;
-      DateTime? lastVolumeDown;
+    double currentvol = -1;
+    DateTime? lastVolumeUp;
+    DateTime? lastVolumeDown;
 
-      PerfectVolumeControl.stream.listen((volume) {
-        if (volume != currentvol) {
-          if (volume > currentvol) {
-            lastVolumeUp = DateTime.now();
+    PerfectVolumeControl.stream.listen((volume) {
+      if (volume != currentvol) {
+        if (volume > currentvol) {
+          lastVolumeUp = DateTime.now();
 
-            if (lastVolumeDown != null) {
-              if (lastVolumeUp!.difference(lastVolumeDown!).inMilliseconds <
-                  intervalMilliSeconds) {
-                controller.sink.add(volume);
-              }
+          if (lastVolumeDown != null) {
+            if (lastVolumeUp!.difference(lastVolumeDown!).inMilliseconds <
+                intervalMilliSeconds) {
+              controller.sink.add(volume);
             }
-          } else {
-            lastVolumeDown = DateTime.now();
+          }
+        } else {
+          lastVolumeDown = DateTime.now();
 
-            if (lastVolumeUp != null) {
-              if (lastVolumeDown!.difference(lastVolumeUp!).inMilliseconds <
-                  intervalMilliSeconds) {
-                controller.sink.add(volume);
-              }
+          if (lastVolumeUp != null) {
+            if (lastVolumeDown!.difference(lastVolumeUp!).inMilliseconds <
+                intervalMilliSeconds) {
+              controller.sink.add(volume);
             }
           }
         }
+      }
 
-        currentvol = volume;
-      });
+      currentvol = volume;
     });
 
     return controller.stream;

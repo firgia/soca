@@ -18,6 +18,9 @@ abstract class LocaleKeys {
   static const camera = 'camera';
   static const cannot_allow_permission_desc = 'cannot_allow_permission_desc';
   static const calls = 'calls';
+  static const call_ended = 'call_ended';
+  static const call_ended_blind_info = 'call_ended_blind_info';
+  static const call_ended_volunteer_info = 'call_ended_volunteer_info';
   static const call_history = 'call_history';
   static const call_state_ended = 'call_state_ended';
   static const call_state_ended_with_declined =
@@ -39,6 +42,8 @@ abstract class LocaleKeys {
   static const date_of_birth = 'date_of_birth';
   static const different_device_title = 'different_device_title';
   static const different_device_desc = 'different_device_desc';
+  static const end_call = 'end_call';
+  static const end_call_successfully = 'end_call_successfully';
   static const error_auth = 'error_auth';
   static const error_auth_sign_in_with_apple_not_supported =
       'error_auth_sign_in_with_apple_not_supported';
@@ -108,11 +113,27 @@ abstract class LocaleKeys {
   static const update_app_required = 'update_app_required';
   static const update_app_required_desc = 'update_app_required_desc';
   static const update_now = 'update_now';
+  static const va_async_answering_call = 'va_async_answering_call';
+  static const va_async_calling_volunteer = 'va_async_calling_volunteer';
+  static const va_call_history_page = 'va_call_history_page';
   static const va_device_language_changed = 'va_device_language_changed';
+  static const va_home_page = 'va_home_page';
+  static const va_home_page_blind_info = 'va_home_page_blind_info';
+  static const va_home_page_volunteer_info = 'va_home_page_volunteer_info';
   static const va_please_select_device_language =
       'va_please_select_device_language';
-  static const va_sign_in_required = 'va_sign_in_required';
-  static const va_sign_up_required = 'va_sign_up_required';
+  static const va_sign_in_page = 'va_sign_in_page';
+  static const va_sign_in_required_1 = 'va_sign_in_required_1';
+  static const va_sign_in_required_2 = 'va_sign_in_required_2';
+  static const va_sign_in_required_3 = 'va_sign_in_required_3';
+  static const va_sign_in_successfully = 'va_sign_in_successfully';
+  static const va_sign_out_successfully = 'va_sign_out_successfully';
+  static const va_sign_up_page = 'va_sign_up_page';
+  static const va_sign_up_required_1 = 'va_sign_up_required_1';
+  static const va_sign_up_required_2 = 'va_sign_up_required_2';
+  static const va_sign_up_required_3 = 'va_sign_up_required_3';
+  static const va_sign_up_successfully = 'va_sign_up_successfully';
+  static const va_starting_video_call = 'va_starting_video_call';
   static const va_welcome = 'va_welcome';
   static const visitors = 'visitors';
   static const volunteer = 'volunteer';

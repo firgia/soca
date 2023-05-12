@@ -17,8 +17,22 @@ import '../../widgets/widgets.dart';
 
 part 'unknown_device_screen.component.dart';
 
-class UnknownDeviceScreen extends StatelessWidget {
+class UnknownDeviceScreen extends StatefulWidget {
   const UnknownDeviceScreen({super.key});
+
+  @override
+  State<UnknownDeviceScreen> createState() => _UnknownDeviceScreenState();
+}
+
+class _UnknownDeviceScreenState extends State<UnknownDeviceScreen> {
+  DeviceFeedback deviceFeedback = sl<DeviceFeedback>();
+  bool hasPlayPageInfo = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    playPageInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,5 +62,19 @@ class UnknownDeviceScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void playPageInfo() {
+    if (mounted && !hasPlayPageInfo) {
+      hasPlayPageInfo = true;
+
+      deviceFeedback.playVoiceAssistant(
+        [
+          LocaleKeys.sign_in_different_device_info.tr(),
+        ],
+        context,
+        immediately: true,
+      );
+    }
   }
 }
