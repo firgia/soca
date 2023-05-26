@@ -239,6 +239,8 @@ void main() {
 
     testWidgets("Should fetched user data when refresh", (tester) async {
       await tester.runAsync(() async {
+        when(completer.future).thenAnswer((_) => Future.value(null));
+
         await tester.pumpApp(child: const HomeScreen());
         await tester.setScreenSize(iphone14);
 
@@ -252,6 +254,7 @@ void main() {
     testWidgets("Should fetched statistic data when refresh", (tester) async {
       await tester.runAsync(() async {
         late BuildContext context;
+        when(completer.future).thenAnswer((_) => Future.value(null));
 
         await tester.pumpApp(
           child: Builder(

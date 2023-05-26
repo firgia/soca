@@ -137,6 +137,7 @@ void main() {
         when(callHistoryBloc.state).thenReturn(const CallHistoryLoading());
 
         MockCompleter completer = getMockCompleter();
+        when(completer.future).thenAnswer((_) => Future.value(null));
         await tester.pumpApp(child: const CallHistoryScreen());
         await tester.setScreenSize(iphone14);
 
