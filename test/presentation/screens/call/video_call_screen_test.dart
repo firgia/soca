@@ -49,11 +49,11 @@ void main() {
     videoCallBloc = getMockVideoCallBloc();
 
     widgetBinding = getMockWidgetsBinding();
-    MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
+    MockPlatformDispatcher platformDispatcher = MockPlatformDispatcher();
 
     when(dotEnv.env).thenReturn({"AGORA_APP_ID": "abc"});
-    when(window.platformBrightness).thenReturn(Brightness.dark);
-    when(widgetBinding.window).thenReturn(window);
+    when(platformDispatcher.platformBrightness).thenReturn(Brightness.dark);
+    when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
 
     imageCacheManager.returns("avatar", kTransparentImage);
   });
@@ -79,7 +79,6 @@ void main() {
 
   Finder findAdaptiveLoading() => find.byType(AdaptiveLoading);
   Finder findAgoraView() => find.byType(AgoraVideoView);
-  Finder findCallEndedText() => find.text(LocaleKeys.call_state_ended.tr());
 
   Finder findEndCallButton() =>
       find.byKey(const Key("video_call_screen_end_call_button"));

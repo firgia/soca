@@ -35,10 +35,10 @@ void main() {
     deviceFeedback = getMockDeviceFeedback();
     widgetBinding = getMockWidgetsBinding();
 
-    MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
+    MockPlatformDispatcher platformDispatcher = MockPlatformDispatcher();
+    when(platformDispatcher.platformBrightness).thenReturn(Brightness.dark);
+    when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
 
-    when(window.platformBrightness).thenReturn(Brightness.dark);
-    when(widgetBinding.window).thenReturn(window);
     when(deviceInfo.isAndroid()).thenReturn(false);
     when(deviceInfo.isIOS()).thenReturn(true);
   });

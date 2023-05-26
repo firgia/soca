@@ -78,8 +78,8 @@ class _SelectLanguagePage extends StatelessWidget {
           },
         ),
         const SizedBox(height: kDefaultSpacing),
-        Row(
-          children: const [
+        const Row(
+          children: [
             _BackIconButton(),
             SizedBox(width: kDefaultSpacing),
             Expanded(child: _NextButton()),
@@ -161,8 +161,8 @@ class _PersonalInformationPage extends StatelessWidget {
         const Spacer(),
         _PageInfoText(LocaleKeys.sign_up_rule_desc.tr()),
         const SizedBox(height: kDefaultSpacing),
-        Row(
-          children: const [
+        const Row(
+          children: [
             _BackIconButton(),
             SizedBox(width: kDefaultSpacing),
             Expanded(child: _SaveButton()),

@@ -197,10 +197,10 @@ class _ItemLoading extends StatelessWidget {
         children: [
           _buildAvatar(context),
           const SizedBox(width: kDefaultSpacing),
-          Expanded(
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 CustomShimmer(
                   height: 25,
                   width: 150,

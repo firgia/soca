@@ -43,10 +43,10 @@ class _UpdateAppScreenState extends State<UpdateAppScreen> {
             maxWidth: 600,
             maxHeight: 800,
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(kDefaultSpacing * 2),
+          child: const Padding(
+            padding: EdgeInsets.all(kDefaultSpacing * 2),
             child: Column(
-              children: const [
+              children: [
                 Spacer(),
                 _UpdateRequiredText(),
                 Spacer(flex: 2),
