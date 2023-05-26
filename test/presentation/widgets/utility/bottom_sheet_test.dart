@@ -18,12 +18,12 @@ import '../../../mock/mock.mocks.dart';
 
 void main() {
   late MockWidgetsBinding widgetBinding;
-  late MockSingletonFlutterWindow window;
+  late MockPlatformDispatcher platformDispatcher;
 
   setUp(() {
     registerLocator();
     widgetBinding = getMockWidgetsBinding();
-    window = MockSingletonFlutterWindow();
+    platformDispatcher = MockPlatformDispatcher();
   });
 
   tearDown(() => unregisterLocator());
@@ -38,8 +38,8 @@ void main() {
 
   group(".pickImage()", () {
     setUp(() {
-      when(window.platformBrightness).thenReturn(Brightness.dark);
-      when(widgetBinding.window).thenReturn(window);
+      when(platformDispatcher.platformBrightness).thenReturn(Brightness.dark);
+      when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
     });
 
     Future showPickImage(
@@ -158,8 +158,8 @@ void main() {
 
   group(".show()", () {
     testWidgets("Should show the child", (tester) async {
-      when(window.platformBrightness).thenReturn(Brightness.dark);
-      when(widgetBinding.window).thenReturn(window);
+      when(platformDispatcher.platformBrightness).thenReturn(Brightness.dark);
+      when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
 
       await tester.runAsync(() async {
         await tester.pumpApp(
@@ -196,8 +196,8 @@ void main() {
 
     testWidgets("Should show the child based on brightness dark",
         (tester) async {
-      when(window.platformBrightness).thenReturn(Brightness.dark);
-      when(widgetBinding.window).thenReturn(window);
+      when(platformDispatcher.platformBrightness).thenReturn(Brightness.dark);
+      when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
 
       await tester.runAsync(() async {
         await tester.pumpApp(
@@ -246,8 +246,8 @@ void main() {
 
     testWidgets("Should show the child based on brightness light",
         (tester) async {
-      when(window.platformBrightness).thenReturn(Brightness.light);
-      when(widgetBinding.window).thenReturn(window);
+      when(platformDispatcher.platformBrightness).thenReturn(Brightness.light);
+      when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
 
       await tester.runAsync(() async {
         await tester.pumpApp(

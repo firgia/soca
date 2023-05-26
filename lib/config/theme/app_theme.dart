@@ -18,8 +18,8 @@ const kBorderRadius = 16.0;
 /// all custom application theme
 abstract class AppTheme with WidgetsBindingObserver {
   static bool get isDarkMode {
-    final window = WidgetsBinding.instance.window;
-    return window.platformBrightness == Brightness.dark;
+    final platformDispatcher = WidgetsBinding.instance.platformDispatcher;
+    return platformDispatcher.platformBrightness == Brightness.dark;
   }
 
   static ThemeData get dark => ThemeData(

@@ -69,8 +69,10 @@ extension ScreenSizeManager on WidgetTester {
   Future<void> setScreenSize(ScreenSize screenSize) async {
     final size = Size(screenSize.width, screenSize.height);
     await binding.setSurfaceSize(size);
-    binding.window.physicalSizeTestValue = size;
-    binding.window.devicePixelRatioTestValue = screenSize.ratio;
+    WidgetTester tester = this;
+
+    tester.view.physicalSize = size;
+    tester.view.devicePixelRatio = screenSize.ratio;
   }
 }
 

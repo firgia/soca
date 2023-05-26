@@ -66,7 +66,7 @@ dependencies:
   image_cropper: ^3.0.1
   image_picker: ^0.8.6+3
   internet_connection_checker: ^1.0.0+1
-  intl: ^0.17.0
+  intl: ^0.18.0
   logging: ^1.1.1
   lottie: ^2.2.0
   onesignal_flutter: ^3.5.0

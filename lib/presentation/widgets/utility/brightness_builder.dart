@@ -21,15 +21,15 @@ class BrightnessBuilder extends StatefulWidget {
 
 class _BrightnessBuilderState extends State<BrightnessBuilder>
     with WidgetsBindingObserver {
-  final _window = sl<WidgetsBinding>().window;
+  final platformDispatcher = sl<WidgetsBinding>().platformDispatcher;
 
-  late Brightness _currentBrightness;
+  late Brightness currentBrightness;
 
   @override
   void initState() {
     super.initState();
 
-    _currentBrightness = _window.platformBrightness;
+    currentBrightness = platformDispatcher.platformBrightness;
 
     WidgetsBinding.instance.addObserver(this);
   }
@@ -45,16 +45,16 @@ class _BrightnessBuilderState extends State<BrightnessBuilder>
   void didChangePlatformBrightness() {
     super.didChangePlatformBrightness();
 
-    final brightness = _window.platformBrightness;
-    if (_currentBrightness != brightness) {
+    final brightness = platformDispatcher.platformBrightness;
+    if (currentBrightness != brightness) {
       setState(() {
-        _currentBrightness = brightness;
+        currentBrightness = brightness;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(context, _currentBrightness);
+    return widget.builder(context, currentBrightness);
   }
 }

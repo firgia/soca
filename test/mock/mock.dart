@@ -83,7 +83,7 @@ export 'mock.mocks.dart';
   MockSpec<OneSignal>(),
   MockSpec<PackageInfo>(),
   MockSpec<agora.RtcEngine>(),
-  MockSpec<SingletonFlutterWindow>(),
+  MockSpec<PlatformDispatcher>(),
   MockSpec<SharedPreferences>(),
   MockSpec<WidgetsBinding>(),
 

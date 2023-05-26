@@ -33,9 +33,9 @@ void main() {
     routeCubit = getMockRouteCubit();
 
     MockWidgetsBinding widgetBinding = getMockWidgetsBinding();
-    MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
-    when(window.platformBrightness).thenReturn(Brightness.dark);
-    when(widgetBinding.window).thenReturn(window);
+    MockPlatformDispatcher platformDispatcher = MockPlatformDispatcher();
+    when(platformDispatcher.platformBrightness).thenReturn(Brightness.dark);
+    when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
   });
 
   tearDown(() => unregisterLocator());

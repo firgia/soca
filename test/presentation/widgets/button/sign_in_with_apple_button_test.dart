@@ -31,10 +31,10 @@ void main() {
   group("Button", () {
     testWidgets("Should use [SignInButton]", (tester) async {
       await tester.runAsync(() async {
-        MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
-
-        when(window.platformBrightness).thenReturn(Brightness.light);
-        when(widgetBinding.window).thenReturn(window);
+        MockPlatformDispatcher platformDispatcher = MockPlatformDispatcher();
+        when(platformDispatcher.platformBrightness)
+            .thenReturn(Brightness.light);
+        when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
 
         await tester.pumpApp(
           child: SignInWithAppleButton(onPressed: () {}),
@@ -46,20 +46,20 @@ void main() {
   });
 
   group("Brightness", () {
-    late MockSingletonFlutterWindow window;
+    late MockPlatformDispatcher platformDispatcher;
     const primaryDarkColor = Colors.white;
     final primaryLightColor = Colors.grey[900]!;
     final onPrimaryDarkColor = Colors.grey[900]!;
     const onPrimaryLightColor = Colors.white;
 
     setUp(() {
-      window = MockSingletonFlutterWindow();
+      platformDispatcher = MockPlatformDispatcher();
     });
 
     testWidgets("Should set the color for dark theme", (tester) async {
       await tester.runAsync(() async {
-        when(window.platformBrightness).thenReturn(Brightness.dark);
-        when(widgetBinding.window).thenReturn(window);
+        when(platformDispatcher.platformBrightness).thenReturn(Brightness.dark);
+        when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
 
         await tester.pumpApp(
           child: SignInWithAppleButton(onPressed: () {}),
@@ -76,8 +76,9 @@ void main() {
 
     testWidgets("Should set the color for light theme", (tester) async {
       await tester.runAsync(() async {
-        when(window.platformBrightness).thenReturn(Brightness.light);
-        when(widgetBinding.window).thenReturn(window);
+        when(platformDispatcher.platformBrightness)
+            .thenReturn(Brightness.light);
+        when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
 
         await tester.pumpApp(
           child: SignInWithAppleButton(onPressed: () {}),

@@ -132,12 +132,12 @@ class _LanguageCardLoading extends StatelessWidget {
       child: Container(
         width: double.maxFinite,
         padding: const EdgeInsets.all(kDefaultSpacing),
-        child: Row(
+        child: const Row(
           children: [
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   CustomShimmer(
                     height: 16,
                     width: 100,
@@ -150,8 +150,8 @@ class _LanguageCardLoading extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: kDefaultSpacing),
-            const CustomShimmer(
+            SizedBox(width: kDefaultSpacing),
+            CustomShimmer(
               height: 20,
               width: 20,
             ),
