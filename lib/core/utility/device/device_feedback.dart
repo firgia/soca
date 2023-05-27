@@ -7,10 +7,13 @@
  * Copyright (c) 2023 Mochamad Firgia
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:vibration/vibration.dart';
 
 import '../../../core/core.dart';
 import '../../../data/data.dart';
@@ -30,6 +33,9 @@ abstract class DeviceFeedback {
     BuildContext context, {
     bool immediately = false,
   });
+
+  void playCallVibration();
+  void stopCallVibration();
 }
 
 class DeviceFeedbackImpl implements DeviceFeedback {
@@ -37,6 +43,7 @@ class DeviceFeedbackImpl implements DeviceFeedback {
   final FlutterTts _flutterTts = FlutterTts();
 
   DeviceLanguage? _tempLanguage;
+  Timer? timerCallVibration;
 
   @override
   Future<void> vibrate() async {
@@ -142,4 +149,27 @@ class DeviceFeedbackImpl implements DeviceFeedback {
 
   @override
   bool get isVoiceAssistantEnable => _settingsRepository.isVoiceAssistantEnable;
+
+  @override
+  void playCallVibration() async {
+    Vibration.vibrate(
+      pattern: [500, 1000, 500, 2000],
+      intensities: [1, 255],
+    );
+    Timer.periodic(const Duration(milliseconds: 2500), (timer) {
+      if (timer.isActive) {
+        timerCallVibration = timer;
+        Vibration.vibrate(
+          pattern: [500, 1000, 500, 2000],
+          intensities: [1, 255],
+        );
+      }
+    });
+  }
+
+  @override
+  void stopCallVibration() {
+    timerCallVibration?.cancel();
+    Vibration.cancel();
+  }
 }
