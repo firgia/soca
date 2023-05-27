@@ -47,6 +47,8 @@ class _CreateCallScreenState extends State<CreateCallScreen> {
     super.initState();
 
     callActionBloc.add(const CallActionCreated());
+
+    deviceFeedback.playCallVibration();
   }
 
   @override
@@ -136,6 +138,8 @@ class _CreateCallScreenState extends State<CreateCallScreen> {
   }
 
   Future<void> playStartVideoCall() async {
+    deviceFeedback.stopCallVibration();
+
     if (mounted && !hasPlayStartVideoCall) {
       hasPlayStartVideoCall = true;
 
@@ -152,5 +156,12 @@ class _CreateCallScreenState extends State<CreateCallScreen> {
         await Future.delayed(const Duration(seconds: 2));
       }
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    deviceFeedback.stopCallVibration();
   }
 }

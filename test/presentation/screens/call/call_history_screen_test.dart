@@ -35,10 +35,10 @@ void main() {
     deviceFeedback = getMockDeviceFeedback();
     widgetBinding = getMockWidgetsBinding();
 
-    MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
+    MockPlatformDispatcher platformDispatcher = MockPlatformDispatcher();
+    when(platformDispatcher.platformBrightness).thenReturn(Brightness.dark);
+    when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
 
-    when(window.platformBrightness).thenReturn(Brightness.dark);
-    when(widgetBinding.window).thenReturn(window);
     when(deviceInfo.isAndroid()).thenReturn(false);
     when(deviceInfo.isIOS()).thenReturn(true);
   });
@@ -137,6 +137,7 @@ void main() {
         when(callHistoryBloc.state).thenReturn(const CallHistoryLoading());
 
         MockCompleter completer = getMockCompleter();
+        when(completer.future).thenAnswer((_) => Future.value(null));
         await tester.pumpApp(child: const CallHistoryScreen());
         await tester.setScreenSize(iphone14);
 

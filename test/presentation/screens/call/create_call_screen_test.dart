@@ -40,10 +40,10 @@ void main() {
     deviceFeedback = getMockDeviceFeedback();
 
     widgetBinding = getMockWidgetsBinding();
-    MockSingletonFlutterWindow window = MockSingletonFlutterWindow();
 
-    when(window.platformBrightness).thenReturn(Brightness.dark);
-    when(widgetBinding.window).thenReturn(window);
+    MockPlatformDispatcher platformDispatcher = MockPlatformDispatcher();
+    when(platformDispatcher.platformBrightness).thenReturn(Brightness.dark);
+    when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
   });
 
   tearDown(() => unregisterLocator());
@@ -371,6 +371,75 @@ void main() {
               immediately: true,
             ),
           );
+        });
+      });
+    });
+  });
+
+  group("Vibration", () {
+    testWidgets('Should play vibration', (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          await tester.pumpApp(child: CreateCallScreen(user: user));
+
+          verify(
+            deviceFeedback.playCallVibration(),
+          );
+        });
+      });
+    });
+
+    testWidgets('Should stop vibration when [CallActionAnsweredSuccessfully]',
+        (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          CallingSetup callingSetup = const CallingSetup(
+            id: "1",
+            rtc: RTCIdentity(token: "abc", channelName: "a", uid: 1),
+            localUser: UserCallIdentity(
+              name: "name",
+              uid: "uid",
+              avatar: "avatar",
+              type: UserType.blind,
+            ),
+            remoteUser: UserCallIdentity(
+              name: "name",
+              uid: "uid",
+              avatar: "avatar",
+              type: UserType.volunteer,
+            ),
+          );
+
+          when(callActionBloc.stream).thenAnswer(
+              (_) => Stream.value(CallActionCreatedSuccessfully(callingSetup)));
+
+          await tester.pumpApp(child: CreateCallScreen(user: user));
+          await tester.pump();
+
+          verify(deviceFeedback.stopCallVibration());
+        });
+      });
+    });
+
+    testWidgets('Should stop vibration when page disposed', (tester) async {
+      await mockNetworkImages(() async {
+        await tester.runAsync(() async {
+          StreamController<Widget> widgetStreamController =
+              StreamController<Widget>();
+
+          await tester.pumpApp(
+              child: StreamBuilder(
+            stream: widgetStreamController.stream,
+            builder: (context, snapshot) => snapshot.data ?? Container(),
+          ));
+
+          widgetStreamController.add(CreateCallScreen(user: user));
+          await tester.pumpAndSettle();
+
+          widgetStreamController.add(const Scaffold());
+          await tester.pumpAndSettle();
+
+          verify(deviceFeedback.stopCallVibration());
         });
       });
     });

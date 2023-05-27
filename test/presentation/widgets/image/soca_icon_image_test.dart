@@ -30,16 +30,16 @@ void main() {
   Finder findImage() => find.byType(Image);
 
   group("Brightness", () {
-    late MockSingletonFlutterWindow window;
+    late MockPlatformDispatcher platformDispatcher;
 
     setUp(() {
-      window = MockSingletonFlutterWindow();
+      platformDispatcher = MockPlatformDispatcher();
     });
 
     testWidgets("Should show image asset for dark theme", (tester) async {
       await tester.runAsync(() async {
-        when(window.platformBrightness).thenReturn(Brightness.dark);
-        when(widgetBinding.window).thenReturn(window);
+        when(platformDispatcher.platformBrightness).thenReturn(Brightness.dark);
+        when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
 
         await tester.pumpApp(
           child: const SocaIconImage(),
@@ -55,9 +55,9 @@ void main() {
 
     testWidgets("Should show image asset for light theme", (tester) async {
       await tester.runAsync(() async {
-        when(window.platformBrightness).thenReturn(Brightness.light);
-        when(widgetBinding.window).thenReturn(window);
-
+        when(platformDispatcher.platformBrightness)
+            .thenReturn(Brightness.light);
+        when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
         await tester.pumpApp(
           child: const SocaIconImage(),
         );
@@ -72,12 +72,12 @@ void main() {
   });
 
   group("Hero", () {
-    late MockSingletonFlutterWindow window;
+    late MockPlatformDispatcher platformDispatcher;
 
     setUp(() {
-      window = MockSingletonFlutterWindow();
-      when(window.platformBrightness).thenReturn(Brightness.light);
-      when(widgetBinding.window).thenReturn(window);
+      platformDispatcher = MockPlatformDispatcher();
+      when(platformDispatcher.platformBrightness).thenReturn(Brightness.light);
+      when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
     });
 
     testWidgets("Should show the [Hero] widget when [heroTag] is exists",
@@ -104,12 +104,12 @@ void main() {
   });
 
   group("Size", () {
-    late MockSingletonFlutterWindow window;
+    late MockPlatformDispatcher platformDispatcher;
 
     setUp(() {
-      window = MockSingletonFlutterWindow();
-      when(window.platformBrightness).thenReturn(Brightness.light);
-      when(widgetBinding.window).thenReturn(window);
+      platformDispatcher = MockPlatformDispatcher();
+      when(platformDispatcher.platformBrightness).thenReturn(Brightness.light);
+      when(widgetBinding.platformDispatcher).thenReturn(platformDispatcher);
     });
 
     testWidgets("Should set the height image 200 as a default", (tester) async {

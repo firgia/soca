@@ -133,26 +133,26 @@ class _SignUpScreenState extends State<SignUpScreen>
 
   @override
   Widget buildMobileLayout(BuildContext context, BoxConstraints constraints) {
-    return SafeArea(
-      key: const Key("sign_up_screen_mobile_layout"),
+    return const SafeArea(
+      key: Key("sign_up_screen_mobile_layout"),
       child: Padding(
-        padding: const EdgeInsets.all(kDefaultSpacing * 1.5),
+        padding: EdgeInsets.all(kDefaultSpacing * 1.5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
+              children: [
                 Expanded(child: _HelloText()),
                 _AuthIconButton(),
               ],
             ),
-            const _LetsGetStartedText(),
-            const SizedBox(height: kDefaultSpacing),
-            const _FillInFormText(),
-            const Spacer(flex: 1),
-            const Flexible(
+            _LetsGetStartedText(),
+            SizedBox(height: kDefaultSpacing),
+            _FillInFormText(),
+            Spacer(flex: 1),
+            Flexible(
               flex: 10,
               child: _SignUpFormPage(),
             ),

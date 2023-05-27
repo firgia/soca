@@ -105,8 +105,8 @@ class DeviceInfoImpl implements DeviceInfo {
 
   @override
   bool isDarkMode() {
-    final window = WidgetsBinding.instance.window;
-    return window.platformBrightness == Brightness.dark;
+    final platformDispatcher = WidgetsBinding.instance.platformDispatcher;
+    return platformDispatcher.platformBrightness == Brightness.dark;
   }
 
   @override
