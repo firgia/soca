@@ -81,6 +81,7 @@ dependencies:
   swipe_refresh: ^1.0.2
   syncfusion_flutter_charts: ^21.1.41
   uuid: ^3.0.7
+  vibration: ^1.7.7
   wakelock: ^0.6.2
 
 dev_dependencies:
